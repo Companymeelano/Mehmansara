@@ -1,5 +1,7 @@
 package ir.ahvaz.mehra.demo
 
+import ir.ahvaz.mehra.core.common.AppError
+import ir.ahvaz.mehra.core.common.AppResult
 import ir.ahvaz.mehra.core.network.SessionEvent
 import ir.ahvaz.mehra.core.network.SessionEventBus
 import ir.ahvaz.mehra.core.security.AuthTokens
@@ -45,7 +47,7 @@ class DemoAuthRepository @Inject constructor(
         delay(280)
         if (username.isBlank() || password.isBlank()) {
             return AppResult.Failure(
-                ir.ahvaz.mehra.core.common.AppError.validation("نام کاربری و رمز عبور را وارد کنید.")
+                AppError.validation("نام کاربری و رمز عبور را وارد کنید.")
             )
         }
         val user = manager.copy(

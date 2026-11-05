@@ -7,7 +7,7 @@ import ir.ahvaz.mehra.domain.model.AlertSeverity
 import ir.ahvaz.mehra.domain.model.AppUser
 import ir.ahvaz.mehra.domain.model.AuditLogEntry
 import ir.ahvaz.mehra.domain.model.CleaningType
-import ir.ahvaz.mehra.domain.model.Companion
+import ir.ahvaz.mehra.domain.model.Companion as GuestCompanion
 import ir.ahvaz.mehra.domain.model.Guest
 import ir.ahvaz.mehra.domain.model.HousekeepingTask
 import ir.ahvaz.mehra.domain.model.HousekeepingTaskStatus
@@ -173,7 +173,7 @@ class DemoStore @Inject constructor() {
             nationalId = "2281945713", phone = "09161234567",
             city = "اهواز", address = "کیانپارس، خیابان ۱۰ شرقی، پلاک ۲۴",
             balanceRial = 3_500_000, totalStays = 4, lastStayAt = at(0, 14, 20),
-            companions = listOf(Companion(fullName = "سمیه محمدی", relation = "همسر")),
+            companions = listOf(GuestCompanion(fullName = "سمیه محمدی", relation = "همسر")),
         ),
         Guest(
             id = "guest-02", firstName = "زهرا", lastName = "کریمی",
@@ -193,8 +193,8 @@ class DemoStore @Inject constructor() {
             city = "اهواز", address = "زیتون کارمندی، خیابان ۱۲",
             balanceRial = 6_600_000, totalStays = 6, lastStayAt = at(0, 12, 30),
             companions = listOf(
-                Companion(fullName = "حسین موسوی", relation = "همسر"),
-                Companion(fullName = "ریحانه موسوی", relation = "دختر"),
+                GuestCompanion(fullName = "حسین موسوی", relation = "همسر"),
+                GuestCompanion(fullName = "ریحانه موسوی", relation = "دختر"),
             ),
         ),
         Guest(
@@ -215,8 +215,8 @@ class DemoStore @Inject constructor() {
             city = "خرمشهر", address = "خیابان ۴۰ متری، پلاک ۱۲",
             balanceRial = 12_500_000, totalStays = 9, lastStayAt = at(-1, 16, 45),
             companions = listOf(
-                Companion(fullName = "نرگس قاسمی", relation = "همسر"),
-                Companion(fullName = "پویا قاسمی", relation = "پسر"),
+                GuestCompanion(fullName = "نرگس قاسمی", relation = "همسر"),
+                GuestCompanion(fullName = "پویا قاسمی", relation = "پسر"),
             ),
         ),
         Guest(
@@ -270,7 +270,7 @@ class DemoStore @Inject constructor() {
         paid: Long = 0L,
         notes: String? = null,
         createdBy: String = DEMO_OPERATOR,
-        companions: List<Companion> = emptyList(),
+        companions: List<GuestCompanion> = emptyList(),
     ): Reservation {
         val nights = nights(checkIn, checkOut)
         val nightly = room?.ratePerNightRial ?: 2_500_000L
@@ -304,7 +304,7 @@ class DemoStore @Inject constructor() {
             "res-101", "MR-34101", guest("guest-01")!!, roomByNumber("102"),
             today.minusDays(2), today.plusDays(1), ReservationStatus.CHECKED_IN,
             guestsCount = 2, paid = 4_000_000,
-            companions = listOf(Companion(fullName = "سمیه محمدی", relation = "همسر")),
+            companions = listOf(GuestCompanion(fullName = "سمیه محمدی", relation = "همسر")),
         ),
         defReservation(
             "res-102", "MR-34102", guest("guest-02")!!, roomByNumber("104"),
@@ -321,8 +321,8 @@ class DemoStore @Inject constructor() {
             today, today.plusDays(3), ReservationStatus.CHECKED_IN,
             guestsCount = 3, paid = 3_000_000,
             companions = listOf(
-                Companion(fullName = "حسین موسوی", relation = "همسر"),
-                Companion(fullName = "ریحانه موسوی", relation = "دختر"),
+                GuestCompanion(fullName = "حسین موسوی", relation = "همسر"),
+                GuestCompanion(fullName = "ریحانه موسوی", relation = "دختر"),
             ),
         ),
         defReservation(
@@ -340,8 +340,8 @@ class DemoStore @Inject constructor() {
             today.minusDays(1), today.plusDays(4), ReservationStatus.CHECKED_IN,
             guestsCount = 5, paid = 20_000_000,
             companions = listOf(
-                Companion(fullName = "نرگس قاسمی", relation = "همسر"),
-                Companion(fullName = "پویا قاسمی", relation = "پسر"),
+                GuestCompanion(fullName = "نرگس قاسمی", relation = "همسر"),
+                GuestCompanion(fullName = "پویا قاسمی", relation = "پسر"),
             ),
         ),
         defReservation(
