@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import ir.ahvaz.mehra.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ir.ahvaz.mehra.core.ui.components.CreatorSignature
@@ -23,14 +25,13 @@ import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.components.MehraCard
 import ir.ahvaz.mehra.core.ui.components.MehraScreen
 import ir.ahvaz.mehra.core.ui.components.SectionHeader
-import ir.ahvaz.mehra.core.ui.icons.MehraIcons
 import ir.ahvaz.mehra.domain.model.Permissions
 import ir.ahvaz.mehra.domain.model.SessionUser
 
 private data class MenuEntry(
     val title: String,
     val description: String,
-    val icon: ImageVector,
+    @androidx.annotation.DrawableRes val iconRes: Int,
     val permission: String?,
     val onClick: () -> Unit,
 )
@@ -54,29 +55,29 @@ fun MoreScreen(
     fun has(permission: String?): Boolean = permission == null || user?.can(permission) == true
 
     val frontOffice = listOfNotNull(
-        MenuEntry("مهمانان", "پرونده مهمان، همراهان و سوابق", MehraIcons.Guests, Permissions.GUESTS_VIEW, onOpenGuests)
+        MenuEntry("مهمانان", "پرونده مهمان، همراهان و سوابق", R.drawable.ic_mehra_guests, Permissions.GUESTS_VIEW, onOpenGuests)
             .takeIf { has(Permissions.GUESTS_VIEW) },
-        MenuEntry("مالی", "صندوق، تراکنش‌ها و بدهکاران", MehraIcons.Finance, Permissions.FINANCE_VIEW, onOpenFinance)
+        MenuEntry("مالی", "صندوق، تراکنش‌ها و بدهکاران", R.drawable.ic_mehra_finance, Permissions.FINANCE_VIEW, onOpenFinance)
             .takeIf { has(Permissions.FINANCE_VIEW) },
     )
 
     val operations = listOfNotNull(
-        MenuEntry("خدمات و نظافت", "درخواست نظافت و تأیید آماده‌سازی", MehraIcons.Housekeeping, Permissions.HOUSEKEEPING_VIEW, onOpenHousekeeping)
+        MenuEntry("خدمات و نظافت", "درخواست نظافت و تأیید آماده‌سازی", R.drawable.ic_mehra_housekeeping, Permissions.HOUSEKEEPING_VIEW, onOpenHousekeeping)
             .takeIf { has(Permissions.HOUSEKEEPING_VIEW) },
-        MenuEntry("تعمیرات", "ثبت خرابی، ارجاع و هزینه", MehraIcons.Maintenance, Permissions.MAINTENANCE_VIEW, onOpenMaintenance)
+        MenuEntry("تعمیرات", "ثبت خرابی، ارجاع و هزینه", R.drawable.ic_mehra_maintenance, Permissions.MAINTENANCE_VIEW, onOpenMaintenance)
             .takeIf { has(Permissions.MAINTENANCE_VIEW) },
     )
 
     val management = listOfNotNull(
-        MenuEntry("گزارش‌ها", "خروجی PDF و اکسل با تاریخ شمسی", MehraIcons.Reports, Permissions.REPORTS_VIEW, onOpenReports)
+        MenuEntry("گزارش‌ها", "خروجی PDF و اکسل با تاریخ شمسی", R.drawable.ic_mehra_reports, Permissions.REPORTS_VIEW, onOpenReports)
             .takeIf { has(Permissions.REPORTS_VIEW) },
-        MenuEntry("کاربران و نقش‌ها", "مدیریت حساب‌ها و مجوزها", MehraIcons.Users, Permissions.USERS_VIEW, onOpenUsers)
+        MenuEntry("کاربران و نقش‌ها", "مدیریت حساب‌ها و مجوزها", R.drawable.ic_mehra_users, Permissions.USERS_VIEW, onOpenUsers)
             .takeIf { has(Permissions.USERS_VIEW) },
     )
 
     val system = listOf(
-        MenuEntry("اعلان‌ها", "رویدادها و هشدارهای سامانه", MehraIcons.Notifications, null, onOpenNotifications),
-        MenuEntry("تنظیمات", "سرور، پوسته، قفل و حساب کاربری", MehraIcons.Settings, null, onOpenSettings),
+        MenuEntry("اعلان‌ها", "رویدادها و هشدارهای سامانه", R.drawable.ic_mehra_notifications, null, onOpenNotifications),
+        MenuEntry("تنظیمات", "سرور، پوسته، قفل و حساب کاربری", R.drawable.ic_mehra_settings, null, onOpenSettings),
     )
 
     MehraScreen(
@@ -125,7 +126,7 @@ private fun MenuTile(entry: MenuEntry) {
     MehraCard(modifier = Modifier.fillMaxWidth(), onClick = entry.onClick) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon3D(
-                icon = entry.icon,
+                icon = ImageVector.vectorResource(entry.iconRes),
                 contentDescription = null,
                 size = 42.dp,
             )

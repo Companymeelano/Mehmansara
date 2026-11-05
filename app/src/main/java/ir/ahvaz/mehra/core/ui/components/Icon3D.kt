@@ -2,7 +2,7 @@ package ir.ahvaz.mehra.core.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.matchParentSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -53,7 +53,7 @@ fun Icon3D(
         // gloss on the upper half + slight shading at the bottom edge -> 3D relief
         Box(
             modifier = Modifier
-                .matchParentSize()
+                .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
                         0.0f to Color.White.copy(alpha = 0.42f),

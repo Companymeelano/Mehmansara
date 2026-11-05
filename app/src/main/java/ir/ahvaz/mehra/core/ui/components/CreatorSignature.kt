@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -72,7 +72,8 @@ fun CreatorSignature(
             val face = colors.metalFace.toArgb()
             val dark = colors.metalDark.toArgb()
 
-            drawIntoCanvas { canvas ->
+            run {
+                val canvas = drawContext.canvas.nativeCanvas
                 // --- extrusion: stacked copies going down-right, getting darker ---
                 val depth = (size.height * 0.17f).coerceAtLeast(2.5f)
                 val steps = depth.toInt().coerceIn(3, 24)

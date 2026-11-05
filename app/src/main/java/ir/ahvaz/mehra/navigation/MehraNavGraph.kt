@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
@@ -41,8 +42,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import ir.ahvaz.mehra.R
 import ir.ahvaz.mehra.core.ui.components.Icon3D
-import ir.ahvaz.mehra.core.ui.icons.MehraIcons
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.feature.dashboard.DashboardScreen
 import ir.ahvaz.mehra.feature.finance.FinanceScreen
@@ -73,16 +74,16 @@ import ir.ahvaz.mehra.domain.model.Permissions
 private data class BottomDestination(
     val route: String,
     val label: String,
-    val icon: ImageVector,
+    @androidx.annotation.DrawableRes val iconRes: Int,
     val permission: String?,
 )
 
 private val bottomDestinations = listOf(
-    BottomDestination(Routes.DASHBOARD, "داشبورد", MehraIcons.Dashboard, Permissions.DASHBOARD_VIEW),
-    BottomDestination(Routes.ROOMS, "اتاق‌ها", MehraIcons.Rooms, Permissions.ROOMS_VIEW),
-    BottomDestination(Routes.RESERVATIONS, "رزروها", MehraIcons.Reservations, Permissions.RESERVATIONS_VIEW),
-    BottomDestination(Routes.RECEPTION, "پذیرش", MehraIcons.Reception, Permissions.RECEPTION_OPERATE),
-    BottomDestination(Routes.MORE, "بیشتر", MehraIcons.More, null),
+    BottomDestination(Routes.DASHBOARD, "داشبورد", R.drawable.ic_mehra_dashboard, Permissions.DASHBOARD_VIEW),
+    BottomDestination(Routes.ROOMS, "اتاق‌ها", R.drawable.ic_mehra_rooms, Permissions.ROOMS_VIEW),
+    BottomDestination(Routes.RESERVATIONS, "رزروها", R.drawable.ic_mehra_reservations, Permissions.RESERVATIONS_VIEW),
+    BottomDestination(Routes.RECEPTION, "پذیرش", R.drawable.ic_mehra_reception, Permissions.RECEPTION_OPERATE),
+    BottomDestination(Routes.MORE, "بیشتر", R.drawable.ic_mehra_more, null),
 )
 
 @Composable
@@ -357,6 +358,7 @@ private fun MehraBottomBar(
                     val selected = backStackEntry?.destination?.hierarchy?.any {
                         it.route == destination.route
                     } == true
+                    val icon = ImageVector.vectorResource(destination.iconRes)
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -366,13 +368,13 @@ private fun MehraBottomBar(
                     ) {
                         if (selected) {
                             Icon3D(
-                                icon = destination.icon,
+                                icon = icon,
                                 contentDescription = destination.label,
                                 size = 40.dp,
                             )
                         } else {
                             Icon(
-                                imageVector = destination.icon,
+                                imageVector = icon,
                                 contentDescription = destination.label,
                                 tint = scheme.onSurfaceVariant,
                                 modifier = Modifier.size(26.dp),
