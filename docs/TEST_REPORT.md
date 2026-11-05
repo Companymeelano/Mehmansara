@@ -28,6 +28,7 @@
   سورس نمایشی شکست خورد (ایمپورت نبودن `AppResult` در `DemoAuthRepository` و تداخل نام
   `Companion` مدل مهمان با `companion object` کلاس `DemoStore`). هر دو اصلاح شد و اجرای
   بعدی (`42097143225`) موفق بود: `assembleProdDebug` + `assembleDemoDebug` + تست‌های واحد.
+- ۱۴۰۴/۰۸/۱۵ — بازطراحی لاکچری (۷ پوستهٔ تم با پس‌زمینهٔ گرادیانی سراسری، آیکن‌های سه‌بعدی، امضای سه‌بعدی سازنده): دو اجرای اول با خطای کامپایل شکست خوردند (بسته‌شدن زودهنگام KDoc به‌خاطر `*/` در `svg/*.svg`، استفاده از `rememberRipple` منسوخ با سطح ERROR، ایمپورت گم‌شدهٔ `nativeCanvas`/`matchParentSize`، و نبود تابع `path` در `ImageVector.Builder` — آیکن‌ها به‌صورت XML vector در `res/drawable/ic_mehra_*` و با `ImageVector.vectorResource` پیاده شدند). اجرای سوم (`42107657996`) موفق بود: `BUILD SUCCESSFUL` برای هر دو flavour؛ APKها در `ci-artifacts` منتشر و SHA/حجم در `artifacts/` به‌روز شد. بازرسی بایت‌به‌بایت: هر دو APK امضای v2 دارند، کلاس‌های جدید (`CreatorSignature`، `MehraIcons`، `Icon3D`) در هر دو هستند و `DemoStore` فقط در نسخهٔ نمایشی است.
 
 ## 1.1 نسخه نمایشی (بیلد ۱۴۰۴/۰۸/۱۴ — اجرای CI `42097143225`)
 

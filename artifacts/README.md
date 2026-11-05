@@ -28,8 +28,8 @@
 | بسته | `ir.ahvaz.mehra.demo.debug` | `ir.ahvaz.mehra.debug` |
 | نام روی گوشی | مهرآ نمایشی | مهرآ |
 | نسخه | 1.0.0-demo-debug (versionCode 1) | 1.0.0-debug (versionCode 1) |
-| حجم | 20,941,947 بایت | 20,843,619 بایت |
-| SHA-256 | `464bb67726c0a2939504dceb6304e0f562a940b7b143b38610b3276c045d5f86` | `9abc44dae615ba611c4d32503e9b95b431d8646fe6e1dd685c591fa140d47d4a` |
+| حجم | 21,002,934 بایت | 20,888,222 بایت |
+| SHA-256 | `79e97bf7f84adc602f98e734c8091de3495f8892363420e52785e74c5612835a` | `24d137440237215982481d3fff059d884bfc3b58e40ecb1dc3a0388291ddabc0` |
 | minSdk / targetSdk | 24 / 35 | 24 / 35 |
 | امضا | APK Signature Scheme v2 (debug keystore) | همان |
 
