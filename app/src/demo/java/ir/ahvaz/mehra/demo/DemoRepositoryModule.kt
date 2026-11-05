@@ -1,0 +1,79 @@
+package ir.ahvaz.mehra.demo
+
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import ir.ahvaz.mehra.domain.repository.AuthRepository
+import ir.ahvaz.mehra.domain.repository.DashboardRepository
+import ir.ahvaz.mehra.domain.repository.FinanceRepository
+import ir.ahvaz.mehra.domain.repository.GuestRepository
+import ir.ahvaz.mehra.domain.repository.HousekeepingRepository
+import ir.ahvaz.mehra.domain.repository.MaintenanceRepository
+import ir.ahvaz.mehra.domain.repository.NotificationRepository
+import ir.ahvaz.mehra.domain.repository.ReceptionRepository
+import ir.ahvaz.mehra.domain.repository.ReportRepository
+import ir.ahvaz.mehra.domain.repository.ReservationRepository
+import ir.ahvaz.mehra.domain.repository.RoomRepository
+import ir.ahvaz.mehra.domain.repository.UserRepository
+import javax.inject.Singleton
+
+/**
+ * Hilt bindings for the showcase build.
+ *
+ * The production flavour has its own `RepositoryModule` (in `src/prod`) that binds the real
+ * network backed implementations; both flavours contain exactly one such module, so no
+ * sample data can ever reach the production app.
+ */
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class DemoRepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(impl: DemoAuthRepository): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDashboardRepository(impl: DemoDashboardRepository): DashboardRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRoomRepository(impl: DemoRoomRepository): RoomRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindGuestRepository(impl: DemoGuestRepository): GuestRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindReservationRepository(impl: DemoReservationRepository): ReservationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindReceptionRepository(impl: DemoReceptionRepository): ReceptionRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFinanceRepository(impl: DemoFinanceRepository): FinanceRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHousekeepingRepository(impl: DemoHousekeepingRepository): HousekeepingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMaintenanceRepository(impl: DemoMaintenanceRepository): MaintenanceRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(impl: DemoUserRepository): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindReportRepository(impl: DemoReportRepository): ReportRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNotificationRepository(impl: DemoNotificationRepository): NotificationRepository
+}

@@ -49,12 +49,14 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          ./gradlew :app:testDebugUnitTest --stacktrace --no-daemon 2>&1 | tee test.log
+          ./gradlew :app:testProdDebugUnitTest --stacktrace --no-daemon 2>&1 | tee test.log
 
-      - name: Assemble debug APK
+      # Two flavours: `prod` (real app, talks only to the hotel server) and `demo`
+      # (self-contained showcase build with an in-memory dataset, no server needed).
+      - name: Assemble debug APKs (prod + demo)
         run: |
           set -o pipefail
-          ./gradlew :app:assembleDebug --stacktrace --no-daemon 2>&1 | tee build.log
+          ./gradlew :app:assembleProdDebug :app:assembleDemoDebug --stacktrace --no-daemon 2>&1 | tee build.log
 
       # GitHub-hosted artifact downloads are not reachable from every environment,
       # so the APK and the compiler output are published on dedicated branches.
@@ -62,8 +64,12 @@ jobs:
         if: success()
         run: |
           set -e
-          mkdir -p out/apk out/logs
-          cp app/build/outputs/apk/debug/*.apk out/apk/ || true
+          mkdir -p out/apk/prod out/apk/demo out/logs
+          # Stable file names so the links in artifacts/README.md never change.
+          cp app/build/outputs/apk/prod/debug/*.apk out/apk/app-debug.apk || true
+          cp app/build/outputs/apk/demo/debug/*.apk out/apk/mehra-demo-debug.apk || true
+          cp out/apk/app-debug.apk out/apk/prod/ || true
+          cp out/apk/mehra-demo-debug.apk out/apk/demo/ || true
           cp build.log out/logs/ 2>/dev/null || true
           cp test.log out/logs/ 2>/dev/null || true
           cd out
@@ -100,7 +106,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mehra-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: mehra-debug-apks
+          path: |
+            app/build/outputs/apk/prod/debug/*.apk
+            app/build/outputs/apk/demo/debug/*.apk
           if-no-files-found: warn
           retention-days: 14

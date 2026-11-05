@@ -38,6 +38,30 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    /**
+     * Two delivery flavours:
+     *
+     *  * `prod` — the real app. It only ever talks to the operator's MEHRA server and ships
+     *    zero sample data (see docs/API_CONTRACT.md).
+     *  * `demo` — a self-contained showcase build for customer presentations. All screens are
+     *    driven by an in-memory dataset inside this flavour (`src/demo`), so it installs next
+     *    to the real app, needs no server and can never be shipped by accident: its
+     *    applicationId is suffixed and none of its code exists in `prod`.
+     */
+    flavorDimensions += "mode"
+    productFlavors {
+        create("prod") {
+            dimension = "mode"
+            buildConfigField("boolean", "DEMO_MODE", "false")
+        }
+        create("demo") {
+            dimension = "mode"
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
+            buildConfigField("boolean", "DEMO_MODE", "true")
+        }
+    }
+
     signingConfigs {
         if (hasReleaseKeystore) {
             create("release") {
