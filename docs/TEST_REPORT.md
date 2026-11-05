@@ -6,10 +6,13 @@
 
 | مورد | وضعیت |
 |---|---|
-| ساخت پروژه (`:app:assembleDebug`) | ✅ **موفق** — روی GitHub Actions (Ubuntu + JDK 17 + Android SDK 35)، خروجی `app-debug.apk` (۲۰٫۸ مگابایت) |
-| تست‌های واحد (`:app:testDebugUnitTest`) | ✅ **سبز** — ۳ کلاس تست (تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX) بدون شکست اجرا شد |
+| ساخت نسخه عملیاتی (`:app:assembleProdDebug`) | ✅ **موفق** — GitHub Actions (Ubuntu + JDK 17 + Android SDK 35)، خروجی `app-debug.apk` / بسته `ir.ahvaz.mehra.debug` (۲۰٫۸ مگابایت) |
+| ساخت نسخه نمایشی (`:app:assembleDemoDebug`) | ✅ **موفق** — همان اجرا؛ خروجی `app-demo-debug.apk` / بسته `ir.ahvaz.mehra.demo.debug` (۲۰٫۹ مگابایت) |
+| جداسازی داده نمونه از نسخه عملیاتی | ✅ **تأیید با بازرسی APK** — کلاس `DemoStore` فقط در dex نسخه نمایشی وجود دارد و در نسخه عملیاتی نیست |
+| تست‌های واحد (`:app:testProdDebugUnitTest`) | ✅ **سبز** — ۳ کلاس تست (تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX) بدون شکست اجرا شد |
 | کامپایل Kotlin + KSP/Hilt | ✅ بدون خطا (فقط هشدارهای deprecation آیکون‌های AutoMirrored) |
-| APK دیباگ | ✅ تولید و امضا شده (debug keystore) — `artifacts/mehra-1.0.0-debug.apk`، شاخه `ci-artifacts` و آدرس https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk |
+| APK دیباگ (عملیاتی) | ✅ تولید و امضا شده (debug keystore) — `artifacts/mehra-1.0.0-debug.apk` (SHA-256 `9abc44da…`)، شاخه `ci-artifacts` و آدرس https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk |
+| APK نسخه نمایشی | ✅ تولید و امضا شده — `artifacts/mehra-demo-1.0.0-debug.apk` (SHA-256 `464bb677…`)، https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/mehra-demo-debug.apk |
 | APK ریلیز | ⏳ تولید نشده — نیازمند keystore انتشار (فایل `keystore.properties`) |
 | تست روی دستگاه/امولاتور | ❌ انجام نشده — محیط توسعه دستگاهی نداشت |
 | تست اتصال به API واقعی | ❌ انجام نشده — سرور ASP.NET Core در این مخزن پیاده‌سازی نشده است |
@@ -21,6 +24,30 @@
 
 - ۱۴۰۴/۰۸/۱۴ — دو بیلد اول با خطای کامپایل شکست خورد (۱۸۹ و ۲۱ خطا). خطاها از طریق شاخه `ci-build-log` بازیابی و اصلاح شدند؛ موارد اصلی: امضای عمومی `ApiExecutor.unit`، نبود ایمپورت `AppResult.map`، فراخوانی تابع‌های افزونه به‌صورت تابع معمولی، `PATTERN_TIME`، دسترسی `private` در مبدل جلالی و اپراتور منسوخ `StateFlow.distinctUntilChanged`.
 - ۱۴۰۴/۰۸/۱۴ — بیلد سوم: موفق؛ APK و لاگ‌ها در `ci-artifacts` منتشر شد.
+- ۱۴۰۴/۰۸/۱۴ — افزودن flavour نسخه نمایشی: اجرای اول (`42096733863`) با ۲ خطای کامپایل در
+  سورس نمایشی شکست خورد (ایمپورت نبودن `AppResult` در `DemoAuthRepository` و تداخل نام
+  `Companion` مدل مهمان با `companion object` کلاس `DemoStore`). هر دو اصلاح شد و اجرای
+  بعدی (`42097143225`) موفق بود: `assembleProdDebug` + `assembleDemoDebug` + تست‌های واحد.
+
+## 1.1 نسخه نمایشی (بیلد ۱۴۰۴/۰۸/۱۴ — اجرای CI `42097143225`)
+
+نسخه نمایشی برای معرفی به مشتری ساخته شد و **بدون هیچ سروری** کار می‌کند:
+
+- دو flavour معرفی شد: `prod` (نسخه واقعی، بدون داده نمونه) و `demo` (نمایشی). بایندینگ‌های
+  Hilt هر flavour جداگانه است (`src/prod/.../RepositoryModule.kt` و
+  `src/demo/.../DemoRepositoryModule.kt`)، بنابراین داده نمونه ساختاراً از نسخه عملیاتی جدا است.
+- پیاده‌سازی نمایشی برای هر ۱۲ ریپازیتوری دامنه (اتاق، مهمان، رزرو، پذیرش، مالی، خدمات،
+  تعمیرات، کاربران، گزارش‌ها، اعلان‌ها، داشبورد، احراز هویت) با یک مجموعه داده درون‌حافظه‌ای
+  هم‌زمان و «همیشه امروز» (۲۴ اتاق، ۱۲ مهمان، ۱۹ رزرو، ۸ اقامت، ۲۵ تراکنش، ۷ کار خدمات،
+  ۵ تیکت تعمیرات، ۶ اعلان، ۶ کاربر، ۱۰ لاگ).
+- در نسخه نمایشی، ثبت رزرو/پذیرش/تسویه/تغییر وضعیت اتاق/تخصیص نظافت/ثبت تیکت واقعاً روی همان
+  داده اثر می‌گذارد و در همه صفحه‌ها فوراً دیده می‌شود (تعارض رزرو هم شبیه‌سازی شده است).
+- بازرسی بایت‌به‌بایت خروجی‌ها:
+  - `mehra-demo-debug.apk`: بسته `ir.ahvaz.mehra.demo.debug`، برچسب «مهرآ نمایشی» در
+    `resources.arsc`، ۱۹ dex شامل `DemoStore`، بلوک امضای v2، فونت‌های Vazirmatn.
+  - `app-debug.apk`: بسته `ir.ahvaz.mehra.debug`، **بدون** `DemoStore` (جداسازی تأیید شد).
+- آنچه هنوز تست نشده: اجرای واقعی روی گوشی/امولاتور؛ صحت چیدمان RTL و جریان‌های تعاملی فقط
+  با بازبینی کد و کامپایل تأیید شده است.
 
 ## 2. آنچه در بررسی ایستا تأیید شد
 
@@ -44,7 +71,7 @@
 اجرا:
 
 ```bash
-./gradlew :app:testDebugUnitTest
+./gradlew :app:testProdDebugUnitTest
 ```
 
 ## 4. ماتریس تست دستی که باید روی دستگاه اجرا شود
@@ -83,8 +110,8 @@
 
 ## 6. معیار پذیرش پیشنهادی برای تحویل نهایی
 
-- [ ] `./gradlew :app:assembleDebug` و `assembleRelease` بدون خطا
-- [ ] `./gradlew :app:testDebugUnitTest` سبز
+- [ ] `./gradlew :app:assembleProdDebug`، `assembleDemoDebug` و `assembleProdRelease` بدون خطا
+- [ ] `./gradlew :app:testProdDebugUnitTest` سبز
 - [ ] اجرای ماتریس بخش ۴ روی امولاتور API 24 و API 35 و یک دستگاه واقعی
 - [ ] اتصال موفق به سرور واقعی و پاس‌شدن سناریوهای ۶ تا ۹
 - [ ] بررسی نبود داده حساس در `logcat` و در بکاپ دستگاه

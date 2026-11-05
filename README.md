@@ -3,14 +3,20 @@
 اپلیکیشن مدیریت مهمان‌پذیر فرهنگیان اهواز (Android) — Persian-first, RTL, offline-tolerant.
 
 > **وضعیت تحویل**
-> - ✅ **APK دیباگ ساخته شد** و آماده دانلود است:
+> - 🎬 **نسخه نمایشی برای معرفی به مشتری آماده است** (بدون سرور، با داده نمونه کامل):
+>   - دانلود مستقیم: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/mehra-demo-debug.apk
+>   - صفحه فایل: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/mehra-demo-debug.apk
+>   - فایل ثابت‌شده: `artifacts/mehra-demo-1.0.0-debug.apk` — راهنما: [`docs/DEMO.md`](docs/DEMO.md)
+> - ✅ **APK نسخه عملیاتی** هم ساخته و منتشر شده است:
 >   - دانلود مستقیم: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk
 >   - صفحه دانلود: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk
 >   - انتشار: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test
 >   - فایل محلی: `artifacts/mehra-1.0.0-debug.apk` (جزئیات در `artifacts/README.md`)
 > - ✅ **تست‌های واحد سبز**: تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX.
-> - ⏳ **تست روی دستگاه و سرور واقعی انجام نشده**؛ بک‌اند ASP.NET Core هنوز پیاده‌سازی نشده است و اپ تا زمانی که سرور سازگار با `docs/API.md` بالا نیاید از مرحله «اتصال به سرور» عبور نمی‌کند (هیچ داده نمونه‌ای نمایش داده نمی‌شود).
-> جزئیات: [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md) و [`dist/README.md`](dist/README.md).
+> - ⏳ **تست زمان‌اجرا روی دستگاه و سرور واقعی انجام نشده**؛ بک‌اند ASP.NET Core هنوز
+>   پیاده‌سازی نشده است و نسخه عملیاتی تا زمانی که سرور سازگار با `docs/API.md` بالا نیاید از
+>   مرحله «اتصال به سرور» عبور نمی‌کند (هیچ داده نمونه‌ای نمایش داده نمی‌شود).
+> جزئیات: [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md) و [`artifacts/README.md`](artifacts/README.md).
 
 ---
 
@@ -30,7 +36,22 @@
 - گزارش‌ها (اشغال، ورود/خروج, رزرو، درآمد، بدهکاران، عملکرد کارکنان، خدمات، تعمیرات) با فیلتر تاریخ شمسی و خروجی PDF/Excel و اشتراک‌گذاری
 - تنظیمات (آدرس سرور، وضعیت اتصال، پوسته، واحد پول، اعلان‌ها، مدیریت نشست، تغییر رمز، نسخه، خروج امن)
 
-## 2. پشته فنی
+## 2. دو flavour: نسخه عملیاتی و نسخه نمایشی
+
+| مورد | `prod` (عملیاتی) | `demo` (نمایشی) |
+|---|---|---|
+| بسته | `ir.ahvaz.mehra` (`*.debug` در بیلد دیباگ) | `ir.ahvaz.mehra.demo` |
+| منبع داده | فقط سرور واقعی (REST/SignalR) | داده درون‌حافظه‌ای در `app/src/demo` |
+| صفحه اتصال به سرور | لازم | ندارد؛ مستقیم به داشبورد |
+| داده نمونه | **هیچ** | همه‌جا (۲۴ اتاق، ۱۲ مهمان، ۱۹ رزرو، صندوق، گزارش‌ها) |
+| ساخت | `./gradlew :app:assembleProdDebug` | `./gradlew :app:assembleDemoDebug` |
+
+نسخه نمایشی برای معرفی به مشتری و آموزش کارکنان است و می‌تواند کنار نسخه واقعی روی همان گوشی
+نصب شود. کد و داده نمایشی فقط در source set مربوط به `demo` قرار دارد؛ بیلد `prod` حتی یک کلاس
+نمایشی هم در dex ندارد (این موضوع با بازرسی بایت‌به‌بایت APK تأیید شده است). راهنمای کامل نمایش
+و مسیر پیشنهادی ۵ دقیقه‌ای برای مشتری: [`docs/DEMO.md`](docs/DEMO.md).
+
+## 3. پشته فنی
 
 | لایه | انتخاب |
 |---|---|
@@ -48,7 +69,7 @@
 
 نسخه‌ها در `gradle/libs.versions.toml` متمرکز شده‌اند و از مجموعه‌ای گرفته شده‌اند که با هم سازگاری اثبات‌شده دارند (Google architecture-samples).
 
-## 3. ساختار پروژه
+## 4. ساختار پروژه
 
 ```
 app/src/main/java/ir/ahvaz/mehra/
@@ -71,23 +92,26 @@ app/src/main/java/ir/ahvaz/mehra/
 └── navigation/                # Routes + NavHost + BottomBar
 ```
 
-## 4. اجرا و ساخت
+## 5. اجرا و ساخت
 
 بیلد در CI (بدون نیاز به نصب چیزی روی سیستم شما): هر push به هر شاخه، workflow «Android CI» را اجرا می‌کند و APK را در شاخه `ci-artifacts` می‌گذارد.
 
 ```bash
 # پیش‌نیاز محلی: JDK 17، Android SDK (API 35)، Android Studio Ladybug یا جدیدتر
-./gradlew :app:assembleDebug        # APK دیباگ
-./gradlew :app:assembleRelease      # APK ریلیز (نیازمند keystore.properties برای امضا)
-./gradlew :app:testDebugUnitTest    # تست‌های واحد
+./gradlew :app:assembleProdDebug      # APK دیباگ نسخه عملیاتی
+./gradlew :app:assembleDemoDebug      # APK نسخه نمایشی (بدون سرور)
+./gradlew :app:assembleProdRelease    # APK ریلیز (نیازمند keystore.properties برای امضا)
+./gradlew :app:testProdDebugUnitTest  # تست‌های واحد
 ```
+
+خروجی‌ها: `app/build/outputs/apk/prod/debug/` و `app/build/outputs/apk/demo/debug/`.
 
 راهنمای کامل: [`docs/INSTALL.md`](docs/INSTALL.md).
 تنظیمات و الزامات سرور: [`docs/SERVER_SETUP.md`](docs/SERVER_SETUP.md).
 قرارداد API: [`docs/API.md`](docs/API.md).
 گزارش تست و مشکلات شناخته‌شده: [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md).
 
-## 5. نکات امنیتی پیاده‌شده
+## 6. نکات امنیتی پیاده‌شده
 
 - توکن‌ها فقط در `EncryptedSharedPreferences`؛ هیچ رمز یا کلیدی در سورس نیست (`allowBackup=false`).
 - لاگ‌ها هرگز توکن/رمز/اطلاعات هویتی مهمان را چاپ نمی‌کنند (interceptor فقط متادیتای امن).
@@ -97,7 +121,7 @@ app/src/main/java/ir/ahvaz/mehra/
 - HTTPS در نسخه ریلیز اجباری است؛ cleartext فقط در variant دیباگ و برای LAN مجاز است.
 - مجوزها فقط «راهنمای UI» هستند؛ تصمیم نهایی همیشه سمت سرور است.
 
-## 6. آفلاین و همگام‌سازی
+## 7. آفلاین و همگام‌سازی
 
 - خواندن‌ها read-through: نتیجه موفق کش می‌شود و در قطعی، همان داده با علامت «کش‌شده» و زمان به‌روزرسانی نمایش داده می‌شود.
 - نوشتن‌های حساس در قطعی، در `outbox` ذخیره و با همان idempotency key بازپخش می‌شوند؛ UI وضعیت «در انتظار تأیید سرور» را نشان می‌دهد.

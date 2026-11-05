@@ -20,8 +20,10 @@ sdk.dir=/path/to/Android/Sdk
 ## 2. ساخت
 
 ```bash
-./gradlew :app:assembleDebug
-# خروجی: app/build/outputs/apk/debug/app-debug.apk
+./gradlew :app:assembleProdDebug      # نسخه عملیاتی
+./gradlew :app:assembleDemoDebug      # نسخه نمایشی (بدون سرور)
+# خروجی: app/build/outputs/apk/prod/debug/app-prod-debug.apk
+#        app/build/outputs/apk/demo/debug/app-demo-debug.apk
 ```
 
 ```bash
@@ -45,7 +47,7 @@ keyPassword=********
 ## 4. نصب روی دستگاه
 
 ```bash
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/prod/debug/app-prod-debug.apk
 ```
 
 ## 5. پیکربندی اولین اجرا

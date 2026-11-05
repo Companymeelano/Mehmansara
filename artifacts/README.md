@@ -1,54 +1,85 @@
-# MEHRA — APK تست (debug)
+# MEHRA — فایل‌های APK تحویلی
 
-**فایل محلی:** `artifacts/mehra-1.0.0-debug.apk` (۲۰٫۸ مگابایت، امضاشده با debug keystore)
+دو نسخه در این پوشه قرار دارد. هر دو با debug keystore امضا شده‌اند و روی گوشی تستی نصب می‌شوند
+(برای انتشار در فروشگاه باید نسخه release با کلید انتشار ساخته شود).
+
+| نسخه | فایل | کاربرد | بسته |
+|---|---|---|---|
+| **نمایشی** (برای معرفی به مشتری) | `artifacts/mehra-demo-1.0.0-debug.apk` | بدون سرور، با داده نمونه کامل | `ir.ahvaz.mehra.demo.debug` |
+| عملیاتی | `artifacts/mehra-1.0.0-debug.apk` | نسخه واقعی؛ به سرور مجموعه وصل می‌شود | `ir.ahvaz.mehra.debug` |
 
 ## لینک‌های دانلود (مخزن عمومی است، نیازی به ورود نیست)
 
-| نوع | لینک |
-|---|---|
-| دانلود مستقیم | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk |
-| صفحه فایل با دکمه Download | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
-| صفحه انتشار | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test |
-| اجرای CI و آرتیفکت‌ها | https://github.com/Companymeelano/Mehmansara/actions |
+| نسخه | دانلود مستقیم | صفحه فایل |
+|---|---|---|
+| **نمایشی** | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/mehra-demo-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/mehra-demo-debug.apk |
+| نمایشی (نسخه ثابت‌شده) | https://github.com/Companymeelano/Mehmansara/raw/arena/276c0f62-mehmansara/artifacts/mehra-demo-1.0.0-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/arena/276c0f62-mehmansara/artifacts/mehra-demo-1.0.0-debug.apk |
+| عملیاتی | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
+| صفحه انتشار | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test | — |
+| اجرای CI و آرتیفکت‌ها | https://github.com/Companymeelano/Mehmansara/actions | — |
 
-> لینک شاخه `ci-artifacts` همیشه **آخرین بیلد موفق** را می‌دهد؛ با هر push در CI بازسازی می‌شود
-> (به همین دلیل هش فایل با هر بیلد تغییر می‌کند). فایل همین پوشه، نسخه ثابت‌شدهٔ همین تحویل است.
+> شاخه `ci-artifacts` همیشه **آخرین بیلد موفق** را می‌دهد و با هر push بازسازی می‌شود (به همین
+> دلیل هش فایل با هر بیلد تغییر می‌کند). فایل‌های همین پوشه، نسخه ثابت‌شدهٔ همین تحویل هستند.
 
 ## مشخصات
 
-| مورد | مقدار |
-|---|---|
-| بسته | `ir.ahvaz.mehra.debug` |
-| نسخه | 1.0.0 (versionCode 1) |
-| حجم | 20,843,619 بایت |
-| SHA-256 | `c78bbc3b40349d4cf4d6e8221b420ce60c08fc3a4d4437e1e70a654d8f7e8107` |
-| minSdk / targetSdk | 24 / 35 |
-| ساخت | JDK 17 • AGP 8.7.3 • Gradle 8.11.1 • GitHub Actions |
-| امضا | APK Signature Scheme v2 با debug keystore (فقط تست) |
+| مورد | نمایشی | عملیاتی |
+|---|---|---|
+| بسته | `ir.ahvaz.mehra.demo.debug` | `ir.ahvaz.mehra.debug` |
+| نام روی گوشی | مهرآ نمایشی | مهرآ |
+| نسخه | 1.0.0-demo-debug (versionCode 1) | 1.0.0-debug (versionCode 1) |
+| حجم | 20,941,947 بایت | 20,843,619 بایت |
+| SHA-256 | `464bb67726c0a2939504dceb6304e0f562a940b7b143b38610b3276c045d5f86` | `9abc44dae615ba611c4d32503e9b95b431d8646fe6e1dd685c591fa140d47d4a` |
+| minSdk / targetSdk | 24 / 35 | 24 / 35 |
+| امضا | APK Signature Scheme v2 (debug keystore) | همان |
+
+هر دو APK از یک کامیت ساخته شده‌اند و می‌توانند همزمان روی یک گوشی نصب شوند.
 
 ## نصب
 
 ```bash
-adb install -r mehra-1.0.0-debug.apk
+adb install -r mehra-demo-1.0.0-debug.apk    # نسخه نمایشی
+adb install -r mehra-1.0.0-debug.apk         # نسخه عملیاتی
 ```
 
 یا انتقال فایل به گوشی → لمس فایل → اجازه «نصب از منابع ناشناس».
 
-## اولین اجرا
+## نسخه نمایشی — اولین اجرا
 
-1. صفحه «اتصال به سرور» → آدرس سرور REST (در دیباگ `http://` برای LAN مجاز است، مثلاً `http://192.168.1.20:5080`).
+1. پیام «نسخه نمایشی مهرآ» نمایش داده می‌شود؛ «شروع نمایش» را بزنید.
+2. مستقیم وارد داشبورد می‌شوید (بدون صفحه اتصال به سرور، بدون ورود).
+3. اگر از برنامه خارج شدید، در صفحه ورود **هر نام کاربری و رمزی** پذیرفته می‌شود
+   (نمونه: `admin` / `123456`).
+4. داده‌های نمایشی روی حافظه اپ هستند؛ با بستن کامل برنامه به حالت اولیه برمی‌گردند.
+
+راهنمای کامل نمایش و فهرست داده‌ها: [`docs/DEMO.md`](../docs/DEMO.md).
+
+## نسخه عملیاتی — اولین اجرا
+
+1. صفحه «اتصال به سرور» → آدرس سرور REST (در دیباگ `http://` برای LAN مجاز است، مثلاً
+   `http://192.168.1.20:5080`).
 2. «بررسی اتصال» → آزمون `GET /api/v1/system/health` → «ذخیره نشانی».
 3. ورود با کاربر ساخته‌شده در سرور.
 
-**بک‌اند هنوز پیاده‌سازی نشده است**؛ اپ تا بالا آمدن سروری سازگار با `docs/API.md` در همین مرحله می‌ماند و هیچ داده نمونه‌ای نشان نمی‌دهد.
+**بک‌اند هنوز پیاده‌سازی نشده است**؛ نسخه عملیاتی تا بالا آمدن سروری سازگار با `docs/API.md`
+در همین مرحله می‌ماند و هیچ داده نمونه‌ای نشان نمی‌دهد (این یک تصمیم طراحی است، نه نقص).
 
-## چه چیزی در این بیلد اثبات شده
+## چه چیزی در این بیلدها اثبات شده
 
-- کامپایل کامل پروژه (Kotlin، Compose، Hilt/KSP، Room، WorkManager) با SDK 35.
-- تست‌های واحد سبز: تبدیل جلالی↔میلادی، ارقام و مبلغ فارسی، اعتبارسنجی کد ملی/موبایل، نویسنده XLSX.
-- منابع و Manifest سالم (Vazirmatn، `ic_notification`، ۱۹ dex).
+- کامپایل کامل هر دو flavour (`assembleProdDebug` + `assembleDemoDebug`) با SDK 35 در CI.
+- تست‌های واحد سبز (تبدیل جلالی، ارقام و مبلغ فارسی، اعتبارسنجی، نویسنده XLSX).
+- بازرسی بایت‌به‌بایت APKها:
+  - نسخه نمایشی: بسته `ir.ahvaz.mehra.demo.debug`، کلاس‌های `DemoStore`/`Demo*Repository`،
+    برچسب «مهرآ نمایشی» در `resources.arsc`، بلوک امضای v2، ۱۹ dex، فونت‌های Vazirmatn.
+  - نسخه عملیاتی: بسته `ir.ahvaz.mehra.debug` و **هیچ** کلاس یا داده نمایشی (`DemoStore`
+    در dex وجود ندارد) — یعنی داده نمونه ساختاراً از نسخه واقعی جدا است.
+- منابع و Manifest سالم (`ic_notification`، فونت‌ها، FileProvider).
 
 ## چه چیزی تست نشده
 
-اتصال به سرور واقعی، ورود، رزرو، پذیرش، پرداخت، SignalR، صف آفلاین و چیدمان RTL روی دستگاه واقعی.
-فهرست کامل: `docs/TEST_REPORT.md`.
+- اجرای واقعی روی گوشی/امولاتور (محیط ساخت دستگاه نداشت) — شامل چیدمان RTL در صفحه‌های
+  واقعی، ثبت رزرو، پذیرش، پرداخت، خروجی PDF/Excel در نمایشگرهای خارجی.
+- اتصال به سرور واقعی و SignalR (سرور هنوز وجود ندارد).
+- نسخه release امضاشده با کلید انتشار (نیازمند `keystore.properties`).
+
+فهرست کامل: [`docs/TEST_REPORT.md`](../docs/TEST_REPORT.md).
