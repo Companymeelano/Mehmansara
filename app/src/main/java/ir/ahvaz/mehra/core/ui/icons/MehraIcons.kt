@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 /**
  * MEHRA's own icon set.
  *
- * Every glyph is authored as an SVG master in `design/icons/svg/*.svg` (with metallic
+ * Every glyph is authored as an SVG master in the `design/icons/svg` folder (with metallic
  * gradients for the 3D look) and mirrored here as an Android vector drawable. At runtime the
  * glyph is drawn by [ir.ahvaz.mehra.core.ui.components.Icon3D] on top of a theme-driven
  * gradient chip, so the icon always matches the user-selected theme. All paths are simple
