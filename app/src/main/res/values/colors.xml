@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mehra_window_background">#FFF8F2E6</color>
+    <color name="mehra_window_background_dark">#FF0E1524</color>
+    <color name="mehra_gold">#FFC8A96A</color>
+    <color name="mehra_navy">#FF0E1524</color>
+    <color name="mehra_icon_background">#FF0E1524</color>
+</resources>

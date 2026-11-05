@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  DEBUG ONLY. Allows plain HTTP so a developer can point the app at
+  http://192.168.x.x:5000 while testing on the internal LAN, and trusts
+  user-installed CAs (e.g. a staging certificate).
+  This file is never packaged in a release APK.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

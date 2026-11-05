@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Production network policy for MEHRA.
+  * HTTPS is mandatory: cleartext traffic is refused for every domain.
+  * Only the platform trust store is honoured. If the hotel uses a private/internal
+    CA, install that CA certificate on the device trust store (see docs/SERVER_SETUP.md)
+    instead of relaxing this policy.
+  The debug variant overrides this file (app/src/debug/res/xml) to allow plain HTTP
+  against a LAN address while developing.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Generated report PDF/XLSX files and captured maintenance photos are shared
+         from the app cache through FileProvider only. -->
+    <cache-path name="reports" path="reports/" />
+    <cache-path name="receipts" path="receipts/" />
+    <cache-path name="images" path="images/" />
+</paths>

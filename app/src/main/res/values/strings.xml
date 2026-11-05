@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مهرآ</string>
+    <string name="app_name_full">مهرآ — مهمان‌پذیر فرهنگیان اهواز</string>
+    <string name="notification_channel_ops_name">اعلان‌های عملیاتی</string>
+    <string name="notification_channel_ops_desc">رزرو، پذیرش، پرداخت و تغییر وضعیت اتاق</string>
+    <string name="notification_channel_sync_name">همگام‌سازی</string>
+    <string name="notification_channel_sync_desc">وضعیت ارسال عملیات در انتظار</string>
+    <string name="file_provider_authority_suffix">fileprovider</string>
+</resources>
