@@ -52,7 +52,7 @@ fun String.normalizePersian(): String = this
     .replace('\u00A0', ' ')
     .trim()
 
-fun String.digitsOnly(): String = ().toLatinDigits().filter { it.isDigit() }
+fun String.digitsOnly(): String = this.toLatinDigits().filter { it.isDigit() }
 
 /** 9123456789 / 09123456789 / +989123456789 -> 09123456789 */
 fun normalizeIranMobile(raw: String): String {
