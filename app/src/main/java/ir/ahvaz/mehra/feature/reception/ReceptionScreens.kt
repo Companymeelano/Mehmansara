@@ -1,5 +1,6 @@
 package ir.ahvaz.mehra.feature.reception
 
+import ir.ahvaz.mehra.core.ui.components.JalaliDateField
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -242,7 +243,7 @@ private fun StayRow(stay: Stay, onCheckOut: () -> Unit, onExtend: () -> Unit, on
                     fontWeight = FontWeight.SemiBold,
                 )
                 Text(
-                    text = "اتاق ${stay.roomNumber} • ${toPersianDigits(stay.guestsCount.toString())} نفر • خروج برنامه‌ریزی‌شده ${stay.plannedCheckOut.formatJalaliLongFa()}",
+                    text = "اتاق ${stay.roomNumber} • ${(stay.guestsCount.toString()).toPersianDigits()} نفر • خروج برنامه‌ریزی‌شده ${stay.plannedCheckOut.formatJalaliLongFa()}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -426,7 +427,7 @@ fun CheckInScreen(
                     MehraCard(modifier = Modifier.fillMaxWidth()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "همراه ${toPersianDigits((index + 1).toString())}",
+                                text = "همراه ${((index + 1).toString()).toPersianDigits()}",
                                 style = MaterialTheme.typography.labelMedium,
                                 modifier = Modifier.weight(1f),
                             )

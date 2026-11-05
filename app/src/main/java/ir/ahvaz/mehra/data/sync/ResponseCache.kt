@@ -34,7 +34,7 @@ class ResponseCache @Inject constructor(
     suspend fun get(key: String): CachedPayload? {
         val entity = runCatching { dao.get(key) }.getOrNull() ?: return null
         if (System.currentTimeMillis() - entity.updatedAtMillis > Constants.CACHE_MAX_AGE_MILLIS) return null
-        return CachedPayload(entity.json = entity.payloadJson, updatedAtMillis = entity.updatedAtMillis)
+        return CachedPayload(json = entity.payloadJson, updatedAtMillis = entity.updatedAtMillis)
     }
 
     suspend fun invalidate(key: String) {

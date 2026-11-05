@@ -19,7 +19,6 @@ import ir.ahvaz.mehra.domain.repository.NotificationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -91,7 +90,7 @@ class RootViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            networkMonitor.isOnline.distinctUntilChanged().collect { online ->
+            networkMonitor.isOnline.collect { online ->
                 _state.update { it.copy(isOnline = online) }
             }
         }

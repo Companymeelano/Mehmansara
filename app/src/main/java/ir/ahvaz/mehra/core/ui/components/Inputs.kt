@@ -379,7 +379,7 @@ fun NumberStepper(
             Icon(Icons.Rounded.ChevronLeft, contentDescription = "کاهش")
         }
         Text(
-            text = ir.ahvaz.mehra.core.common.toPersianDigits(value.toString()),
+            text = value.toString().toPersianDigits(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.width(36.dp),

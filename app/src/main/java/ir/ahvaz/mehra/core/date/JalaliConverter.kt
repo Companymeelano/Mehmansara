@@ -63,7 +63,7 @@ object JalaliConverter {
         return d
     }
 
-    private fun jdnToGregorian(jdn: Int): LocalDate {
+    fun jdnToGregorian(jdn: Int): LocalDate {
         var j = 4 * jdn + 139361631
         j = j + ((4 * jdn + 183187720) / 146097) * 3 / 4 * 4 - 3908
         val i = (j % 1461 / 4) * 5 + 308

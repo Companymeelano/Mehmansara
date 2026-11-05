@@ -166,7 +166,7 @@ private fun DashboardContent(
                             DonutSegment(snapshot.maintenanceRooms.toFloat(), colors.statusMaintenance, "تعمیرات"),
                         ),
                         modifier = Modifier.size(140.dp),
-                        centerValue = "${toPersianDigits(snapshot.occupancyPercent.toString())}٪",
+                        centerValue = "${(snapshot.occupancyPercent.toString()).toPersianDigits()}٪",
                         centerLabel = "اشغال",
                     )
                     Spacer(modifier = Modifier.width(16.dp))
@@ -188,14 +188,14 @@ private fun DashboardContent(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 StatTile(
                     label = "کل اتاق‌ها",
-                    value = toPersianDigits(snapshot.totalRooms.toString()),
+                    value = (snapshot.totalRooms.toString()).toPersianDigits(),
                     icon = Icons.Rounded.Bed,
                     modifier = Modifier.weight(1f),
                     onClick = onOpenRooms,
                 )
                 StatTile(
                     label = "آزاد",
-                    value = toPersianDigits(snapshot.freeRooms.toString()),
+                    value = (snapshot.freeRooms.toString()).toPersianDigits(),
                     icon = Icons.Rounded.EventAvailable,
                     tone = colors.statusFree,
                     modifier = Modifier.weight(1f),
@@ -207,7 +207,7 @@ private fun DashboardContent(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 StatTile(
                     label = "رزرو‌شده",
-                    value = toPersianDigits(snapshot.reservedRooms.toString()),
+                    value = (snapshot.reservedRooms.toString()).toPersianDigits(),
                     icon = Icons.Rounded.EventBusy,
                     tone = colors.statusReserved,
                     modifier = Modifier.weight(1f),
@@ -215,7 +215,7 @@ private fun DashboardContent(
                 )
                 StatTile(
                     label = "اشغال",
-                    value = toPersianDigits(snapshot.occupiedRooms.toString()),
+                    value = (snapshot.occupiedRooms.toString()).toPersianDigits(),
                     icon = Icons.Rounded.Bed,
                     tone = colors.statusOccupied,
                     modifier = Modifier.weight(1f),
@@ -227,7 +227,7 @@ private fun DashboardContent(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 StatTile(
                     label = "در حال نظافت",
-                    value = toPersianDigits(snapshot.cleaningRooms.toString()),
+                    value = (snapshot.cleaningRooms.toString()).toPersianDigits(),
                     icon = Icons.Rounded.CleaningServices,
                     tone = colors.statusCleaning,
                     modifier = Modifier.weight(1f),
@@ -235,7 +235,7 @@ private fun DashboardContent(
                 )
                 StatTile(
                     label = "تعمیراتی",
-                    value = toPersianDigits(snapshot.maintenanceRooms.toString()),
+                    value = (snapshot.maintenanceRooms.toString()).toPersianDigits(),
                     icon = Icons.Rounded.Handyman,
                     tone = colors.statusMaintenance,
                     modifier = Modifier.weight(1f),
@@ -247,7 +247,7 @@ private fun DashboardContent(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 StatTile(
                     label = "ورود امروز",
-                    value = toPersianDigits(snapshot.todayCheckIns.toString()),
+                    value = (snapshot.todayCheckIns.toString()).toPersianDigits(),
                     icon = Icons.Rounded.Login,
                     tone = colors.info,
                     modifier = Modifier.weight(1f),
@@ -255,7 +255,7 @@ private fun DashboardContent(
                 )
                 StatTile(
                     label = "خروج امروز",
-                    value = toPersianDigits(snapshot.todayCheckOuts.toString()),
+                    value = (snapshot.todayCheckOuts.toString()).toPersianDigits(),
                     icon = Icons.Rounded.Logout,
                     tone = colors.warning,
                     modifier = Modifier.weight(1f),

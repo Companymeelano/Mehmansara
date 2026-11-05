@@ -154,7 +154,7 @@ fun ReservationsScreen(
                                         entry.guestPhone,
                                         entry.requestedCheckIn.formatJalaliFaOrDash() + " تا " +
                                             entry.requestedCheckOut.formatJalaliFaOrDash(),
-                                        "${toPersianDigits(entry.guestsCount.toString())} نفر",
+                                        "${(entry.guestsCount.toString()).toPersianDigits()} نفر",
                                     ).joinToString(" • "),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -301,7 +301,7 @@ fun ReservationDetailScreen(
                     InfoRow("ورود", reservation.checkIn.formatJalaliLongFa())
                     InfoRow("خروج", reservation.checkOut.formatJalaliLongFa())
                     InfoRow("مدت اقامت", nightsLabelFa(reservation.nights))
-                    InfoRow("تعداد نفرات", toPersianDigits(reservation.guestsCount.toString()))
+                    InfoRow("تعداد نفرات", (reservation.guestsCount.toString()).toPersianDigits())
                     InfoRow("تعرفه شبانه", formatMoneyFa(reservation.nightlyRateRial))
                     InfoRow("مبلغ کل", formatMoneyFa(reservation.totalRial))
                     InfoRow("تخفیف", formatMoneyFa(reservation.discountRial))

@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ir.ahvaz.mehra.core.common.AppError
 import ir.ahvaz.mehra.core.common.AppResult
+import ir.ahvaz.mehra.core.common.map
 import ir.ahvaz.mehra.core.common.CachedData
 import ir.ahvaz.mehra.core.common.Validators
 import ir.ahvaz.mehra.core.network.ApiExecutor

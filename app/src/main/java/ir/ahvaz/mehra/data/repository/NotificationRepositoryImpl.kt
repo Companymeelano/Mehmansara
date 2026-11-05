@@ -3,6 +3,7 @@ package ir.ahvaz.mehra.data.repository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ir.ahvaz.mehra.core.common.AppResult
+import ir.ahvaz.mehra.core.common.map
 import ir.ahvaz.mehra.core.common.CachedData
 import ir.ahvaz.mehra.core.di.ApplicationScope
 import ir.ahvaz.mehra.core.network.ApiExecutor

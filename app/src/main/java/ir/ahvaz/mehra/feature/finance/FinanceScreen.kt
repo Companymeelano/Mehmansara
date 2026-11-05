@@ -304,7 +304,7 @@ private fun CashBoxTab(state: FinanceUiState, viewModel: FinanceViewModel) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(total.method.labelFa, modifier = Modifier.weight(1f))
                                 Text(
-                                    text = "${formatMoneyFa(total.amountRial)} • ${toPersianDigits(total.count.toString())} تراکنش",
+                                    text = "${formatMoneyFa(total.amountRial)} • ${(total.count.toString()).toPersianDigits()} تراکنش",
                                     style = MaterialTheme.typography.labelMedium,
                                 )
                             }

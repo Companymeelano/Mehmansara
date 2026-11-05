@@ -7,12 +7,15 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import ir.ahvaz.mehra.core.common.toPersianDigits
 import java.time.temporal.ChronoUnit
 
 /**
  * All business dates of the hotel belong to the Asia/Tehran time zone.
  * The backend stores UTC instants; only this object decides what "today" means.
  */
+private const val PATTERN_TIME = "HH:mm"
+
 object TehranTime {
 
     val zone: ZoneId = ZoneId.of("Asia/Tehran")
@@ -95,14 +98,14 @@ fun Instant?.formatJalaliDateTimeFa(): String {
     if (this == null) return "\u2014"
     val zoned = atZone(TehranTime.zone)
     val date = JalaliDate.from(zoned.toLocalDate()).formatShortFa()
-    val time = zoned.format(DateTimeFormatter.ofPattern(PATTERN_TIME)).let { ir.ahvaz.mehra.core.common.toPersianDigits(it) }
+    val time = zoned.format(DateTimeFormatter.ofPattern(PATTERN_TIME)).let { it.toPersianDigits() }
     return "$date \u2014 $time"
 }
 
 fun Instant?.formatTimeFa(): String {
     if (this == null) return "\u2014"
     val time = atZone(TehranTime.zone).format(DateTimeFormatter.ofPattern(PATTERN_TIME))
-    return ir.ahvaz.mehra.core.common.toPersianDigits(time)
+    return (time)
 }
 
 fun Long?.formatEpochDateTimeFa(): String = this?.let { Instant.ofEpochMilli(it) }?.formatJalaliDateTimeFa() ?: "\u2014"
@@ -116,7 +119,7 @@ fun nightsBetween(checkIn: LocalDate, checkOut: LocalDate): Int {
 }
 
 /** "۳ شب" / "۴ روز" style duration used on reservation summaries. */
-fun nightsLabelFa(nights: Int): String = "${ir.ahvaz.mehra.core.common.toPersianDigits(nights.toString())} شب"
+fun nightsLabelFa(nights: Int): String = "${(nights.toString())} شب"
 
 /** "۳ دقیقه پیش" — used for activity feeds and cache freshness. */
 fun relativeTimeFa(instant: Instant?, now: Instant = Instant.now()): String {
@@ -124,9 +127,9 @@ fun relativeTimeFa(instant: Instant?, now: Instant = Instant.now()): String {
     val seconds = ChronoUnit.SECONDS.between(instant, now)
     return when {
         seconds < 60 -> "همین حالا"
-        seconds < 3600 -> "${ir.ahvaz.mehra.core.common.toPersianDigits((seconds / 60).toString())} دقیقه پیش"
-        seconds < 86_400 -> "${ir.ahvaz.mehra.core.common.toPersianDigits((seconds / 3600).toString())} ساعت پیش"
-        seconds < 2_592_000 -> "${ir.ahvaz.mehra.core.common.toPersianDigits((seconds / 86_400).toString())} روز پیش"
+        seconds < 3600 -> "${((seconds / 60).toString())} دقیقه پیش"
+        seconds < 86_400 -> "${((seconds / 3600).toString())} ساعت پیش"
+        seconds < 2_592_000 -> "${((seconds / 86_400).toString())} روز پیش"
         else -> JalaliDate.from(instant.atZone(TehranTime.zone).toLocalDate()).formatShortFa()
     }
 }

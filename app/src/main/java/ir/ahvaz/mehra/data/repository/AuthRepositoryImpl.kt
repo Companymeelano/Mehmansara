@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import ir.ahvaz.mehra.core.common.AppError
 import ir.ahvaz.mehra.core.common.AppResult
+import ir.ahvaz.mehra.core.common.map
 import ir.ahvaz.mehra.core.date.IsoFormat
 import ir.ahvaz.mehra.core.di.RefreshClient
 import ir.ahvaz.mehra.core.network.ApiErrorCodes

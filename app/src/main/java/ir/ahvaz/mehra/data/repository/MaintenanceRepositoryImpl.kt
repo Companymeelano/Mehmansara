@@ -9,6 +9,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import com.google.gson.reflect.TypeToken
 import ir.ahvaz.mehra.core.common.AppError
 import ir.ahvaz.mehra.core.common.AppResult
+import ir.ahvaz.mehra.core.common.map
 import ir.ahvaz.mehra.core.common.CachedData
 import ir.ahvaz.mehra.core.network.ApiExecutor
 import ir.ahvaz.mehra.core.network.NetworkMonitor

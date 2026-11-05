@@ -257,7 +257,7 @@ fun MaintenanceFormScreen(
             Spacer(modifier = Modifier.height(16.dp))
             SectionHeader(title = "تصاویر خرابی")
             Text(
-                text = "حداکثر ${toPersianDigits("5")} تصویر. تصاویر پس از ثبت گزارش به سرور ارسال می‌شوند.",
+                text = "حداکثر ${("5").toPersianDigits()} تصویر. تصاویر پس از ثبت گزارش به سرور ارسال می‌شوند.",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

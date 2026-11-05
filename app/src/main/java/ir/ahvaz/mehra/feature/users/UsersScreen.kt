@@ -246,13 +246,13 @@ private fun RolesTab(roles: List<RoleInfo>) {
                         modifier = Modifier.weight(1f),
                     )
                     Text(
-                        text = "${toPersianDigits(role.userCount.toString())} کاربر",
+                        text = "${(role.userCount.toString()).toPersianDigits()} کاربر",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Text(
-                    text = "${toPersianDigits(role.permissions.size.toString())} مجوز",
+                    text = "${(role.permissions.size.toString()).toPersianDigits()} مجوز",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import ir.ahvaz.mehra.core.common.AppError
 import ir.ahvaz.mehra.core.common.AppResult
 import ir.ahvaz.mehra.core.common.CachedData
+import ir.ahvaz.mehra.core.common.map
 import ir.ahvaz.mehra.core.common.ErrorKind
 import ir.ahvaz.mehra.core.network.ApiExecutor
 import ir.ahvaz.mehra.core.network.NetworkMonitor
@@ -26,7 +27,7 @@ abstract class BaseRepository(
     protected val networkMonitor: NetworkMonitor,
 ) {
 
-    protected suspend fun <T> readThrough(
+    protected suspend fun <T : Any> readThrough(
         cacheKey: String,
         cacheType: Type,
         fetch: suspend () -> AppResult<T>,

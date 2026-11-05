@@ -226,7 +226,7 @@ private fun ReportTablePreview(table: ReportTable) {
         }
         if (table.rows.size > 60) {
             Text(
-                text = "نمایش ۶۰ سطر از ${toPersianDigits(table.rows.size.toString())} سطر — برای فهرست کامل، خروجی PDF یا اکسل بگیرید.",
+                text = "نمایش ۶۰ سطر از ${(table.rows.size.toString()).toPersianDigits()} سطر — برای فهرست کامل، خروجی PDF یا اکسل بگیرید.",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 6.dp),

@@ -1,5 +1,6 @@
 package ir.ahvaz.mehra.feature.root
 
+import ir.ahvaz.mehra.core.common.toPersianDigits
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -178,7 +179,7 @@ private fun Keypad(onDigit: (String) -> Unit, onBackspace: () -> Unit) {
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text(
-                                    text = ir.ahvaz.mehra.core.common.toPersianDigits(key),
+                                    text = key.toString().toPersianDigits(),
                                     style = MaterialTheme.typography.titleLarge,
                                     fontWeight = FontWeight.Medium,
                                 )

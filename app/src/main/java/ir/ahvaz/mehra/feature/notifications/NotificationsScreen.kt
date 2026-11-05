@@ -108,7 +108,7 @@ fun NotificationsScreen(viewModel: NotificationsViewModel = hiltViewModel()) {
                                         )
                                     }
                                     Text(
-                                        text = item.createdAt.relativeTimeFa(),
+                                        text = relativeTimeFa(item.createdAt),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )

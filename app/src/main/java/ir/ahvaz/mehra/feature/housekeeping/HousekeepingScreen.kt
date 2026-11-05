@@ -223,7 +223,7 @@ private fun TaskCard(
                 Text(
                     text = listOfNotNull(
                         task.assignedToName?.let { "نظافت‌کار: $it" } ?: "بدون تخصیص",
-                        task.createdAt.relativeTimeFa().takeIf { it.isNotBlank() },
+                        relativeTimeFa(task.createdAt).takeIf { it.isNotBlank() },
                     ).joinToString(" • "),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -312,7 +312,7 @@ private fun CleaningRoomsTab(rooms: List<Room>, canManage: Boolean, onCreate: ()
                             fontWeight = FontWeight.SemiBold,
                         )
                         Text(
-                            text = "طبقه ${toPersianDigits(room.floor.toString())} • ${room.roomTypeName}",
+                            text = "طبقه ${(room.floor.toString()).toPersianDigits()} • ${room.roomTypeName}",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -347,7 +347,7 @@ private fun PerformanceTab(state: HousekeepingUiState) {
         }
         HorizontalBarList(
             items = state.performance.map { it.employeeName to it.completedCount.toLong() },
-            valueFormatter = { "${toPersianDigits(it.toString())} مورد" },
+            valueFormatter = { "${(it.toString()).toPersianDigits()} مورد" },
         )
         Spacer(modifier = Modifier.height(16.dp))
         state.performance.forEach { performance ->
@@ -358,9 +358,9 @@ private fun PerformanceTab(state: HousekeepingUiState) {
                     fontWeight = FontWeight.SemiBold,
                 )
                 Text(
-                    text = "تکمیل‌شده: ${toPersianDigits(performance.completedCount.toString())} • " +
-                        "میانگین زمان: ${toPersianDigits(performance.averageMinutes.toString())} دقیقه • " +
-                        "نرخ تأیید: ${toPersianDigits(performance.approvalRatePercent.toString())}٪",
+                    text = "تکمیل‌شده: ${(performance.completedCount.toString()).toPersianDigits()} • " +
+                        "میانگین زمان: ${(performance.averageMinutes.toString()).toPersianDigits()} دقیقه • " +
+                        "نرخ تأیید: ${(performance.approvalRatePercent.toString()).toPersianDigits()}٪",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

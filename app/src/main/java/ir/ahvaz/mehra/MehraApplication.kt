@@ -20,7 +20,6 @@ import ir.ahvaz.mehra.domain.model.RealtimeEvent
 import ir.ahvaz.mehra.domain.repository.NotificationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -80,7 +79,6 @@ class MehraApplication : Application(), Configuration.Provider {
         // Drain the outbox as soon as the network comes back.
         appScope.launch {
             networkMonitor.isOnline
-                .distinctUntilChanged()
                 .collect { online ->
                     if (online && sessionManager.isLoggedIn) {
                         SyncWorker.enqueueImmediate(this@MehraApplication)

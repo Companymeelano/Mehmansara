@@ -79,7 +79,7 @@ fun RoomsScreen(
 
     MehraScreen(
         title = "مدیریت اتاق‌ها",
-        subtitle = if (state.floor != null) "طبقه ${toPersianDigits(state.floor.toString())}" else null,
+        subtitle = if (state.floor != null) "طبقه ${(state.floor.toString()).toPersianDigits()}" else null,
         offline = rooms.fromCache || !state.isOnline,
         pendingCount = state.pendingOperations,
         actions = {
@@ -115,7 +115,7 @@ fun RoomsScreen(
                         items = state.floors,
                         selected = state.floor,
                         onSelect = viewModel::onFloorChange,
-                        label = { "طبقه ${toPersianDigits(it.toString())}" },
+                        label = { "طبقه ${(it.toString()).toPersianDigits()}" },
                     )
                 }
                 Spacer(modifier = Modifier.height(6.dp))
@@ -170,8 +170,8 @@ private fun RoomRow(room: Room, onClick: () -> Unit) {
                 Text(
                     text = listOfNotNull(
                         room.roomTypeName.takeIf { it.isNotBlank() },
-                        "طبقه ${toPersianDigits(room.floor.toString())}",
-                        "ظرفیت ${toPersianDigits(room.capacity.toString())} نفر",
+                        "طبقه ${(room.floor.toString()).toPersianDigits()}",
+                        "ظرفیت ${(room.capacity.toString()).toPersianDigits()} نفر",
                     ).joinToString(" • "),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -247,10 +247,10 @@ fun RoomDetailScreen(
                             Icon(Icons.Rounded.Refresh, contentDescription = "به‌روزرسانی")
                         }
                     }
-                    InfoRow("شماره اتاق", toPersianDigits(room.roomNumber))
+                    InfoRow("شماره اتاق", (room.roomNumber).toPersianDigits())
                     InfoRow("نوع اتاق", room.roomTypeName.ifBlank { "—" })
-                    InfoRow("طبقه", toPersianDigits(room.floor.toString()))
-                    InfoRow("ظرفیت", "${toPersianDigits(room.capacity.toString())} نفر")
+                    InfoRow("طبقه", (room.floor.toString()).toPersianDigits())
+                    InfoRow("ظرفیت", "${(room.capacity.toString()).toPersianDigits()} نفر")
                     InfoRow("تعرفه شبانه", formatMoneyFa(room.ratePerNightRial))
                     if (room.amenities.isNotEmpty()) {
                         InfoRow("امکانات", room.amenities.joinToString("، "))

@@ -1,5 +1,6 @@
 package ir.ahvaz.mehra.core.ui.components
 
+import ir.ahvaz.mehra.core.common.toPersianDigits
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
@@ -107,7 +108,7 @@ fun CountBadge(count: Int, modifier: Modifier = Modifier, tone: Color = MehraThe
             .padding(horizontal = 8.dp, vertical = 2.dp),
     ) {
         Text(
-            text = ir.ahvaz.mehra.core.common.toPersianDigits(count.toString()),
+            text = count.toString().toPersianDigits(),
             style = MaterialTheme.typography.labelSmall,
             color = tone,
             fontWeight = FontWeight.SemiBold,

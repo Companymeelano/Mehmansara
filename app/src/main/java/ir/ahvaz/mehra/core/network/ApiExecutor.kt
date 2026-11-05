@@ -46,7 +46,7 @@ class ApiExecutor @Inject constructor(private val gson: Gson) {
         }
 
     /** For endpoints that acknowledge with 200/204 and no meaningful payload. */
-    suspend fun unit(call: suspend () -> Response<ApiEnvelope<com.google.gson.JsonElement>>): AppResult<Unit> =
+    suspend fun <T : Any> unit(call: suspend () -> Response<ApiEnvelope<T>>): AppResult<Unit> =
         withContext(Dispatchers.IO) {
             try {
                 val response = call()

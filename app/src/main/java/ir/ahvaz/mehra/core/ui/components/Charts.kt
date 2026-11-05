@@ -118,7 +118,7 @@ fun ChartLegend(segments: List<DonutSegment>, modifier: Modifier = Modifier) {
                     modifier = Modifier.weight(1f),
                 )
                 Text(
-                    text = formatThousands(segment.value.toLong()).toPersianDigits(),
+                    text = (segment.value.toLong()).formatThousands().toPersianDigits(),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -189,7 +189,7 @@ fun BarSeriesChart(
 fun HorizontalBarList(
     items: List<Pair<String, Long>>,
     modifier: Modifier = Modifier,
-    valueFormatter: (Long) -> String = { formatThousands(it).toPersianDigits() },
+    valueFormatter: (Long) -> String = { (it).formatThousands().toPersianDigits() },
     barColor: Color = MehraTheme.colors.chartSecondary,
 ) {
     val max = (items.maxOfOrNull { it.second } ?: 1L).coerceAtLeast(1L)

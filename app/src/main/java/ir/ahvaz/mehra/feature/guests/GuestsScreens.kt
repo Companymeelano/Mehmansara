@@ -135,13 +135,13 @@ private fun GuestRow(guest: Guest, showNationalId: Boolean, onClick: () -> Unit)
                     text = listOfNotNull(
                         guest.phone,
                         guest.city,
-                        if (showNationalId && !guest.nationalId.isNullOrBlank()) "کد ملی: ${toPersianDigits(guest.nationalId)}" else null,
+                        if (showNationalId && !guest.nationalId.isNullOrBlank()) "کد ملی: ${(guest.nationalId).toPersianDigits()}" else null,
                     ).joinToString(" • "),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    text = "اقامت‌ها: ${toPersianDigits(guest.totalStays.toString())}" +
+                    text = "اقامت‌ها: ${(guest.totalStays.toString()).toPersianDigits()}" +
                         (guest.lastStayAt?.let { " • آخرین: ${it.formatJalaliDateTimeFa()}" } ?: ""),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -212,7 +212,7 @@ fun GuestDetailScreen(
                         InfoRow("شهر", guest.city ?: "—")
                         InfoRow("نشانی", guest.address ?: "—")
                         InfoRow("مانده حساب", formatMoneyFa(guest.balanceRial))
-                        InfoRow("تعداد اقامت", toPersianDigits(guest.totalStays.toString()))
+                        InfoRow("تعداد اقامت", (guest.totalStays.toString()).toPersianDigits())
                         if (state.canViewPii) {
                             Spacer(modifier = Modifier.height(6.dp))
                             CompactButton(
@@ -352,7 +352,7 @@ fun GuestDetailScreen(
 private fun maskNationalId(nationalId: String?): String {
     if (nationalId.isNullOrBlank()) return "—"
     val visible = nationalId.takeLast(2)
-    return "******${toPersianDigits(visible)}"
+    return "******${(visible).toPersianDigits()}"
 }
 
 @Composable
@@ -447,7 +447,7 @@ fun GuestFormScreen(
                 MehraCard(modifier = Modifier.fillMaxWidth()) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "همراه ${toPersianDigits((index + 1).toString())}",
+                            text = "همراه ${((index + 1).toString()).toPersianDigits()}",
                             style = MaterialTheme.typography.labelMedium,
                             modifier = Modifier.weight(1f),
                         )

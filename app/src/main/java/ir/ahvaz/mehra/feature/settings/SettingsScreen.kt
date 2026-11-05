@@ -114,14 +114,14 @@ fun SettingsScreen(
                 }
                 if (state.realtime.lastEventAt != null) {
                     Text(
-                        text = "آخرین رویداد: ${state.realtime.lastEventAt.relativeTimeFa()}",
+                        text = "آخرین رویداد: ${relativeTimeFa(state.realtime.lastEventAt)}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 state.serverVersion?.let { version ->
                     Text(
-                        text = "نسخه سرور: ${toPersianDigits(version)}",
+                        text = "نسخه سرور: ${(version).toPersianDigits()}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -169,9 +169,9 @@ fun SettingsScreen(
                     checked = state.settings.realtimeEnabled,
                     onCheckedChange = viewModel::setRealtime,
                 )
-                InfoRow("عملیات در انتظار ارسال", toPersianDigits(state.pendingOperations.toString()))
+                InfoRow("عملیات در انتظار ارسال", (state.pendingOperations.toString()).toPersianDigits())
                 InfoRow("آخرین همگام‌سازی", state.settings.lastSyncMillis?.let {
-                    java.time.Instant.ofEpochMilli(it).relativeTimeFa()
+                    relativeTimeFa(java.time.Instant.ofEpochMilli(it))
                 } ?: "—")
                 if (state.pendingOperations > 0) {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -194,14 +194,14 @@ fun SettingsScreen(
                 )
                 InfoRow(
                     "قفل خودکار پس از",
-                    "${toPersianDigits(state.settings.lockTimeoutMinutes.toString())} دقیقه بی‌کاری",
+                    "${(state.settings.lockTimeoutMinutes.toString()).toPersianDigits()} دقیقه بی‌کاری",
                 )
                 DropdownField(
                     label = "مدت بی‌کاری تا قفل",
                     options = listOf(1, 2, 5, 10, 15, 30, 60),
                     selected = state.settings.lockTimeoutMinutes,
                     onSelect = viewModel::setLockTimeout,
-                    optionLabel = { "${toPersianDigits(it.toString())} دقیقه" },
+                    optionLabel = { "${(it.toString()).toPersianDigits()} دقیقه" },
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -239,8 +239,8 @@ fun SettingsScreen(
             SectionHeader(title = "درباره سامانه")
             MehraCard(modifier = Modifier.fillMaxWidth()) {
                 InfoRow("نام سامانه", "مهرآ — مهمان‌پذیر فرهنگیان اهواز")
-                InfoRow("نسخه اپلیکیشن", toPersianDigits(BuildConfig.VERSION_NAME))
-                InfoRow("نسخه ساخت", toPersianDigits(BuildConfig.VERSION_CODE.toString()))
+                InfoRow("نسخه اپلیکیشن", (BuildConfig.VERSION_NAME).toPersianDigits())
+                InfoRow("نسخه ساخت", (BuildConfig.VERSION_CODE.toString()).toPersianDigits())
                 InfoRow("آدرس API", "api/v1")
             }
 
