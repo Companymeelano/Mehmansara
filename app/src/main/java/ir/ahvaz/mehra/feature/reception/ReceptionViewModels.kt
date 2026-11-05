@@ -38,12 +38,14 @@ data class ReceptionUiState(
     val isOnline: Boolean = true,
     val canOperate: Boolean = false,
     val actionMessage: String? = null,
+    val rooms: List<ir.ahvaz.mehra.domain.model.Room> = emptyList(),
 )
 
 @HiltViewModel
 class ReceptionViewModel @Inject constructor(
     private val receptionRepository: ReceptionRepository,
     private val reservationRepository: ReservationRepository,
+    private val roomRepository: RoomRepository,
     private val authRepository: AuthRepository,
     private val offlineQueue: OfflineQueue,
     networkMonitor: NetworkMonitor,
@@ -94,6 +96,47 @@ class ReceptionViewModel @Inject constructor(
                     is AppResult.Failure -> it.copy(isSearching = false, actionMessage = result.error.userMessageFa)
                 }
             }
+        }
+    }
+
+    fun loadRooms() {
+        viewModelScope.launch {
+            when (val result = roomRepository.rooms()) {
+                is AppResult.Success -> _state.update { it.copy(rooms = result.data.data) }
+                is AppResult.Failure -> _state.update { it.copy(actionMessage = result.error.userMessageFa) }
+            }
+        }
+    }
+
+    fun extendStay(stayId: String, newCheckOut: java.time.LocalDate) {
+        _state.update { it.copy(actionMessage = null) }
+        viewModelScope.launch {
+            val result = receptionRepository.extendStay(stayId, newCheckOut)
+            _state.update {
+                it.copy(
+                    actionMessage = when (result) {
+                        is AppResult.Success -> "تمدید اقامت ثبت شد."
+                        is AppResult.Failure -> result.error.userMessageFa
+                    }
+                )
+            }
+            refresh()
+        }
+    }
+
+    fun moveRoom(stayId: String, newRoomId: String, reason: String?) {
+        _state.update { it.copy(actionMessage = null) }
+        viewModelScope.launch {
+            val result = receptionRepository.moveRoom(stayId, newRoomId, reason)
+            _state.update {
+                it.copy(
+                    actionMessage = when (result) {
+                        is AppResult.Success -> "اتاق مهمان تغییر کرد."
+                        is AppResult.Failure -> result.error.userMessageFa
+                    }
+                )
+            }
+            refresh()
         }
     }
 

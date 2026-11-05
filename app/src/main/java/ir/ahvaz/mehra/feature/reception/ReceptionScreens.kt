@@ -80,6 +80,8 @@ fun ReceptionScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val stays = state.stays
     var mode by remember { mutableStateOf(0) }
+    var extendStay by remember { mutableStateOf<Stay?>(null) }
+    var moveStay by remember { mutableStateOf<Stay?>(null) }
 
     MehraScreen(
         title = "پذیرش",
@@ -135,7 +137,18 @@ fun ReceptionScreen(
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         items(stays.data.orEmpty(), key = { it.id }) { stay ->
-                            StayRow(stay = stay, onCheckOut = { onCheckOut(stay.id) })
+                            StayRow(
+                                stay = stay,
+                                onCheckOut = { onCheckOut(stay.id) },
+                                onExtend = {
+                                    viewModel.loadRooms()
+                                    extendStay = stay
+                                },
+                                onMoveRoom = {
+                                    viewModel.loadRooms()
+                                    moveStay = stay
+                                },
+                            )
                         }
                     }
                 }
@@ -193,10 +206,33 @@ fun ReceptionScreen(
             }
         }
     }
+
+    extendStay?.let { stay ->
+        ExtendStayDialog(
+            stay = stay,
+            onDismiss = { extendStay = null },
+            onConfirm = { newDate ->
+                viewModel.extendStay(stay.id, newDate.toGregorian())
+                extendStay = null
+            },
+        )
+    }
+
+    moveStay?.let { stay ->
+        MoveRoomDialog(
+            stay = stay,
+            rooms = state.rooms.filter { room -> room.id != stay.roomId && room.status.isAssignable },
+            onDismiss = { moveStay = null },
+            onConfirm = { roomId, reason ->
+                viewModel.moveRoom(stay.id, roomId, reason)
+                moveStay = null
+            },
+        )
+    }
 }
 
 @Composable
-private fun StayRow(stay: Stay, onCheckOut: () -> Unit) {
+private fun StayRow(stay: Stay, onCheckOut: () -> Unit, onExtend: () -> Unit, onMoveRoom: () -> Unit) {
     MehraCard(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
@@ -219,8 +255,87 @@ private fun StayRow(stay: Stay, onCheckOut: () -> Unit) {
             StatusPill(text = stay.status.labelFa, tint = stay.status.tint())
         }
         Spacer(modifier = Modifier.height(8.dp))
-        CompactButton(text = "تسویه و خروج", onClick = onCheckOut, modifier = Modifier.fillMaxWidth())
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            CompactButton(text = "تسویه و خروج", onClick = onCheckOut, modifier = Modifier.weight(1f))
+            CompactButton(text = "تمدید", onClick = onExtend, modifier = Modifier.weight(1f))
+            CompactButton(text = "تغییر اتاق", onClick = onMoveRoom, modifier = Modifier.weight(1f))
+        }
     }
+}
+
+@Composable
+private fun ExtendStayDialog(
+    stay: Stay,
+    onDismiss: () -> Unit,
+    onConfirm: (ir.ahvaz.mehra.core.date.JalaliDate) -> Unit,
+) {
+    var newDate by remember { mutableStateOf(ir.ahvaz.mehra.core.date.JalaliDate.from(stay.plannedCheckOut).plusDays(1)) }
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("تمدید اقامت ${stay.guestName}") },
+        text = {
+            Column {
+                Text(
+                    text = "خروج فعلی: ${stay.plannedCheckOut.formatJalaliLongFa()}",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                JalaliDateField(
+                    label = "خروج جدید",
+                    value = newDate,
+                    onDateSelected = { newDate = it },
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(newDate) }) { Text("ثبت تمدید") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("انصراف") } },
+    )
+}
+
+@Composable
+private fun MoveRoomDialog(
+    stay: Stay,
+    rooms: List<ir.ahvaz.mehra.domain.model.Room>,
+    onDismiss: () -> Unit,
+    onConfirm: (String, String?) -> Unit,
+) {
+    var selected by remember { mutableStateOf<ir.ahvaz.mehra.domain.model.Room?>(null) }
+    var reason by remember { mutableStateOf("") }
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("تغییر اتاق ${stay.guestName}") },
+        text = {
+            Column {
+                if (rooms.isEmpty()) {
+                    Text("اتاق آزاد دیگری برای انتقال وجود ندارد.")
+                } else {
+                    DropdownField(
+                        label = "اتاق جدید",
+                        options = rooms,
+                        selected = selected,
+                        onSelect = { selected = it },
+                        optionLabel = { "اتاق ${it.roomNumber} • ${it.roomTypeName}" },
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                MehraTextField(
+                    label = "دلیل جابه‌جایی",
+                    value = reason,
+                    onValueChange = { reason = it },
+                    singleLine = false,
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = selected != null,
+                onClick = { selected?.let { onConfirm(it.id, reason.takeIf { text -> text.isNotBlank() }) } },
+            ) { Text("انتقال") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("انصراف") } },
+    )
 }
 
 @Composable
