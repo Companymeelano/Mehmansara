@@ -2,11 +2,11 @@
 
 اپلیکیشن مدیریت مهمان‌پذیر فرهنگیان اهواز (Android) — Persian-first, RTL, offline-tolerant.
 
-> **وضعیت تحویل — مهم**
-> این مخزن شامل کد کامل اپلیکیشن اندروید، منابع، مستندات و قرارداد API است، اما **هیچ بیلدی روی این مخزن اجرا نشده است**:
-> در محیطی که کد نوشته شد نه JDK، نه Android SDK و نه دسترسی به مخازن Maven (Google Maven / Maven Central) وجود داشت.
-> در نتیجه هیچ APK دیباگ/ریلیز تولید نشده و هیچ تست اجرایی (unit/instrumented/emulator) اجرا نشده است.
-> جزئیات دقیق در [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md).
+> **وضعیت تحویل**
+> - ✅ **APK دیباگ ساخته شد**: `dist/mehra-1.0.0-debug.apk` (و شاخه `ci-artifacts`) — بیلد روی GitHub Actions با JDK 17 و Android SDK 35.
+> - ✅ **تست‌های واحد سبز**: تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX.
+> - ⏳ **تست روی دستگاه و سرور واقعی انجام نشده**؛ بک‌اند ASP.NET Core هنوز پیاده‌سازی نشده است و اپ تا زمانی که سرور سازگار با `docs/API.md` بالا نیاید از مرحله «اتصال به سرور» عبور نمی‌کند (هیچ داده نمونه‌ای نمایش داده نمی‌شود).
+> جزئیات: [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md) و [`dist/README.md`](dist/README.md).
 
 ---
 
@@ -69,8 +69,10 @@ app/src/main/java/ir/ahvaz/mehra/
 
 ## 4. اجرا و ساخت
 
+بیلد در CI (بدون نیاز به نصب چیزی روی سیستم شما): هر push به هر شاخه، workflow «Android CI» را اجرا می‌کند و APK را در شاخه `ci-artifacts` می‌گذارد.
+
 ```bash
-# پیش‌نیاز: JDK 17، Android SDK (API 35)، Android Studio Ladybug یا جدیدتر
+# پیش‌نیاز محلی: JDK 17، Android SDK (API 35)، Android Studio Ladybug یا جدیدتر
 ./gradlew :app:assembleDebug        # APK دیباگ
 ./gradlew :app:assembleRelease      # APK ریلیز (نیازمند keystore.properties برای امضا)
 ./gradlew :app:testDebugUnitTest    # تست‌های واحد
