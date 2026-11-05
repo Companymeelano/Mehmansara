@@ -23,7 +23,7 @@ fun Long.displayToRial(unit: CurrencyUnit): Long = this * unit.rialDivisor
 
 /** "۱۲٫۵۰۰٫۰۰۰ تومان" — Persian digits with thousands separators. */
 fun formatMoneyFa(amountRial: Long, unit: CurrencyUnit = CurrencyUnit.RIAL): String =
-    "${(amountRial.rialToDisplay(unit)).formatThousands()} ${unit.labelFa}"
+    "${formatThousands(amountRial.rialToDisplay(unit))} ${unit.labelFa}"
 
 /** Compact form for dashboard tiles: "۱۲٫۵ م" / "۱٫۲ میلیارد" (Toman based). */
 fun formatMoneyCompactFa(amountRial: Long, unit: CurrencyUnit = CurrencyUnit.RIAL): String {
@@ -43,7 +43,7 @@ fun formatMoneyCompactFa(amountRial: Long, unit: CurrencyUnit = CurrencyUnit.RIA
             val v = abs / 100_000L
             "${v / 10}.${v % 10} م"
         }
-        else -> (abs).formatThousands()
+        else -> formatThousands(abs)
     }
     return "$sign$body ${unit.labelFa}".toPersianDigits()
 }
