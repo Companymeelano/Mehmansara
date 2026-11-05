@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive-icon backdrop: deep navy fading into warm bronze at the corner (GradientDrawable
+     gradients render on every API level, unlike vector gradients). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:startColor="#FF24344F"
+        android:centerColor="#FF101A2E"
+        android:endColor="#FF0B1220"
+        android:type="linear" />
+</shape>

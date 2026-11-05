@@ -8,19 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CleaningServices
-import androidx.compose.material.icons.rounded.Description
-import androidx.compose.material.icons.rounded.Groups
-import androidx.compose.material.icons.rounded.Handyman
-import androidx.compose.material.icons.rounded.ManageAccounts
-import androidx.compose.material.icons.rounded.NotificationsNone
-import androidx.compose.material.icons.rounded.Payments
-import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import ir.ahvaz.mehra.core.ui.components.CreatorSignature
+import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.components.MehraCard
 import ir.ahvaz.mehra.core.ui.components.MehraScreen
 import ir.ahvaz.mehra.core.ui.components.SectionHeader
-import ir.ahvaz.mehra.core.ui.theme.MehraTheme
+import ir.ahvaz.mehra.core.ui.icons.MehraIcons
 import ir.ahvaz.mehra.domain.model.Permissions
 import ir.ahvaz.mehra.domain.model.SessionUser
 
@@ -63,29 +54,29 @@ fun MoreScreen(
     fun has(permission: String?): Boolean = permission == null || user?.can(permission) == true
 
     val frontOffice = listOfNotNull(
-        MenuEntry("مهمانان", "پرونده مهمان، همراهان و سوابق", Icons.Rounded.Groups, Permissions.GUESTS_VIEW, onOpenGuests)
+        MenuEntry("مهمانان", "پرونده مهمان، همراهان و سوابق", MehraIcons.Guests, Permissions.GUESTS_VIEW, onOpenGuests)
             .takeIf { has(Permissions.GUESTS_VIEW) },
-        MenuEntry("مالی", "صندوق، تراکنش‌ها و بدهکاران", Icons.Rounded.Payments, Permissions.FINANCE_VIEW, onOpenFinance)
+        MenuEntry("مالی", "صندوق، تراکنش‌ها و بدهکاران", MehraIcons.Finance, Permissions.FINANCE_VIEW, onOpenFinance)
             .takeIf { has(Permissions.FINANCE_VIEW) },
     )
 
     val operations = listOfNotNull(
-        MenuEntry("خدمات و نظافت", "درخواست نظافت و تأیید آماده‌سازی", Icons.Rounded.CleaningServices, Permissions.HOUSEKEEPING_VIEW, onOpenHousekeeping)
+        MenuEntry("خدمات و نظافت", "درخواست نظافت و تأیید آماده‌سازی", MehraIcons.Housekeeping, Permissions.HOUSEKEEPING_VIEW, onOpenHousekeeping)
             .takeIf { has(Permissions.HOUSEKEEPING_VIEW) },
-        MenuEntry("تعمیرات", "ثبت خرابی، ارجاع و هزینه", Icons.Rounded.Handyman, Permissions.MAINTENANCE_VIEW, onOpenMaintenance)
+        MenuEntry("تعمیرات", "ثبت خرابی، ارجاع و هزینه", MehraIcons.Maintenance, Permissions.MAINTENANCE_VIEW, onOpenMaintenance)
             .takeIf { has(Permissions.MAINTENANCE_VIEW) },
     )
 
     val management = listOfNotNull(
-        MenuEntry("گزارش‌ها", "خروجی PDF و اکسل با تاریخ شمسی", Icons.Rounded.Description, Permissions.REPORTS_VIEW, onOpenReports)
+        MenuEntry("گزارش‌ها", "خروجی PDF و اکسل با تاریخ شمسی", MehraIcons.Reports, Permissions.REPORTS_VIEW, onOpenReports)
             .takeIf { has(Permissions.REPORTS_VIEW) },
-        MenuEntry("کاربران و نقش‌ها", "مدیریت حساب‌ها و مجوزها", Icons.Rounded.ManageAccounts, Permissions.USERS_VIEW, onOpenUsers)
+        MenuEntry("کاربران و نقش‌ها", "مدیریت حساب‌ها و مجوزها", MehraIcons.Users, Permissions.USERS_VIEW, onOpenUsers)
             .takeIf { has(Permissions.USERS_VIEW) },
     )
 
     val system = listOf(
-        MenuEntry("اعلان‌ها", "رویدادها و هشدارهای سامانه", Icons.Rounded.NotificationsNone, null, onOpenNotifications),
-        MenuEntry("تنظیمات", "سرور، پوسته، قفل و حساب کاربری", Icons.Rounded.Settings, null, onOpenSettings),
+        MenuEntry("اعلان‌ها", "رویدادها و هشدارهای سامانه", MehraIcons.Notifications, null, onOpenNotifications),
+        MenuEntry("تنظیمات", "سرور، پوسته، قفل و حساب کاربری", MehraIcons.Settings, null, onOpenSettings),
     )
 
     MehraScreen(
@@ -123,6 +114,8 @@ fun MoreScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth(),
             )
+            Spacer(modifier = Modifier.height(10.dp))
+            CreatorSignature(compact = true, modifier = Modifier.fillMaxWidth())
         }
     }
 }
@@ -131,11 +124,10 @@ fun MoreScreen(
 private fun MenuTile(entry: MenuEntry) {
     MehraCard(modifier = Modifier.fillMaxWidth(), onClick = entry.onClick) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = entry.icon,
+            Icon3D(
+                icon = entry.icon,
                 contentDescription = null,
-                tint = MehraTheme.colors.gold,
-                modifier = Modifier.size(22.dp),
+                size = 42.dp,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {

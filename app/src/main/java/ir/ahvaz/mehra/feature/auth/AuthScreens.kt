@@ -29,12 +29,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ir.ahvaz.mehra.core.ui.components.CreatorSignature
+import ir.ahvaz.mehra.core.ui.components.GradientText
+import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.components.InlineMessage
 import ir.ahvaz.mehra.core.ui.components.MehraScreen
 import ir.ahvaz.mehra.core.ui.components.MehraTextField
 import ir.ahvaz.mehra.core.ui.components.PrimaryButton
 import ir.ahvaz.mehra.core.ui.components.SecondaryButton
-import ir.ahvaz.mehra.core.ui.theme.MehraTheme
+import ir.ahvaz.mehra.core.ui.icons.MehraIcons
+import ir.ahvaz.mehra.core.ui.theme.LocalAccentBrush
 
 /**
  * First run: the operator points the app at the hotel server (LAN address or the verified
@@ -53,12 +57,18 @@ fun ServerSetupScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp),
         ) {
-            Text(
-                text = "مهرآ",
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold,
-                color = MehraTheme.colors.gold,
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 72.dp)
+                Spacer(modifier = Modifier.height(10.dp))
+                GradientText(
+                    text = "مهرآ",
+                    style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.Bold),
+                    brush = LocalAccentBrush.current,
+                )
+            }
             Text(
                 text = "مهمان‌پذیر فرهنگیان اهواز",
                 style = MaterialTheme.typography.bodyMedium,
@@ -152,6 +162,20 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 64.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+                GradientText(
+                    text = "مهرآ",
+                    style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
+                    brush = LocalAccentBrush.current,
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "سامانه مدیریت مهمان‌پذیر فرهنگیان اهواز",
                 style = MaterialTheme.typography.titleMedium,
@@ -206,6 +230,9 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+
+            Spacer(modifier = Modifier.height(28.dp))
+            CreatorSignature(compact = true, modifier = Modifier.fillMaxWidth())
         }
     }
 }

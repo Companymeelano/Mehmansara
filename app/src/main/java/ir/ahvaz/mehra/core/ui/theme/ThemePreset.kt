@@ -35,6 +35,27 @@ enum class ThemePreset(
         titleEn = "Silver Horizon",
         descriptionFa = "سفید، آبی خاکستری و نقره‌ای",
         isDark = false,
+    ),
+    SAPPHIRE_ROYAL(
+        id = "sapphire_royal",
+        titleFa = "یاقوت کبود",
+        titleEn = "Sapphire Royal",
+        descriptionFa = "آبی یاقوتی عمیق، سفید یخی و نقره‌ای",
+        isDark = false,
+    ),
+    EMERALD_CROWN(
+        id = "emerald_crown",
+        titleFa = "زمرد تاج",
+        titleEn = "Emerald Crown",
+        descriptionFa = "سبز زمردی، طلایی و مشکی مخملی",
+        isDark = true,
+    ),
+    RUBY_NIGHT(
+        id = "ruby_night",
+        titleFa = "یاقوت شب",
+        titleEn = "Ruby Night",
+        descriptionFa = "قرمز یاقوتی، رزگلد و مشکی",
+        isDark = true,
     );
 
     companion object {

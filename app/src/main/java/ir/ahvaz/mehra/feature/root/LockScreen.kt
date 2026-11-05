@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import ir.ahvaz.mehra.core.ui.components.CreatorSignature
+import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 
 /**
@@ -61,9 +63,7 @@ fun LockScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -72,11 +72,11 @@ fun LockScreen(
                 .padding(28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Icon(
-                imageVector = Icons.Rounded.Lock,
+            Icon3D(
+                icon = Icons.Rounded.Lock,
                 contentDescription = null,
-                tint = colors.gold,
-                modifier = Modifier.size(48.dp),
+                size = 56.dp,
+                tone = colors.gold,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -188,7 +188,8 @@ private fun Keypad(onDigit: (String) -> Unit, onBackspace: () -> Unit) {
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+            CreatorSignature(compact = true, modifier = Modifier.fillMaxWidth())
         }
     }
 }

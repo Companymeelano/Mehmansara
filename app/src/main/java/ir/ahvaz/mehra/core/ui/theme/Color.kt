@@ -6,7 +6,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
-/** Semantic colours that Material 3 does not cover (statuses, charts, brand gold). */
+/**
+ * Semantic colours that Material 3 does not cover (statuses, charts, brand accents) plus the
+ * luxury tokens every shell component needs: a three-stop accent gradient for 3D icon chips and
+ * buttons, a backdrop gradient applied behind the whole app, the top-bar gradient, and the
+ * metallic ramp used to render the 3D creator signature.
+ */
 @Immutable
 data class MehraColors(
     val isDark: Boolean,
@@ -31,45 +36,53 @@ data class MehraColors(
     val chartTertiary: Color,
     val chartGrid: Color,
     val cardBorder: Color,
+    // --- luxury tokens -----------------------------------------------------
+    /** Three-stop brand gradient: 3D icon chips, primary buttons, selected states. */
+    val accentStart: Color,
+    val accentMid: Color,
+    val accentEnd: Color,
+    /** Glyph colour rendered on top of the accent gradient. */
+    val onAccent: Color,
+    /** Vertical gradient painted behind every screen. */
+    val bgTop: Color,
+    val bgBottom: Color,
+    /** Horizontal gradient of the app top bar. */
+    val topBarStart: Color,
+    val topBarEnd: Color,
+    val topBarText: Color,
+    /** Metallic ramp for the 3D extruded creator signature. */
+    val metalLight: Color,
+    val metalFace: Color,
+    val metalDark: Color,
+    /** Soft glow colour used behind the signature and icon shadows. */
+    val glow: Color,
 )
 
+/** Mix this colour towards white (used to build gradient stops from a single tone). */
+fun Color.lighten(amount: Float): Color {
+    val t = amount.coerceIn(0f, 1f)
+    return Color(
+        red = red + (1f - red) * t,
+        green = green + (1f - green) * t,
+        blue = blue + (1f - blue) * t,
+        alpha = alpha,
+    )
+}
+
+/** Scale this colour towards black (used to build gradient stops from a single tone). */
+fun Color.darken(amount: Float): Color {
+    val t = amount.coerceIn(0f, 1f)
+    return Color(
+        red = red * (1f - t),
+        green = green * (1f - t),
+        blue = blue * (1f - t),
+        alpha = alpha,
+    )
+}
+
 // ---------------------------------------------------------------------------
-// Palette building blocks
+// Shared status colours
 // ---------------------------------------------------------------------------
-private val NavyDeep = Color(0xFF0E1524)
-private val NavyMid = Color(0xFF1B2740)
-private val Champagne = Color(0xFFC8A96A)
-private val ChampagneSoft = Color(0xFFE8D6AE)
-private val WarmWhite = Color(0xFFFBF7EF)
-private val WarmSurface = Color(0xFFFFFFFF)
-private val WarmOutline = Color(0xFFE3D9C6)
-private val Ink = Color(0xFF17202F)
-private val MutedInk = Color(0xFF5A6474)
-
-private val ObsidianBlack = Color(0xFF090C12)
-private val ObsidianSurface = Color(0xFF12161F)
-private val ObsidianCard = Color(0xFF171C27)
-private val ObsidianOutline = Color(0xFF2C3341)
-private val SilverAccent = Color(0xFFC9CFD8)
-private val SilverSoft = Color(0xFFE6EAEF)
-private val ObsidianText = Color(0xFFEDEFF3)
-
-private val PearlWhite = Color(0xFFF7F6F3)
-private val PearlSurface = Color(0xFFFFFFFF)
-private val PearlGray = Color(0xFFEDECE8)
-private val PearlOutline = Color(0xFFDDDBD4)
-private val MatteGold = Color(0xFFA98F5C)
-private val MatteGoldSoft = Color(0xFFE4D9C2)
-private val PearlInk = Color(0xFF1F2126)
-
-private val HorizonWhite = Color(0xFFF8FAFC)
-private val HorizonSurface = Color(0xFFFFFFFF)
-private val SlateBlue = Color(0xFF4A6B8A)
-private val SlateBlueDeep = Color(0xFF2C4359)
-private val SlateSoft = Color(0xFFDFE7EF)
-private val SilverLine = Color(0xFFD8E0E8)
-private val HorizonInk = Color(0xFF1B2836)
-
 private val Success = Color(0xFF2E7D5B)
 private val SuccessSoft = Color(0xFFE1F1E9)
 private val Warning = Color(0xFFB7791F)
@@ -89,23 +102,23 @@ private val InfoDark = Color(0xFF7FB7DC)
 // ---------------------------------------------------------------------------
 fun ThemePreset.colorScheme(): ColorScheme = when (this) {
     ThemePreset.GOLDEN_EXECUTIVE -> lightColorScheme(
-        primary = NavyDeep,
+        primary = Color(0xFF0E1524),
         onPrimary = Color.White,
-        primaryContainer = NavyMid,
-        onPrimaryContainer = ChampagneSoft,
-        secondary = Champagne,
-        onSecondary = NavyDeep,
-        secondaryContainer = ChampagneSoft,
-        onSecondaryContainer = NavyDeep,
+        primaryContainer = Color(0xFF1B2740),
+        onPrimaryContainer = Color(0xFFE8D6AE),
+        secondary = Color(0xFFC8A96A),
+        onSecondary = Color(0xFF0E1524),
+        secondaryContainer = Color(0xFFE8D6AE),
+        onSecondaryContainer = Color(0xFF0E1524),
         tertiary = Color(0xFF5C6B82),
         onTertiary = Color.White,
-        background = WarmWhite,
-        onBackground = Ink,
-        surface = WarmSurface,
-        onSurface = Ink,
+        background = Color(0xFFFBF7EF),
+        onBackground = Color(0xFF17202F),
+        surface = Color.White,
+        onSurface = Color(0xFF17202F),
         surfaceVariant = Color(0xFFF3EDE1),
-        onSurfaceVariant = MutedInk,
-        outline = WarmOutline,
+        onSurfaceVariant = Color(0xFF5A6474),
+        outline = Color(0xFFE3D9C6),
         outlineVariant = Color(0xFFEFE7D8),
         error = Danger,
         onError = Color.White,
@@ -115,49 +128,49 @@ fun ThemePreset.colorScheme(): ColorScheme = when (this) {
     )
 
     ThemePreset.OBSIDIAN_ROYAL -> darkColorScheme(
-        primary = SilverSoft,
-        onPrimary = ObsidianBlack,
+        primary = Color(0xFFE6EAEF),
+        onPrimary = Color(0xFF090C12),
         primaryContainer = Color(0xFF2A3140),
-        onPrimaryContainer = SilverSoft,
-        secondary = Champagne,
-        onSecondary = ObsidianBlack,
+        onPrimaryContainer = Color(0xFFE6EAEF),
+        secondary = Color(0xFFC8A96A),
+        onSecondary = Color(0xFF090C12),
         secondaryContainer = Color(0xFF33291A),
-        onSecondaryContainer = ChampagneSoft,
-        tertiary = SilverAccent,
-        onTertiary = ObsidianBlack,
-        background = ObsidianBlack,
-        onBackground = ObsidianText,
-        surface = ObsidianSurface,
-        onSurface = ObsidianText,
-        surfaceVariant = ObsidianCard,
+        onSecondaryContainer = Color(0xFFE8D6AE),
+        tertiary = Color(0xFFC9CFD8),
+        onTertiary = Color(0xFF090C12),
+        background = Color(0xFF090C12),
+        onBackground = Color(0xFFEDEFF3),
+        surface = Color(0xFF12161F),
+        onSurface = Color(0xFFEDEFF3),
+        surfaceVariant = Color(0xFF171C27),
         onSurfaceVariant = Color(0xFFA9B1BE),
-        outline = ObsidianOutline,
+        outline = Color(0xFF2C3341),
         outlineVariant = Color(0xFF232936),
         error = DangerDark,
-        onError = ObsidianBlack,
+        onError = Color(0xFF090C12),
         errorContainer = Color(0xFF3A1F1D),
         onErrorContainer = DangerDark,
         scrim = Color(0xCC000000),
     )
 
     ThemePreset.PLATINUM_LUXURY -> lightColorScheme(
-        primary = PearlInk,
+        primary = Color(0xFF1F2126),
         onPrimary = Color.White,
-        primaryContainer = PearlGray,
-        onPrimaryContainer = PearlInk,
-        secondary = MatteGold,
+        primaryContainer = Color(0xFFEDECE8),
+        onPrimaryContainer = Color(0xFF1F2126),
+        secondary = Color(0xFFA98F5C),
         onSecondary = Color.White,
-        secondaryContainer = MatteGoldSoft,
+        secondaryContainer = Color(0xFFE4D9C2),
         onSecondaryContainer = Color(0xFF3B2F17),
         tertiary = Color(0xFF7A7568),
         onTertiary = Color.White,
-        background = PearlWhite,
-        onBackground = PearlInk,
-        surface = PearlSurface,
-        onSurface = PearlInk,
+        background = Color(0xFFF7F6F3),
+        onBackground = Color(0xFF1F2126),
+        surface = Color.White,
+        onSurface = Color(0xFF1F2126),
         surfaceVariant = Color(0xFFF1F0EC),
         onSurfaceVariant = Color(0xFF6B675E),
-        outline = PearlOutline,
+        outline = Color(0xFFDDDBD4),
         outlineVariant = Color(0xFFEAE8E2),
         error = Danger,
         onError = Color.White,
@@ -167,23 +180,23 @@ fun ThemePreset.colorScheme(): ColorScheme = when (this) {
     )
 
     ThemePreset.SILVER_HORIZON -> lightColorScheme(
-        primary = SlateBlueDeep,
+        primary = Color(0xFF2C4359),
         onPrimary = Color.White,
-        primaryContainer = SlateSoft,
-        onPrimaryContainer = SlateBlueDeep,
-        secondary = SlateBlue,
+        primaryContainer = Color(0xFFDFE7EF),
+        onPrimaryContainer = Color(0xFF2C4359),
+        secondary = Color(0xFF4A6B8A),
         onSecondary = Color.White,
         secondaryContainer = Color(0xFFE8EFF6),
-        onSecondaryContainer = SlateBlueDeep,
+        onSecondaryContainer = Color(0xFF2C4359),
         tertiary = Color(0xFF7D8FA3),
         onTertiary = Color.White,
-        background = HorizonWhite,
-        onBackground = HorizonInk,
-        surface = HorizonSurface,
-        onSurface = HorizonInk,
+        background = Color(0xFFF8FAFC),
+        onBackground = Color(0xFF1B2836),
+        surface = Color.White,
+        onSurface = Color(0xFF1B2836),
         surfaceVariant = Color(0xFFEEF3F8),
         onSurfaceVariant = Color(0xFF5B6B7C),
-        outline = SilverLine,
+        outline = Color(0xFFD8E0E8),
         outlineVariant = Color(0xFFE9EFF5),
         error = Danger,
         onError = Color.White,
@@ -191,13 +204,94 @@ fun ThemePreset.colorScheme(): ColorScheme = when (this) {
         onErrorContainer = Danger,
         scrim = Color(0x99000000),
     )
+
+    ThemePreset.SAPPHIRE_ROYAL -> lightColorScheme(
+        primary = Color(0xFF1E3A66),
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFFD7E6F7),
+        onPrimaryContainer = Color(0xFF12294A),
+        secondary = Color(0xFF3D6FB4),
+        onSecondary = Color.White,
+        secondaryContainer = Color(0xFFDCE9F8),
+        onSecondaryContainer = Color(0xFF12294A),
+        tertiary = Color(0xFF6E87A8),
+        onTertiary = Color.White,
+        background = Color(0xFFF7FAFF),
+        onBackground = Color(0xFF14243A),
+        surface = Color.White,
+        onSurface = Color(0xFF14243A),
+        surfaceVariant = Color(0xFFEAF1F9),
+        onSurfaceVariant = Color(0xFF54687F),
+        outline = Color(0xFFCBD9E8),
+        outlineVariant = Color(0xFFE2ECF6),
+        error = Danger,
+        onError = Color.White,
+        errorContainer = DangerSoft,
+        onErrorContainer = Danger,
+        scrim = Color(0x99000000),
+    )
+
+    ThemePreset.EMERALD_CROWN -> darkColorScheme(
+        primary = Color(0xFF8FE3B4),
+        onPrimary = Color(0xFF05170E),
+        primaryContainer = Color(0xFF123B28),
+        onPrimaryContainer = Color(0xFFC9F2DD),
+        secondary = Color(0xFFD2AC5F),
+        onSecondary = Color(0xFF1A1206),
+        secondaryContainer = Color(0xFF2E2412),
+        onSecondaryContainer = Color(0xFFF0DCA8),
+        tertiary = Color(0xFF7FA892),
+        onTertiary = Color(0xFF05170E),
+        background = Color(0xFF07120C),
+        onBackground = Color(0xFFE8F5EE),
+        surface = Color(0xFF0C1D14),
+        onSurface = Color(0xFFE8F5EE),
+        surfaceVariant = Color(0xFF10271B),
+        onSurfaceVariant = Color(0xFF9DBBA9),
+        outline = Color(0xFF24402F),
+        outlineVariant = Color(0xFF1A3325),
+        error = DangerDark,
+        onError = Color(0xFF05170E),
+        errorContainer = Color(0xFF3A1F1D),
+        onErrorContainer = DangerDark,
+        scrim = Color(0xCC000000),
+    )
+
+    ThemePreset.RUBY_NIGHT -> darkColorScheme(
+        primary = Color(0xFFF2A9BC),
+        onPrimary = Color(0xFF22060D),
+        primaryContainer = Color(0xFF4A1B2A),
+        onPrimaryContainer = Color(0xFFF6DCE3),
+        secondary = Color(0xFFE08A6D),
+        onSecondary = Color(0xFF2A0E08),
+        secondaryContainer = Color(0xFF3A1A14),
+        onSecondaryContainer = Color(0xFFFFD9C9),
+        tertiary = Color(0xFFB08A96),
+        onTertiary = Color(0xFF22060D),
+        background = Color(0xFF150A0F),
+        onBackground = Color(0xFFF7E9ED),
+        surface = Color(0xFF1F0E15),
+        onSurface = Color(0xFFF7E9ED),
+        surfaceVariant = Color(0xFF2A121B),
+        onSurfaceVariant = Color(0xFFC09AA7),
+        outline = Color(0xFF4A2430),
+        outlineVariant = Color(0xFF38202B),
+        error = DangerDark,
+        onError = Color(0xFF22060D),
+        errorContainer = Color(0xFF3A1F1D),
+        onErrorContainer = DangerDark,
+        scrim = Color(0xCC000000),
+    )
 }
 
+// ---------------------------------------------------------------------------
+// Semantic + luxury palettes per preset
+// ---------------------------------------------------------------------------
 fun ThemePreset.mehraColors(): MehraColors = when (this) {
     ThemePreset.GOLDEN_EXECUTIVE -> MehraColors(
         isDark = false,
-        gold = Champagne,
-        goldSoft = ChampagneSoft,
+        gold = Color(0xFFC8A96A),
+        goldSoft = Color(0xFFE8D6AE),
         success = Success,
         successSoft = SuccessSoft,
         warning = Warning,
@@ -212,16 +306,29 @@ fun ThemePreset.mehraColors(): MehraColors = when (this) {
         statusCleaning = Color(0xFF7A5EA8),
         statusMaintenance = Color(0xFFB7791F),
         statusOutOfService = Color(0xFF6B7280),
-        chartPrimary = NavyDeep,
-        chartSecondary = Champagne,
+        chartPrimary = Color(0xFF0E1524),
+        chartSecondary = Color(0xFFC8A96A),
         chartTertiary = Color(0xFF9FAFC4),
-        chartGrid = WarmOutline,
+        chartGrid = Color(0xFFE3D9C6),
         cardBorder = Color(0xFFEDE4D3),
+        accentStart = Color(0xFFEFD9A7),
+        accentMid = Color(0xFFC8A96A),
+        accentEnd = Color(0xFF93763F),
+        onAccent = Color(0xFF2A1F0C),
+        bgTop = Color(0xFFFFFBF3),
+        bgBottom = Color(0xFFF1E6D2),
+        topBarStart = Color(0xFF101A2E),
+        topBarEnd = Color(0xFF1B2740),
+        topBarText = Color(0xFFF7EFDF),
+        metalLight = Color(0xFFFFF6DC),
+        metalFace = Color(0xFFD9B96A),
+        metalDark = Color(0xFF6E5426),
+        glow = Color(0xFFC8A96A),
     )
 
     ThemePreset.OBSIDIAN_ROYAL -> MehraColors(
         isDark = true,
-        gold = Champagne,
+        gold = Color(0xFFC8A96A),
         goldSoft = Color(0xFF4A3B22),
         success = SuccessDark,
         successSoft = Color(0xFF17342A),
@@ -233,21 +340,34 @@ fun ThemePreset.mehraColors(): MehraColors = when (this) {
         dangerSoft = Color(0xFF3A1F1D),
         statusFree = SuccessDark,
         statusReserved = InfoDark,
-        statusOccupied = Champagne,
+        statusOccupied = Color(0xFFC8A96A),
         statusCleaning = Color(0xFFB49BE0),
         statusMaintenance = WarningDark,
         statusOutOfService = Color(0xFF98A1AF),
-        chartPrimary = SilverSoft,
-        chartSecondary = Champagne,
+        chartPrimary = Color(0xFFE6EAEF),
+        chartSecondary = Color(0xFFC8A96A),
         chartTertiary = Color(0xFF5A6474),
-        chartGrid = ObsidianOutline,
+        chartGrid = Color(0xFF2C3341),
         cardBorder = Color(0xFF222836),
+        accentStart = Color(0xFFF2F5FA),
+        accentMid = Color(0xFFC9CFD8),
+        accentEnd = Color(0xFF7E8797),
+        onAccent = Color(0xFF0A0D13),
+        bgTop = Color(0xFF04060A),
+        bgBottom = Color(0xFF0D1320),
+        topBarStart = Color(0xFF161C29),
+        topBarEnd = Color(0xFF0A0D14),
+        topBarText = Color(0xFFEDEFF3),
+        metalLight = Color(0xFFFFFFFF),
+        metalFace = Color(0xFFC9CFD8),
+        metalDark = Color(0xFF5E6673),
+        glow = Color(0xFFC9CFD8),
     )
 
     ThemePreset.PLATINUM_LUXURY -> MehraColors(
         isDark = false,
-        gold = MatteGold,
-        goldSoft = MatteGoldSoft,
+        gold = Color(0xFFA98F5C),
+        goldSoft = Color(0xFFE4D9C2),
         success = Success,
         successSoft = SuccessSoft,
         warning = Warning,
@@ -262,11 +382,24 @@ fun ThemePreset.mehraColors(): MehraColors = when (this) {
         statusCleaning = Color(0xFF6E5A93),
         statusMaintenance = Warning,
         statusOutOfService = Color(0xFF75726A),
-        chartPrimary = PearlInk,
-        chartSecondary = MatteGold,
+        chartPrimary = Color(0xFF1F2126),
+        chartSecondary = Color(0xFFA98F5C),
         chartTertiary = Color(0xFFBDBAB1),
-        chartGrid = PearlOutline,
+        chartGrid = Color(0xFFDDDBD4),
         cardBorder = Color(0xFFE9E7E1),
+        accentStart = Color(0xFF565A63),
+        accentMid = Color(0xFF2A2C31),
+        accentEnd = Color(0xFF101114),
+        onAccent = Color(0xFFF5EFE2),
+        bgTop = Color(0xFFFCFBF8),
+        bgBottom = Color(0xFFECE9E2),
+        topBarStart = Color(0xFFFFFFFF),
+        topBarEnd = Color(0xFFF1EEE7),
+        topBarText = Color(0xFF1F2126),
+        metalLight = Color(0xFFFFFFFF),
+        metalFace = Color(0xFFD8DBE0),
+        metalDark = Color(0xFF8A8F98),
+        glow = Color(0xFFB9BEC7),
     )
 
     ThemePreset.SILVER_HORIZON -> MehraColors(
@@ -282,15 +415,142 @@ fun ThemePreset.mehraColors(): MehraColors = when (this) {
         danger = Danger,
         dangerSoft = DangerSoft,
         statusFree = Success,
-        statusReserved = SlateBlue,
+        statusReserved = Color(0xFF4A6B8A),
         statusOccupied = Color(0xFF3B5E7D),
         statusCleaning = Color(0xFF6B6FA8),
         statusMaintenance = Warning,
         statusOutOfService = Color(0xFF6B7A88),
-        chartPrimary = SlateBlueDeep,
-        chartSecondary = SlateBlue,
+        chartPrimary = Color(0xFF2C4359),
+        chartSecondary = Color(0xFF4A6B8A),
         chartTertiary = Color(0xFFAFC3D4),
-        chartGrid = SilverLine,
+        chartGrid = Color(0xFFD8E0E8),
         cardBorder = Color(0xFFE4EBF2),
+        accentStart = Color(0xFF8FB2D1),
+        accentMid = Color(0xFF4A6B8A),
+        accentEnd = Color(0xFF2C4359),
+        onAccent = Color(0xFFFFFFFF),
+        bgTop = Color(0xFFF9FBFD),
+        bgBottom = Color(0xFFE7EEF5),
+        topBarStart = Color(0xFFFFFFFF),
+        topBarEnd = Color(0xFFEDF3F8),
+        topBarText = Color(0xFF1B2836),
+        metalLight = Color(0xFFFFFFFF),
+        metalFace = Color(0xFFC7D3DE),
+        metalDark = Color(0xFF74808E),
+        glow = Color(0xFF7FA3C4),
+    )
+
+    ThemePreset.SAPPHIRE_ROYAL -> MehraColors(
+        isDark = false,
+        gold = Color(0xFF3D6FB4),
+        goldSoft = Color(0xFFDCE9F8),
+        success = Success,
+        successSoft = SuccessSoft,
+        warning = Warning,
+        warningSoft = WarningSoft,
+        info = Info,
+        infoSoft = InfoSoft,
+        danger = Danger,
+        dangerSoft = DangerSoft,
+        statusFree = Success,
+        statusReserved = Color(0xFF3D6FB4),
+        statusOccupied = Color(0xFF1E3A66),
+        statusCleaning = Color(0xFF6B6FA8),
+        statusMaintenance = Warning,
+        statusOutOfService = Color(0xFF6B7A88),
+        chartPrimary = Color(0xFF1E3A66),
+        chartSecondary = Color(0xFF3D6FB4),
+        chartTertiary = Color(0xFFA9C4E0),
+        chartGrid = Color(0xFFCBD9E8),
+        cardBorder = Color(0xFFDCE7F2),
+        accentStart = Color(0xFF7FB3E8),
+        accentMid = Color(0xFF3D6FB4),
+        accentEnd = Color(0xFF1E3A66),
+        onAccent = Color(0xFFFFFFFF),
+        bgTop = Color(0xFFF7FAFF),
+        bgBottom = Color(0xFFE2EDF9),
+        topBarStart = Color(0xFF14345F),
+        topBarEnd = Color(0xFF0B2140),
+        topBarText = Color(0xFFEAF2FC),
+        metalLight = Color(0xFFCFE4FF),
+        metalFace = Color(0xFF5B8DD9),
+        metalDark = Color(0xFF1E3A6E),
+        glow = Color(0xFF6FA8DC),
+    )
+
+    ThemePreset.EMERALD_CROWN -> MehraColors(
+        isDark = true,
+        gold = Color(0xFFD2AC5F),
+        goldSoft = Color(0xFF2E2412),
+        success = SuccessDark,
+        successSoft = Color(0xFF17342A),
+        warning = WarningDark,
+        warningSoft = Color(0xFF3A2E15),
+        info = InfoDark,
+        infoSoft = Color(0xFF16283A),
+        danger = DangerDark,
+        dangerSoft = Color(0xFF3A1F1D),
+        statusFree = SuccessDark,
+        statusReserved = InfoDark,
+        statusOccupied = Color(0xFFD2AC5F),
+        statusCleaning = Color(0xFFB49BE0),
+        statusMaintenance = WarningDark,
+        statusOutOfService = Color(0xFF98A1AF),
+        chartPrimary = Color(0xFF8FE3B4),
+        chartSecondary = Color(0xFFD2AC5F),
+        chartTertiary = Color(0xFF5A7A66),
+        chartGrid = Color(0xFF24402F),
+        cardBorder = Color(0xFF1E3A2B),
+        accentStart = Color(0xFF8FE3B4),
+        accentMid = Color(0xFF2E9E6B),
+        accentEnd = Color(0xFF0F5C3A),
+        onAccent = Color(0xFF04170E),
+        bgTop = Color(0xFF05100B),
+        bgBottom = Color(0xFF0A1F15),
+        topBarStart = Color(0xFF0D2C1D),
+        topBarEnd = Color(0xFF06130C),
+        topBarText = Color(0xFFE9F7EF),
+        metalLight = Color(0xFFF7E9BF),
+        metalFace = Color(0xFFD2AC5F),
+        metalDark = Color(0xFF6E5320),
+        glow = Color(0xFF57C79B),
+    )
+
+    ThemePreset.RUBY_NIGHT -> MehraColors(
+        isDark = true,
+        gold = Color(0xFFE08A6D),
+        goldSoft = Color(0xFF3A1A14),
+        success = SuccessDark,
+        successSoft = Color(0xFF17342A),
+        warning = WarningDark,
+        warningSoft = Color(0xFF3A2E15),
+        info = InfoDark,
+        infoSoft = Color(0xFF16283A),
+        danger = DangerDark,
+        dangerSoft = Color(0xFF3A1F1D),
+        statusFree = SuccessDark,
+        statusReserved = InfoDark,
+        statusOccupied = Color(0xFFE08A6D),
+        statusCleaning = Color(0xFFB49BE0),
+        statusMaintenance = WarningDark,
+        statusOutOfService = Color(0xFF98A1AF),
+        chartPrimary = Color(0xFFF2A9BC),
+        chartSecondary = Color(0xFFE08A6D),
+        chartTertiary = Color(0xFF8A5A68),
+        chartGrid = Color(0xFF4A2430),
+        cardBorder = Color(0xFF3A2029),
+        accentStart = Color(0xFFF2A9BC),
+        accentMid = Color(0xFFC04A67),
+        accentEnd = Color(0xFF6E1B31),
+        onAccent = Color(0xFFFFF5F7),
+        bgTop = Color(0xFF150A0F),
+        bgBottom = Color(0xFF200D15),
+        topBarStart = Color(0xFF2C101A),
+        topBarEnd = Color(0xFF170910),
+        topBarText = Color(0xFFF9E9ED),
+        metalLight = Color(0xFFFFE3D6),
+        metalFace = Color(0xFFE08A6D),
+        metalDark = Color(0xFF7E3325),
+        glow = Color(0xFFE0708A),
     )
 }

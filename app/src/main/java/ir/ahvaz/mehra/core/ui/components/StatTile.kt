@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,19 +53,13 @@ fun StatTile(
         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (icon != null) {
-                    Box(
-                        modifier = Modifier
-                            .size(26.dp)
-                            .background(accent.copy(alpha = 0.12f), RoundedCornerShape(8.dp)),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = null,
-                            tint = accent,
-                            modifier = Modifier.size(16.dp),
-                        )
-                    }
+                    Icon3D(
+                        icon = icon,
+                        contentDescription = null,
+                        size = 34.dp,
+                        tone = accent,
+                        glyphScale = 0.6f,
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(

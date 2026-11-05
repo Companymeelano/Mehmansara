@@ -1,6 +1,10 @@
 package ir.ahvaz.mehra.feature.settings
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,14 +12,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudSync
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -26,7 +34,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,12 +53,15 @@ import ir.ahvaz.mehra.core.ui.components.InlineMessage
 import ir.ahvaz.mehra.core.ui.components.MehraCard
 import ir.ahvaz.mehra.core.ui.components.MehraScreen
 import ir.ahvaz.mehra.core.ui.components.MehraTextField
+import ir.ahvaz.mehra.core.ui.components.CreatorSignature
 import ir.ahvaz.mehra.core.ui.components.SecondaryButton
 import ir.ahvaz.mehra.core.ui.components.SectionHeader
 import ir.ahvaz.mehra.core.ui.components.StatusPill
 import ir.ahvaz.mehra.core.ui.components.SwitchRow
+import ir.ahvaz.mehra.core.ui.icons.MehraIcons
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.core.ui.theme.ThemePreset
+import ir.ahvaz.mehra.core.ui.theme.mehraColors
 
 @Composable
 fun SettingsScreen(
@@ -132,19 +147,26 @@ fun SettingsScreen(
             SectionHeader(title = "ظاهر")
             MehraCard(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "پوسته سازمانی",
+                    text = "پوستهٔ لاکچری — تم در همهٔ بخش‌های برنامه اعمال می‌شود",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                 )
-                ThemePreset.entries.forEach { preset ->
-                    SwitchRow(
-                        title = preset.titleFa,
-                        description = preset.descriptionFa,
-                        checked = state.settings.themeId == preset.id,
-                        onCheckedChange = { checked -> if (checked) viewModel.setTheme(preset) },
-                    )
+                Spacer(modifier = Modifier.height(10.dp))
+                ThemePreset.entries.chunked(2).forEach { rowPresets ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        rowPresets.forEach { preset ->
+                            ThemePresetCard(
+                                preset = preset,
+                                selected = state.settings.themeId == preset.id,
+                                onSelect = { viewModel.setTheme(preset) },
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        if (rowPresets.size == 1) Spacer(modifier = Modifier.weight(1f))
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 DropdownField(
                     label = "واحد نمایش مبالغ",
                     options = CurrencyUnit.entries.toList(),
@@ -242,6 +264,9 @@ fun SettingsScreen(
                 InfoRow("نسخه اپلیکیشن", (BuildConfig.VERSION_NAME).toPersianDigits())
                 InfoRow("نسخه ساخت", (BuildConfig.VERSION_CODE.toString()).toPersianDigits())
                 InfoRow("آدرس API", "api/v1")
+                InfoRow("سازندهٔ برنامه", "Milad Yaghoobi")
+                Spacer(modifier = Modifier.height(14.dp))
+                CreatorSignature(modifier = Modifier.fillMaxWidth())
             }
 
             Spacer(modifier = Modifier.height(18.dp))
@@ -374,4 +399,101 @@ private fun ChangePasswordDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("انصراف") } },
     )
+}
+
+/**
+ * A theme preset shown as a luxury swatch card: a gradient preview bar in the preset's own
+ * accent colours, Persian + Latin names, and — when selected — a gradient border, a soft
+ * shadow and a 3D-style check glyph.
+ */
+@Composable
+private fun ThemePresetCard(
+    preset: ThemePreset,
+    selected: Boolean,
+    onSelect: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val current = MehraTheme.colors
+    val scheme = MaterialTheme.colorScheme
+    val palette = preset.mehraColors()
+    val shape = RoundedCornerShape(18.dp)
+    val border = if (selected) {
+        BorderStroke(
+            width = 1.5.dp,
+            brush = Brush.linearGradient(listOf(palette.accentStart, palette.accentEnd)),
+        )
+    } else {
+        BorderStroke(1.dp, current.cardBorder)
+    }
+    Surface(
+        modifier = modifier
+            .shadow(if (selected) 8.dp else 3.dp, shape)
+            .clickable(onClick = onSelect),
+        shape = shape,
+        color = scheme.surface.copy(alpha = if (current.isDark) 0.85f else 0.92f),
+        border = border,
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(36.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(
+                        Brush.verticalGradient(listOf(palette.bgTop, palette.bgBottom)),
+                    ),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(14.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(palette.accentStart, palette.accentMid, palette.accentEnd)
+                            ),
+                        ),
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = preset.titleFa,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        text = preset.titleEn,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = scheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                if (selected) {
+                    Icon(
+                        imageVector = MehraIcons.Check,
+                        contentDescription = "انتخاب شده",
+                        tint = palette.accentEnd,
+                        modifier = Modifier.size(20.dp),
+                    )
+                }
+            }
+            Text(
+                text = preset.descriptionFa,
+                style = MaterialTheme.typography.labelSmall,
+                color = scheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = 4.dp),
+            )
+        }
+    }
 }

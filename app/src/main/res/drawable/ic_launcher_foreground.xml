@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- MEHRA mark: a pointed Persian arch (mihrab) rendered in champagne gold. -->
+<!-- MEHRA mark: a pointed Persian arch (mihrab) in layered champagne golds over a soft halo
+     disc — the two-tone layering reads as a 3D relief on every launcher. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path
+        android:fillColor="#2EC8A96A"
+        android:pathData="M54,54 m-33,0 a33,33 0 1,0 66,0 a33,33 0 1,0 -66,0" />
+    <path
         android:fillColor="#00000000"
-        android:pathData="M40,86 L40,56 Q40,36 54,28 Q68,36 68,56 L68,86"
+        android:pathData="M38,88 L38,56 Q38,33 54,25 Q70,33 70,56 L70,88"
+        android:strokeColor="#E8D6AE"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M46,88 L46,60 Q46,47 54,42 Q62,47 62,60 L62,88"
         android:strokeColor="#C8A96A"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:strokeWidth="4.5" />
+        android:strokeWidth="3" />
     <path
         android:fillColor="#00000000"
-        android:pathData="M47,86 L47,60 Q47,48 54,43 Q61,48 61,60 L61,86"
-        android:strokeColor="#8C7748"
+        android:pathData="M29,88 L79,88"
+        android:strokeColor="#E8D6AE"
         android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:strokeWidth="2.5" />
+        android:strokeWidth="5" />
     <path
-        android:fillColor="#00000000"
-        android:pathData="M31,86 L77,86"
-        android:strokeColor="#C8A96A"
-        android:strokeLineCap="round"
-        android:strokeWidth="4.5" />
-    <path
-        android:fillColor="#C8A96A"
-        android:pathData="M54,18 m-2.4,0 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" />
+        android:fillColor="#E8D6AE"
+        android:pathData="M54,15 m-2.8,0 a2.8,2.8 0 1,0 5.6,0 a2.8,2.8 0 1,0 -5.6,0" />
 </vector>

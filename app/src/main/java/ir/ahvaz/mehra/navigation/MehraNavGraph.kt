@@ -1,21 +1,37 @@
 package ir.ahvaz.mehra.navigation
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Apps
-import androidx.compose.material.icons.rounded.Bed
-import androidx.compose.material.icons.rounded.Dashboard
-import androidx.compose.material.icons.rounded.EventNote
-import androidx.compose.material.icons.rounded.Hotel
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -25,6 +41,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import ir.ahvaz.mehra.core.ui.components.Icon3D
+import ir.ahvaz.mehra.core.ui.icons.MehraIcons
+import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.feature.dashboard.DashboardScreen
 import ir.ahvaz.mehra.feature.finance.FinanceScreen
 import ir.ahvaz.mehra.feature.guests.GuestDetailScreen
@@ -59,11 +78,11 @@ private data class BottomDestination(
 )
 
 private val bottomDestinations = listOf(
-    BottomDestination(Routes.DASHBOARD, "داشبورد", Icons.Rounded.Dashboard, Permissions.DASHBOARD_VIEW),
-    BottomDestination(Routes.ROOMS, "اتاق‌ها", Icons.Rounded.Bed, Permissions.ROOMS_VIEW),
-    BottomDestination(Routes.RESERVATIONS, "رزروها", Icons.Rounded.EventNote, Permissions.RESERVATIONS_VIEW),
-    BottomDestination(Routes.RECEPTION, "پذیرش", Icons.Rounded.Hotel, Permissions.RECEPTION_OPERATE),
-    BottomDestination(Routes.MORE, "بیشتر", Icons.Rounded.Apps, null),
+    BottomDestination(Routes.DASHBOARD, "داشبورد", MehraIcons.Dashboard, Permissions.DASHBOARD_VIEW),
+    BottomDestination(Routes.ROOMS, "اتاق‌ها", MehraIcons.Rooms, Permissions.ROOMS_VIEW),
+    BottomDestination(Routes.RESERVATIONS, "رزروها", MehraIcons.Reservations, Permissions.RESERVATIONS_VIEW),
+    BottomDestination(Routes.RECEPTION, "پذیرش", MehraIcons.Reception, Permissions.RECEPTION_OPERATE),
+    BottomDestination(Routes.MORE, "بیشتر", MehraIcons.More, null),
 )
 
 @Composable
@@ -80,31 +99,24 @@ fun MehraNavGraph(
     val destinations = bottomDestinations.filter { can(it.permission) }
 
     Scaffold(
+        containerColor = Color.Transparent,
         bottomBar = {
             if (showBottomBar) {
-                NavigationBar {
-                    destinations.forEach { destination ->
-                        val selected = backStackEntry?.destination?.hierarchy?.any {
-                            it.route == destination.route
-                        } == true
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = {
-                                if (currentRoute != destination.route) {
-                                    navController.navigate(destination.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
+                MehraBottomBar(
+                    destinations = destinations,
+                    backStackEntry = backStackEntry,
+                    onSelect = { destination ->
+                        if (currentRoute != destination.route) {
+                            navController.navigate(destination.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
-                            },
-                            icon = { Icon(destination.icon, contentDescription = destination.label) },
-                            label = { Text(destination.label) },
-                        )
-                    }
-                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    },
+                )
             }
         },
     ) { padding ->
@@ -291,6 +303,91 @@ fun MehraNavGraph(
                     onOpenNotifications = { navController.navigate(Routes.NOTIFICATIONS) },
                     onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                 )
+            }
+        }
+    }
+}
+
+/**
+ * Floating luxury bottom bar: a rounded glass pill with a gradient border and soft shadow.
+ * The selected destination gets a full 3D gradient icon chip ([Icon3D]) in the theme accent;
+ * unselected ones show the plain glyph in the muted surface colour.
+ */
+@Composable
+private fun MehraBottomBar(
+    destinations: List<BottomDestination>,
+    backStackEntry: NavBackStackEntry?,
+    onSelect: (BottomDestination) -> Unit,
+) {
+    val colors = MehraTheme.colors
+    val scheme = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(26.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.navigationBars)
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(14.dp, shape),
+            shape = shape,
+            color = scheme.surface.copy(alpha = if (colors.isDark) 0.88f else 0.92f),
+            border = BorderStroke(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    listOf(
+                        colors.accentStart.copy(alpha = 0.5f),
+                        colors.cardBorder,
+                        colors.accentEnd.copy(alpha = 0.5f),
+                    )
+                ),
+            ),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(66.dp)
+                    .padding(horizontal = 6.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                destinations.forEach { destination ->
+                    val selected = backStackEntry?.destination?.hierarchy?.any {
+                        it.route == destination.route
+                    } == true
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { onSelect(destination) },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        if (selected) {
+                            Icon3D(
+                                icon = destination.icon,
+                                contentDescription = destination.label,
+                                size = 40.dp,
+                            )
+                        } else {
+                            Icon(
+                                imageVector = destination.icon,
+                                contentDescription = destination.label,
+                                tint = scheme.onSurfaceVariant,
+                                modifier = Modifier.size(26.dp),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(3.dp))
+                        Text(
+                            text = destination.label,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                            color = if (selected) colors.accentEnd else scheme.onSurfaceVariant,
+                            maxLines = 1,
+                        )
+                    }
+                }
             }
         }
     }
