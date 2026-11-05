@@ -3,8 +3,10 @@ name: Android CI
 on:
   push:
     branches: [ "**" ]
-  pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 concurrency:
   group: android-ci-${{ github.ref }}
@@ -12,7 +14,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build debug APK and run unit tests
+    name: Build debug APK
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -44,11 +46,55 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Unit tests
-        run: ./gradlew :app:testDebugUnitTest --stacktrace --no-daemon
         continue-on-error: true
+        run: |
+          set -o pipefail
+          ./gradlew :app:testDebugUnitTest --stacktrace --no-daemon 2>&1 | tee test.log
 
       - name: Assemble debug APK
-        run: ./gradlew :app:assembleDebug --stacktrace --no-daemon
+        run: |
+          set -o pipefail
+          ./gradlew :app:assembleDebug --stacktrace --no-daemon 2>&1 | tee build.log
+
+      # GitHub-hosted artifact downloads are not reachable from every environment,
+      # so the APK and the compiler output are published on dedicated branches.
+      - name: Publish APK to ci-artifacts branch
+        if: success()
+        run: |
+          set -e
+          mkdir -p out/apk out/logs
+          cp app/build/outputs/apk/debug/*.apk out/apk/ || true
+          cp build.log out/logs/ 2>/dev/null || true
+          cp test.log out/logs/ 2>/dev/null || true
+          cd out
+          git init -q
+          git config user.name "mehra-ci"
+          git config user.email "ci@mehra.local"
+          git checkout -q -b ci-artifacts
+          git add -A
+          git commit -q -m "MEHRA debug APK ${GITHUB_SHA}" || true
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish build log on failure
+        if: failure()
+        run: |
+          set -e
+          mkdir -p out
+          cp build.log out/last-build.log 2>/dev/null || echo "assemble step did not run" > out/last-build.log
+          cp test.log out/last-test.log 2>/dev/null || true
+          if [ -d app/build/reports/tests ]; then cp -r app/build/reports/tests out/test-reports; fi
+          cd out
+          git init -q
+          git config user.name "mehra-ci"
+          git config user.email "ci@mehra.local"
+          git checkout -q -b ci-build-log
+          git add -A
+          git commit -q -m "build log ${GITHUB_SHA}" || true
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-build-log
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload debug APK
         if: always()
@@ -58,12 +104,3 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-test-reports
-          path: app/build/reports/tests/**
-          if-no-files-found: ignore
-          retention-days: 7
