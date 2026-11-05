@@ -2,8 +2,8 @@ package ir.ahvaz.mehra.core.ui.icons
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.StrokeLineCap
-import androidx.compose.ui.graphics.StrokeLineJoin
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.PathBuilder
 import androidx.compose.ui.graphics.vector.ImageVector.Builder
@@ -23,7 +23,7 @@ object MehraIcons {
     private val Glyph: SolidColor = SolidColor(Color.White)
 
     private fun builder(name: String): Builder =
-        ImageVector.Builder(name, 24.dp, 24.dp, 24.dp, 24.dp)
+        ImageVector.Builder(name, 24.dp, 24.dp, 24f, 24f)
 
     private fun Builder.stroked(
         width: Float = 1.7f,
@@ -32,8 +32,8 @@ object MehraIcons {
         stroke = Glyph,
         strokeAlpha = 1f,
         strokeLineWidth = width,
-        strokeLineCap = StrokeLineCap.Round,
-        strokeLineJoin = StrokeLineJoin.Round,
+        strokeLineCap = StrokeCap.Round,
+        strokeLineJoin = StrokeJoin.Round,
         pathBuilder = pathBuilder,
     )
 
@@ -44,7 +44,7 @@ object MehraIcons {
         fill = Glyph,
         stroke = Glyph,
         strokeLineWidth = width,
-        strokeLineJoin = StrokeLineJoin.Round,
+        strokeLineJoin = StrokeJoin.Round,
         pathBuilder = pathBuilder,
     )
 

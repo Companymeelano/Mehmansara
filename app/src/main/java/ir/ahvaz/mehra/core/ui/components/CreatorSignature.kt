@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,8 +31,8 @@ private const val SIGNATURE_LATIN = "MILAD YAGHOOBI"
  * glow behind it and a specular highlight across the top half of the letters. Underneath, the
  * Persian name and role are shown in Vazirmatn.
  *
- * Everything is drawn on a [Canvas] with plain android.graphics paints, so it works on every
- * API level (minSdk 24) without any SVG runtime dependency.
+ * Everything is drawn on a [Canvas] with plain android.graphics paints via `drawIntoCanvas`,
+ * so it works on every API level (minSdk 24) without any SVG runtime dependency.
  */
 @Composable
 fun CreatorSignature(
@@ -70,53 +72,49 @@ fun CreatorSignature(
             val face = colors.metalFace.toArgb()
             val dark = colors.metalDark.toArgb()
 
-            // --- extrusion: stacked copies going down-right, getting darker ---
-            val depth = (size.height * 0.17f).coerceAtLeast(2.5f)
-            val steps = depth.toInt().coerceIn(3, 24)
-            for (i in steps downTo 1) {
-                val t = i.toFloat() / steps
-                paint.shader = null
-                paint.setShadowLayer(0f, 0f, 0f, 0)
-                paint.color = ColorUtils.blendARGB(dark, face, t * 0.65f)
-                drawContext.canvas.nativeCanvas.drawText(
-                    text,
-                    x + i * 0.55f,
-                    baseline + i * 0.55f,
-                    paint,
+            drawIntoCanvas { canvas ->
+                // --- extrusion: stacked copies going down-right, getting darker ---
+                val depth = (size.height * 0.17f).coerceAtLeast(2.5f)
+                val steps = depth.toInt().coerceIn(3, 24)
+                for (i in steps downTo 1) {
+                    val t = i.toFloat() / steps
+                    paint.shader = null
+                    paint.setShadowLayer(0f, 0f, 0f, 0)
+                    paint.color = ColorUtils.blendARGB(dark, face, t * 0.65f)
+                    canvas.drawText(text, x + i * 0.55f, baseline + i * 0.55f, paint)
+                }
+
+                // --- metallic face with glow ---
+                paint.shader = LinearGradient(
+                    x, baseline + metrics.ascent,
+                    x, baseline + metrics.descent,
+                    intArrayOf(light, face, dark),
+                    floatArrayOf(0f, 0.55f, 1f),
+                    Shader.TileMode.CLAMP,
                 )
+                paint.setShadowLayer(
+                    size.height * 0.22f, 0f, 0f,
+                    colors.glow.copy(alpha = 0.65f).toArgb(),
+                )
+                canvas.drawText(text, x, baseline, paint)
+
+                // --- specular highlight across the top half of the letters ---
+                paint.setShadowLayer(0f, 0f, 0f, 0)
+                canvas.save()
+                canvas.clipRect(0f, baseline + metrics.ascent, size.width, center.y + 1f)
+                paint.shader = LinearGradient(
+                    0f, baseline + metrics.ascent,
+                    0f, center.y,
+                    intArrayOf(
+                        Color.White.copy(alpha = 0.54f).toArgb(),
+                        Color.Transparent.toArgb(),
+                    ),
+                    null,
+                    Shader.TileMode.CLAMP,
+                )
+                canvas.drawText(text, x, baseline, paint)
+                canvas.restore()
             }
-
-            // --- metallic face with glow ---
-            paint.shader = LinearGradient(
-                x, baseline + metrics.ascent,
-                x, baseline + metrics.descent,
-                intArrayOf(light, face, dark),
-                floatArrayOf(0f, 0.55f, 1f),
-                Shader.TileMode.CLAMP,
-            )
-            paint.setShadowLayer(
-                size.height * 0.22f, 0f, 0f,
-                colors.glow.copy(alpha = 0.65f).toArgb(),
-            )
-            drawContext.canvas.nativeCanvas.drawText(text, x, baseline, paint)
-
-            // --- specular highlight across the top half of the letters ---
-            paint.setShadowLayer(0f, 0f, 0f, 0)
-            val native = drawContext.canvas.nativeCanvas
-            native.save()
-            native.clipRect(0f, baseline + metrics.ascent, size.width, center.y + 1f)
-            paint.shader = LinearGradient(
-                0f, baseline + metrics.ascent,
-                0f, center.y,
-                intArrayOf(
-                    androidx.compose.ui.graphics.Color.White.copy(alpha = 0.54f).toArgb(),
-                    androidx.compose.ui.graphics.Color.Transparent.toArgb(),
-                ),
-                null,
-                Shader.TileMode.CLAMP,
-            )
-            native.drawText(text, x, baseline, paint)
-            native.restore()
         }
         Spacer(modifier = Modifier.height(2.dp))
         Text(
