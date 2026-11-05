@@ -3,7 +3,11 @@
 اپلیکیشن مدیریت مهمان‌پذیر فرهنگیان اهواز (Android) — Persian-first, RTL, offline-tolerant.
 
 > **وضعیت تحویل**
-> - ✅ **APK دیباگ ساخته شد**: `dist/mehra-1.0.0-debug.apk` (و شاخه `ci-artifacts`) — بیلد روی GitHub Actions با JDK 17 و Android SDK 35.
+> - ✅ **APK دیباگ ساخته شد** و آماده دانلود است:
+>   - دانلود مستقیم: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk
+>   - صفحه دانلود: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk
+>   - انتشار: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test
+>   - فایل محلی: `artifacts/mehra-1.0.0-debug.apk` (جزئیات در `artifacts/README.md`)
 > - ✅ **تست‌های واحد سبز**: تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX.
 > - ⏳ **تست روی دستگاه و سرور واقعی انجام نشده**؛ بک‌اند ASP.NET Core هنوز پیاده‌سازی نشده است و اپ تا زمانی که سرور سازگار با `docs/API.md` بالا نیاید از مرحله «اتصال به سرور» عبور نمی‌کند (هیچ داده نمونه‌ای نمایش داده نمی‌شود).
 > جزئیات: [`docs/TEST_REPORT.md`](docs/TEST_REPORT.md) و [`dist/README.md`](dist/README.md).

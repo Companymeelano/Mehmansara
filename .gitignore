@@ -19,5 +19,3 @@ keystore.properties
 .DS_Store
 Thumbs.db
 
-# Local build output delivered to the tester
-dist/

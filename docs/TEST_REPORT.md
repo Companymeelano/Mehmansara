@@ -9,7 +9,7 @@
 | ساخت پروژه (`:app:assembleDebug`) | ✅ **موفق** — روی GitHub Actions (Ubuntu + JDK 17 + Android SDK 35)، خروجی `app-debug.apk` (۲۰٫۸ مگابایت) |
 | تست‌های واحد (`:app:testDebugUnitTest`) | ✅ **سبز** — ۳ کلاس تست (تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX) بدون شکست اجرا شد |
 | کامپایل Kotlin + KSP/Hilt | ✅ بدون خطا (فقط هشدارهای deprecation آیکون‌های AutoMirrored) |
-| APK دیباگ | ✅ تولید و امضا شده (debug keystore) — `dist/mehra-1.0.0-debug.apk` و شاخه `ci-artifacts` |
+| APK دیباگ | ✅ تولید و امضا شده (debug keystore) — `artifacts/mehra-1.0.0-debug.apk`، شاخه `ci-artifacts` و آدرس https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk |
 | APK ریلیز | ⏳ تولید نشده — نیازمند keystore انتشار (فایل `keystore.properties`) |
 | تست روی دستگاه/امولاتور | ❌ انجام نشده — محیط توسعه دستگاهی نداشت |
 | تست اتصال به API واقعی | ❌ انجام نشده — سرور ASP.NET Core در این مخزن پیاده‌سازی نشده است |
