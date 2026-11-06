@@ -39,7 +39,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 
 [Languages]
-Name: "persian"; MessagesFile: "compiler:Languages\Persian.isl"
+Name: "farsi"; MessagesFile: "inno\Farsi.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
