@@ -4,6 +4,12 @@
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "فرهنگان اهواز"
 #define MyAppExeName "Mehra.exe"
+#ifndef MyPublishDir
+#define MyPublishDir "publish"
+#endif
+#ifndef MyOutputDir
+#define MyOutputDir "out\exe"
+#endif
 
 [Setup]
 AppId={{7C4E9A21-3B58-4F6D-9E1A-2D8B5F0C41A7}}
@@ -15,7 +21,7 @@ AppPublisherURL=https://github.com/Companymeelano/Mehmansara
 DefaultDirName={localappdata}\Mehra
 DefaultGroupName={#MyAppName}
 PrivilegesRequired=lowest
-OutputDir=GetEnv("MEHRA_OUT")
+OutputDir={#MyOutputDir}
 OutputBaseFileName=Mehra-setup
 SetupIconFile=desktop\Mehra.Desktop\Assets\mehra.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
@@ -31,7 +37,7 @@ Name: "persian"; MessagesFile: "compiler:Languages\Persian.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: GetEnv("MEHRA_PUBLISH") + "\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyPublishDir}\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "out\exe\README.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
