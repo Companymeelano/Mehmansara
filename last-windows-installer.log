@@ -23,12 +23,6 @@ Non-commercial use only
 
 Preprocessing
    Reading file: C:\Program Files (x86)\Inno Setup 6\ISPPBuiltins.iss
-Parsing [Setup] section, line 15
-Parsing [Setup] section, line 16
-Parsing [Setup] section, line 17
-Parsing [Setup] section, line 18
-Parsing [Setup] section, line 19
-Parsing [Setup] section, line 20
 Parsing [Setup] section, line 21
 Parsing [Setup] section, line 22
 Parsing [Setup] section, line 23
@@ -42,10 +36,20 @@ Parsing [Setup] section, line 30
 Parsing [Setup] section, line 31
 Parsing [Setup] section, line 32
 Parsing [Setup] section, line 33
+Parsing [Setup] section, line 34
+Parsing [Setup] section, line 35
+Parsing [Setup] section, line 36
+Parsing [Setup] section, line 37
+Parsing [Setup] section, line 38
+Parsing [Setup] section, line 39
 Reading file (WizardImageFile)
 Reading file (WizardSmallImageFile)
 Preparing Setup program executable
    Verification successful
    Updating icons (Setup.e32)
-Error on line 26 in D:\a\Mehmansara\Mehmansara\desktop\installer.iss: The system cannot find the path specified.
+   Updating version info (Setup.e32)
+Determining language code pages
+Parsing [Languages] section, line 42
+   Reading file: C:\Program Files (x86)\Inno Setup 6\Languages\Persian.isl
+Error on line 42 in D:\a\Mehmansara\Mehmansara\desktop\installer.iss: Couldn't open include file "C:\Program Files (x86)\Inno Setup 6\Languages\Persian.isl": The system cannot find the file specified.
 Compile aborted.
