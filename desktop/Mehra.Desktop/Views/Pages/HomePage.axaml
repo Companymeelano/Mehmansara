@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.HomePage">
+  <StackPanel Spacing="14">
+    <StackPanel Spacing="2">
+      <TextBlock Text="{Binding Greeting}" FontSize="24" Classes="bold" />
+      <TextBlock Text="{Binding TodayFa}" Foreground="#5A6474" />
+    </StackPanel>
+    <ItemsControl ItemsSource="{Binding Cards}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid Columns="3" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6">
+            <StackPanel Spacing="4">
+              <TextBlock Text="{Binding Label}" Foreground="#5A6474" FontSize="12" />
+              <TextBlock Text="{Binding Value}" FontSize="22" Classes="bold" Foreground="{Binding Accent}" />
+              <TextBlock Text="{Binding Caption}" FontSize="11" Foreground="#8A93A3" />
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="هشدارها" FontSize="15" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Alerts}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,3">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <Border Background="{Binding Accent}" Width="6" CornerRadius="3" />
+              <StackPanel Spacing="2">
+                <TextBlock Text="{Binding Title}" Classes="bold" />
+                <TextBlock Text="{Binding Message}" Foreground="#5A6474" FontSize="12" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="فعالیت‌های اخیر" FontSize="15" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Activities}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,3">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0" Text="{Binding Title}" />
+              <TextBlock Grid.Column="1" Text="{Binding TimeFa}" Foreground="#8A93A3" FontSize="11" />
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding OccupancyFa}" Foreground="#8A93A3" FontSize="11" TextWrapping="Wrap" />
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

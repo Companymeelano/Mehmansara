@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Mehra.Desktop.Views.LoginWindow"
+        Title="مهرآ — ورود"
+        Width="470" Height="640"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False">
+  <Border Background="#16233D">
+    <StackPanel VerticalAlignment="Center" Margin="38" Spacing="12">
+      <TextBlock Text="مهرآ" FontSize="46" Classes="bold" Foreground="#E8D6AE" HorizontalAlignment="Center" />
+      <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز" Foreground="#C9CFD8" HorizontalAlignment="Center" TextAlignment="Center" />
+      <Border Classes="card" Margin="0,16,0,0">
+        <StackPanel Spacing="10">
+          <TextBlock Text="نشانی سرور" Classes="bold" />
+          <TextBox x:Name="ServerBox" Watermark="مثال: https://mehra.example.ir" />
+          <TextBlock Text="نام کاربری" Classes="bold" />
+          <TextBox x:Name="UserBox" Watermark="نام کاربری" />
+          <TextBlock Text="رمز عبور" Classes="bold" />
+          <PasswordBox x:Name="PassBox" />
+          <TextBlock x:Name="ErrorText" Foreground="#B3261E" TextWrapping="Wrap" IsVisible="False" />
+          <Button Classes="primary" Content="ورود" Click="OnLogin" HorizontalAlignment="Stretch" Margin="0,4,0,0" />
+          <Button Classes="ghost" Content="ورود نمایشی (بدون سرور — دادهٔ نمونه)" Click="OnDemo" HorizontalAlignment="Stretch" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
+        </StackPanel>
+      </Border>
+      <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی" Foreground="#9AA6B8" FontSize="11" HorizontalAlignment="Center" Margin="0,8,0,0" />
+    </StackPanel>
+  </Border>
+</Window>

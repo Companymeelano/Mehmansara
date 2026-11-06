@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.ReceptionPage">
+  <StackPanel Spacing="12">
+    <TextBlock Text="پذیرش — اقامت‌های فعال" FontSize="22" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Items}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,4">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <StackPanel Grid.Column="0" Spacing="3" Margin="0,0,16,0">
+                <TextBlock Text="{Binding Code}" FontSize="16" Classes="bold" />
+                <Border Background="{Binding StatusBrush}" CornerRadius="999" Padding="8,3" HorizontalAlignment="Start">
+                  <TextBlock Text="{Binding StatusFa}" FontSize="10" Foreground="White" />
+                </Border>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="3">
+                <TextBlock Text="{Binding GuestName}" Classes="bold" />
+                <TextBlock Text="{Binding RoomNumber}" Foreground="#5A6474" FontSize="12" />
+                <TextBlock Text="{Binding SinceFa}" Foreground="#5A6474" FontSize="12" />
+                <TextBlock Text="{Binding PlannedOutFa}" Foreground="#5A6474" FontSize="12" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                <TextBlock Text="{Binding GuestsFa}" FontSize="12" Foreground="#5A6474" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,80 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="Window, UserControl">
+    <Setter Property="FontFamily" Value="avares://Mehra.Desktop/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
+    <Setter Property="FlowDirection" Value="RightToLeft" />
+    <Setter Property="FontSize" Value="13" />
+  </Style>
+
+  <Style Selector="TextBlock">
+    <Setter Property="FontFamily" Value="avares://Mehra.Desktop/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
+  </Style>
+
+  <Style Selector="TextBlock.bold">
+    <Setter Property="FontFamily" Value="avares://Mehra.Desktop/Assets/Fonts/vazirmatn_bold.ttf#Vazirmatn" />
+  </Style>
+
+  <Style Selector="Button">
+    <Setter Property="Padding" Value="16,9" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="#B08D3E" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#C6A452" />
+  </Style>
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#8F7030" />
+  </Style>
+
+  <Style Selector="Button.ghost">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="#E8D6AE" />
+    <Setter Property="BorderBrush" Value="#3A4A66" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="Button.ghost:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#22304C" />
+  </Style>
+
+  <Style Selector="Border.card">
+    <Setter Property="Background" Value="#FFFFFFFB" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Padding" Value="14" />
+    <Setter Property="BorderBrush" Value="#E4D9BE" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+
+  <Style Selector="TextBox, PasswordBox">
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="10,8" />
+    <Setter Property="BorderBrush" Value="#D8CBA6" />
+    <Setter Property="Background" Value="#FFFDF8" />
+  </Style>
+
+  <Style Selector="ListBox.nav">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Margin" Value="10,6" />
+  </Style>
+  <Style Selector="ListBox.nav ListBoxItem">
+    <Setter Property="Foreground" Value="#C9CFD8" />
+    <Setter Property="Padding" Value="14,10" />
+    <Setter Property="Margin" Value="0,2" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="ListBox.nav ListBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#22304C" />
+  </Style>
+  <Style Selector="ListBox.nav ListBoxItem:selected /template/ ContentPresenter">
+    <Setter Property="Background" Value="#B08D3E" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+</Styles>

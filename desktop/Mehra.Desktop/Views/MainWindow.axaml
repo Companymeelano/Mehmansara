@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Mehra.Desktop.Views.MainWindow"
+        Title="مهرآ — نسخهٔ ویندوز"
+        Width="1180" Height="760"
+        MinWidth="900" MinHeight="560"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="*,30">
+    <Grid Grid.Row="0" ColumnDefinitions="230,*">
+      <Border Grid.Column="0" Background="#16233D">
+        <Grid RowDefinitions="Auto,*,Auto">
+          <StackPanel Grid.Row="0" Margin="16,20,16,10" Spacing="2">
+            <TextBlock Text="مهرآ" FontSize="30" Classes="bold" Foreground="#E8D6AE" />
+            <TextBlock Text="مهمان‌پذیر فرهنگیان اهواز" FontSize="11" Foreground="#9AA6B8" />
+          </StackPanel>
+          <ListBox x:Name="NavList" Grid.Row="1" Classes="nav" SelectionChanged="OnNavChanged">
+            <ListBoxItem Content="خانه" Tag="home" />
+            <ListBoxItem Content="اتاق‌ها" Tag="rooms" />
+            <ListBoxItem Content="رزروها" Tag="reservations" />
+            <ListBoxItem Content="پذیرش" Tag="reception" />
+            <ListBoxItem Content="تنظیمات" Tag="settings" />
+          </ListBox>
+          <StackPanel Grid.Row="2" Margin="16,10" Spacing="6">
+            <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" />
+            <TextBlock x:Name="RoleText" Foreground="#9AA6B8" FontSize="11" />
+            <Button Classes="ghost" Content="خروج از حساب" Click="OnLogout" HorizontalAlignment="Stretch" />
+          </StackPanel>
+        </Grid>
+      </Border>
+      <Border Grid.Column="1" Background="#F6EFE0">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <ContentControl x:Name="ContentArea" Margin="18" />
+        </ScrollViewer>
+      </Border>
+    </Grid>
+    <Border Grid.Row="1" Background="#101A2E">
+      <TextBlock x:Name="StatusText" Foreground="#C9CFD8" FontSize="11" Margin="12,5" />
+    </Border>
+  </Grid>
+</Window>

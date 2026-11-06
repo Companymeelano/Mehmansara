@@ -76,10 +76,19 @@ jobs:
           git init -q
           git config user.name "mehra-ci"
           git config user.email "ci@mehra.local"
-          git checkout -q -b ci-artifacts
+          # Merge into the existing ci-artifacts branch instead of force-pushing,
+          # so artifacts from other jobs (e.g. exe/ from Windows CI) are preserved.
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q origin ci-artifacts || true
+          if git show-ref --verify -q refs/remotes/origin/ci-artifacts; then
+            git checkout -q -b ci-artifacts origin/ci-artifacts
+            rm -rf apk
+          else
+            git checkout -q -b ci-artifacts
+          fi
           git add -A
           git commit -q -m "MEHRA debug APK ${GITHUB_SHA}" || true
-          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-artifacts
+          git push origin ci-artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

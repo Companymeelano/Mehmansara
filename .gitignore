@@ -19,3 +19,7 @@ keystore.properties
 .DS_Store
 Thumbs.db
 
+
+# .NET desktop (Windows) build output
+desktop/**/bin/
+desktop/**/obj/

@@ -12,7 +12,11 @@
 >   - صفحه دانلود: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk
 >   - انتشار: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test
 >   - فایل محلی: `artifacts/mehra-1.0.0-debug.apk` (جزئیات در `artifacts/README.md`)
-> - ✅ **تست‌های واحد سبز**: تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX.
+> - 🖥️ **نسخهٔ ویندوز (exe) هم منتشر شد** — برنامهٔ رومیزی کارکنان (Avalonia/.NET 8، win-x64 self-contained):
+  - دانلود مستقیم: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
+  - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
+  - جزئیات و صداقت در گزارش: [`docs/WINDOWS.md`](docs/WINDOWS.md)
+- ✅ **تست‌های واحد سبز**: تبدیل جلالی، ارقام/پول فارسی، نویسنده XLSX.
 > - ⏳ **تست زمان‌اجرا روی دستگاه و سرور واقعی انجام نشده**؛ بک‌اند ASP.NET Core هنوز
 >   پیاده‌سازی نشده است و نسخه عملیاتی تا زمانی که سرور سازگار با `docs/API.md` بالا نیاید از
 >   مرحله «اتصال به سرور» عبور نمی‌کند (هیچ داده نمونه‌ای نمایش داده نمی‌شود).

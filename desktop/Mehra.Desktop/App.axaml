@@ -1,0 +1,8 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.App">
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Mehra.Desktop/Styles/AppStyles.axaml" />
+  </Application.Styles>
+</Application>

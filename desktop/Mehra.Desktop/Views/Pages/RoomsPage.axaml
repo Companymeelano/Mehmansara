@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.RoomsPage">
+  <StackPanel Spacing="12">
+    <TextBlock Text="اتاق‌ها" FontSize="22" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Rooms}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <WrapPanel />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Width="225" Margin="6">
+            <StackPanel Spacing="5">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Text="{Binding Number}" FontSize="19" Classes="bold" />
+                <Border Grid.Column="1" Background="{Binding StatusBrush}" CornerRadius="999" Padding="8,3">
+                  <TextBlock Text="{Binding StatusFa}" FontSize="10" Foreground="White" />
+                </Border>
+              </Grid>
+              <TextBlock Text="{Binding TypeName}" Foreground="#5A6474" FontSize="12" />
+              <TextBlock Text="{Binding Details}" FontSize="11" Foreground="#8A93A3" />
+              <TextBlock Text="{Binding RateFa}" FontSize="12" />
+              <TextBlock Text="{Binding GuestName}" FontSize="11" Foreground="#8A93A3" IsVisible="{Binding GuestName.Length}" />
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

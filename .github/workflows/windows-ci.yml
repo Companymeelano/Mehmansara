@@ -1,0 +1,90 @@
+name: Windows CI
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - "desktop/**"
+      - ".github/workflows/windows-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Publish Mehra.exe (win-x64)
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish single-file self-contained exe
+        shell: pwsh
+        run: |
+          dotnet publish desktop/Mehra.Desktop/Mehra.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true -o publish 2>&1 | Tee-Object -FilePath build.log
+          if (-not (Test-Path publish\Mehra.exe)) { throw "Mehra.exe was not produced" }
+          (Get-Item publish\Mehra.exe).Length
+
+      - name: Package exe + zip + log
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out\exe, out\logs | Out-Null
+          Copy-Item publish\Mehra.exe out\exe\Mehra.exe
+          Compress-Archive -Path publish\Mehra.exe -DestinationPath out\exe\Mehra-win-x64.zip -Force
+          Copy-Item build.log out\logs\windows-build.log
+          Get-ChildItem out -Recurse | Select-Object FullName, Length
+
+      # APKs (android-ci) and the exe (this job) share the ci-artifacts branch:
+      # clone the existing branch and merge into it — never force-push.
+      - name: Publish exe to ci-artifacts branch (merge)
+        if: success()
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Set-Location out
+          git init -q
+          git config user.name "mehra-ci"
+          git config user.email "ci@mehra.local"
+          git remote add origin "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git"
+          git fetch -q origin ci-artifacts 2>$null
+          if (git show-ref --verify -q refs/remotes/origin/ci-artifacts) {
+            git checkout -q -b ci-artifacts origin/ci-artifacts
+            Remove-Item -Recurse -Force exe -ErrorAction SilentlyContinue
+          } else {
+            git checkout -q -b ci-artifacts
+          }
+          git add -A
+          git commit -q -m "MEHRA Windows exe $env:GITHUB_SHA" 2>$null
+          git push origin ci-artifacts
+
+      - name: Publish build log on failure
+        if: failure()
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ErrorActionPreference = 'Continue'
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          if (Test-Path build.log) { Copy-Item build.log out\last-windows-build.log } else { "publish step did not run" | Out-File out\last-windows-build.log }
+          Set-Location out
+          git init -q
+          git config user.name "mehra-ci"
+          git config user.email "ci@mehra.local"
+          git checkout -q -b ci-build-log
+          git add -A
+          git commit -q -m "windows build log $env:GITHUB_SHA" 2>$null
+          git push -f "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git" ci-build-log

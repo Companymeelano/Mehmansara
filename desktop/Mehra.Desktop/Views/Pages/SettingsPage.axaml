@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.SettingsPage">
+  <StackPanel Spacing="12" MaxWidth="560">
+    <TextBlock Text="تنظیمات" FontSize="22" Classes="bold" />
+    <Border Classes="card">
+      <StackPanel Spacing="8">
+        <TextBlock Text="نشانی سرور" Classes="bold" />
+        <TextBlock Text="{Binding ServerLabel}" Foreground="#5A6474" TextWrapping="Wrap" />
+        <TextBlock Text="{Binding Mode}" Foreground="#5A6474" TextWrapping="Wrap" />
+        <Button Classes="ghost" Content="بررسی اتصال به سرور" Click="OnHealth" HorizontalAlignment="Start" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
+        <TextBlock Text="{Binding Health}" Foreground="#2E7D5B" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+    <Border Classes="card">
+      <StackPanel Spacing="6">
+        <TextBlock Text="دربارهٔ برنامه" Classes="bold" />
+        <TextBlock Text="مهرآ — نسخهٔ ویندوز (نسخهٔ ۱.۰)" />
+        <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوزی که به همان API نسخهٔ اندروئید متصل می‌شود." TextWrapping="Wrap" Foreground="#5A6474" />
+        <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی" Classes="bold" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>
