@@ -2,17 +2,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <Style Selector="Window, UserControl">
-    <Setter Property="FontFamily" Value="avares://Mehra.Desktop/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
+    <Setter Property="FontFamily" Value="avares://Mehra/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
     <Setter Property="FlowDirection" Value="RightToLeft" />
     <Setter Property="FontSize" Value="13" />
   </Style>
 
   <Style Selector="TextBlock">
-    <Setter Property="FontFamily" Value="avares://Mehra.Desktop/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
+    <Setter Property="FontFamily" Value="avares://Mehra/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
   </Style>
 
   <Style Selector="TextBlock.bold">
-    <Setter Property="FontFamily" Value="avares://Mehra.Desktop/Assets/Fonts/vazirmatn_bold.ttf#Vazirmatn" />
+    <Setter Property="FontFamily" Value="avares://Mehra/Assets/Fonts/vazirmatn_bold.ttf#Vazirmatn" />
   </Style>
 
   <Style Selector="Button">

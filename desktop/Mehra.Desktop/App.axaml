@@ -3,6 +3,6 @@
              x:Class="Mehra.Desktop.App">
   <Application.Styles>
     <FluentTheme />
-    <StyleInclude Source="avares://Mehra.Desktop/Styles/AppStyles.axaml" />
+    <StyleInclude Source="avares://Mehra/Styles/AppStyles.axaml" />
   </Application.Styles>
 </Application>
