@@ -59,6 +59,19 @@ jobs:
             
             طراح و توسعه‌دهنده: میلاد یعقوبی
 
+      - name: Build installer (Inno Setup) -> Mehra-setup.exe
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { $iscc = "ISCC.exe" }
+          $env:MEHRA_PUBLISH = (Resolve-Path publish).Path
+          New-Item -ItemType Directory -Force -Path out\exe | Out-Null
+          $env:MEHRA_OUT = (Resolve-Path out\exe).Path
+          & $iscc desktop\installer.iss
+          if (-not (Test-Path out\exe\Mehra-setup.exe)) { throw "Mehra-setup.exe was not produced" }
+          (Get-Item out\exe\Mehra-setup.exe).Length
+
       # APKs (android-ci) and the exe (this job) share the ci-artifacts branch:
       # clone the existing branch and merge into it — never force-push.
       - name: Publish exe to ci-artifacts branch (merge)
