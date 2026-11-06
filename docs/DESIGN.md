@@ -46,7 +46,7 @@ luxury tokens:
 - SVG masters: `design/icons/svg/*.svg` (see `design/icons/README.md`).
 - Vector glyphs: `core/ui/icons/MehraIcons.kt` (mirrors the SVG path data, 24dp viewport).
 - Runtime: `Icon3D` puts any glyph on a theme-accent gradient squircle with gloss + shadow —
-  used in the bottom bar, module tiles (`بیشتر`), dashboard `StatTile`s, lock screen, etc.
+  used in the bottom bar, module tiles (`بخش‌ها`), dashboard `StatTile`s, lock screen, etc.
 - Launcher & splash: layered two-tone gold mihrab arch over a gradient adaptive-icon
   backdrop (`res/drawable/ic_launcher_*`, `ic_splash_logo.xml`).
 
@@ -63,7 +63,7 @@ Compose `Canvas` as a true 3D metallic extrusion: stacked offset copies for dept
 metal gradient face taken from the active theme (`metalLight/metalFace/metalDark`), a
 theme-coloured glow and a specular highlight on the top half of the letters — followed by
 «میلاد یعقوبی — طراح و توسعه‌دهندهٔ سامانهٔ مهرآ». It appears on the **login screen, lock
-screen, بیشتر footer and تنظیمات → درباره سامانه**, so the app is visibly and uniquely yours.
+screen, بخش‌ها footer and تنظیمات → درباره سامانه**, so the app is visibly and uniquely yours.
 
 ## 6. Build
 
