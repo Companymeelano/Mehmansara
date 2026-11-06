@@ -50,7 +50,7 @@
     <Setter Property="BorderThickness" Value="1" />
   </Style>
 
-  <Style Selector="TextBox, PasswordBox">
+  <Style Selector="TextBox">
     <Setter Property="CornerRadius" Value="10" />
     <Setter Property="Padding" Value="10,8" />
     <Setter Property="BorderBrush" Value="#D8CBA6" />

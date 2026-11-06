@@ -8,7 +8,7 @@
         <TextBlock Text="نشانی سرور" Classes="bold" />
         <TextBlock Text="{Binding ServerLabel}" Foreground="#5A6474" TextWrapping="Wrap" />
         <TextBlock Text="{Binding Mode}" Foreground="#5A6474" TextWrapping="Wrap" />
-        <Button Classes="ghost" Content="بررسی اتصال به سرور" Click="OnHealth" HorizontalAlignment="Start" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
+        <Button Classes="ghost" Content="بررسی اتصال به سرور" Click="OnHealth" HorizontalAlignment="Right" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
         <TextBlock Text="{Binding Health}" Foreground="#2E7D5B" TextWrapping="Wrap" />
       </StackPanel>
     </Border>
