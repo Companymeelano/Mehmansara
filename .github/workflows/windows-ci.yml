@@ -65,7 +65,10 @@ jobs:
           git config user.email "ci@mehra.local"
           git remote add origin "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git"
           git fetch -q origin ci-artifacts 2>$null
-          if ($LASTEXITCODE -eq 0 -and (git show-ref --verify -q refs/remotes/origin/ci-artifacts)) {
+          $fetched = ($LASTEXITCODE -eq 0)
+          git show-ref --verify -q refs/remotes/origin/ci-artifacts
+          $haveRef = ($LASTEXITCODE -eq 0)
+          if ($fetched -and $haveRef) {
             git checkout -q -B ci-artifacts origin/ci-artifacts
             Remove-Item -Recurse -Force exe -ErrorAction SilentlyContinue
           } else {
@@ -93,7 +96,10 @@ jobs:
           git config user.email "ci@mehra.local"
           git remote add origin "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git"
           git fetch -q origin ci-build-log 2>$null
-          if ($LASTEXITCODE -eq 0 -and (git show-ref --verify -q refs/remotes/origin/ci-build-log)) {
+          $fetched = ($LASTEXITCODE -eq 0)
+          git show-ref --verify -q refs/remotes/origin/ci-build-log
+          $haveRef = ($LASTEXITCODE -eq 0)
+          if ($fetched -and $haveRef) {
             git checkout -q -B ci-build-log origin/ci-build-log
           } else {
             git checkout -q -b ci-build-log

@@ -188,7 +188,7 @@ public class ApiClient : IHotelApi
             var env = JsonSerializer.Deserialize<ApiEnvelope<T>>(body, Json.Opts);
             if (!resp.IsSuccessStatusCode || env is null || !env.Success)
                 return Result<T>.Fail(env?.Error?.Message ?? $"پاسخ نامعتبر از سرور (کد {(int)resp.StatusCode})");
-            return Result<T>.Good(env.Data is null ? default! : env.Data);
+            return Result<T>.Good(env.Data!);
         }
         catch (Exception ex)
         {
