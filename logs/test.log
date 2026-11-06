@@ -1,0 +1,76 @@
+
+Welcome to Gradle 8.11.1!
+
+Here are the highlights of this release:
+ - Parallel load and store for Configuration Cache
+ - Java compilation errors at the end of the build output
+ - Consolidated report for warnings and deprecations
+
+For more details see https://docs.gradle.org/8.11.1/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.defaults.buildfeatures.buildconfig=true' is deprecated.
+The current default is 'false'.
+It will be removed in version 9.0 of the Android Gradle plugin.
+To keep using this feature, add the following to your module-level build.gradle files:
+    android.buildFeatures.buildConfig = true
+or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build Files`.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preProdDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateProdDebugBuildConfig FROM-CACHE
+> Task :app:generateProdDebugResValues FROM-CACHE
+> Task :app:checkProdDebugAarMetadata
+> Task :app:mapProdDebugSourceSetPaths
+> Task :app:generateProdDebugResources
+> Task :app:packageProdDebugResources
+> Task :app:mergeProdDebugResources
+> Task :app:createProdDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksProdDebug FROM-CACHE
+> Task :app:processProdDebugMainManifest FROM-CACHE
+> Task :app:processProdDebugManifest FROM-CACHE
+> Task :app:parseProdDebugLocalResources
+> Task :app:processProdDebugManifestForPackage FROM-CACHE
+> Task :app:javaPreCompileProdDebug FROM-CACHE
+> Task :app:mergeProdDebugShaders
+> Task :app:compileProdDebugShaders NO-SOURCE
+> Task :app:generateProdDebugAssets UP-TO-DATE
+> Task :app:mergeProdDebugAssets
+> Task :app:preProdDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileProdDebugUnitTest FROM-CACHE
+> Task :app:processProdDebugResources
+> Task :app:packageProdDebugUnitTestForUnitTest
+> Task :app:generateProdDebugUnitTestConfig
+> Task :app:kspProdDebugKotlin
+> Task :app:compileProdDebugKotlin
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:251:42 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:259:42 'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:376:36 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
+
+> Task :app:compileProdDebugJavaWithJavac
+> Task :app:hiltAggregateDepsProdDebug FROM-CACHE
+> Task :app:hiltJavaCompileProdDebug
+> Task :app:processProdDebugJavaRes
+> Task :app:bundleProdDebugClassesToCompileJar
+> Task :app:transformProdDebugClassesWithAsm
+> Task :app:bundleProdDebugClassesToRuntimeJar
+> Task :app:kspProdDebugUnitTestKotlin
+> Task :app:compileProdDebugUnitTestKotlin
+> Task :app:compileProdDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:hiltAggregateDepsProdDebugUnitTest FROM-CACHE
+> Task :app:hiltJavaCompileProdDebugUnitTest NO-SOURCE
+> Task :app:processProdDebugUnitTestJavaRes
+> Task :app:transformProdDebugUnitTestClassesWithAsm
+> Task :app:testProdDebugUnitTest
+
+BUILD SUCCESSFUL in 1m 21s
+35 actionable tasks: 25 executed, 10 from cache
