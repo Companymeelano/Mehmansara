@@ -7,6 +7,13 @@
 - صفحهٔ فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 - لاگ build: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/logs/windows-build.log
 
+## هش و تأیید باینری (sha256) (اجرای CI `42267706303`، کامیت `eb2f84d`)
+
+- `exe/Mehra.exe`: 92,138,107 بایت — sha256 `00031abe126cd446e1e364c903102b3f2aa90064f955879d5d06a3ed49a8af1c`
+- `exe/Mehra-win-x64.zip`: 40,589,323 بایت (حاوی همان Mehra.exe)
+- بررسی بایت‌به‌بایت: MZ/PE معتبر، ماشین 0x8664 (x64)، PE32+، subsystem 2 (Windows GUI)،
+  رشته‌های فارسی UI به‌صورت UTF-16 در باینری موجودند.
+
 ## نحوهٔ اجرا
 
 1. فایل `Mehra.exe` را دانلود و اجرا کنید (win-x64 و self-contained؛ نیازی به نصب .NET نیست).

@@ -18,6 +18,22 @@
 | صفحه انتشار | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test | — |
 | اجرای CI و آرتیفکت‌ها | https://github.com/Companymeelano/Mehmansara/actions | — |
 
+## نسخهٔ ویندوز (Mehra.exe)
+
+برنامهٔ رومیزی ویندوز (win-x64، self-contained single-file) در همان شاخهٔ `ci-artifacts` منتشر می‌شود
+(فایل ۹۲ مگابایتی به‌خاطر حجم، در این پوشه pin نشده و فقط هش/مشخصاتش اینجا ثبت شده است):
+
+| فایل | دانلود مستقیم | حجم | SHA-256 |
+|---|---|---|---|
+| `exe/Mehra.exe` | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe | 92,138,107 بایت | `00031abe126cd446e1e364c903102b3f2aa90064f955879d5d06a3ed49a8af1c` |
+| `exe/Mehra-win-x64.zip` | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip | 40,589,323 بایت | — |
+| لاگ build | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/logs/windows-build.log | — | — |
+
+بررسی بایت‌به‌بایت exe (اجرای CI `42267706303`): سرآیند MZ/PE معتبر، ماشین 0x8664 (x64)،
+PE32+ با subsystem 2 (Windows GUI) — یعنی یک فایل اجرایی واقعی ویندوز است؛ رشته‌های فارسی
+رابط کاربری (مهرآ، ورود نمایشی، …) به‌صورت UTF-16 در باینری وجود دارند.
+جزئیات و صداقت در گزارش: [`docs/WINDOWS.md`](docs/WINDOWS.md).
+
 > شاخه `ci-artifacts` همیشه **آخرین بیلد موفق** را می‌دهد و با هر push بازسازی می‌شود (به همین
 > دلیل هش فایل با هر بیلد تغییر می‌کند). فایل‌های همین پوشه، نسخه ثابت‌شدهٔ همین تحویل هستند.
 
