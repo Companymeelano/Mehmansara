@@ -72,20 +72,21 @@ jobs:
           cp out/apk/mehra-demo-debug.apk out/apk/demo/ || true
           cp build.log out/logs/ 2>/dev/null || true
           cp test.log out/logs/ 2>/dev/null || true
-          cd out
+          # Merge into the existing ci-artifacts branch in a CLEAN directory
+          # (checking out over untracked files fails), so artifacts from other
+          # jobs (e.g. exe/ from Windows CI) are preserved — never force-push.
+          rm -rf merge && mkdir merge && cd merge
           git init -q
           git config user.name "mehra-ci"
           git config user.email "ci@mehra.local"
-          # Merge into the existing ci-artifacts branch instead of force-pushing,
-          # so artifacts from other jobs (e.g. exe/ from Windows CI) are preserved.
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git fetch -q origin ci-artifacts || true
-          if git show-ref --verify -q refs/remotes/origin/ci-artifacts; then
-            git checkout -q -b ci-artifacts origin/ci-artifacts
+          if git fetch -q origin ci-artifacts && git show-ref --verify -q refs/remotes/origin/ci-artifacts; then
+            git checkout -q -B ci-artifacts origin/ci-artifacts
             rm -rf apk
           else
             git checkout -q -b ci-artifacts
           fi
+          cp -r ../out/apk ../out/logs .
           git add -A
           git commit -q -m "MEHRA debug APK ${GITHUB_SHA}" || true
           git push origin ci-artifacts
@@ -100,14 +101,20 @@ jobs:
           cp build.log out/last-build.log 2>/dev/null || echo "assemble step did not run" > out/last-build.log
           cp test.log out/last-test.log 2>/dev/null || true
           if [ -d app/build/reports/tests ]; then cp -r app/build/reports/tests out/test-reports; fi
-          cd out
+          rm -rf merge && mkdir merge && cd merge
           git init -q
           git config user.name "mehra-ci"
           git config user.email "ci@mehra.local"
-          git checkout -q -b ci-build-log
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git fetch -q origin ci-build-log && git show-ref --verify -q refs/remotes/origin/ci-build-log; then
+            git checkout -q -B ci-build-log origin/ci-build-log
+          else
+            git checkout -q -b ci-build-log
+          fi
+          cp -r ../out/* .
           git add -A
           git commit -q -m "build log ${GITHUB_SHA}" || true
-          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-build-log
+          git push origin ci-build-log
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

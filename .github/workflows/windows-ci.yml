@@ -55,18 +55,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $ErrorActionPreference = 'Stop'
-          Set-Location out
+          # Merge into existing ci-artifacts in a CLEAN directory (checkout over
+          # untracked files fails); keep other jobs' files (apk/) — no force-push.
+          Remove-Item -Recurse -Force merge -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path merge | Out-Null
+          Set-Location merge
           git init -q
           git config user.name "mehra-ci"
           git config user.email "ci@mehra.local"
           git remote add origin "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git"
           git fetch -q origin ci-artifacts 2>$null
-          if (git show-ref --verify -q refs/remotes/origin/ci-artifacts) {
-            git checkout -q -b ci-artifacts origin/ci-artifacts
+          if ($LASTEXITCODE -eq 0 -and (git show-ref --verify -q refs/remotes/origin/ci-artifacts)) {
+            git checkout -q -B ci-artifacts origin/ci-artifacts
             Remove-Item -Recurse -Force exe -ErrorAction SilentlyContinue
           } else {
             git checkout -q -b ci-artifacts
           }
+          Copy-Item -Recurse -Force ..\out\* .
           git add -A
           git commit -q -m "MEHRA Windows exe $env:GITHUB_SHA" 2>$null
           git push origin ci-artifacts
@@ -80,11 +85,20 @@ jobs:
           $ErrorActionPreference = 'Continue'
           New-Item -ItemType Directory -Force -Path out | Out-Null
           if (Test-Path build.log) { Copy-Item build.log out\last-windows-build.log } else { "publish step did not run" | Out-File out\last-windows-build.log }
-          Set-Location out
+          Remove-Item -Recurse -Force merge -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path merge | Out-Null
+          Set-Location merge
           git init -q
           git config user.name "mehra-ci"
           git config user.email "ci@mehra.local"
-          git checkout -q -b ci-build-log
+          git remote add origin "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git"
+          git fetch -q origin ci-build-log 2>$null
+          if ($LASTEXITCODE -eq 0 -and (git show-ref --verify -q refs/remotes/origin/ci-build-log)) {
+            git checkout -q -B ci-build-log origin/ci-build-log
+          } else {
+            git checkout -q -b ci-build-log
+          }
+          Copy-Item -Recurse -Force ..\out\* .
           git add -A
           git commit -q -m "windows build log $env:GITHUB_SHA" 2>$null
-          git push -f "https://x-access-token:$env:GITHUB_TOKEN@github.com/$env:GITHUB_REPOSITORY.git" ci-build-log
+          git push origin ci-build-log

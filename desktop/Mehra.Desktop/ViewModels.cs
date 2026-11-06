@@ -55,7 +55,7 @@ public class HomeVm : VmBase
         var red = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#B3261E"));
         Add("اتاق‌ها", Fa.Num(d.TotalRooms), Fa.Num(d.FreeRooms) + " اتاق خالی", blue);
         Add("پر / اشغال", Fa.Num(d.OccupiedRooms + d.ReservedRooms), Fa.Num(d.OccupiedRooms) + " با مهمان", gold);
-        Add("درصد اشغال", Fa.Digits($"{d.OccupancyPercent:0.#}%"), "از کل اتاق‌ها", green);
+        Add("درصد اشغال", Fa.Digits(d.OccupancyPercent.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "%"), "از کل اتاق‌ها", green);
         Add("ورودی امروز", Fa.Num(d.TodayCheckIns), "خروجی: " + Fa.Num(d.TodayCheckOuts), blue);
         Add("درآمد امروز", Fa.Money(d.RevenueTodayRial), "به ریال", gold);
         Add("نظافت / تعمیر", Fa.Num(d.CleaningRooms + d.MaintenanceRooms), Fa.Num(d.CleaningRooms) + " نظافت، " + Fa.Num(d.MaintenanceRooms) + " تعمیر", red);
