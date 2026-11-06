@@ -79,11 +79,11 @@ private data class BottomDestination(
 )
 
 private val bottomDestinations = listOf(
-    BottomDestination(Routes.DASHBOARD, "داشبورد", R.drawable.ic_mehra_dashboard, Permissions.DASHBOARD_VIEW),
+    BottomDestination(Routes.DASHBOARD, "خانه", R.drawable.ic_mehra_dashboard, Permissions.DASHBOARD_VIEW),
     BottomDestination(Routes.ROOMS, "اتاق‌ها", R.drawable.ic_mehra_rooms, Permissions.ROOMS_VIEW),
     BottomDestination(Routes.RESERVATIONS, "رزروها", R.drawable.ic_mehra_reservations, Permissions.RESERVATIONS_VIEW),
     BottomDestination(Routes.RECEPTION, "پذیرش", R.drawable.ic_mehra_reception, Permissions.RECEPTION_OPERATE),
-    BottomDestination(Routes.MORE, "بیشتر", R.drawable.ic_mehra_more, null),
+    BottomDestination(Routes.MORE, "بخش‌ها", R.drawable.ic_mehra_more, null),
 )
 
 @Composable

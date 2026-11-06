@@ -76,7 +76,7 @@ fun DashboardScreen(
     val snapshot = dashboard.data
 
     MehraScreen(
-        title = "داشبورد",
+        title = "خانه",
         subtitle = TehranTime.today().formatJalaliLongFa() + " • " + (state.user?.fullName ?: ""),
         offline = dashboard.fromCache || !state.isOnline,
         pendingCount = state.pendingOperations,
