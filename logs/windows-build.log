@@ -1,5 +1,5 @@
   Determining projects to restore...
-  Restored D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj (in 14.99 sec).
+  Restored D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj (in 17.42 sec).
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Views/MainWindow.axaml : Avalonia warning AVLN3001: XAML resource "avares://Mehra/Views/MainWindow.axaml" won't be reachable via runtime loader, as no public constructor was found [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Views/Pages/FinancePage.axaml : Avalonia warning AVLN3001: XAML resource "avares://Mehra/Views/Pages/FinancePage.axaml" won't be reachable via runtime loader, as no public constructor was found [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Views/Pages/GuestsPage.axaml : Avalonia warning AVLN3001: XAML resource "avares://Mehra/Views/Pages/GuestsPage.axaml" won't be reachable via runtime loader, as no public constructor was found [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
