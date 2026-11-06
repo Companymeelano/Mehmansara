@@ -28,14 +28,14 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:mapProdDebugSourceSetPaths
 > Task :app:generateProdDebugResources
 > Task :app:packageProdDebugResources
-> Task :app:mergeProdDebugResources
 > Task :app:createProdDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksProdDebug FROM-CACHE
+> Task :app:mergeProdDebugResources
 > Task :app:processProdDebugMainManifest FROM-CACHE
 > Task :app:processProdDebugManifest FROM-CACHE
 > Task :app:processProdDebugManifestForPackage FROM-CACHE
-> Task :app:javaPreCompileProdDebug FROM-CACHE
 > Task :app:parseProdDebugLocalResources
+> Task :app:javaPreCompileProdDebug FROM-CACHE
 > Task :app:mergeProdDebugShaders
 > Task :app:compileProdDebugShaders NO-SOURCE
 > Task :app:generateProdDebugAssets UP-TO-DATE
@@ -73,5 +73,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:transformProdDebugUnitTestClassesWithAsm
 > Task :app:testProdDebugUnitTest
 
-BUILD SUCCESSFUL in 55s
+BUILD SUCCESSFUL in 57s
 35 actionable tasks: 25 executed, 10 from cache
