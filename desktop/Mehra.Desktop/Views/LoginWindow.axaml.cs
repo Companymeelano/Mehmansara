@@ -15,7 +15,7 @@ public partial class LoginWindow : Window
     {
         var server = this.FindControl<TextBox>("ServerBox")!.Text ?? "";
         var user = this.FindControl<TextBox>("UserBox")!.Text ?? "";
-        var pass = this.FindControl<PasswordBox>("PassBox")!.Password ?? "";
+        var pass = this.FindControl<TextBox>("PassBox")!.Text ?? "";
         var error = this.FindControl<TextBlock>("ErrorText")!;
         error.IsVisible = false;
         if (user.Trim().Length == 0 || pass.Length == 0)

@@ -16,7 +16,7 @@
           <TextBlock Text="نام کاربری" Classes="bold" />
           <TextBox x:Name="UserBox" Watermark="نام کاربری" />
           <TextBlock Text="رمز عبور" Classes="bold" />
-          <PasswordBox x:Name="PassBox" />
+          <TextBox x:Name="PassBox" PasswordChar="•" />
           <TextBlock x:Name="ErrorText" Foreground="#B3261E" TextWrapping="Wrap" IsVisible="False" />
           <Button Classes="primary" Content="ورود" Click="OnLogin" HorizontalAlignment="Stretch" Margin="0,4,0,0" />
           <Button Classes="ghost" Content="ورود نمایشی (بدون سرور — دادهٔ نمونه)" Click="OnDemo" HorizontalAlignment="Stretch" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />

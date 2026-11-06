@@ -53,7 +53,7 @@ public static class Jalali
         var gy = jy + 621;
         var leapJ = -14;
         var jp = Breaks[0];
-        int jm = 0, jump = 0, leapG = 0, n = 0, i = 0;
+        int jm = 0, jump = 0, n = 0, i = 0;
         if (jy < jp || jy >= Breaks[bl - 1])
             throw new ArgumentOutOfRangeException(nameof(jy), "Jalali year out of supported range");
         for (i = 1; i < bl; i++)
