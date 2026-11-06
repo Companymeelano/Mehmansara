@@ -16,6 +16,7 @@
 | نمایشی (نسخه ثابت‌شده) | https://github.com/Companymeelano/Mehmansara/raw/arena/276c0f62-mehmansara/artifacts/mehra-demo-1.0.0-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/arena/276c0f62-mehmansara/artifacts/mehra-demo-1.0.0-debug.apk |
 | عملیاتی | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
 | صفحه انتشار | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test | — |
+| انتشار نسخهٔ ویندوز | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-windows | — |
 | اجرای CI و آرتیفکت‌ها | https://github.com/Companymeelano/Mehmansara/actions | — |
 
 ## نسخهٔ ویندوز (Mehra.exe)
@@ -25,11 +26,11 @@
 
 | فایل | دانلود مستقیم | حجم | SHA-256 |
 |---|---|---|---|
-| `exe/Mehra.exe` | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe | 92,138,107 بایت | `00031abe126cd446e1e364c903102b3f2aa90064f955879d5d06a3ed49a8af1c` |
-| `exe/Mehra-win-x64.zip` | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip | 40,589,323 بایت | — |
+| `exe/Mehra.exe` | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe | 92,797,563 بایت | `6a55794e74559c720ede4da08d362f263a211f1720b5fcca192fdb53a8eb27f4` |
+| `exe/Mehra-win-x64.zip` | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip | 40,954,471 بایت | — |
 | لاگ build | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/logs/windows-build.log | — | — |
 
-بررسی بایت‌به‌بایت exe (اجرای CI `42267706303`): سرآیند MZ/PE معتبر، ماشین 0x8664 (x64)،
+بررسی بایت‌به‌بایت exe (اجرای CI `42276592462` (final)): سرآیند MZ/PE معتبر، ماشین 0x8664 (x64)،
 PE32+ با subsystem 2 (Windows GUI) — یعنی یک فایل اجرایی واقعی ویندوز است؛ رشته‌های فارسی
 رابط کاربری (مهرآ، ورود نمایشی، …) به‌صورت UTF-16 در باینری وجود دارند.
 جزئیات و صداقت در گزارش: [`docs/WINDOWS.md`](docs/WINDOWS.md).

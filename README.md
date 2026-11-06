@@ -12,7 +12,7 @@
 >   - صفحه دانلود: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk
 >   - انتشار: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test
 >   - فایل محلی: `artifacts/mehra-1.0.0-debug.apk` (جزئیات در `artifacts/README.md`)
-> - 🖥️ **نسخهٔ ویندوز (exe) هم منتشر شد** — برنامهٔ رومیزی کارکنان (Avalonia/.NET 8، win-x64 self-contained):
+> - 🖥️ **نسخهٔ نهایی ویندوز (Mehra.exe 1.0) منتشر شد** — انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-windows — برنامهٔ رومیزی کارکنان (Avalonia/.NET 8، win-x64 self-contained):
   - دانلود مستقیم: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
   - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
   - جزئیات و صداقت در گزارش: [`docs/WINDOWS.md`](docs/WINDOWS.md)

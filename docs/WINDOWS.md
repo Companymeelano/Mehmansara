@@ -2,17 +2,19 @@
 
 ## فایل‌های قابل دانلود
 
+- انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-windows
 - دانلود مستقیم exe: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
 - فایل zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - صفحهٔ فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 - لاگ build: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/logs/windows-build.log
 
-## هش و تأیید باینری (sha256) (اجرای CI `42267706303`، کامیت `eb2f84d`)
+## هش و تأیید باینری (نسخهٔ نهایی — اجرای CI `42276592462`، کامیت `13952c7`)
 
-- `exe/Mehra.exe`: 92,138,107 بایت — sha256 `00031abe126cd446e1e364c903102b3f2aa90064f955879d5d06a3ed49a8af1c`
-- `exe/Mehra-win-x64.zip`: 40,589,323 بایت (حاوی همان Mehra.exe)
+- `exe/Mehra.exe`: 92,797,563 بایت — sha256 `6a55794e74559c720ede4da08d362f263a211f1720b5fcca192fdb53a8eb27f4`
+- `exe/Mehra-win-x64.zip`: 40,954,471 بایت (حاوی Mehra.exe + README.txt فارسی)
 - بررسی بایت‌به‌بایت: MZ/PE معتبر، ماشین 0x8664 (x64)، PE32+، subsystem 2 (Windows GUI)،
-  رشته‌های فارسی UI به‌صورت UTF-16 در باینری موجودند.
+  ressource آیکن (mehra.ico) و متادیتای نسخه (1.0.0.0، Culturalists of Ahvaz، «طراح و توسعه‌دهنده: میلاد یعقوبی») در باینری موجودند؛
+  رشته‌های فارسیِ همهٔ ۱۲ صفحه (خانه، اتاق‌ها، رزروها، پذیرش، مهمانان، مالی، نظافت، تعمیرات، گزارش‌ها، کاربران، اعلانات، تنظیمات) به‌صورت UTF-16 در باینری هستند.
 
 ## نحوهٔ اجرا
 
@@ -31,5 +33,5 @@
 
 - کد: `desktop/Mehra.Desktop/` — راهنمای کامل: `desktop/README.md`
 - CI: `.github/workflows/windows-ci.yml` (شاخهٔ `ci-artifacts`، مسیر `exe/`)
-- صفحات: خانه / اتاق‌ها / رزروها / پذیرش / تنظیمات — کاملاً فارسی، RTL، تاریخ جلالی، فونت وزیرمتن.
+- صفحات (۱۲ مورد): خانه / اتاق‌ها / رزروها / پذیرش / مهمانان / مالی / نظافت / تعمیرات / گزارش‌ها / کاربران / اعلانات / تنظیمات — کاملاً فارسی، RTL، تاریخ جلالی، فونت وزیرمتن، آیکن و متادیتای نسخهٔ 1.0.0.
 - طراح و توسعه‌دهنده: میلاد یعقوبی
