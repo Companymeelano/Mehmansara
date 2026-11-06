@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.NotificationsPage">
+  <StackPanel Spacing="12">
+    <Grid ColumnDefinitions="*,Auto">
+      <TextBlock Grid.Column="0" Text="اعلان‌ها" FontSize="22" Classes="bold" />
+      <Button Grid.Column="1" Classes="ghost" Content="علامت‌گذاری همه به‌عنوان خوانده‌شده" Click="OnMarkAll" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
+    </Grid>
+    <ItemsControl ItemsSource="{Binding Items}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,3">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <Border Background="{Binding Accent}" Width="6" CornerRadius="3" />
+              <StackPanel Spacing="2">
+                <TextBlock Text="{Binding Title}" Classes="bold" />
+                <TextBlock Text="{Binding Body}" Foreground="#5A6474" FontSize="12" />
+                <TextBlock Text="{Binding SeverityFa}" Foreground="#8A93A3" FontSize="11" />
+              </StackPanel>
+              <StackPanel HorizontalAlignment="Right" Spacing="2" Margin="10,0,0,0">
+                <TextBlock Text="{Binding TimeFa}" FontSize="11" Foreground="#8A93A3" />
+                <TextBlock Text="{Binding ReadFa}" FontSize="10" Foreground="#8A93A3" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

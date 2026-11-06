@@ -12,8 +12,14 @@
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <InvariantGlobalization>false</InvariantGlobalization>
     <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <AssemblyTitle>MEHRA — Hospitality Management (Windows)</AssemblyTitle>
+    <Description>سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — نسخهٔ ویندوز (کارکنان)</Description>
     <Product>MEHRA</Product>
+    <Company>Culturalists of Ahvaz — فرهنگیان اهواز</Company>
+    <Copyright>Copyright © 2026 — طراح و توسعه‌دهنده: میلاد یعقوبی</Copyright>
+    <ApplicationIcon>Assets\mehra.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

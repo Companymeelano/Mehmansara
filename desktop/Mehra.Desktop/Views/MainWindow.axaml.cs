@@ -32,6 +32,13 @@ public partial class MainWindow : Window
             case "rooms": area.Content = new RoomsPage(_session); status.Text = "فهرست اتاق‌ها"; break;
             case "reservations": area.Content = new ReservationsPage(_session); status.Text = "فهرست رزروها"; break;
             case "reception": area.Content = new ReceptionPage(_session); status.Text = "پذیرش — اقامت‌های فعال"; break;
+            case "guests": area.Content = new GuestsPage(_session); status.Text = "فهرست مهمانان"; break;
+            case "finance": area.Content = new FinancePage(_session); status.Text = "مالی — صندوق و تراکنش‌ها"; break;
+            case "housekeeping": area.Content = new HousekeepingPage(_session); status.Text = "نظافت و خدمات"; break;
+            case "maintenance": area.Content = new MaintenancePage(_session); status.Text = "تعمیرات"; break;
+            case "reports": area.Content = new ReportsPage(_session); status.Text = "گزارش‌ها"; break;
+            case "users": area.Content = new UsersPage(_session); status.Text = "کاربران"; break;
+            case "notifications": area.Content = new NotificationsPage(_session); status.Text = "اعلان‌ها"; break;
             case "settings": area.Content = new SettingsPage(_session); status.Text = "تنظیمات"; break;
         }
     }

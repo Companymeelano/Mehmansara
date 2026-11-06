@@ -24,6 +24,16 @@ public interface IHotelApi
     Task<Result<List<ReservationDto>>> ReservationsAsync();
     Task<Result<List<StayDto>>> StaysAsync();
     Task<Result<string>> HealthAsync();
+    Task<Result<List<GuestDto>>> GuestsAsync();
+    Task<Result<CashBoxDto>> CashboxAsync(string dateIso);
+    Task<Result<List<DebtorDto>>> DebtorsAsync();
+    Task<Result<List<TransactionDto>>> TransactionsAsync(string fromIso, string toIso);
+    Task<Result<List<HousekeepingTaskDto>>> HousekeepingAsync();
+    Task<Result<List<MaintenanceTicketDto>>> MaintenanceAsync();
+    Task<Result<List<AppUserDto>>> UsersAsync();
+    Task<Result<List<NotificationDto>>> NotificationsAsync();
+    Task<Result<string>> MarkAllNotificationsReadAsync();
+    Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso);
 }
 
 public static class Json
@@ -102,7 +112,7 @@ public static class StatusText
 }
 
 /// <summary>REST client for the MEHRA backend (see docs/API.md): envelope {success,data,error}, Bearer auth.</summary>
-public class ApiClient : IHotelApi
+public partial class ApiClient : IHotelApi
 {
     private readonly HttpClient _http = new() { Timeout = TimeSpan.FromSeconds(30) };
     private string _server = "";
@@ -216,7 +226,7 @@ public class ApiClient : IHotelApi
 /// Offline demo mode: in-memory sample data, clearly labeled, so the app can be explored
 /// without the backend. Mirrors the Android demo flavour - never used in production mode.
 /// </summary>
-public class DemoApi : IHotelApi
+public partial class DemoApi : IHotelApi
 {
     private static readonly DateTime Today = DateTime.Today;
 

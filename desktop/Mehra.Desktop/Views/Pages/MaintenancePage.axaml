@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.MaintenancePage">
+  <StackPanel Spacing="12">
+    <TextBlock Text="تعمیرات" FontSize="22" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Items}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,4">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <StackPanel Grid.Column="0" Spacing="3" Margin="0,0,16,0">
+                <TextBlock Text="{Binding Code}" Classes="bold" />
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <Border Background="{Binding PriorityBrush}" CornerRadius="999" Padding="8,3">
+                    <TextBlock Text="{Binding PriorityFa}" FontSize="10" Foreground="White" />
+                  </Border>
+                  <Border Background="{Binding StatusBrush}" CornerRadius="999" Padding="8,3">
+                    <TextBlock Text="{Binding StatusFa}" FontSize="10" Foreground="White" />
+                  </Border>
+                </StackPanel>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding Title}" FontSize="13" Classes="bold" />
+                <TextBlock Text="{Binding Room}" Foreground="#5A6474" FontSize="12" />
+                <TextBlock Text="{Binding CreatedFa}" Foreground="#8A93A3" FontSize="11" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" HorizontalAlignment="Right" Spacing="2">
+                <TextBlock Text="{Binding CostFa}" FontSize="12" Classes="bold" />
+                <TextBlock Text="{Binding Assignee}" FontSize="11" Foreground="#8A93A3" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

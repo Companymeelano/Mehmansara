@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Mehra.Desktop.Views.MainWindow"
+        Icon="avares://Mehra/Assets/mehra.ico"
         Title="مهرآ — نسخهٔ ویندوز"
         Width="1180" Height="760"
         MinWidth="900" MinHeight="560"
@@ -18,6 +19,13 @@
             <ListBoxItem Content="اتاق‌ها" Tag="rooms" />
             <ListBoxItem Content="رزروها" Tag="reservations" />
             <ListBoxItem Content="پذیرش" Tag="reception" />
+            <ListBoxItem Content="مهمانان" Tag="guests" />
+            <ListBoxItem Content="مالی" Tag="finance" />
+            <ListBoxItem Content="نظافت" Tag="housekeeping" />
+            <ListBoxItem Content="تعمیرات" Tag="maintenance" />
+            <ListBoxItem Content="گزارش‌ها" Tag="reports" />
+            <ListBoxItem Content="کاربران" Tag="users" />
+            <ListBoxItem Content="اعلان‌ها" Tag="notifications" />
             <ListBoxItem Content="تنظیمات" Tag="settings" />
           </ListBox>
           <StackPanel Grid.Row="2" Margin="16,10" Spacing="6">

@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.ReportsPage">
+  <StackPanel Spacing="12">
+    <TextBlock Text="گزارش‌ها" FontSize="22" Classes="bold" />
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <TextBlock Text="نوع گزارش:" VerticalAlignment="Center" />
+      <ComboBox x:Name="ReportCombo" Width="280" SelectionChanged="OnReportChanged" />
+    </StackPanel>
+    <TextBlock Text="{Binding Title}" FontSize="16" Classes="bold" />
+    <TextBlock Text="{Binding Subtitle}" Foreground="#5A6474" />
+    <TextBlock Text="{Binding Period}" Foreground="#8A93A3" FontSize="11" />
+    <ItemsControl ItemsSource="{Binding Lines}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,2" Padding="10,6">
+            <TextBlock Text="{Binding Text}" FontSize="12" />
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

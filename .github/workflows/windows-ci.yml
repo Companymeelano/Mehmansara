@@ -42,9 +42,22 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path out\exe, out\logs | Out-Null
           Copy-Item publish\Mehra.exe out\exe\Mehra.exe
-          Compress-Archive -Path publish\Mehra.exe -DestinationPath out\exe\Mehra-win-x64.zip -Force
+          [System.IO.File]::WriteAllText("out\exe\README.txt", $env:MEHRA_README, [System.Text.Encoding]::UTF8)
+          Compress-Archive -Path out\exe\Mehra.exe, out\exe\README.txt -DestinationPath out\exe\Mehra-win-x64.zip -Force
           Copy-Item build.log out\logs\windows-build.log
           Get-ChildItem out -Recurse | Select-Object FullName, Length
+        env:
+          MEHRA_README: |-
+            مهرآ — نسخهٔ ویندوز (Mehra.exe)
+            سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ 1.0
+            
+            1. فایل Mehra.exe را اجرا کنید (win-x64، self-contained — نیازی به نصب .NET نیست).
+            2. «ورود نمایشی»: بدون سرور — با دادهٔ نمونه کامل.
+            3. «ورود واقعی»: نشانی سرور + نام کاربری/رمز عبور.
+            
+            صفحه‌ها: خانه / اتاق‌ها / رزروها / پذیرش / مهمانان / مالی / نظافت / تعمیرات / گزارش‌ها / کاربران / اعلان‌ها / تنظیمات
+            
+            طراح و توسعه‌دهنده: میلاد یعقوبی
 
       # APKs (android-ci) and the exe (this job) share the ci-artifacts branch:
       # clone the existing branch and merge into it — never force-push.

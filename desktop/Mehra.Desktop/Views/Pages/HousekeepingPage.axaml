@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.HousekeepingPage">
+  <StackPanel Spacing="12">
+    <TextBlock Text="نظافت و خدمات" FontSize="22" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Items}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,4">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <StackPanel Grid.Column="0" Spacing="3" Margin="0,0,16,0">
+                <TextBlock Text="{Binding Room}" Classes="bold" FontSize="15" />
+                <Border Background="{Binding StatusBrush}" CornerRadius="999" Padding="8,3" HorizontalAlignment="Right">
+                  <TextBlock Text="{Binding StatusFa}" FontSize="10" Foreground="White" />
+                </Border>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding TypeFa}" FontSize="13" />
+                <TextBlock Text="{Binding Notes}" Foreground="#5A6474" FontSize="11" />
+                <TextBlock Text="{Binding CreatedFa}" Foreground="#8A93A3" FontSize="11" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                <TextBlock Text="{Binding Assignee}" FontSize="12" Foreground="#5A6474" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mehra.Desktop.Views.Pages.FinancePage">
+  <StackPanel Spacing="12">
+    <TextBlock Text="مالی — صندوق امروز" FontSize="22" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Cards}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid Columns="4" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6">
+            <StackPanel Spacing="4">
+              <TextBlock Text="{Binding Label}" Foreground="#5A6474" FontSize="12" />
+              <TextBlock Text="{Binding Value}" FontSize="18" Classes="bold" Foreground="{Binding Accent}" />
+              <TextBlock Text="{Binding Caption}" FontSize="11" Foreground="#8A93A3" />
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="بدهکاران" FontSize="15" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Debtors}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,3">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Name}" Classes="bold" />
+                <TextBlock Text="{Binding PhoneFa}" Foreground="#5A6474" FontSize="12" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" HorizontalAlignment="Right" Spacing="2">
+                <TextBlock Text="{Binding BalanceFa}" Classes="bold" Foreground="#B3261E" />
+                <TextBlock Text="{Binding Room}" FontSize="11" Foreground="#8A93A3" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="تراکنش‌های هفتهٔ اخیر" FontSize="15" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding Transactions}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,3">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <StackPanel Grid.Column="0" Spacing="3" Margin="0,0,16,0">
+                <TextBlock Text="{Binding Code}" Classes="bold" />
+                <Border Background="{Binding TypeBrush}" CornerRadius="999" Padding="8,3" HorizontalAlignment="Right">
+                  <TextBlock Text="{Binding TypeFa}" FontSize="10" Foreground="White" />
+                </Border>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding Guest}" FontSize="12" />
+                <TextBlock Text="{Binding MethodFa}" Foreground="#5A6474" FontSize="11" />
+                <TextBlock Text="{Binding Room}" Foreground="#8A93A3" FontSize="11" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" HorizontalAlignment="Right" Spacing="2">
+                <TextBlock Text="{Binding AmountFa}" Classes="bold" />
+                <TextBlock Text="{Binding DateFa}" FontSize="11" Foreground="#8A93A3" />
+                <TextBlock Text="{Binding ReversedFa}" FontSize="10" Foreground="#B3261E" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
+  </StackPanel>
+</UserControl>
