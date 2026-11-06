@@ -72,7 +72,9 @@ jobs:
           $env:MEHRA_PUBLISH = (Resolve-Path publish).Path
           New-Item -ItemType Directory -Force -Path out\exe | Out-Null
           $env:MEHRA_OUT = (Resolve-Path out\exe).Path
-          & $iscc desktop\installer.iss "/DMyPublishDir=$env:MEHRA_PUBLISH" "/DMyOutputDir=$env:MEHRA_OUT" 2>&1 | Tee-Object -FilePath installer.log -Append
+          $env:MEHRA_ICON = (Resolve-Path desktop\Mehra.Desktop\Assets\mehra.ico).Path
+          $env:MEHRA_README_FILE = (Resolve-Path out\exe\README.txt).Path
+          & $iscc desktop\installer.iss "/DMyPublishDir=$env:MEHRA_PUBLISH" "/DMyOutputDir=$env:MEHRA_OUT" "/DMyIconFile=$env:MEHRA_ICON" "/DMyReadme=$env:MEHRA_README_FILE" 2>&1 | Tee-Object -FilePath installer.log -Append
           if ($LASTEXITCODE -ne 0) { throw "ISCC failed — see installer.log" }
           if (-not (Test-Path out\exe\Mehra-setup.exe)) { throw "Mehra-setup.exe was not produced" }
           (Get-Item out\exe\Mehra-setup.exe).Length

@@ -10,6 +10,12 @@
 #ifndef MyOutputDir
 #define MyOutputDir "out\exe"
 #endif
+#ifndef MyIconFile
+#define MyIconFile "Mehra.Desktop\Assets\mehra.ico"
+#endif
+#ifndef MyReadme
+#define MyReadme "..\out\exe\README.txt"
+#endif
 
 [Setup]
 AppId={{7C4E9A21-3B58-4F6D-9E1A-2D8B5F0C41A7}}
@@ -23,7 +29,7 @@ DefaultGroupName={#MyAppName}
 PrivilegesRequired=lowest
 OutputDir={#MyOutputDir}
 OutputBaseFileName=Mehra-setup
-SetupIconFile=desktop\Mehra.Desktop\Assets\mehra.ico
+SetupIconFile={#MyIconFile}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2
 SolidCompression=yes
@@ -38,7 +44,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
 Source: "{#MyPublishDir}\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "out\exe\README.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyReadme}"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
