@@ -62,13 +62,18 @@ jobs:
       - name: Build installer (Inno Setup) -> Mehra-setup.exe
         shell: pwsh
         run: |
-          choco install innosetup -y --no-progress
-          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-          if (-not (Test-Path $iscc)) { $iscc = "ISCC.exe" }
+          $log = { param($m) $m | Tee-Object -FilePath installer.log -Append }
+          choco install innosetup -y --no-progress 2>&1 | Tee-Object -FilePath installer.log
+          if ($LASTEXITCODE -ne 0) { throw "choco install innosetup failed" }
+          $iscc = Get-ChildItem "C:\Program Files (x86)\Inno Setup 6\ISCC.exe", "C:\Program Files\Inno Setup 6\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+          if (-not $iscc) { $c = Get-Command ISCC.exe -ErrorAction SilentlyContinue; if ($c) { $iscc = $c.Source } }
+          if (-not $iscc) { throw "ISCC.exe not found after choco install innosetup" }
+          "ISCC: $iscc" | Tee-Object -FilePath installer.log -Append
           $env:MEHRA_PUBLISH = (Resolve-Path publish).Path
           New-Item -ItemType Directory -Force -Path out\exe | Out-Null
           $env:MEHRA_OUT = (Resolve-Path out\exe).Path
-          & $iscc desktop\installer.iss
+          & $iscc desktop\installer.iss 2>&1 | Tee-Object -FilePath installer.log -Append
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed — see installer.log" }
           if (-not (Test-Path out\exe\Mehra-setup.exe)) { throw "Mehra-setup.exe was not produced" }
           (Get-Item out\exe\Mehra-setup.exe).Length
 
@@ -114,6 +119,7 @@ jobs:
           $ErrorActionPreference = 'Continue'
           New-Item -ItemType Directory -Force -Path out | Out-Null
           if (Test-Path build.log) { Copy-Item build.log out\last-windows-build.log } else { "publish step did not run" | Out-File out\last-windows-build.log }
+          if (Test-Path installer.log) { Copy-Item installer.log out\last-windows-installer.log }
           Remove-Item -Recurse -Force merge -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path merge | Out-Null
           Set-Location merge
