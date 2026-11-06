@@ -11,10 +11,6 @@ Chocolatey installed 0/1 packages.
 Warnings:
  - InnoSetup - InnoSetup v6.7.1 already installed.
  Use --force to reinstall, specify a version to install, or try upgrade.
-
-Enjoy using Chocolatey? Explore more amazing features to take your
-experience to the next level at
- https://chocolatey.org/compare
 ISCC: C:\Program Files (x86)\Inno Setup 6\ISCC.exe
 Inno Setup 6 Command-Line Compiler
 Copyright (C) 1997-2026 Jordan Russell. All rights reserved.
@@ -27,12 +23,6 @@ Non-commercial use only
 
 Preprocessing
    Reading file: C:\Program Files (x86)\Inno Setup 6\ISPPBuiltins.iss
-Parsing [Setup] section, line 9
-Parsing [Setup] section, line 10
-Parsing [Setup] section, line 11
-Parsing [Setup] section, line 12
-Parsing [Setup] section, line 13
-Parsing [Setup] section, line 14
 Parsing [Setup] section, line 15
 Parsing [Setup] section, line 16
 Parsing [Setup] section, line 17
@@ -46,6 +36,16 @@ Parsing [Setup] section, line 24
 Parsing [Setup] section, line 25
 Parsing [Setup] section, line 26
 Parsing [Setup] section, line 27
-Creating output directory: D:\a\Mehmansara\Mehmansara\desktop\GetEnv("MEHRA_OUT")
-Error on line 18 in D:\a\Mehmansara\Mehmansara\desktop\installer.iss: I/O error 123.
+Parsing [Setup] section, line 28
+Parsing [Setup] section, line 29
+Parsing [Setup] section, line 30
+Parsing [Setup] section, line 31
+Parsing [Setup] section, line 32
+Parsing [Setup] section, line 33
+Reading file (WizardImageFile)
+Reading file (WizardSmallImageFile)
+Preparing Setup program executable
+   Verification successful
+   Updating icons (Setup.e32)
+Error on line 26 in D:\a\Mehmansara\Mehmansara\desktop\installer.iss: The system cannot find the path specified.
 Compile aborted.
