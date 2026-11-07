@@ -87,16 +87,15 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
 > Task :app:validateSigningDemoDebug
-> Task :app:writeDemoDebugAppMetadata
 > Task :app:checkDemoDebugDuplicateClasses
-> Task :app:parseDemoDebugLocalResources
-> Task :app:writeDemoDebugSigningConfigVersions
+> Task :app:writeDemoDebugAppMetadata
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugResources
+> Task :app:parseDemoDebugLocalResources
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
+> Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:processDemoDebugResources
 > Task :app:kspDemoDebugKotlin
-
 > Task :app:compileDemoDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
@@ -120,5 +119,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 1m 8s
+BUILD SUCCESSFUL in 1m 42s
 82 actionable tasks: 40 executed, 18 from cache, 24 up-to-date
