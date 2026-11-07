@@ -111,13 +111,26 @@ begin
   AddFontResourceExW(ExpandConstant('{tmp}\vazirmatn_bold.ttf'), $10, 0);
 end;
 
-function MakeConnStr(server, db: string; winAuth: Boolean; user, pass: string): string;
+function EscBs(s: string): string;
+var
+  i: Integer;
+  c: string;
+begin
+  Result := '';
+  for i := 1 to Length(s) do
+  begin
+    c := Copy(s, i, 1);
+    if c = '\' then Result := Result + '\\' else Result := Result + c;
+  end;
+end;
+
+function MakeConnStr(provider, server, db: string; winAuth: Boolean; user, pass: string): string;
 begin
   if winAuth then
-    Result := 'Provider={PROV};Data Source=' + server + ';Initial Catalog=' + db +
+    Result := 'Provider=' + provider + ';Data Source=' + server + ';Initial Catalog=' + db +
               ';Integrated Security=SSPI;Encrypt=Optional;TrustServerCertificate=True;'
   else
-    Result := 'Provider={PROV};Data Source=' + server + ';Initial Catalog=' + db +
+    Result := 'Provider=' + provider + ';Data Source=' + server + ';Initial Catalog=' + db +
               ';User Id=' + user + ';Password=' + pass + ';Encrypt=Optional;TrustServerCertificate=True;';
 end;
 
@@ -130,8 +143,7 @@ begin
     Conn := CreateOleObject(provider);
     Conn.ConnectionTimeout := 8;
     Conn.CommandTimeout := 60;
-    ConnStr := MakeConnStr(server, db, winAuth, user, pass);
-    ConnStr := StringChange(ConnStr, '{PROV}', provider);
+    ConnStr := MakeConnStr(provider, server, db, winAuth, user, pass);
     Conn.Open(ConnStr);
     Result := True;
   except
@@ -229,8 +241,8 @@ var
 begin
   Path := ExpandConstant('{userappdata}\\mehra\\settings.json');
   ForceDirectories(ExtractFileDir(Path));
-  Srv := StringChange(server, '\', '\\');
-  Usr := StringChange(user, '\', '\\');
+  Srv := EscBs(server);
+  Usr := EscBs(user);
   if sqlAuth then
     Json := '{\"Mode\":\"sql\",\"ServerUrl\":\"\",\"SqlServer\":\"' + Srv + '\",\"SqlDb\":\"' + db + '\",\"SqlAuth\":\"sql\",\"SqlUser\":\"' + Usr + '\"}'
   else
