@@ -1,37 +1,42 @@
-# نسخهٔ ویندوز (Mehra.exe)
+# نسخهٔ ویندوز ۱.۱.۰ — نصب‌گر مهرآSetup.exe و برنامهٔ مهرآ.exe
 
-## فایل‌های قابل دانلود
+## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۰)
 
-- انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-windows
-- دانلود مستقیم exe: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
-- فایل zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
-- صفحهٔ فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
-- لاگ build: https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/logs/windows-build.log
+- انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
+- **نصب‌گر کامل (پیشنهادی):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
+- لاگ ساخت نصب‌گر (Inno Setup): https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/setup/setup-build.log
+- exe خام (بدون نصب‌گر): https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
+- zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
+- مرور فایل‌های: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش و تأیید باینری (نسخهٔ نهایی — اجرای CI `42276592462`، کامیت `13952c7`)
+## هش اندازهٔ باینری‌ها (اجرای CI `42386498201`)
 
-- `exe/Mehra.exe`: 92,797,563 بایت — sha256 `6a55794e74559c720ede4da08d362f263a211f1720b5fcca192fdb53a8eb27f4`
-- `exe/Mehra-win-x64.zip`: 40,954,471 بایت (حاوی Mehra.exe + README.txt فارسی)
-- بررسی بایت‌به‌بایت: MZ/PE معتبر، ماشین 0x8664 (x64)، PE32+، subsystem 2 (Windows GUI)،
-  ressource آیکن (mehra.ico) و متادیتای نسخه (1.0.0.0، Culturalists of Ahvaz، «طراح و توسعه‌دهنده: میلاد یعقوبی») در باینری موجودند؛
-  رشته‌های فارسیِ همهٔ ۱۲ صفحه (خانه، اتاق‌ها، رزروها، پذیرش، مهمانان، مالی، نظافت، تعمیرات، گزارش‌ها، کاربران، اعلانات، تنظیمات) به‌صورت UTF-16 در باینری هستند.
+- `setup/MehraSetup.exe`: 31,313,277 بایت — sha256 `540a9a952860741dc4e999d8b06382ac549106a46ef88b2123132915d7541910`
+- `exe/Mehra.exe`: 94,110,600 بایت — sha256 `d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80`
+- تأیید بایت-be-بایت: MZ/PE mo'tabar; brand dar نصب‌گر be-surat UTF-16/UTF-8 موجود ast: `www.meelano.ir`, `09120219593`, `Milad Yaghoobi`, «میلاد یعقوبی», «مهرآ», نسخهٔ ۱.۱.۰.
 
-## نحوهٔ اجرا
+## نصب با MehraSetup.exe (فایل کامل)
 
-1. فایل `Mehra.exe` را دانلود و اجرا کنید (win-x64 و self-contained؛ نیازی به نصب .NET نیست).
-2. **ورود نمایشی:** بدون سرور — دادهٔ نمونهٔ کامل برای آشنایی با برنامه.
-3. **ورود واقعی:** نشانی سرور ASP.NET Core (مطابق `docs/API.md`) + نام کاربری و رمز.
+1. اگر SQL Server نصب شده (از 2008 به تا bālā — LocalDB ya Express ya نسخهٔ-ye kāmil), نصب‌گر kār mikonad; اسکریپت-e جداول داخل exe nist و به‌صورت-جداگانه فایل `db\schema.sql` نصب mishavad.
+2. `MehraSetup.exe` rā اجرا کنید; همهٔ-ye مراحل-ye نصب با فارسی راست‌به‌چاپ ast, به‌ فونت وزیرمتن و رنگ‌های لوکس (سرمهای/طلایی).
+3. Dar صفحهٔ-ye «پایگاه داده SQL Server» نام سرور (مثالاً `.\SQLEXPRESS` ya `(localdb)\MSSQLLocalDB`) و نام پایگاه داده rā وارد کنید; اتصال تست زنده mishavad و dar صورت-ye خطا, پیام فارسی دقیق نمایش داده می‌شود.
+4. به‌ tik-e «ایجاد/به‌روزرانی جداول‌ها», پس از-ye کپی-ye فایل‌های, اسکریپت-e `db\schema.sql` batch-be-batch (GO) ejrā mishavad و 9 جداول ساخته mishavad; درصد پیشرفت فارسی نمایش داده می‌شود.
+5. بررسی-haye هوشمند: حداقل 300MB فضای آزاد دیسک, Windows 10 به bālā, خطا-e اتصال SQL Server — hame به‌ پیام فارسی.
+6. پس از-ye نصب, تنظیمات-e اتصال dar `%AppData%\mehra\settings.json` نوشته می‌شود mishavad و برنامهٔ آمادهٔ اجرا ast.
 
-## صداقت در گزارش
+ورود avaliye: کاربر `admin` / رمز `Admin@1234` (dar `db\schema.sql` seed shode; dar حالت-e SQL Server هیچ دادهٔ نمونه‌ای-i وجود ندارد).
 
-- exe توسط GitHub Actions روی `windows-latest` کامپایل و منتشر می‌شود؛ در محیط توسعهٔ این مخزن SDK دات‌نت وجود ندارد، بنابراین «تست زمان‌اجرا روی ویندوز» انجام نشده و فقط سبز بودن کامپایل CI تأیید شده است.
-- فایل exe امضا نشده (unsigned) است؛ ویندوز ممکن است هشدار SmartScreen نشان دهد.
-- حالت واقعی نیازمند بک‌اند است که هنوز در این مخزن پیاده‌سازی نشده (`docs/SERVER_SETUP.md`).
-- دادهٔ نمونه فقط در حالت نمایشی وجود دارد؛ حالت عملیاتی هیچ دادهٔ نمونه‌ای ندارد.
+## حالت-ye ورود برنامهٔ
 
-## جزئیات
+- «ورود نمایشی»: آفلاین, به‌ دادهٔ نمونه‌ای کامل (فقط همین حالت demo ast).
+- «ورود به‌ API»: اتصال به سرور web (envelope `{success,data,error}` + Bearer — docs/API.md).
+- «ورود به‌ SQL Server»: اتصال مستقیم به Microsoft SQL Server bā System.Data.SqlClient; جداول‌ها bā `db\schema.sql` ya دکمهٔ-ye «راه‌اندازی/به‌روزرانی جداول‌ها» dar تنظیمات ساخته mishavand.
 
-- کد: `desktop/Mehra.Desktop/` — راهنمای کامل: `desktop/README.md`
-- CI: `.github/workflows/windows-ci.yml` (شاخهٔ `ci-artifacts`، مسیر `exe/`)
-- صفحات (۱۲ مورد): خانه / اتاق‌ها / رزروها / پذیرش / مهمانان / مالی / نظافت / تعمیرات / گزارش‌ها / کاربران / اعلانات / تنظیمات — کاملاً فارسی، RTL، تاریخ جلالی، فونت وزیرمتن، آیکن و متادیتای نسخهٔ 1.0.0.
-- طراح و توسعه‌دهنده: میلاد یعقوبی
+طراح و توسعه‌دهنده: Milad Yaghoobi (میلاد یعقوبی) — www.meelano.ir — 09120219593
+
+## صداقت dar گزارش
+
+- Bāynari-hā فقط توسط GitHub Actions (windows-latest) کامپایل و منتشر shode-and و بایت-be-بایت بررسی shode-and (MZ/PE, size, sha256, brand/نسخهٔ); **ru-ye Windows-e واقعی ejrā نشده-and**.
+- نصب‌گر و exe امضا نشده-and (unsigned); Windows ممکن ast SmartScreen نشان داده.
+- حالت-e SQL Server فقط به‌ کامپایل sabz-e CI + review-e script-e `schema.sql` taeed shode و hich-gah bar-xord SQL Server-e زنده test nashode; اگر لازم shod, az دکمهٔ-ye «راه‌اندازی-ye جداول‌ها» dar تنظیمات دوباره تلاش konid.
+- دادهٔ نمونه‌ای فقط dar «ورود نمایشی» وجود dārad.

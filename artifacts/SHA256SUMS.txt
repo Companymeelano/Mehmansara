@@ -2,3 +2,7 @@ b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
 # Windows desktop exe (final, run 42276592462) — on branch ci-artifacts (exe/Mehra.exe); not pinned locally (size).
 6a55794e74559c720ede4da08d362f263a211f1720b5fcca192fdb53a8eb27f4  ci-artifacts:exe/Mehra.exe  (92,797,563 bytes)
+
+# Windows v۱.۱.۰ (final, run 42386498201) — on branch ci-artifacts
+540a9a952860741dc4e999d8b06382ac549106a46ef88b2123132915d7541910  ci-artifacts:setup/MehraSetup.exe  (31,313,277 bytes)
+d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80  ci-artifacts:exe/Mehra.exe  (94,110,600 bytes)
