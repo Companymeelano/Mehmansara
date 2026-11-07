@@ -96,7 +96,6 @@ var
   DbPage: TInputQueryWizardPage;
   OptPage: TInputOptionWizardPage;
   PctLabel: TLabel;
-  FTimer: TTimer;
 
 function AddFontResourceExW(lpszFilename: string; fl: LongWord; pdv: Pointer): LongWord;
   external 'AddFontResourceExW@gdi32.dll stdcall';
@@ -269,15 +268,11 @@ begin
   end;
 end;
 
-procedure OnTimer(Sender: TObject);
-var
-  p, m: Integer;
+procedure CurProgressChanged(CurProgress, MaxProgress: Integer);
 begin
   try
-    p := WizardForm.ProgressBar.Position;
-    m := WizardForm.ProgressBar.Max;
-    if m > 0 then
-      PctLabel.Caption := IntToStr(MulDiv(p, 100, m)) + ' ٪';
+    if MaxProgress > 0 then
+      PctLabel.Caption := IntToStr(MulDiv(CurProgress, 100, MaxProgress)) + ' ٪';
   except
   end;
 end;
@@ -290,7 +285,7 @@ begin
   if CurStep = ssInstall then
   begin
     PctLabel.Visible := True;
-    FTimer.Enabled := True;
+    PctLabel.Caption := '0 ٪';
   end;
   if CurStep = ssPostInstall then
   begin
@@ -311,7 +306,6 @@ begin
   end;
   if CurStep = ssDone then
   begin
-    FTimer.Enabled := False;
     PctLabel.Visible := False;
   end;
 end;
@@ -378,8 +372,4 @@ begin
     Transparent := True;
   end;
 
-  FTimer := TTimer.Create(WizardForm);
-  FTimer.Interval := 100;
-  FTimer.Enabled := False;
-  FTimer.OnTimer := @OnTimer;
 end;
