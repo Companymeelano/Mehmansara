@@ -86,5 +86,5 @@ Warning: Message name "TasksLabel" is not recognized by this version of Inno Set
 Warning: Message name "ReadyLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
 
-Successful compile (28.375 sec). Resulting Setup program filename is:
+Successful compile (22.329 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
