@@ -48,20 +48,20 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:processProdDebugJavaRes UP-TO-DATE
 > Task :app:mergeProdDebugJniLibFolders
 > Task :app:mergeProdDebugNativeLibs
-> Task :app:mergeProjectDexProdDebug
 > Task :app:mergeProdDebugJavaResource
+> Task :app:mergeProjectDexProdDebug
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
-
-> Task :app:stripProdDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
-
 > Task :app:writeProdDebugSigningConfigVersions
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDemoDebugBuildConfig FROM-CACHE
-> Task :app:generateDemoDebugResValues FROM-CACHE
+
+> Task :app:stripProdDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
+
 > Task :app:checkDemoDebugAarMetadata
+> Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:mapDemoDebugSourceSetPaths
 > Task :app:generateDemoDebugResources
 > Task :app:packageDemoDebugResources
@@ -72,30 +72,31 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processDemoDebugManifestForPackage FROM-CACHE
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugShaders
-> Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:packageProdDebug
 > Task :app:createProdDebugApkListingFileRedirect
 > Task :app:assembleProdDebug
+> Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:generateDemoDebugAssets UP-TO-DATE
 > Task :app:mergeDemoDebugAssets
 > Task :app:compressDemoDebugAssets FROM-CACHE
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
-> Task :app:parseDemoDebugLocalResources
 > Task :app:mergeDemoDebugJniLibFolders
 > Task :app:mergeDemoDebugNativeLibs
-> Task :app:validateSigningDemoDebug
-> Task :app:writeDemoDebugAppMetadata
-> Task :app:writeDemoDebugSigningConfigVersions
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:parseDemoDebugLocalResources
+> Task :app:validateSigningDemoDebug
+> Task :app:writeDemoDebugAppMetadata
+> Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:checkDemoDebugDuplicateClasses
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugResources
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:processDemoDebugResources
 > Task :app:kspDemoDebugKotlin
+
 > Task :app:compileDemoDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
@@ -119,5 +120,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 1m 43s
+BUILD SUCCESSFUL in 1m 4s
 82 actionable tasks: 40 executed, 18 from cache, 24 up-to-date
