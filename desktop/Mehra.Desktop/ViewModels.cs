@@ -196,14 +196,14 @@ public class SettingsVm : VmBase
         IsSql = session.Api is SqlServerApi;
         Mode = session.Api.IsDemo
             ? "حالت: نسخهٔ نمایشی (دادهٔ نمونه — بدون اتصال به سرور)"
-            : IsSql ? "حالت: اتصال مستقیم به SQL Server (جدول‌ها از فایل db\schema.sql ساخته می‌شوند)"
+            : IsSql ? "حالت: اتصال مستقیم به SQL Server (جدول‌ها از فایل db\\schema.sql ساخته می‌شوند)"
             : "حالت: اتصال به سرور وب (API)";
     }
 
     public async Task EnsureSchemaAsync()
     {
         if (_session.Api is not SqlServerApi sql) return;
-        SchemaStatus = "در حال اجرای اسکریپت db\schema.sql …";
+        SchemaStatus = "در حال اجرای اسکریپت db\\schema.sql …";
         var path = Path.Combine(AppContext.BaseDirectory, "db", "schema.sql");
         var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path);
         SchemaStatus = r.Ok ? r.Value! : r.Error;
