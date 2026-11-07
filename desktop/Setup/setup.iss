@@ -170,7 +170,7 @@ begin
         Result := True;
         Exit;
       except
-        on E: Exception do Err := E.Message;
+        Err := GetExceptionMessage;
       end;
     end;
   end;
@@ -225,7 +225,7 @@ begin
           Result := True;
           Exit;
         except
-          on E: Exception do Err := E.Message;
+          Err := GetExceptionMessage;
         end;
       end;
     end;
