@@ -375,7 +375,7 @@ begin
   PctLabel := TLabel.Create(WizardForm);
   with PctLabel do
   begin
-    Parent := WizardForm.ProgressBar.Parent;
+    Parent := WizardForm.ProgressGauge.Parent;
     Font.Name := 'Vazirmatn';
     Font.Size := 12;
     Font.Style := [fsBold];
@@ -383,8 +383,8 @@ begin
     AutoSize := False;
     Width := 90;
     Height := 22;
-    Left := WizardForm.ProgressBar.Left + WizardForm.ProgressBar.Width + 10;
-    Top := WizardForm.ProgressBar.Top - 3;
+    Left := WizardForm.ProgressGauge.Left + WizardForm.ProgressGauge.Width + 10;
+    Top := WizardForm.ProgressGauge.Top - 3;
     Alignment := taCenter;
     Caption := '0 ٪';
     Visible := False;
