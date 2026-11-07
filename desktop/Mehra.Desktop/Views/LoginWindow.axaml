@@ -3,27 +3,50 @@
         x:Class="Mehra.Desktop.Views.LoginWindow"
         Icon="avares://Mehra/Assets/mehra.ico"
         Title="مهرآ — ورود"
-        Width="470" Height="640"
+        Width="500" Height="720"
         WindowStartupLocation="CenterScreen"
         CanResize="False">
   <Border Background="#16233D">
-    <StackPanel VerticalAlignment="Center" Margin="38" Spacing="12">
-      <TextBlock Text="مهرآ" FontSize="46" Classes="bold" Foreground="#E8D6AE" HorizontalAlignment="Center" />
+    <StackPanel VerticalAlignment="Center" Margin="36" Spacing="10">
+      <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="76" Height="76" HorizontalAlignment="Center" />
+      <TextBlock Text="مهرآ" FontSize="42" Classes="bold" Foreground="#E8D6AE" HorizontalAlignment="Center" />
       <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز" Foreground="#C9CFD8" HorizontalAlignment="Center" TextAlignment="Center" />
-      <Border Classes="card" Margin="0,16,0,0">
-        <StackPanel Spacing="10">
-          <TextBlock Text="نشانی سرور" Classes="bold" />
-          <TextBox x:Name="ServerBox" Watermark="مثال: https://mehra.example.ir" />
+      <TextBlock Text="www.meelano.ir — ۰۹۱۲۰۲۱۹۵۹۳" Foreground="#E8D6AE" FontSize="11" HorizontalAlignment="Center" />
+      <Border Classes="card" Margin="0,10,0,0">
+        <StackPanel Spacing="8">
+          <TextBlock Text="منبع داده" Classes="bold" />
+          <ComboBox x:Name="ModeCombo" HorizontalAlignment="Stretch" SelectionChanged="OnModeChanged">
+            <ComboBoxItem Content="نسخهٔ نمایشی (آفلاین — دادهٔ نمونه)" Tag="demo" />
+            <ComboBoxItem Content="سرور وب (API)" Tag="api" />
+            <ComboBoxItem Content="SQL Server (پایگاه دادهٔ مستقیم)" Tag="sql" />
+          </ComboBox>
+          <StackPanel x:Name="ApiPanel" Spacing="8" IsVisible="False">
+            <TextBlock Text="نشانی سرور" Classes="bold" />
+            <TextBox x:Name="ServerBox" Watermark="مثال: https://mehra.example.ir" />
+          </StackPanel>
+          <StackPanel x:Name="SqlPanel" Spacing="8" IsVisible="False">
+            <TextBlock Text="سرور SQL Server" Classes="bold" />
+            <TextBox x:Name="SqlServerBox" Watermark="مثال: .\SQLEXPRESS یا (localdb)\MSSQLLocalDB" />
+            <TextBlock Text="نام پایگاه داده" Classes="bold" />
+            <TextBox x:Name="SqlDbBox" />
+            <ComboBox x:Name="SqlAuthCombo" HorizontalAlignment="Stretch" SelectionChanged="OnSqlAuthChanged">
+              <ComboBoxItem Content="احراز هویت ویندوز (Windows Authentication)" Tag="win" />
+              <ComboBoxItem Content="نام کاربری و رمز SQL Server" Tag="sql" />
+            </ComboBox>
+            <StackPanel x:Name="SqlCredPanel" Spacing="8" IsVisible="False">
+              <TextBox x:Name="SqlUserBox" Watermark="نام کاربری SQL (مثلاً sa)" />
+              <TextBox x:Name="SqlPassBox" PasswordChar="•" Watermark="رمز عبور SQL" />
+            </StackPanel>
+          </StackPanel>
           <TextBlock Text="نام کاربری" Classes="bold" />
           <TextBox x:Name="UserBox" Watermark="نام کاربری" />
           <TextBlock Text="رمز عبور" Classes="bold" />
           <TextBox x:Name="PassBox" PasswordChar="•" />
           <TextBlock x:Name="ErrorText" Foreground="#B3261E" TextWrapping="Wrap" IsVisible="False" />
           <Button Classes="primary" Content="ورود" Click="OnLogin" HorizontalAlignment="Stretch" Margin="0,4,0,0" />
-          <Button Classes="ghost" Content="ورود نمایشی (بدون سرور — دادهٔ نمونه)" Click="OnDemo" HorizontalAlignment="Stretch" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
         </StackPanel>
       </Border>
-      <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی" Foreground="#9AA6B8" FontSize="11" HorizontalAlignment="Center" Margin="0,8,0,0" />
+      <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی — www.meelano.ir — ۰۹۱۲۰۲۱۹۵۹۳" Foreground="#9AA6B8" FontSize="11" HorizontalAlignment="Center" Margin="0,6,0,0" TextWrapping="Wrap" TextAlignment="Center" />
     </StackPanel>
   </Border>
 </Window>

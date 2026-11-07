@@ -11,6 +11,7 @@
       <Border Grid.Column="0" Background="#16233D">
         <Grid RowDefinitions="Auto,*,Auto">
           <StackPanel Grid.Row="0" Margin="16,20,16,10" Spacing="2">
+            <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="52" Height="52" HorizontalAlignment="Right" />
             <TextBlock Text="مهرآ" FontSize="30" Classes="bold" Foreground="#E8D6AE" />
             <TextBlock Text="مهمان‌پذیر فرهنگیان اهواز" FontSize="11" Foreground="#9AA6B8" />
           </StackPanel>

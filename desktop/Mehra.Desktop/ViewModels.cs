@@ -184,13 +184,29 @@ public class SettingsVm : VmBase
     private string _mode = "";
     public string Mode { get => _mode; set => Set(ref _mode, value); }
 
+    private bool _isSql;
+    public bool IsSql { get => _isSql; set => Set(ref _isSql, value); }
+    private string _schemaStatus = "";
+    public string SchemaStatus { get => _schemaStatus; set => Set(ref _schemaStatus, value); }
+
     public SettingsVm(Session session)
     {
         _session = session;
         _serverLabel = session.Api.ServerLabel;
+        IsSql = session.Api is SqlServerApi;
         Mode = session.Api.IsDemo
             ? "حالت: نسخهٔ نمایشی (دادهٔ نمونه — بدون اتصال به سرور)"
-            : "حالت: اتصال به سرور واقعی";
+            : IsSql ? "حالت: اتصال مستقیم به SQL Server (جدول‌ها از فایل db\schema.sql ساخته می‌شوند)"
+            : "حالت: اتصال به سرور وب (API)";
+    }
+
+    public async Task EnsureSchemaAsync()
+    {
+        if (_session.Api is not SqlServerApi sql) return;
+        SchemaStatus = "در حال اجرای اسکریپت db\schema.sql …";
+        var path = Path.Combine(AppContext.BaseDirectory, "db", "schema.sql");
+        var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path);
+        SchemaStatus = r.Ok ? r.Value! : r.Error;
     }
 
     public async Task CheckHealthAsync()

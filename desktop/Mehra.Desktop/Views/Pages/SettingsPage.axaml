@@ -10,6 +10,8 @@
         <TextBlock Text="{Binding Mode}" Foreground="#5A6474" TextWrapping="Wrap" />
         <Button Classes="ghost" Content="بررسی اتصال به سرور" Click="OnHealth" HorizontalAlignment="Right" Foreground="#8A6A2F" BorderBrush="#D8CBA6" />
         <TextBlock Text="{Binding Health}" Foreground="#2E7D5B" TextWrapping="Wrap" />
+        <Button Classes="primary" Content="راه‌اندازی/به‌روزرسانی جداول پایگاه داده (SQL Server)" Click="OnEnsureSchema" HorizontalAlignment="Right" IsVisible="{Binding IsSql}" />
+        <TextBlock Text="{Binding SchemaStatus}" Foreground="#5A6474" TextWrapping="Wrap" />
       </StackPanel>
     </Border>
     <Border Classes="card">

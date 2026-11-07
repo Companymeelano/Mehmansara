@@ -15,4 +15,7 @@ public partial class SettingsPage : UserControl
 
     private async void OnHealth(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
         await _vm.CheckHealthAsync();
+
+    private async void OnEnsureSchema(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+        await _vm.EnsureSchemaAsync();
 }

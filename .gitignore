@@ -23,3 +23,13 @@ Thumbs.db
 # .NET desktop (Windows) build output
 desktop/**/bin/
 desktop/**/obj/
+
+# Desktop build/publish outputs (CI artifacts live on ci-artifacts branch)
+desktop/publish/
+setup-out/
+desktop/Setup/Output/
+# Large generation-source PNGs (shipped formats: .ico/.bmp/.png-128 are committed)
+desktop/mehra-icon-source.png
+desktop/mehra-icon-3d-source.png
+desktop/Setup/art_hero_3d.png
+desktop/Setup/art_db_3d.png

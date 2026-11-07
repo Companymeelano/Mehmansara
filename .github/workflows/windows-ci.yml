@@ -30,54 +30,52 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Install Inno Setup 6
+        shell: pwsh
+        run: choco install innosetup -y
+
       - name: Publish single-file self-contained exe
         shell: pwsh
         run: |
-          dotnet publish desktop/Mehra.Desktop/Mehra.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true -o publish 2>&1 | Tee-Object -FilePath build.log
-          if (-not (Test-Path publish\Mehra.exe)) { throw "Mehra.exe was not produced" }
-          (Get-Item publish\Mehra.exe).Length
+          dotnet publish desktop/Mehra.Desktop/Mehra.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:UseAppHost=true -o desktop/publish 2>&1 | Tee-Object -FilePath build.log
+          if (-not (Test-Path desktop\publish\Mehra.exe)) { throw "Mehra.exe was not produced" }
+          (Get-Item desktop\publish\Mehra.exe).Length
+
+      - name: Build MehraSetup.exe with Inno Setup (ISCC)
+        shell: pwsh
+        run: |
+          $iscc = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+          if (-not (Test-Path $iscc)) { $iscc = Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe' }
+          if (-not (Test-Path $iscc)) { throw "ISCC.exe not found" }
+          & $iscc "desktop\Setup\setup.iss" 2>&1 | Tee-Object -FilePath setup-build.log
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed with exit code $LASTEXITCODE" }
+          if (-not (Test-Path setup-out\MehraSetup.exe)) { throw "MehraSetup.exe was not produced" }
+          (Get-Item setup-out\MehraSetup.exe).Length
 
       - name: Package exe + zip + log
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path out\exe, out\logs | Out-Null
-          Copy-Item publish\Mehra.exe out\exe\Mehra.exe
+          New-Item -ItemType Directory -Force -Path out\exe, out\logs, out\setup | Out-Null
+          Copy-Item desktop\publish\Mehra.exe out\exe\Mehra.exe
           [System.IO.File]::WriteAllText("out\exe\README.txt", $env:MEHRA_README, [System.Text.Encoding]::UTF8)
           Compress-Archive -Path out\exe\Mehra.exe, out\exe\README.txt -DestinationPath out\exe\Mehra-win-x64.zip -Force
           Copy-Item build.log out\logs\windows-build.log
+          Copy-Item setup-out\MehraSetup.exe out\setup\MehraSetup.exe
+          if (Test-Path setup-build.log) { Copy-Item setup-build.log out\setup\setup-build.log } else { 'no setup-build.log' | Out-File out\setup\setup-build.log }
           Get-ChildItem out -Recurse | Select-Object FullName, Length
         env:
           MEHRA_README: |-
-            مهرآ — نسخهٔ ویندوز (Mehra.exe)
-            سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ 1.0
+            مهرآ — نسخٔ ویندوز (Mehra.exe)
+            سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخٔ ۱.۱.۰
             
             1. فایل Mehra.exe را اجرا کنید (win-x64، self-contained — نیازی به نصب .NET نیست).
             2. «ورود نمایشی»: بدون سرور — با دادهٔ نمونه کامل.
-            3. «ورود واقعی»: نشانی سرور + نام کاربری/رمز عبور.
+            3. «ورود با SQL Server»: اتصال مستقیم به Microsoft SQL Server (هر ورژن، از 2008 به بالا) — جداول به‌صورت خودکار ساخته می‌شوند.
+            4. «ورود با API»: نشانی سرور + نام کاربری/رمز عبور.
             
             صفحه‌ها: خانه / اتاق‌ها / رزروها / پذیرش / مهمانان / مالی / نظافت / تعمیرات / گزارش‌ها / کاربران / اعلان‌ها / تنظیمات
             
             طراح و توسعه‌دهنده: میلاد یعقوبی
-
-      - name: Build installer (Inno Setup) -> Mehra-setup.exe
-        shell: pwsh
-        run: |
-          $log = { param($m) $m | Tee-Object -FilePath installer.log -Append }
-          choco install innosetup -y --no-progress 2>&1 | Tee-Object -FilePath installer.log
-          if ($LASTEXITCODE -ne 0) { throw "choco install innosetup failed" }
-          $iscc = Get-ChildItem "C:\Program Files (x86)\Inno Setup 6\ISCC.exe", "C:\Program Files\Inno Setup 6\ISCC.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
-          if (-not $iscc) { $c = Get-Command ISCC.exe -ErrorAction SilentlyContinue; if ($c) { $iscc = $c.Source } }
-          if (-not $iscc) { throw "ISCC.exe not found after choco install innosetup" }
-          "ISCC: $iscc" | Tee-Object -FilePath installer.log -Append
-          $env:MEHRA_PUBLISH = (Resolve-Path publish).Path
-          New-Item -ItemType Directory -Force -Path out\exe | Out-Null
-          $env:MEHRA_OUT = (Resolve-Path out\exe).Path
-          $env:MEHRA_ICON = (Resolve-Path desktop\Mehra.Desktop\Assets\mehra.ico).Path
-          $env:MEHRA_README_FILE = (Resolve-Path out\exe\README.txt).Path
-          & $iscc desktop\installer.iss "/DMyPublishDir=$env:MEHRA_PUBLISH" "/DMyOutputDir=$env:MEHRA_OUT" "/DMyIconFile=$env:MEHRA_ICON" "/DMyReadme=$env:MEHRA_README_FILE" 2>&1 | Tee-Object -FilePath installer.log -Append
-          if ($LASTEXITCODE -ne 0) { throw "ISCC failed — see installer.log" }
-          if (-not (Test-Path out\exe\Mehra-setup.exe)) { throw "Mehra-setup.exe was not produced" }
-          (Get-Item out\exe\Mehra-setup.exe).Length
 
       # APKs (android-ci) and the exe (this job) share the ci-artifacts branch:
       # clone the existing branch and merge into it — never force-push.
@@ -103,7 +101,8 @@ jobs:
           $haveRef = ($LASTEXITCODE -eq 0)
           if ($fetched -and $haveRef) {
             git checkout -q -B ci-artifacts origin/ci-artifacts
-            Remove-Item -Recurse -Force exe -ErrorAction SilentlyContinue
+            Remove-Item -Recurse -Force setup -ErrorAction SilentlyContinue
+            Remove-Item -Force exe\Mehra.exe, exe\README.txt, exe\Mehra-win-x64.zip -ErrorAction SilentlyContinue
           } else {
             git checkout -q -b ci-artifacts
           }
@@ -121,7 +120,7 @@ jobs:
           $ErrorActionPreference = 'Continue'
           New-Item -ItemType Directory -Force -Path out | Out-Null
           if (Test-Path build.log) { Copy-Item build.log out\last-windows-build.log } else { "publish step did not run" | Out-File out\last-windows-build.log }
-          if (Test-Path installer.log) { Copy-Item installer.log out\last-windows-installer.log }
+          if (Test-Path setup-build.log) { Copy-Item setup-build.log out\setup-build.log }
           Remove-Item -Recurse -Force merge -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path merge | Out-Null
           Set-Location merge

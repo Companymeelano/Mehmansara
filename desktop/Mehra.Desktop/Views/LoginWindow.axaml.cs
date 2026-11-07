@@ -7,39 +7,83 @@ public partial class LoginWindow : Window
     public LoginWindow()
     {
         InitializeComponent();
-        var saved = SettingsStore.LoadServerUrl();
-        if (saved.Length > 0) this.FindControl<TextBox>("ServerBox")!.Text = saved;
+        var s = SettingsStore.Load();
+        this.FindControl<ComboBox>("ModeCombo")!.SelectedIndex = s.Mode switch { "api" => 1, "sql" => 2, _ => 0 };
+        this.FindControl<TextBox>("ServerBox")!.Text = s.ServerUrl;
+        this.FindControl<TextBox>("SqlServerBox")!.Text = s.SqlServer;
+        this.FindControl<TextBox>("SqlDbBox")!.Text = s.SqlDb;
+        this.FindControl<ComboBox>("SqlAuthCombo")!.SelectedIndex = s.SqlAuth == "sql" ? 1 : 0;
+        this.FindControl<TextBox>("SqlUserBox")!.Text = s.SqlUser;
+        ApplyModeVisibility();
+    }
+
+    private void OnModeChanged(object? sender, SelectionChangedEventArgs e) => ApplyModeVisibility();
+    private void OnSqlAuthChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var win = (this.FindControl<ComboBox>("SqlAuthCombo")!.SelectedItem as ComboBoxItem)?.Tag as string == "win";
+        this.FindControl<StackPanel>("SqlCredPanel")!.IsVisible = !win;
+    }
+
+    private string Mode => (this.FindControl<ComboBox>("ModeCombo")!.SelectedItem as ComboBoxItem)?.Tag as string ?? "demo";
+
+    private void ApplyModeVisibility()
+    {
+        var m = Mode;
+        this.FindControl<StackPanel>("ApiPanel")!.IsVisible = m == "api";
+        this.FindControl<StackPanel>("SqlPanel")!.IsVisible = m == "sql";
     }
 
     private async void OnLogin(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var server = this.FindControl<TextBox>("ServerBox")!.Text ?? "";
         var user = this.FindControl<TextBox>("UserBox")!.Text ?? "";
         var pass = this.FindControl<TextBox>("PassBox")!.Text ?? "";
         var error = this.FindControl<TextBlock>("ErrorText")!;
         error.IsVisible = false;
-        if (user.Trim().Length == 0 || pass.Length == 0)
+        var mode = Mode;
+
+        if (mode is "api" or "sql" && (user.Trim().Length == 0 || pass.Length == 0))
         {
             error.Text = "نام کاربری و رمز عبور را وارد کنید.";
             error.IsVisible = true;
             return;
         }
-        var api = new ApiClient();
-        var result = await api.LoginAsync(server, user.Trim(), pass);
+
+        IHotelApi api;
+        Result<SessionUser> result;
+        if (mode == "demo")
+        {
+            api = new DemoApi();
+            result = await api.LoginAsync("", "demo", "");
+        }
+        else if (mode == "api")
+        {
+            var server = this.FindControl<TextBox>("ServerBox")!.Text ?? "";
+            api = new ApiClient();
+            result = await api.LoginAsync(server, user.Trim(), pass);
+            if (result.Ok) SettingsStore.Save(new AppSettings { Mode = "api", ServerUrl = server });
+        }
+        else
+        {
+            var server = this.FindControl<TextBox>("SqlServerBox")!.Text?.Trim() ?? "";
+            var db = this.FindControl<TextBox>("SqlDbBox")!.Text?.Trim() ?? "Mehra";
+            var winAuth = (this.FindControl<ComboBox>("SqlAuthCombo")!.SelectedItem as ComboBoxItem)?.Tag as string == "win";
+            var sqlUser = this.FindControl<TextBox>("SqlUserBox")!.Text ?? "";
+            var sqlPass = this.FindControl<TextBox>("SqlPassBox")!.Text ?? "";
+            if (server.Length == 0) { error.Text = "نام سرور SQL Server را وارد کنید."; error.IsVisible = true; return; }
+            var created = await SqlServerApi.TryCreateAsync(server, db, winAuth, winAuth ? null : sqlUser, winAuth ? null : sqlPass);
+            if (!created.Ok) { error.Text = created.Error; error.IsVisible = true; return; }
+            api = created.Value!;
+            result = await api.LoginAsync(server, user.Trim(), pass);
+            if (result.Ok)
+                SettingsStore.Save(new AppSettings { Mode = "sql", SqlServer = server, SqlDb = db, SqlAuth = winAuth ? "win" : "sql", SqlUser = sqlUser });
+        }
+
         if (!result.Ok)
         {
             error.Text = result.Error;
             error.IsVisible = true;
             return;
         }
-        SettingsStore.SaveServerUrl(server);
-        OpenMain(new Session(api, result.Value!));
-    }
-
-    private async void OnDemo(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var api = new DemoApi();
-        var result = await api.LoginAsync("", "demo", "");
         OpenMain(new Session(api, result.Value!));
     }
 
@@ -51,6 +95,16 @@ public partial class LoginWindow : Window
     }
 }
 
+public class AppSettings
+{
+    public string Mode { get; set; } = "demo";
+    public string ServerUrl { get; set; } = "";
+    public string SqlServer { get; set; } = "(localdb)\\MSSQLLocalDB";
+    public string SqlDb { get; set; } = "Mehra";
+    public string SqlAuth { get; set; } = "win";
+    public string SqlUser { get; set; } = "";
+}
+
 public static class SettingsStore
 {
     private static string FilePath()
@@ -60,25 +114,26 @@ public static class SettingsStore
         return Path.Combine(dir, "settings.json");
     }
 
-    public static string LoadServerUrl()
+    public static AppSettings Load()
     {
         try
         {
             var f = FilePath();
-            if (!File.Exists(f)) return "";
-            using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(f));
-            return doc.RootElement.TryGetProperty("serverUrl", out var el) ? el.GetString() ?? "" : "";
+            if (!File.Exists(f)) return new AppSettings();
+            return System.Text.Json.JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(f)) ?? new AppSettings();
         }
-        catch { return ""; }
+        catch { return new AppSettings(); }
     }
 
-    public static void SaveServerUrl(string url)
+    public static void Save(AppSettings s)
     {
         try
         {
-            File.WriteAllText(FilePath(),
-                System.Text.Json.JsonSerializer.Serialize(new { serverUrl = url }));
+            File.WriteAllText(FilePath(), System.Text.Json.JsonSerializer.Serialize(s));
         }
         catch { /* non-fatal */ }
     }
+
+    public static string LoadServerUrl() => Load().ServerUrl;
+    public static void SaveServerUrl(string url) => Save(new AppSettings { Mode = "api", ServerUrl = url });
 }

@@ -11,11 +11,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <InvariantGlobalization>false</InvariantGlobalization>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
     <AssemblyTitle>MEHRA — Hospitality Management (Windows)</AssemblyTitle>
-    <Description>سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — نسخهٔ ویندوز (کارکنان)</Description>
+    <Description>سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — نسخهٔ ویندوز 1.1 (کارکنان — اتصال مستقیم به SQL Server) — www.meelano.ir — 09120219593</Description>
     <Product>MEHRA</Product>
     <Company>Culturalists of Ahvaz — فرهنگیان اهواز</Company>
     <Copyright>Copyright © 2026 — طراح و توسعه‌دهنده: میلاد یعقوبی</Copyright>
@@ -26,6 +26,8 @@
     <PackageReference Include="Avalonia" Version="11.3.5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.5" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.5" />
+    <!-- Windows-only, in-box SNI: keeps the exe small (no native payload like Microsoft.Data.SqlClient) -->
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
