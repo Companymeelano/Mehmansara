@@ -28,9 +28,9 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:mapProdDebugSourceSetPaths
 > Task :app:generateProdDebugResources
 > Task :app:packageProdDebugResources
+> Task :app:mergeProdDebugResources
 > Task :app:createProdDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksProdDebug FROM-CACHE
-> Task :app:mergeProdDebugResources
 > Task :app:processProdDebugMainManifest FROM-CACHE
 > Task :app:processProdDebugManifest FROM-CACHE
 > Task :app:processProdDebugManifestForPackage FROM-CACHE
@@ -46,6 +46,7 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:packageProdDebugUnitTestForUnitTest
 > Task :app:generateProdDebugUnitTestConfig
 > Task :app:kspProdDebugKotlin
+
 > Task :app:compileProdDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
@@ -72,5 +73,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:transformProdDebugUnitTestClassesWithAsm
 > Task :app:testProdDebugUnitTest
 
-BUILD SUCCESSFUL in 1m 24s
+BUILD SUCCESSFUL in 53s
 35 actionable tasks: 25 executed, 10 from cache
