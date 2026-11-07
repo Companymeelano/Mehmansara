@@ -70,6 +70,6 @@ Parsing [Files] section, line 82
 Parsing [Files] section, line 83
 Parsing [Files] section, line 84
 Compiling [Code] section
-Error on line 131 in D:\a\Mehmansara\Mehmansara\desktop\Setup\setup.iss: Column 72:
-Variable Expected.
+Error on line 134 in D:\a\Mehmansara\Mehmansara\desktop\Setup\setup.iss: Column 57:
+Type mismatch.
 Compile aborted.
