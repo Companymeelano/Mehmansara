@@ -377,7 +377,7 @@ begin
   Result := True;
   if GetWindowsVersion < $0A004246 then
   begin
-    MsgBox('نسخهٔ ویندوز شما باید Windows 10 نسخهٔ 1709 (build 17763) یا جدیدتر باشد.', mbError, MB_OK);
+    MsgBox('نسخهٔ ویندوز شما باید Windows 10 نسخهٔ 1803 (build 17134) یا جدیدتر باشد.', mbError, MB_OK);
     Result := False;
     Exit;
   end;
