@@ -61,14 +61,30 @@ Reading [Code] section
 Parsing [Tasks] section, line 76
 Parsing [Tasks] section, line 77
 Parsing [Tasks] section, line 78
-Parsing [Icons] section, line 87
-Parsing [Icons] section, line 88
-Parsing [Icons] section, line 89
-Parsing [Run] section, line 92
+Parsing [Icons] section, line 103
+Parsing [Icons] section, line 104
+Parsing [Icons] section, line 105
+Parsing [Run] section, line 108
 Parsing [Files] section, line 81
 Parsing [Files] section, line 82
 Parsing [Files] section, line 83
 Parsing [Files] section, line 84
+Parsing [Files] section, line 85
+Parsing [Files] section, line 86
+Parsing [Files] section, line 87
+Parsing [Files] section, line 88
+Parsing [Files] section, line 89
+Parsing [Files] section, line 90
+Parsing [Files] section, line 91
+Parsing [Files] section, line 92
+Parsing [Files] section, line 93
+Parsing [Files] section, line 94
+Parsing [Files] section, line 95
+Parsing [Files] section, line 96
+Parsing [Files] section, line 97
+Parsing [Files] section, line 98
+Parsing [Files] section, line 99
+Parsing [Files] section, line 100
 Compiling [Code] section
 Creating setup files
    Verification successful
@@ -76,7 +92,11 @@ Creating setup files
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\..\publish\Mehra.exe
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\..\Mehra.Desktop\db\schema.sql
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_regular.ttf
+   Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_medium.ttf
+   Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_semibold.ttf
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_bold.ttf
+   Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_extrabold.ttf
+   Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_black.ttf
    Compressing Setup program executable
    Updating version info (Setup.exe)
    Updating manifest (Setup.exe)
@@ -85,6 +105,7 @@ Warning: Message name "SelectDirLabel" is not recognized by this version of Inno
 Warning: Message name "TasksLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "ReadyLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
+Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or consider using its "auto" form.
 
-Successful compile (22.329 sec). Resulting Setup program filename is:
+Successful compile (24.266 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
