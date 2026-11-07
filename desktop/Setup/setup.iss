@@ -182,7 +182,6 @@ var
   Providers: array[0..3] of string;
   i: Integer;
   Conn: Variant;
-  s: string;
   Lines, Batches: TStringList;
   j: Integer;
   Cur: string;
@@ -190,15 +189,14 @@ begin
   Result := False; Err := '';
   Providers[0] := 'MSOLEDBSQL'; Providers[1] := 'MSOLEDBSQL.1';
   Providers[2] := 'SQLOLEDB.1'; Providers[3] := 'SQLOLEDB';
-  if not LoadStringFromFile(schemaFile, s) then
-  begin
-    Err := 'فایل schema.sql پیدا نشد.';
-    Exit;
-  end;
   Lines := TStringList.Create;
   Batches := TStringList.Create;
   try
-    Lines.Text := s;
+    if not LoadStringsFromFile(schemaFile, Lines) then
+    begin
+      Err := 'فایل schema.sql پیدا نشد.';
+      Exit;
+    end;
     Cur := '';
     for j := 0 to Lines.Count - 1 do
     begin
