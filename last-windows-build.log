@@ -1,5 +1,5 @@
   Determining projects to restore...
-  Restored D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj (in 12.83 sec).
+  Restored D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj (in 15.49 sec).
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(130,24): warning CS0618: 'SqlConnection' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(137,104): warning CS0618: 'SqlDataReader' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(153,29): warning CS0618: 'SqlDataReader' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
