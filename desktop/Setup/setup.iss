@@ -356,8 +356,10 @@ begin
 
   OptPage := CreateInputOptionPage(wpSelectTasks,
     'پایگاه دادهٔ SQL Server', 'اگر SQL Server روی سیستم نصب کرده‌ید، این نصب‌گر می‌تواند جداول پایگاه داده را برای هر ورژن SQL Server (2008 به بالا) ایجاد کند.', 'توضیح: این بخش اختیاری است و به‌صورت خودکار از db\\schema.sql ساخته می‌شود.', False, False);
-  OptPage.Add('احراز هویت ویندوز (Windows Authentication)', True);
-  OptPage.Add('ایجاد/به‌روزانی جداول پایگاه داده در SQL Server هنگام نصب', True);
+  OptPage.Add('احراز هویت ویندوز (Windows Authentication)');
+  OptPage.Values[0] := True;
+  OptPage.Add('ایجاد/به‌روزانی جداول پایگاه داده در SQL Server هنگام نصب');
+  OptPage.Values[1] := True;
 
   DbPage := CreateInputQueryPage(wpSelectTasks,
     'تنظیمات اتصال SQL Server', 'نام سرور (نمونه): .\\SQLEXPRESS یا (localdb)\\MSSQLLocalDB و نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شوند.');
