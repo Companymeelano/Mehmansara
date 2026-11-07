@@ -32,9 +32,9 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:extractDeepLinksProdDebug FROM-CACHE
 > Task :app:mergeProdDebugResources
 > Task :app:processProdDebugMainManifest FROM-CACHE
-> Task :app:parseProdDebugLocalResources
 > Task :app:processProdDebugManifest FROM-CACHE
 > Task :app:processProdDebugManifestForPackage FROM-CACHE
+> Task :app:parseProdDebugLocalResources
 > Task :app:javaPreCompileProdDebug FROM-CACHE
 > Task :app:mergeProdDebugShaders
 > Task :app:compileProdDebugShaders NO-SOURCE
@@ -72,5 +72,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:transformProdDebugUnitTestClassesWithAsm
 > Task :app:testProdDebugUnitTest
 
-BUILD SUCCESSFUL in 1m 22s
+BUILD SUCCESSFUL in 1m 24s
 35 actionable tasks: 25 executed, 10 from cache

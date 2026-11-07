@@ -48,14 +48,14 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:processProdDebugJavaRes UP-TO-DATE
 > Task :app:mergeProdDebugJniLibFolders
 > Task :app:mergeProdDebugNativeLibs
-
-> Task :app:stripProdDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
-
 > Task :app:mergeProjectDexProdDebug
 > Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
+
+> Task :app:stripProdDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
+
 > Task :app:writeProdDebugSigningConfigVersions
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
@@ -72,29 +72,29 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:extractDeepLinksDemoDebug FROM-CACHE
 > Task :app:processDemoDebugMainManifest FROM-CACHE
 > Task :app:processDemoDebugManifest FROM-CACHE
-> Task :app:parseDemoDebugLocalResources
 > Task :app:processDemoDebugManifestForPackage FROM-CACHE
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugShaders
 > Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:generateDemoDebugAssets UP-TO-DATE
+> Task :app:parseDemoDebugLocalResources
 > Task :app:mergeDemoDebugAssets
 > Task :app:compressDemoDebugAssets FROM-CACHE
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
 > Task :app:mergeDemoDebugJniLibFolders
-> Task :app:mergeDemoDebugNativeLibs
 > Task :app:validateSigningDemoDebug
+> Task :app:mergeDemoDebugNativeLibs
+> Task :app:writeDemoDebugAppMetadata
+> Task :app:checkDemoDebugDuplicateClasses
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDemoDebugAppMetadata
-> Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:mergeDemoDebugResources
-> Task :app:checkDemoDebugDuplicateClasses
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
-> Task :app:processDemoDebugResources
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
+> Task :app:writeDemoDebugSigningConfigVersions
+> Task :app:processDemoDebugResources
 > Task :app:kspDemoDebugKotlin
 > Task :app:compileDemoDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
@@ -119,5 +119,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 1m 45s
+BUILD SUCCESSFUL in 1m 50s
 82 actionable tasks: 40 executed, 18 from cache, 24 up-to-date
