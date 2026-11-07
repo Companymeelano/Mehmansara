@@ -9,9 +9,9 @@
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - مرور فایل‌های: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش اندازهٔ باینری‌ها (اجرای CI `42386498201`)
+## هش اندازهٔ باینری‌ها (اجرای CI `42412469431`)
 
-- `setup/MehraSetup.exe`: 31,313,277 بایت — sha256 `540a9a952860741dc4e999d8b06382ac549106a46ef88b2123132915d7541910`
+- `setup/MehraSetup.exe`: 31,444,448 بایت — sha256 `be1e60447b2f245b2f1d14317065f4f6028998fc340fec93ddbce085c13b948d`
 - `exe/Mehra.exe`: 94,110,600 بایت — sha256 `d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80`
 - تأیید بایت-be-بایت: MZ/PE mo'tabar; brand dar نصب‌گر be-surat UTF-16/UTF-8 موجود ast: `www.meelano.ir`, `09120219593`, `Milad Yaghoobi`, «میلاد یعقوبی», «مهرآ», نسخهٔ ۱.۱.۰.
 
@@ -23,6 +23,13 @@
 4. به‌ tik-e «ایجاد/به‌روزرانی جداول‌ها», پس از-ye کپی-ye فایل‌های, اسکریپت-e `db\schema.sql` batch-be-batch (GO) ejrā mishavad و 9 جداول ساخته mishavad; درصد پیشرفت فارسی نمایش داده می‌شود.
 5. بررسی-haye هوشمند: حداقل 300MB فضای آزاد دیسک, Windows 10 به bālā, خطا-e اتصال SQL Server — hame به‌ پیام فارسی.
 6. پس از-ye نصب, تنظیمات-e اتصال dar `%AppData%\mehra\settings.json` نوشته می‌شود mishavad و برنامهٔ آمادهٔ اجرا ast.
+
+
+## فونت‌ها (Vazirmatn)
+
+- نصب‌گر **6 وزن فونت وزیرمتن** (Regular, Medium, SemiBold, Bold, ExtraBold, Black — نسخهٔ 33.003) را به‌صورت دائمی نصب می‌کند: اگر ادمین باشید در پوشهٔ فونت‌های ویندوز (`{fonts}`), وگرنه به‌صورت per-user (`{userfonts}` — ویندوز 10 نسخهٔ 1803 به بالا) و همزمان session با AddFontResourceW ثبت می‌شوند.
+- خود نصب‌گر (همهٔ برچسب‌ها و صفحات) هم با فونت وزیرمتن نمایش داده می‌شود (ثبت خصوصی FR_PRIVATE).
+- خود برنامهٔ مهرآ فونت regular/bold را به‌صورت embedded (avares) داخل exe دارد, پس **حتی بدون نصب فونت هم در زمان اجرا با زیباترین شکل نمایش داده می‌شود** و حجم exe به‌خاطر فونت‌های اضافی بالا نرفته است.
 
 ورود avaliye: کاربر `admin` / رمز `Admin@1234` (dar `db\schema.sql` seed shode; dar حالت-e SQL Server هیچ دادهٔ نمونه‌ای-i وجود ندارد).
 
