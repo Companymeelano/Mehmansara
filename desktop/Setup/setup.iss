@@ -97,7 +97,7 @@ var
   OptPage: TInputOptionWizardPage;
   PctLabel: TLabel;
 
-function AddFontResourceExW(lpszFilename: string; fl: LongWord; pdv: Pointer): LongWord;
+function AddFontResourceExW(lpszFilename: string; fl: LongWord; pdv: LongWord): LongWord;
   external 'AddFontResourceExW@gdi32.dll stdcall';
 function IsAdminLoggedOn: Boolean;
   external 'IsAdminLoggedOn@shell32.dll stdcall';
