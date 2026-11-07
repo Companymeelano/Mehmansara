@@ -81,7 +81,23 @@ Name: "createdb"; Description: "ایجاد/به‌روزرانی جداول پا
 Source: "..\publish\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Mehra.Desktop\db\schema.sql"; DestDir: "{app}\db"; Flags: ignoreversion
 Source: "vazirmatn_regular.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+Source: "vazirmatn_medium.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+Source: "vazirmatn_semibold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
 Source: "vazirmatn_bold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+Source: "vazirmatn_black.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+Source: "vazirmatn_regular.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
+Source: "vazirmatn_regular.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
+Source: "vazirmatn_medium.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
+Source: "vazirmatn_medium.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
+Source: "vazirmatn_semibold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
+Source: "vazirmatn_semibold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
+Source: "vazirmatn_bold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
+Source: "vazirmatn_bold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
+Source: "vazirmatn_black.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
+Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
 
 [Icons]
 Name: "{group}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"
@@ -101,14 +117,20 @@ function AddFontResourceExW(lpszFilename: string; fl: LongWord; pdv: LongWord): 
   external 'AddFontResourceExW@gdi32.dll stdcall';
 function IsAdminLoggedOn: Boolean;
   external 'IsAdminLoggedOn@shell32.dll stdcall';
+function AddFontResourceW(lpszFilename: string): LongWord;
+  external 'AddFontResourceW@gdi32.dll stdcall';
 function GetDiskFreeSpaceExW(lpDirectoryName: string; var lpFreeBytesAvailableToCaller: Int64;
   var lpTotalNumberOfBytes: Int64; var lpTotalNumberOfFreeBytes: Int64): Boolean;
   external 'GetDiskFreeSpaceExW@kernel32.dll stdcall';
 
 procedure RegisterFonts;
 begin
-  AddFontResourceExW(ExpandConstant('{tmp}\vazirmatn_regular.ttf'), $10, 0);
-  AddFontResourceExW(ExpandConstant('{tmp}\vazirmatn_bold.ttf'), $10, 0);
+  AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_regular.ttf'), $10, 0);
+  AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_medium.ttf'), $10, 0);
+  AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_semibold.ttf'), $10, 0);
+  AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_bold.ttf'), $10, 0);
+  AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_extrabold.ttf'), $10, 0);
+  AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_black.ttf'), $10, 0);
 end;
 
 function EscBs(s: string): string;
@@ -232,6 +254,26 @@ begin
   end;
 end;
 
+procedure InstallFonts;
+var
+  Names: array[0..5] of string;
+  i: Integer;
+  P: string;
+begin
+  Names[0] := 'vazirmatn_regular.ttf';
+  Names[1] := 'vazirmatn_medium.ttf';
+  Names[2] := 'vazirmatn_semibold.ttf';
+  Names[3] := 'vazirmatn_bold.ttf';
+  Names[4] := 'vazirmatn_extrabold.ttf';
+  Names[5] := 'vazirmatn_black.ttf';
+  for i := 0 to 5 do
+  begin
+    P := ExpandConstant('{fonts}\\' + Names[i]);
+    if not FileExists(P) then P := ExpandConstant('{userfonts}\\' + Names[i]);
+    if FileExists(P) then AddFontResourceW(P);
+  end;
+end;
+
 procedure WriteAppSettings(server, db: string; sqlAuth: Boolean; user: string);
 var
   Path, Json, Srv, Usr: string;
@@ -305,6 +347,7 @@ begin
   end;
   if CurStep = ssPostInstall then
   begin
+    InstallFonts;
     if OptPage.Values[1] then
     begin
       winAuth := OptPage.Values[0];
@@ -332,9 +375,9 @@ var
   FreeB, TotalB, Dummy: Int64;
 begin
   Result := True;
-  if GetWindowsVersion < $0A000000 then
+  if GetWindowsVersion < $0A004246 then
   begin
-    MsgBox('نسخهٔ ویندوز شما باید Windows 10 (build 14393) یا جدیدتر باشد.', mbError, MB_OK);
+    MsgBox('نسخهٔ ویندوز شما باید Windows 10 نسخهٔ 1709 (build 17763) یا جدیدتر باشد.', mbError, MB_OK);
     Result := False;
     Exit;
   end;
@@ -351,6 +394,10 @@ end;
 procedure InitializeWizard;
 begin
   RegisterFonts;
+  try
+    WizardForm.Font.Name := 'Vazirmatn';
+  except
+  end;
   if not IsAdminLoggedOn then
     WizardForm.DirEdit.Text := ExpandConstant('{localappdata}\Mehra');
 
