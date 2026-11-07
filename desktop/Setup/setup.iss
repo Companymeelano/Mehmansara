@@ -182,14 +182,14 @@ var
   Providers: array[0..3] of string;
   i: Integer;
   Conn: Variant;
-  Lines, Batches: TStringList;
+  Lines: TArrayOfString;
+  Batches: TStringList;
   j: Integer;
   Cur: string;
 begin
   Result := False; Err := '';
   Providers[0] := 'MSOLEDBSQL'; Providers[1] := 'MSOLEDBSQL.1';
   Providers[2] := 'SQLOLEDB.1'; Providers[3] := 'SQLOLEDB';
-  Lines := TStringList.Create;
   Batches := TStringList.Create;
   try
     if not LoadStringsFromFile(schemaFile, Lines) then
@@ -198,7 +198,7 @@ begin
       Exit;
     end;
     Cur := '';
-    for j := 0 to Lines.Count - 1 do
+    for j := 0 to Length(Lines) - 1 do
     begin
       if UpperCase(Trim(Lines[j])) = 'GO' then
       begin
@@ -236,6 +236,7 @@ end;
 procedure WriteAppSettings(server, db: string; sqlAuth: Boolean; user: string);
 var
   Path, Json, Srv, Usr: string;
+  Arr: TArrayOfString;
 begin
   Path := ExpandConstant('{userappdata}\\mehra\\settings.json');
   ForceDirectories(ExtractFileDir(Path));
@@ -245,7 +246,9 @@ begin
     Json := '{\"Mode\":\"sql\",\"ServerUrl\":\"\",\"SqlServer\":\"' + Srv + '\",\"SqlDb\":\"' + db + '\",\"SqlAuth\":\"sql\",\"SqlUser\":\"' + Usr + '\"}'
   else
     Json := '{\"Mode\":\"sql\",\"ServerUrl\":\"\",\"SqlServer\":\"' + Srv + '\",\"SqlDb\":\"' + db + '\",\"SqlAuth\":\"win\",\"SqlUser\":\"\\"\"}';
-  SaveStringToFile(Path, Json, False);
+  SetLength(Arr, 1);
+  Arr[0] := Json;
+  SaveStringsToUTF8FileWithoutBOM(Path, Arr, False);
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -281,7 +284,7 @@ begin
   end;
 end;
 
-procedure CurProgressChanged(CurProgress, MaxProgress: Integer);
+procedure CurInstallProgressChanged(CurProgress, MaxProgress: Integer);
 begin
   try
     if MaxProgress > 0 then
@@ -352,13 +355,13 @@ begin
   if not IsAdminLoggedOn then
     WizardForm.DirEdit.Text := ExpandConstant('{localappdata}\Mehra');
 
-  OptPage := CreateInputOptionWizardPage(wpSelectTasks,
+  OptPage := CreateInputOptionPage(wpSelectTasks,
     'پایگاه دادهٔ SQL Server', 'اگر SQL Server روی سیستم نصب کرده‌ید، این نصب‌گر می‌تواند جداول پایگاه داده را برای هر ورژن SQL Server (2008 به بالا) ایجاد کند.', 'توضیح: این بخش اختیاری است و به‌صورت خودکار از db\\schema.sql ساخته می‌شود.', False, False);
   OptPage.Add('احراز هویت ویندوز (Windows Authentication)', True);
   OptPage.Add('ایجاد/به‌روزانی جداول پایگاه داده در SQL Server هنگام نصب', True);
 
-  DbPage := CreateInputQueryWizardPage(wpSelectTasks,
-    'تنظیمات اتصال SQL Server', 'نام سرور (نمونه): .\\SQLEXPRESS یا (localdb)\\MSSQLLocalDB و نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شوند.', False, False);
+  DbPage := CreateInputQueryPage(wpSelectTasks,
+    'تنظیمات اتصال SQL Server', 'نام سرور (نمونه): .\\SQLEXPRESS یا (localdb)\\MSSQLLocalDB و نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شوند.');
   DbPage.Add('سرور SQL Server:', False);
   DbPage.Values[0] := '(localdb)\MSSQLLocalDB';
   DbPage.Add('نام پایگاه داده:', False);
