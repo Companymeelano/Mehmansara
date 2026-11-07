@@ -122,13 +122,17 @@ begin
 end;
 
 function TryProviderOpen(provider, server, db: string; winAuth: Boolean; user, pass: string; var Conn: Variant): Boolean;
+var
+  ConnStr: string;
 begin
   Result := False;
   try
     Conn := CreateOleObject(provider);
     Conn.ConnectionTimeout := 8;
     Conn.CommandTimeout := 60;
-    Conn.Open(StringChange(MakeConnStr(server, db, winAuth, user, pass), '{PROV}', provider));
+    ConnStr := MakeConnStr(server, db, winAuth, user, pass);
+    ConnStr := StringChange(ConnStr, '{PROV}', provider);
+    Conn.Open(ConnStr);
     Result := True;
   except
     Result := False;
@@ -221,17 +225,16 @@ end;
 
 procedure WriteAppSettings(server, db: string; sqlAuth: Boolean; user: string);
 var
-  Path, Json, Srv: string;
+  Path, Json, Srv, Usr: string;
 begin
-  Path := ExpandConstant('{userappdata}\mehra\settings.json');
+  Path := ExpandConstant('{userappdata}\\mehra\\settings.json');
   ForceDirectories(ExtractFileDir(Path));
   Srv := StringChange(server, '\', '\\');
+  Usr := StringChange(user, '\', '\\');
   if sqlAuth then
-    Json := '{"Mode":"sql","ServerUrl":"","SqlServer":"' + Srv + '","SqlDb":"' + db +
-            '","SqlAuth":"sql","SqlUser":"' + StringChange(user, '\', '\\') + '"}'
+    Json := '{\"Mode\":\"sql\",\"ServerUrl\":\"\",\"SqlServer\":\"' + Srv + '\",\"SqlDb\":\"' + db + '\",\"SqlAuth\":\"sql\",\"SqlUser\":\"' + Usr + '\"}'
   else
-    Json := '{"Mode":"sql","ServerUrl":"","SqlServer":"' + Srv + '","SqlDb":"' + db +
-            '","SqlAuth":"win","SqlUser":""}';
+    Json := '{\"Mode\":\"sql\",\"ServerUrl\":\"\",\"SqlServer\":\"' + Srv + '\",\"SqlDb\":\"' + db + '\",\"SqlAuth\":\"win\",\"SqlUser\":\"\\"\"}';
   SaveStringToFile(Path, Json, False);
 end;
 
@@ -281,6 +284,7 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var
   Err: string;
   winAuth: Boolean;
+  SchemaPath: string;
 begin
   if CurStep = ssInstall then
   begin
@@ -292,8 +296,9 @@ begin
     if OptPage.Values[1] then
     begin
       winAuth := OptPage.Values[0];
+      SchemaPath := ExpandConstant('{app}\\db\\schema.sql');
       if RunSchema(DbPage.Values[0], DbPage.Values[1], winAuth, DbPage.Values[2], DbPage.Values[3],
-                   ExpandConstant('{app}\db\schema.sql'), Err) then
+                   SchemaPath, Err) then
       begin
         WriteAppSettings(DbPage.Values[0], DbPage.Values[1], not winAuth, DbPage.Values[2]);
         Log('MEHRA: schema created on ' + DbPage.Values[0]);
