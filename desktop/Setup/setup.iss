@@ -228,7 +228,6 @@ begin
       end;
     end;
   finally
-    Lines.Free;
     Batches.Free;
   end;
 end;
