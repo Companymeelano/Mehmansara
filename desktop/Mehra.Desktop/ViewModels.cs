@@ -205,7 +205,7 @@ public class SettingsVm : VmBase
         if (_session.Api is not SqlServerApi sql) return;
         SchemaStatus = "در حال اجرای اسکریپت db\\schema.sql …";
         var path = Path.Combine(AppContext.BaseDirectory, "db", "schema.sql");
-        var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path);
+        var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path, sql.Database);
         SchemaStatus = r.Ok ? r.Value! : r.Error;
     }
 

@@ -37,7 +37,9 @@ public class SqlServerApi : IHotelApi
         var api = new SqlServerApi(server, database, windowsAuth, sqlUser, sqlPass);
         try
         {
-            await using var con = new SqlConnection(api.ConnectionString);
+            // Test against master: the target DB may not exist yet (schema is created separately).
+            var probe = new SqlServerApi(server, "master", windowsAuth, sqlUser, sqlPass);
+            await using var con = new SqlConnection(probe.ConnectionString);
             await con.OpenAsync();
             await using var cmd = new SqlCommand("SELECT 1", con);
             await cmd.ExecuteScalarAsync();
@@ -50,11 +52,12 @@ public class SqlServerApi : IHotelApi
     }
 
     /// <summary>Runs db/schema.sql batch-by-batch (idempotent). Used by the installer flow and the app's «راه‌اندازی پایگاه داده».</summary>
-    public static async Task<Result<string>> EnsureSchemaAsync(string connectionStringMaster, string schemaPath)
+    public static async Task<Result<string>> EnsureSchemaAsync(string connectionStringMaster, string schemaPath, string dbName)
     {
         try
         {
-            var sql = await File.ReadAllTextAsync(schemaPath);
+            // schema.sql hardcodes [Mehra]; retarget it to the configured database name.
+            var sql = (await File.ReadAllTextAsync(schemaPath)).Replace("Mehra", dbName);
             var batches = new List<string>();
             var sb = new StringBuilder();
             foreach (var line in sql.Split('\n'))

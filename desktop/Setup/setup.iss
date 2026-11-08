@@ -133,6 +133,26 @@ begin
   AddFontResourceExW(ExpandConstant('{tmp}\\vazirmatn_black.ttf'), $10, 0);
 end;
 
+function ReplaceAll(s, from, to_: string): string;
+var
+  i, fl: Integer;
+begin
+  Result := ''; fl := Length(from); i := 1;
+  while i <= Length(s) do
+  begin
+    if (i + fl - 1 <= Length(s)) and (Copy(s, i, fl) = from) then
+    begin
+      Result := Result + to_;
+      i := i + fl;
+    end
+    else
+    begin
+      Result := Result + Copy(s, i, 1);
+      i := i + 1;
+    end;
+  end;
+end;
+
 function EscBs(s: string): string;
 var
   i: Integer;
@@ -219,6 +239,8 @@ begin
       Err := 'فایل schema.sql پیدا نشد.';
       Exit;
     end;
+    for j := 0 to Length(Lines) - 1 do
+      Lines[j] := ReplaceAll(Lines[j], 'Mehra', db);
     Cur := '';
     for j := 0 to Length(Lines) - 1 do
     begin
@@ -315,7 +337,7 @@ begin
     winAuth := OptPage.Values[0];
     if OptPage.Values[1] then
     begin
-      if not TestSql(DbPage.Values[0], DbPage.Values[1], winAuth, DbPage.Values[2], DbPage.Values[3], Err) then
+      if not TestSql(DbPage.Values[0], 'master', winAuth, DbPage.Values[2], DbPage.Values[3], Err) then
       begin
         MsgBox('اتصال به SQL Server برقرار نشد:' + #13#10#13#10 + Err + #13#10#13#10 + 'نام سرور/نمونه (instance)، وضع سرویس SQL Server و شبکه را بررسی کنید.', mbError, MB_OK);
         Result := False;
@@ -409,7 +431,7 @@ begin
   OptPage.Values[1] := True;
 
   DbPage := CreateInputQueryPage(wpSelectTasks,
-    'تنظیمات اتصال SQL Server', 'نام سرور (نمونه): .\\SQLEXPRESS یا (localdb)\\MSSQLLocalDB و نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شوند.');
+    'تنظیمات اتصال SQL Server', 'نام سرور (نمونه): .\\SQLEXPRESS یا (localdb)\\MSSQLLocalDB و نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شود و اگر پایگاه داده وجود ندارد، به‌صورت خودکار ساخته می‌شود.');
   DbPage.Add('سرور SQL Server:', False);
   DbPage.Values[0] := '(localdb)\MSSQLLocalDB';
   DbPage.Add('نام پایگاه داده:', False);
