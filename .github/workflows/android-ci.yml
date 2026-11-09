@@ -45,6 +45,14 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      # Ephemeral, CI-only signing key so the release APK is installable.
+      # keystore.properties is gitignored and never committed; for store
+      # publishing, provide your own release keystore instead (docs/INSTALL.md).
+      - name: Generate ephemeral release keystore (CI-only)
+        run: |
+          keytool -genkeypair -v -keystore /tmp/mehra-ci.jks -alias mehra -keyalg RSA -keysize 2048 -validity 10000 -storepass mehra-ci-pass -keypass mehra-ci-pass -dname "CN=Mehra CI, OU=Mehra, O=Meelano, L=Istanbul, ST=Istanbul, C=TR"
+          printf 'storeFile=/tmp/mehra-ci.jks\nstorePassword=mehra-ci-pass\nkeyAlias=mehra\nkeyPassword=mehra-ci-pass\n' > keystore.properties
+
       - name: Unit tests
         continue-on-error: true
         run: |
@@ -56,7 +64,7 @@ jobs:
       - name: Assemble debug APKs (prod + demo)
         run: |
           set -o pipefail
-          ./gradlew :app:assembleProdDebug :app:assembleDemoDebug --stacktrace --no-daemon 2>&1 | tee build.log
+          ./gradlew :app:assembleProdRelease :app:assembleProdDebug :app:assembleDemoDebug --stacktrace --no-daemon 2>&1 | tee build.log
 
       # GitHub-hosted artifact downloads are not reachable from every environment,
       # so the APK and the compiler output are published on dedicated branches.
@@ -67,7 +75,9 @@ jobs:
           mkdir -p out/apk/prod out/apk/demo out/logs
           # Stable file names so the links in artifacts/README.md never change.
           cp app/build/outputs/apk/prod/debug/*.apk out/apk/app-debug.apk || true
+          cp app/build/outputs/apk/prod/release/*.apk out/apk/app-release.apk || true
           cp app/build/outputs/apk/demo/debug/*.apk out/apk/mehra-demo-debug.apk || true
+          cp out/apk/app-release.apk out/apk/prod/ 2>/dev/null || true
           cp out/apk/app-debug.apk out/apk/prod/ || true
           cp out/apk/mehra-demo-debug.apk out/apk/demo/ || true
           cp build.log out/logs/ 2>/dev/null || true
