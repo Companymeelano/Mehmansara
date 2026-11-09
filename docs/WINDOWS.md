@@ -9,9 +9,9 @@
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - مرور فایل‌های: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش اندازهٔ باینری‌ها (اجرای CI `42500717460`)
+## هش اندازهٔ باینری‌ها (اجرای CI `42718935759`)
 
-- `setup/MehraSetup.exe`: 31,439,569 بایت — sha256 `489bd74b1b14d40f127bb538c1fd034dcac3103adc67d098943872c22a352ca8`
+- `setup/MehraSetup.exe`: 31,440,831 بایت — sha256 `b7063efa12249b90c20502b04dc788cf875ce6c9f30afc308033fcd84baa4e12`
 - `exe/Mehra.exe`: 94,110,600 بایت — sha256 `d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80`
 - تأیید بایت-be-بایت: MZ/PE mo'tabar; brand dar نصب‌گر be-surat UTF-16/UTF-8 موجود ast: `www.meelano.ir`, `09120219593`, `Milad Yaghoobi`, «میلاد یعقوبی», «مهرآ», نسخهٔ ۱.۱.۰.
 
