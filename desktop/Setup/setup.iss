@@ -21,6 +21,8 @@ DefaultDirName={autopf}\Mehra
 DefaultGroupName=مهرآ
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
+CloseApplications=yes
+RestartApplications=yes
 OutputDir=..\..\setup-out
 OutputBaseFilename=MehraSetup
 SetupIconFile=..\Mehra.Desktop\Assets\mehra.ico
@@ -72,32 +74,37 @@ FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیل�
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
 SetupWindowTitle=مهرآ ۱.۱ — نصب‌گر
 
+[Components]
+Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
+Name: "schema"; Description: "فایل اسکریپت پایگاه داده (db‌schema.sql) — برای ساخت جداول روی SQL Server"; Types: full
+Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — نصب دائمی در سیستم"; Types: full
+
 [Tasks]
 Name: "desktopicon"; Description: "ایجاد میان‌بر روی دسکتاپ"; GroupDescription: "گزینه‌های اضافی:"
 Name: "runapp"; Description: "اجرای برنامه پس از پایان نصب"; GroupDescription: "گزینه‌های اضافی:"
 Name: "createdb"; Description: "ایجاد/به‌روزرانی جداول پایگاه داده در SQL Server هنگام نصب (اجرای db\schema.sql)"; GroupDescription: "پایگاه دادهٔ SQL Server"
 
 [Files]
-Source: "..\publish\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Mehra.Desktop\db\schema.sql"; DestDir: "{app}\db"; Flags: ignoreversion
-Source: "vazirmatn_regular.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
-Source: "vazirmatn_medium.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
-Source: "vazirmatn_semibold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
-Source: "vazirmatn_bold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
-Source: "vazirmatn_extrabold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
-Source: "vazirmatn_black.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
-Source: "vazirmatn_regular.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
-Source: "vazirmatn_regular.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
-Source: "vazirmatn_medium.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
-Source: "vazirmatn_medium.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
-Source: "vazirmatn_semibold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
-Source: "vazirmatn_semibold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
-Source: "vazirmatn_bold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
-Source: "vazirmatn_bold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
-Source: "vazirmatn_extrabold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
-Source: "vazirmatn_extrabold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
-Source: "vazirmatn_black.ttf"; DestDir: "{fonts}"; Flags: ignoreversion; Check: IsAdminLoggedOn
-Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion; Check: not IsAdminLoggedOn
+Source: "..\publish\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace; Components: app
+Source: "..\Mehra.Desktop\db\schema.sql"; DestDir: "{app}\db"; Flags: ignoreversion; Components: schema
+Source: "vazirmatn_regular.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
+Source: "vazirmatn_medium.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
+Source: "vazirmatn_semibold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
+Source: "vazirmatn_bold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
+Source: "vazirmatn_black.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
+Source: "vazirmatn_regular.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_regular.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_medium.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_medium.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_semibold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_semibold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_bold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_bold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_black.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
 
 [Icons]
 Name: "{group}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"
@@ -276,6 +283,14 @@ begin
   end;
 end;
 
+procedure KillRunningApp;
+var
+  R: Integer;
+begin
+  { If the app is running, its exe is locked -> sharing violation (error 32). }
+  Exec('taskkill', '/IM Mehra.exe /F /T', '', SW_HIDE, ewWaitUntilTerminated, R);
+end;
+
 procedure InstallFonts;
 var
   Names: array[0..5] of string;
@@ -364,6 +379,7 @@ var
 begin
   if CurStep = ssInstall then
   begin
+    KillRunningApp;
     PctLabel.Visible := True;
     PctLabel.Caption := '0 ٪';
   end;
