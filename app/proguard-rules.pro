@@ -40,3 +40,6 @@
 # SignalR hub payloads are parsed with Gson as well.
 -keep class ir.ahvaz.mehra.core.network.realtime.** { *; }
 -keepnames class ir.ahvaz.mehra.**ViewModel { *; }
+
+# --- errorprone annotations (transitive deps, annotations only) --------------
+-dontwarn com.google.errorprone.annotations.**
