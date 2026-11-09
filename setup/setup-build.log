@@ -39,6 +39,8 @@ Parsing [Setup] section, line 37
 Parsing [Setup] section, line 38
 Parsing [Setup] section, line 39
 Parsing [Setup] section, line 40
+Parsing [Setup] section, line 41
+Parsing [Setup] section, line 42
 Creating output directory: D:\a\Mehmansara\Mehmansara\setup-out
 Reading file (WizardImageFile)
    Reading file: D:\a\Mehmansara\Mehmansara\desktop\Setup\art_side.bmp
@@ -49,29 +51,25 @@ Preparing Setup program executable
    Updating icons (Setup.e32)
    Updating version info (Setup.e32)
 Determining language code pages
-Parsing [Languages] section, line 43
+Parsing [Languages] section, line 45
    Reading file: D:\a\Mehmansara\Mehmansara\desktop\Setup\Farsi.isl
    Messages in script file
 Reading default messages from Default.isl
-Parsing [Languages] section, line 43
+Parsing [Languages] section, line 45
    Reading file: D:\a\Mehmansara\Mehmansara\desktop\Setup\Farsi.isl
 Parsing [LangOptions], [Messages], and [CustomMessages] sections
    Messages in script file
 Reading [Code] section
-Parsing [Tasks] section, line 76
-Parsing [Tasks] section, line 77
-Parsing [Tasks] section, line 78
-Parsing [Icons] section, line 103
-Parsing [Icons] section, line 104
-Parsing [Icons] section, line 105
-Parsing [Run] section, line 108
-Parsing [Files] section, line 81
-Parsing [Files] section, line 82
-Parsing [Files] section, line 83
-Parsing [Files] section, line 84
-Parsing [Files] section, line 85
-Parsing [Files] section, line 86
-Parsing [Files] section, line 87
+Parsing [Components] section, line 78
+Parsing [Components] section, line 79
+Parsing [Components] section, line 80
+Parsing [Tasks] section, line 83
+Parsing [Tasks] section, line 84
+Parsing [Tasks] section, line 85
+Parsing [Icons] section, line 110
+Parsing [Icons] section, line 111
+Parsing [Icons] section, line 112
+Parsing [Run] section, line 115
 Parsing [Files] section, line 88
 Parsing [Files] section, line 89
 Parsing [Files] section, line 90
@@ -85,6 +83,13 @@ Parsing [Files] section, line 97
 Parsing [Files] section, line 98
 Parsing [Files] section, line 99
 Parsing [Files] section, line 100
+Parsing [Files] section, line 101
+Parsing [Files] section, line 102
+Parsing [Files] section, line 103
+Parsing [Files] section, line 104
+Parsing [Files] section, line 105
+Parsing [Files] section, line 106
+Parsing [Files] section, line 107
 Compiling [Code] section
 Creating setup files
    Verification successful
@@ -107,5 +112,5 @@ Warning: Message name "ReadyLabel" is not recognized by this version of Inno Set
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or consider using its "auto" form.
 
-Successful compile (25.734 sec). Resulting Setup program filename is:
+Successful compile (22.515 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
