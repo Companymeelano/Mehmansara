@@ -6,3 +6,7 @@ b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0
 # Windows v۱.۱.۰ (final, run 42500717460, 6 Vazirmatn weights installed by setup) — on branch ci-artifacts
 489bd74b1b14d40f127bb538c1fd034dcac3103adc67d098943872c22a352ca8  ci-artifacts:setup/MehraSetup.exe  (31,439,569 bytes)
 d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80  ci-artifacts:exe/Mehra.exe  (94,110,600 bytes)
+
+# Android v1.1.0 debug APKs (final, run 42698342228) — on branch ci-artifacts
+3edb7a3d016778a0d3a0da00aea261e23c485d456dd7e79b5da94c1b2680d7f2  ci-artifacts:apk/app-debug.apk  (20,904,610 bytes, ir.ahvaz.mehra.debug)
+00410508a1eea7e1275d76bc5513ff86e811140631c727b344a558e5212f5742  ci-artifacts:apk/demo/mehra-demo-debug.apk  (21,002,938 bytes, ir.ahvaz.mehra.demo.debug)

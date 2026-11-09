@@ -17,6 +17,9 @@
 | عملیاتی | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
 | صفحه انتشار | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test | — |
 | نصب‌گر ویندوز ۱.۱.۰ | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/setup/MehraSetup.exe |
+| اندروید ۱.۱.۰ — عملیاتی (v1.1.0) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
+| اندروید ۱.۱.۰ — نمایشی (v1.1.0-demo) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/demo/mehra-demo-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/demo/mehra-demo-debug.apk |
+| انتشار اندروید ۱.۱.۰ | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-android | — |
 | انتشار نسخهٔ ویندوز v1.1.0 | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows | — |
 | انتشار نسخهٔ ویندوز | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-windows | — |
 | اجرای CI و آرتیفکت‌ها | https://github.com/Companymeelano/Mehmansara/actions | — |
