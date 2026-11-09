@@ -59,7 +59,7 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:generateDemoDebugBuildConfig FROM-CACHE
+> Task :app:generateDemoDebugBuildConfig
 > Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:checkDemoDebugAarMetadata
 > Task :app:mapDemoDebugSourceSetPaths
@@ -67,25 +67,26 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:packageDemoDebugResources
 > Task :app:createDemoDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDemoDebug FROM-CACHE
+> Task :app:parseDemoDebugLocalResources
+> Task :app:mergeDemoDebugResources
+> Task :app:processDemoDebugMainManifest
+> Task :app:processDemoDebugManifest
 > Task :app:packageProdDebug
 > Task :app:createProdDebugApkListingFileRedirect
 > Task :app:assembleProdDebug
-> Task :app:processDemoDebugMainManifest FROM-CACHE
-> Task :app:processDemoDebugManifest FROM-CACHE
-> Task :app:processDemoDebugManifestForPackage FROM-CACHE
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugShaders
 > Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:generateDemoDebugAssets UP-TO-DATE
-> Task :app:parseDemoDebugLocalResources
 > Task :app:mergeDemoDebugAssets
 > Task :app:compressDemoDebugAssets FROM-CACHE
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
 > Task :app:mergeDemoDebugJniLibFolders
-> Task :app:checkDemoDebugDuplicateClasses
+> Task :app:processDemoDebugManifestForPackage
 > Task :app:mergeDemoDebugNativeLibs
-> Task :app:mergeDemoDebugResources
+> Task :app:checkDemoDebugDuplicateClasses
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
+> Task :app:processDemoDebugResources
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:validateSigningDemoDebug
 > Task :app:writeDemoDebugAppMetadata
@@ -94,7 +95,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:processDemoDebugResources
 > Task :app:kspDemoDebugKotlin
 > Task :app:compileDemoDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
@@ -119,5 +119,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 1m 23s
-82 actionable tasks: 40 executed, 18 from cache, 24 up-to-date
+BUILD SUCCESSFUL in 1m 43s
+82 actionable tasks: 44 executed, 14 from cache, 24 up-to-date

@@ -22,19 +22,18 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preBuild UP-TO-DATE
 > Task :app:preProdDebugBuild UP-TO-DATE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateProdDebugBuildConfig FROM-CACHE
-> Task :app:generateProdDebugResValues FROM-CACHE
+> Task :app:generateProdDebugBuildConfig
 > Task :app:checkProdDebugAarMetadata
+> Task :app:generateProdDebugResValues FROM-CACHE
 > Task :app:mapProdDebugSourceSetPaths
 > Task :app:generateProdDebugResources
 > Task :app:packageProdDebugResources
-> Task :app:mergeProdDebugResources
 > Task :app:createProdDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksProdDebug FROM-CACHE
-> Task :app:processProdDebugMainManifest FROM-CACHE
-> Task :app:processProdDebugManifest FROM-CACHE
-> Task :app:processProdDebugManifestForPackage FROM-CACHE
 > Task :app:parseProdDebugLocalResources
+> Task :app:mergeProdDebugResources
+> Task :app:processProdDebugMainManifest
+> Task :app:processProdDebugManifest
 > Task :app:javaPreCompileProdDebug FROM-CACHE
 > Task :app:mergeProdDebugShaders
 > Task :app:compileProdDebugShaders NO-SOURCE
@@ -42,11 +41,11 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:mergeProdDebugAssets
 > Task :app:preProdDebugUnitTestBuild UP-TO-DATE
 > Task :app:javaPreCompileProdDebugUnitTest FROM-CACHE
+> Task :app:processProdDebugManifestForPackage
 > Task :app:processProdDebugResources
 > Task :app:packageProdDebugUnitTestForUnitTest
 > Task :app:generateProdDebugUnitTestConfig
 > Task :app:kspProdDebugKotlin
-
 > Task :app:compileProdDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
@@ -73,5 +72,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:transformProdDebugUnitTestClassesWithAsm
 > Task :app:testProdDebugUnitTest
 
-BUILD SUCCESSFUL in 1m 10s
-35 actionable tasks: 25 executed, 10 from cache
+BUILD SUCCESSFUL in 1m 26s
+35 actionable tasks: 29 executed, 6 from cache
