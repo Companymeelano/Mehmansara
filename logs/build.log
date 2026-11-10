@@ -32,8 +32,8 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:createProdReleaseCompatibleScreenManifests
 > Task :app:extractDeepLinksProdRelease FROM-CACHE
 > Task :app:parseProdReleaseLocalResources
-> Task :app:mergeProdReleaseResources
 > Task :app:processProdReleaseMainManifest
+> Task :app:mergeProdReleaseResources
 > Task :app:processProdReleaseManifest
 > Task :app:javaPreCompileProdRelease FROM-CACHE
 > Task :app:extractProguardFiles
@@ -52,6 +52,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:preProdDebugBuild UP-TO-DATE
 > Task :app:mergeProdDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateProdDebugBuildConfig UP-TO-DATE
+> Task :app:processProdReleaseManifestForPackage
 > Task :app:checkProdDebugAarMetadata UP-TO-DATE
 > Task :app:generateProdDebugResValues UP-TO-DATE
 > Task :app:mapProdDebugSourceSetPaths UP-TO-DATE
@@ -61,7 +62,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:parseProdDebugLocalResources UP-TO-DATE
 > Task :app:createProdDebugCompatibleScreenManifests UP-TO-DATE
 > Task :app:extractDeepLinksProdDebug UP-TO-DATE
-> Task :app:processProdReleaseManifestForPackage
 > Task :app:processProdDebugMainManifest UP-TO-DATE
 > Task :app:processProdDebugManifest UP-TO-DATE
 > Task :app:processProdDebugManifestForPackage UP-TO-DATE
@@ -75,8 +75,8 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:compileProdDebugShaders NO-SOURCE
 > Task :app:generateProdDebugAssets UP-TO-DATE
 > Task :app:mergeProdDebugAssets UP-TO-DATE
-> Task :app:convertLinkedResourcesToProtoProdRelease
 > Task :app:compressProdDebugAssets FROM-CACHE
+> Task :app:convertLinkedResourcesToProtoProdRelease
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
 > Task :app:checkProdDebugDuplicateClasses
 > Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
@@ -92,12 +92,12 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProdDebugNativeLibs
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
+> Task :app:writeProdDebugSigningConfigVersions
+> Task :app:preDemoDebugBuild UP-TO-DATE
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeProdDebugSigningConfigVersions
-> Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDemoDebugBuildConfig FROM-CACHE
 > Task :app:generateDemoDebugResValues FROM-CACHE
@@ -126,10 +126,10 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
 > Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
 > Task :app:hiltJavaCompileDemoDebug FROM-CACHE
+> Task :app:transformDemoDebugClassesWithAsm FROM-CACHE
 > Task :app:packageProdDebug
 > Task :app:createProdDebugApkListingFileRedirect
 > Task :app:assembleProdDebug
-> Task :app:transformDemoDebugClassesWithAsm FROM-CACHE
 > Task :app:dexBuilderDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
 > Task :app:processDemoDebugJavaRes
@@ -151,7 +151,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 > Task :app:kspProdReleaseKotlin
-
 > Task :app:compileProdReleaseKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
@@ -179,5 +178,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:createProdReleaseApkListingFileRedirect
 > Task :app:assembleProdRelease
 
-BUILD SUCCESSFUL in 2m 30s
+BUILD SUCCESSFUL in 3m 19s
 133 actionable tasks: 73 executed, 36 from cache, 24 up-to-date
