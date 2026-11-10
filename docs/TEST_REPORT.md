@@ -122,4 +122,4 @@
 - [ ] اتصال موفق به سرور واقعی و پاس‌شدن سناریوهای ۶ تا ۹
 - [ ] بررسی نبود داده حساس در `logcat` و در بکاپ دستگاه
 
-| نسخه نهایی prod RELEASE (امضاشده، minify) | ✅ موفق — اجرای `42726145997`؛ خطای crash درesty launch نسخه قبلی (حذف گراف Hilt توسط R8) با keep-rule رفع شد و klas‌های Hilt/Dagger/Retrofit در classes.dex تأیید بایت-à-bayt شدند — `apk/app-release.apk` (۲٫۷۷ مگابایت)، sha256 `dcf44eb9…b51a3`
+| نسخه نهایی prod RELEASE (امضاشده، minify) | ✅ موفق — اجرای `42730185851`؛ خطای crash درesty launch نسخه قبلی (حذف گراف Hilt توسط R8) با keep-rule رفع شد و klas‌های Hilt/Dagger/Retrofit در classes.dex تأیید بایت-à-bayt شدند — `apk/app-release.apk` (۱۳٫۹ مگابایت)، sha256 `808420e5…ea12c`
