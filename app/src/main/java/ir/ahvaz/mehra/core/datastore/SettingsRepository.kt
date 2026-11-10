@@ -2,7 +2,9 @@ package ir.ahvaz.mehra.core.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -18,7 +20,12 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val Context.mehraSettingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "mehra_settings")
+private val Context.mehraSettingsDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "mehra_settings",
+    // A corrupted prefs file must never crash-loop the app at startup:
+    // reset to defaults instead (the "clear cache" loop users would otherwise hit).
+    corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+)
 
 /** Non-sensitive operator preferences (the server address lives in [ir.ahvaz.mehra.core.security.SecureStore]). */
 data class AppSettings(

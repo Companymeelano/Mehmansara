@@ -82,8 +82,12 @@ android {
             buildConfigField("boolean", "ALLOW_CLEARTEXT", "true")
         }
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            // Deliberately NOT minified / resource-shrunk: the release APK must behave
+            // code-identical to the debug build (R8 full-mode stripped the generated
+            // Hilt graph in 1.1.0 and the app crashed instantly at launch). Signing and
+            // the HTTPS-only policy below are what make this the production build.
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("boolean", "ALLOW_CLEARTEXT", "false")
             if (hasReleaseKeystore) {
