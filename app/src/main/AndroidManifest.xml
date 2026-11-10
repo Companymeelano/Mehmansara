@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Only used by the crash recorder on Android < 10 to save mehra-crash-*.txt to Downloads. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
 
     <!-- Camera + storage are deliberately NOT declared. Maintenance & receipt photos
          use system pickers / MediaStore so the app never needs broad media permissions. -->

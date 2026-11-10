@@ -1,6 +1,7 @@
 package ir.ahvaz.mehra
 
 import android.app.Application
+import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -8,6 +9,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import ir.ahvaz.mehra.core.datastore.SettingsRepository
+import ir.ahvaz.mehra.core.diagnostics.CrashRecorder
 import ir.ahvaz.mehra.core.di.ApplicationScope
 import ir.ahvaz.mehra.core.network.NetworkMonitor
 import ir.ahvaz.mehra.core.notifications.NotificationChannels
@@ -61,7 +63,14 @@ class MehraApplication : Application(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .build()
 
+    override fun attachBaseContext(base: Context) {
+        // Earliest possible hook: capture even a crash inside Hilt injection / super.onCreate.
+        CrashRecorder.install(base)
+        super.attachBaseContext(base)
+    }
+
     override fun onCreate() {
+        CrashRecorder.install(this)
         super.onCreate()
 
         NotificationChannels.create(this)
