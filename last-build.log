@@ -22,30 +22,33 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:extractProdReleaseNativeSymbolTables FROM-CACHE
 > Task :app:mergeProdReleaseNativeDebugMetadata NO-SOURCE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateProdReleaseBuildConfig FROM-CACHE
+> Task :app:generateProdReleaseBuildConfig
 > Task :app:generateProdReleaseResValues FROM-CACHE
 > Task :app:checkProdReleaseAarMetadata
 > Task :app:mapProdReleaseSourceSetPaths
-> Task :app:generateProdReleaseResources FROM-CACHE
-> Task :app:mergeProdReleaseResources FROM-CACHE
-> Task :app:packageProdReleaseResources FROM-CACHE
-> Task :app:parseProdReleaseLocalResources FROM-CACHE
+> Task :app:generateProdReleaseResources
+> Task :app:packageProdReleaseResources
 > Task :app:createProdReleaseCompatibleScreenManifests
 > Task :app:extractDeepLinksProdRelease FROM-CACHE
+> Task :app:parseProdReleaseLocalResources
+> Task :app:mergeProdReleaseResources
 > Task :app:processProdReleaseMainManifest
 > Task :app:processProdReleaseManifest
 > Task :app:javaPreCompileProdRelease FROM-CACHE
 > Task :app:desugarProdReleaseFileDependencies FROM-CACHE
 > Task :app:mergeProdReleaseStartupProfile
+> Task :app:processProdReleaseManifestForPackage
 > Task :app:mergeExtDexProdRelease FROM-CACHE
-> Task :app:mergeProdReleaseArtProfile
+> Task :app:processProdReleaseResources
 > Task :app:mergeProdReleaseShaders
+> Task :app:mergeProdReleaseArtProfile
 > Task :app:compileProdReleaseShaders NO-SOURCE
 > Task :app:generateProdReleaseAssets UP-TO-DATE
 > Task :app:mergeProdReleaseAssets
 > Task :app:compressProdReleaseAssets FROM-CACHE
 > Task :app:extractProdReleaseVersionControlInfo
 > Task :app:collectProdReleaseDependencies
+> Task :app:optimizeProdReleaseResources
 > Task :app:sdkProdReleaseDependencyData
 > Task :app:validateSigningProdRelease
 > Task :app:writeProdReleaseAppMetadata
@@ -55,7 +58,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:generateProdDebugBuildConfig UP-TO-DATE
 > Task :app:checkProdDebugAarMetadata UP-TO-DATE
 > Task :app:generateProdDebugResValues UP-TO-DATE
-> Task :app:processProdReleaseManifestForPackage
 > Task :app:mapProdDebugSourceSetPaths UP-TO-DATE
 > Task :app:generateProdDebugResources UP-TO-DATE
 > Task :app:mergeProdDebugResources UP-TO-DATE
@@ -68,43 +70,40 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processProdDebugManifestForPackage UP-TO-DATE
 > Task :app:processProdDebugResources UP-TO-DATE
 > Task :app:kspProdDebugKotlin UP-TO-DATE
-> Task :app:processProdReleaseResources
 > Task :app:javaPreCompileProdDebug UP-TO-DATE
 > Task :app:mergeProdDebugShaders UP-TO-DATE
 > Task :app:compileProdDebugShaders NO-SOURCE
 > Task :app:generateProdDebugAssets UP-TO-DATE
 > Task :app:mergeProdDebugAssets UP-TO-DATE
 > Task :app:compressProdDebugAssets FROM-CACHE
-> Task :app:optimizeProdReleaseResources
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
 > Task :app:mergeProdDebugJniLibFolders
-> Task :app:mergeProdDebugNativeLibs
 > Task :app:checkProdDebugDuplicateClasses
+> Task :app:mergeProdDebugNativeLibs
+> Task :app:mergeExtDexProdDebug FROM-CACHE
+> Task :app:mergeLibDexProdDebug FROM-CACHE
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:mergeExtDexProdDebug FROM-CACHE
-> Task :app:mergeLibDexProdDebug FROM-CACHE
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
 > Task :app:writeProdDebugSigningConfigVersions
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
-> Task :app:generateDemoDebugBuildConfig FROM-CACHE
+> Task :app:generateDemoDebugBuildConfig
 > Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:checkDemoDebugAarMetadata
 > Task :app:mapDemoDebugSourceSetPaths
-> Task :app:generateDemoDebugResources FROM-CACHE
-> Task :app:mergeDemoDebugResources FROM-CACHE
-> Task :app:packageDemoDebugResources FROM-CACHE
-> Task :app:parseDemoDebugLocalResources FROM-CACHE
+> Task :app:generateDemoDebugResources
+> Task :app:packageDemoDebugResources
+> Task :app:parseDemoDebugLocalResources
 > Task :app:createDemoDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDemoDebug FROM-CACHE
 > Task :app:processDemoDebugMainManifest
 > Task :app:processDemoDebugManifest
-> Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:processDemoDebugManifestForPackage
+> Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugShaders
 > Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:generateDemoDebugAssets UP-TO-DATE
@@ -112,8 +111,8 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:compressDemoDebugAssets FROM-CACHE
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
 > Task :app:checkDemoDebugDuplicateClasses
-> Task :app:processDemoDebugResources
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
+> Task :app:mergeDemoDebugResources
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugJniLibFolders
 > Task :app:mergeDemoDebugNativeLibs
@@ -124,17 +123,61 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:validateSigningDemoDebug
 > Task :app:writeDemoDebugAppMetadata
 > Task :app:writeDemoDebugSigningConfigVersions
-> Task :app:kspDemoDebugKotlin
+> Task :app:processDemoDebugResources
 > Task :app:kspProdReleaseKotlin
+> Task :app:kspDemoDebugKotlin
+> Task :app:compileProdDebugKotlin
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:152:46 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:5 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:17 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:23 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:225:34 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:226:50 Unresolved reference 'guestName'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:230:54 Unresolved reference 'id'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:231:21 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:236:54 Unresolved reference 'id'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:237:21 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionViewModels.kt:168:94 Unresolved reference 'message'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:181:54 Unresolved reference 'Article'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:191:54 Unresolved reference 'Image'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:198:54 Unresolved reference 'Code'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:205:54 Unresolved reference 'Bluetooth'.
 
 > Task :app:compileProdDebugKotlin FAILED
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/diagnostics/CrashRecorder.kt:64:68 Unresolved reference 'SDK_INT'.
 
 > Task :app:compileProdReleaseKotlin FAILED
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/diagnostics/CrashRecorder.kt:64:68 Unresolved reference 'SDK_INT'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:152:46 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:5 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:17 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:23 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:225:34 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:226:50 Unresolved reference 'guestName'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:230:54 Unresolved reference 'id'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:231:21 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:236:54 Unresolved reference 'id'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:237:21 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionViewModels.kt:168:94 Unresolved reference 'message'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:181:54 Unresolved reference 'Article'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:191:54 Unresolved reference 'Image'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:198:54 Unresolved reference 'Code'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:205:54 Unresolved reference 'Bluetooth'.
 
 > Task :app:compileDemoDebugKotlin FAILED
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/diagnostics/CrashRecorder.kt:64:68 Unresolved reference 'SDK_INT'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:152:46 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:5 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:17 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:223:23 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:225:34 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:226:50 Unresolved reference 'guestName'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:230:54 Unresolved reference 'id'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:231:21 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:236:54 Unresolved reference 'id'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionScreens.kt:237:21 Unresolved reference 'outputStay'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reception/ReceptionViewModels.kt:168:94 Unresolved reference 'message'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:181:54 Unresolved reference 'Article'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:191:54 Unresolved reference 'Image'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:198:54 Unresolved reference 'Code'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reports/ReportsScreen.kt:205:54 Unresolved reference 'Bluetooth'.
 
 FAILURE: Build completed with 3 failures.
 
@@ -389,37 +432,6 @@ org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:com
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
-	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:111)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
-	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
-	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:313)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:46)
-	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:304)
-	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:220)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:263)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:127)
-	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:181)
-	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:50)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.lambda$run$0(DefaultBuildController.java:198)
-	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:198)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
@@ -555,37 +567,6 @@ Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionExcept
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
-	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:111)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
-	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
-	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:313)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:46)
-	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:304)
-	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:220)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:263)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:127)
-	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:181)
-	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:50)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.lambda$run$0(DefaultBuildController.java:198)
-	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:198)
-	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
@@ -622,7 +603,9 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:132)
 	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:164)
 	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:133)
-	... 7 more
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	... 5 more
 
 ==============================================================================
 
@@ -846,5 +829,5 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 
 ==============================================================================
 
-BUILD FAILED in 37s
-97 actionable tasks: 51 executed, 28 from cache, 18 up-to-date
+BUILD FAILED in 56s
+97 actionable tasks: 61 executed, 18 from cache, 18 up-to-date
