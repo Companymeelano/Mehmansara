@@ -43,12 +43,12 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:hiltAggregateDepsProdDebug FROM-CACHE
 > Task :app:hiltJavaCompileProdDebug FROM-CACHE
 > Task :app:transformProdDebugClassesWithAsm FROM-CACHE
-> Task :app:bundleProdDebugClassesToRuntimeJar
 > Task :app:mergeProdDebugShaders
 > Task :app:compileProdDebugShaders NO-SOURCE
 > Task :app:generateProdDebugAssets UP-TO-DATE
 > Task :app:mergeProdDebugAssets
 > Task :app:preProdDebugUnitTestBuild UP-TO-DATE
+> Task :app:bundleProdDebugClassesToRuntimeJar
 > Task :app:packageProdDebugUnitTestForUnitTest
 > Task :app:generateProdDebugUnitTestConfig
 > Task :app:processProdDebugJavaRes
@@ -63,5 +63,5 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:transformProdDebugUnitTestClassesWithAsm FROM-CACHE
 > Task :app:testProdDebugUnitTest FROM-CACHE
 
-BUILD SUCCESSFUL in 17s
+BUILD SUCCESSFUL in 14s
 35 actionable tasks: 11 executed, 24 from cache
