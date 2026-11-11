@@ -15,6 +15,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Badge
+import androidx.compose.material.icons.rounded.Bluetooth
+import androidx.compose.material.icons.rounded.Code
+import androidx.compose.material.icons.rounded.Image
+import androidx.compose.material.icons.rounded.PhotoCamera
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.GridOn
 import androidx.compose.material.icons.rounded.Refresh
@@ -188,21 +194,21 @@ fun ReportsScreen(viewModel: ReportsViewModel = hiltViewModel()) {
                             CompactButton(
                                 text = "عکس (PNG)",
                                 onClick = viewModel::exportPng,
-                                icon = Icons.Rounded.PhotoCamera,
+                                icon = PhotoCamera,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
                             CompactButton(
                                 text = "خروجی خام",
                                 onClick = viewModel::exportRawCsv,
-                                icon = Icons.Rounded.Badge,
+                                icon = Badge,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
                             CompactButton(
                                 text = "بلوتوث",
                                 onClick = viewModel::exportBluetooth,
-                                icon = Icons.Rounded.Share,
+                                icon = Share,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
