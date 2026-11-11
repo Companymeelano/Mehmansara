@@ -13,12 +13,12 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preProdReleaseBuild UP-TO-DATE
 > Task :app:mergeProdReleaseJniLibFolders
 > Task :app:mergeProdReleaseNativeLibs
-> Task :app:checkProdReleaseDuplicateClasses
 
 > Task :app:stripProdReleaseDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
 > Task :app:buildKotlinToolingMetadata
+> Task :app:checkProdReleaseDuplicateClasses
 > Task :app:extractProdReleaseNativeSymbolTables FROM-CACHE
 > Task :app:mergeProdReleaseNativeDebugMetadata NO-SOURCE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
@@ -37,7 +37,9 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:javaPreCompileProdRelease FROM-CACHE
 > Task :app:desugarProdReleaseFileDependencies FROM-CACHE
 > Task :app:mergeProdReleaseStartupProfile
+> Task :app:processProdReleaseManifestForPackage
 > Task :app:mergeExtDexProdRelease FROM-CACHE
+> Task :app:processProdReleaseResources
 > Task :app:mergeProdReleaseArtProfile
 > Task :app:mergeProdReleaseShaders
 > Task :app:compileProdReleaseShaders NO-SOURCE
@@ -49,13 +51,13 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:sdkProdReleaseDependencyData
 > Task :app:validateSigningProdRelease
 > Task :app:writeProdReleaseAppMetadata
+> Task :app:optimizeProdReleaseResources
 > Task :app:writeProdReleaseSigningConfigVersions
 > Task :app:preProdDebugBuild UP-TO-DATE
 > Task :app:mergeProdDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateProdDebugBuildConfig UP-TO-DATE
 > Task :app:checkProdDebugAarMetadata UP-TO-DATE
 > Task :app:generateProdDebugResValues UP-TO-DATE
-> Task :app:processProdReleaseManifestForPackage
 > Task :app:mapProdDebugSourceSetPaths UP-TO-DATE
 > Task :app:generateProdDebugResources UP-TO-DATE
 > Task :app:mergeProdDebugResources UP-TO-DATE
@@ -68,7 +70,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processProdDebugManifestForPackage UP-TO-DATE
 > Task :app:processProdDebugResources UP-TO-DATE
 > Task :app:kspProdDebugKotlin UP-TO-DATE
-> Task :app:processProdReleaseResources
 > Task :app:compileProdDebugKotlin UP-TO-DATE
 > Task :app:javaPreCompileProdDebug UP-TO-DATE
 > Task :app:compileProdDebugJavaWithJavac UP-TO-DATE
@@ -77,12 +78,11 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:generateProdDebugAssets UP-TO-DATE
 > Task :app:mergeProdDebugAssets UP-TO-DATE
 > Task :app:compressProdDebugAssets FROM-CACHE
-> Task :app:checkProdDebugDuplicateClasses
-> Task :app:optimizeProdReleaseResources
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
+> Task :app:checkProdDebugDuplicateClasses
+> Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:mergeExtDexProdDebug FROM-CACHE
 > Task :app:mergeLibDexProdDebug FROM-CACHE
-> Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:transformProdDebugClassesWithAsm UP-TO-DATE
 > Task :app:dexBuilderProdDebug
@@ -90,34 +90,34 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processProdDebugJavaRes UP-TO-DATE
 > Task :app:mergeProdDebugJniLibFolders
 > Task :app:mergeProdDebugNativeLibs
+> Task :app:kspProdReleaseKotlin
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:kspProdReleaseKotlin
+> Task :app:mergeProjectDexProdDebug
+> Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
 > Task :app:writeProdDebugSigningConfigVersions
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDemoDebugBuildConfig FROM-CACHE
-> Task :app:checkDemoDebugAarMetadata
 > Task :app:generateDemoDebugResValues FROM-CACHE
+> Task :app:checkDemoDebugAarMetadata
 > Task :app:mapDemoDebugSourceSetPaths
-> Task :app:mergeProdDebugJavaResource
 > Task :app:generateDemoDebugResources FROM-CACHE
 > Task :app:mergeDemoDebugResources FROM-CACHE
 > Task :app:packageDemoDebugResources FROM-CACHE
 > Task :app:parseDemoDebugLocalResources FROM-CACHE
-> Task :app:mergeProjectDexProdDebug
 > Task :app:createDemoDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDemoDebug FROM-CACHE
 > Task :app:processDemoDebugMainManifest
 > Task :app:processDemoDebugManifest
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
+> Task :app:processDemoDebugManifestForPackage
 > Task :app:mergeDemoDebugShaders
 > Task :app:compileDemoDebugShaders NO-SOURCE
-> Task :app:processDemoDebugManifestForPackage
 > Task :app:generateDemoDebugAssets UP-TO-DATE
 > Task :app:mergeDemoDebugAssets
 > Task :app:compressDemoDebugAssets FROM-CACHE
@@ -125,18 +125,18 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:checkDemoDebugDuplicateClasses
 > Task :app:processDemoDebugResources
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
-> Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:packageProdDebug
 > Task :app:createProdDebugApkListingFileRedirect
 > Task :app:assembleProdDebug
+> Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugJniLibFolders
-> Task :app:validateSigningDemoDebug
 > Task :app:mergeDemoDebugNativeLibs
+> Task :app:validateSigningDemoDebug
+> Task :app:writeDemoDebugAppMetadata
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDemoDebugAppMetadata
 > Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:kspDemoDebugKotlin
 > Task :app:compileProdReleaseKotlin
@@ -188,5 +188,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:createProdReleaseApkListingFileRedirect
 > Task :app:assembleProdRelease
 
-BUILD SUCCESSFUL in 2m 26s
+BUILD SUCCESSFUL in 2m 22s
 131 actionable tasks: 74 executed, 33 from cache, 24 up-to-date

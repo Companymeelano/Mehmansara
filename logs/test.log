@@ -37,11 +37,11 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:javaPreCompileProdDebug FROM-CACHE
 > Task :app:mergeProdDebugShaders
 > Task :app:compileProdDebugShaders NO-SOURCE
-> Task :app:processProdDebugManifestForPackage
 > Task :app:generateProdDebugAssets UP-TO-DATE
 > Task :app:mergeProdDebugAssets
 > Task :app:preProdDebugUnitTestBuild UP-TO-DATE
 > Task :app:javaPreCompileProdDebugUnitTest FROM-CACHE
+> Task :app:processProdDebugManifestForPackage
 > Task :app:processProdDebugResources
 > Task :app:packageProdDebugUnitTestForUnitTest
 > Task :app:generateProdDebugUnitTestConfig
@@ -72,5 +72,5 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:transformProdDebugUnitTestClassesWithAsm
 > Task :app:testProdDebugUnitTest
 
-BUILD SUCCESSFUL in 1m 26s
+BUILD SUCCESSFUL in 1m 23s
 35 actionable tasks: 24 executed, 11 from cache
