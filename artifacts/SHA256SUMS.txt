@@ -10,4 +10,4 @@ d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80  ci-artifacts:e
 # Android v1.1.0 debug APKs (final, run 42698342228) — on branch ci-artifacts
 3edb7a3d016778a0d3a0da00aea261e23c485d456dd7e79b5da94c1b2680d7f2  ci-artifacts:apk/app-debug.apk  (20,904,610 bytes, ir.ahvaz.mehra.debug)
 00410508a1eea7e1275d76bc5513ff86e811140631c727b344a558e5212f5742  ci-artifacts:apk/demo/mehra-demo-debug.apk  (21,002,938 bytes, ir.ahvaz.mehra.demo.debug)
-808420e56d2c41456d337ff0c299d6f4110c0535a95009e13938784df39ea12c  ci-artifacts:apk/app-release.apk  (13,924,878 bytes, prod RELEASE, signed v2+, versionName 1.1.0 — run 42730185851)
+1118d79e8cc06d9f7a353b030b48806d684d96dc10084f534ecc2f006f85d3f6  ci-artifacts:apk/app-release.apk  (13,924,930 bytes, prod RELEASE, signed v2+, versionName 1.1.0 — run 42928219106)
