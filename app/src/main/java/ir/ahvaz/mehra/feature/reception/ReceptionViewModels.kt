@@ -164,8 +164,8 @@ class ReceptionViewModel @Inject constructor(
                                     _state.update { it.copy(actionMessage = receiptRes.error.userMessageFa) }
                             }
                         }
-                    }.onFailure {
-                        _state.update { it.copy(actionMessage = "ساخت خروجی ناموفق بود: ${it.message}") }
+                    }.onFailure { err ->
+                        _state.update { st -> st.copy(actionMessage = "ساخت خروجی ناموفق بود: ${err.message}") }
                     }
                 }
                 is AppResult.Failure -> _state.update { it.copy(actionMessage = stayRes.error.userMessageFa) }

@@ -178,7 +178,7 @@ fun ReportsScreen(viewModel: ReportsViewModel = hiltViewModel()) {
                             CompactButton(
                                 text = "ورد",
                                 onClick = viewModel::exportDocx,
-                                icon = Icons.Rounded.Article,
+                                icon = Icons.Rounded.Description,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )

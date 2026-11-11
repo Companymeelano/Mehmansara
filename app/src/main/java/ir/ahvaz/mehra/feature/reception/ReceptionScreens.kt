@@ -83,6 +83,7 @@ fun ReceptionScreen(
     var mode by remember { mutableStateOf(0) }
     var extendStay by remember { mutableStateOf<Stay?>(null) }
     var moveStay by remember { mutableStateOf<Stay?>(null) }
+    var outputStay by remember { mutableStateOf<Stay?>(null) }
 
     MehraScreen(
         title = "پذیرش",
