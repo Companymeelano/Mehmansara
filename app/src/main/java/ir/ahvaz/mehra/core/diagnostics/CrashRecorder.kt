@@ -61,7 +61,7 @@ object CrashRecorder {
             append("MEHRA crash report\n")
             append("time: $ts\n")
             append("thread: ${thread.name}\n")
-            append("android: ${Build.VERSION.RELEASE} (SDK ${Build.SDK_INT})\n")
+            append("android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})\n")
             append("device: ${Build.MANUFACTURER} ${Build.MODEL} (${Build.DEVICE})\n")
             append("abi: ${Build.SUPPORTED_ABIS.joinToString()}\n\n")
             append(sw.toString())
