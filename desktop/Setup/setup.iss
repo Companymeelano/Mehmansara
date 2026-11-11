@@ -306,12 +306,13 @@ begin
   Result := '';
   BestDir := '';
   DirPat := ExpandConstant('{pf}\Microsoft SQL Server\*');
-  // attribute 16 = faDirectory
-  if FindFirst(DirPat, 16, SR) then
+  // Inno Pascal FindFirst takes (Path, var FindRec) and returns dirs too
+  if FindFirst(DirPat, SR) then
   begin
     try
       repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
+        if (SR.Name <> '.') and (SR.Name <> '..') and
+           ((SR.Attributes and FILE_ATTRIBUTE_DIRECTORY) <> 0) then
         begin
           if (BestDir = '') or (StrToIntDef(SR.Name, 0) > StrToIntDef(BestDir, 0)) then
             BestDir := SR.Name;
