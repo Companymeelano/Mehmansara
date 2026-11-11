@@ -93,18 +93,18 @@ Source: "vazirmatn_semibold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deletea
 Source: "vazirmatn_bold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
 Source: "vazirmatn_extrabold.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
 Source: "vazirmatn_black.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
-Source: "vazirmatn_regular.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_regular.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_medium.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_medium.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_semibold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_semibold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_bold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_bold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_extrabold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_extrabold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_black.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOn; Components: fonts
-Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOn; Components: fonts
+Source: "vazirmatn_regular.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_regular.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_medium.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_medium.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_semibold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_semibold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_bold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_bold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_extrabold.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_black.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartreplace; Check: IsAdminLoggedOnSafe; Components: fonts
+Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
 
 [Icons]
 Name: "{group}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"
@@ -121,14 +121,25 @@ var
   PctLabel: TLabel;
 
 function AddFontResourceExW(lpszFilename: string; fl: LongWord; pdv: LongWord): LongWord;
-  external 'AddFontResourceExW@gdi32.dll stdcall';
+  external 'AddFontResourceExW@gdi32.dll stdcall delayload';
 function IsAdminLoggedOn: Boolean;
-  external 'IsAdminLoggedOn@shell32.dll stdcall';
+  external 'IsAdminLoggedOn@shell32.dll stdcall delayload';
+
+{ Never let a shell32 hiccup abort the whole setup: on any failure assume admin
+  (system-wide {fonts}); the {userfonts} fallback is only an optimisation. }
+function IsAdminLoggedOnSafe: Boolean;
+begin
+  try
+    Result := IsAdminLoggedOn;
+  except
+    Result := True;
+  end;
+end;
 function AddFontResourceW(lpszFilename: string): LongWord;
-  external 'AddFontResourceW@gdi32.dll stdcall';
+  external 'AddFontResourceW@gdi32.dll stdcall delayload';
 function GetDiskFreeSpaceExW(lpDirectoryName: string; var lpFreeBytesAvailableToCaller: Int64;
   var lpTotalNumberOfBytes: Int64; var lpTotalNumberOfFreeBytes: Int64): Boolean;
-  external 'GetDiskFreeSpaceExW@kernel32.dll stdcall';
+  external 'GetDiskFreeSpaceExW@kernel32.dll stdcall delayload';
 
 procedure RegisterFonts;
 begin
