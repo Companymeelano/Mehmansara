@@ -28,6 +28,8 @@ desktop/**/obj/
 desktop/publish/
 setup-out/
 desktop/Setup/Output/
+# Downloaded by Windows CI at build time (SqlLocalDB.msi), bundled into the setup — never commit
+desktop/Setup/redist/
 # Large generation-source PNGs (shipped formats: .ico/.bmp/.png-128 are committed)
 desktop/mehra-icon-source.png
 desktop/mehra-icon-3d-source.png

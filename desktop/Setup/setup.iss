@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.0
-AppVerName=مهرآ ۱.۱ — ویندوز
+AppVersion=1.1.1
+AppVerName=مهرآ ۱.۱.۱ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -20,7 +20,8 @@ AppCopyright=© 2026 Milad Yaghoobi (میلاد یعقوبی) — www.meelano.ir
 DefaultDirName={autopf}\Mehra
 DefaultGroupName=مهرآ
 DisableProgramGroupPage=yes
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
+PrivilegesRequiredOverrides=yes
 CloseApplications=yes
 RestartApplications=yes
 OutputDir=..\..\setup-out
@@ -35,7 +36,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.0.0
+VersionInfoVersion=1.1.1.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -72,10 +73,11 @@ StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
 FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۱.۱ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
+Name: "localdb"; Description: "SQL Server LocalDB 2022 همراه (حدود ۵۵ مگابایت) — موتور پایگاه دادهٔ سبک؛ ثبت واقعی داده روی همین PC بدون نصب جداگانه"; Types: full custom
 Name: "schema"; Description: "فایل اسکریپت پایگاه داده (db‌schema.sql) — برای ساخت جداول روی SQL Server"; Types: full
 Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — نصب دائمی در سیستم"; Types: full
 
@@ -86,6 +88,7 @@ Name: "createdb"; Description: "ایجاد/به‌روزرانی جداول پا
 
 [Files]
 Source: "..\publish\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace; Components: app
+Source: "redist\SqlLocalDB.msi"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: localdb
 Source: "..\Mehra.Desktop\db\schema.sql"; DestDir: "{app}\db"; Flags: ignoreversion; Components: schema
 Source: "vazirmatn_regular.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
 Source: "vazirmatn_medium.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
@@ -119,6 +122,7 @@ var
   DbPage: TInputQueryWizardPage;
   OptPage: TInputOptionWizardPage;
   PctLabel: TLabel;
+  LocalDbOk: Boolean;
 
 function AddFontResourceExW(lpszFilename: string; fl: LongWord; pdv: LongWord): LongWord;
   external 'AddFontResourceExW@gdi32.dll stdcall delayload';
@@ -294,6 +298,79 @@ begin
   end;
 end;
 
+// Locate the newest sqllocaldb.exe under Program Files\Microsoft SQL Server\<ver>\Tools\Binn
+function FindSqlLocalDbExe: string;
+var
+  DirPat, ExePat, BestDir: string;
+  SR: TFindRec;
+begin
+  Result := '';
+  BestDir := '';
+  DirPat := ExpandConstant('{pf}\Microsoft SQL Server\*');
+  if FindFirst(DirPat, faDirectory, SR) then
+  begin
+    try
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+        begin
+          if (BestDir = '') or (StrToIntDef(SR.Name, 0) > StrToIntDef(BestDir, 0)) then
+            BestDir := SR.Name;
+        end;
+      until not FindNext(SR);
+    finally
+      FindClose(SR);
+    end;
+  end;
+  if BestDir <> '' then
+  begin
+    ExePat := ExpandConstant('{pf}\Microsoft SQL Server\' + BestDir + '\Tools\Binn\sqllocaldb.exe');
+    if FileExists(ExePat) then Result := ExePat;
+  end;
+end;
+
+// Silently install the bundled SqlLocalDB.msi (MS license accepted via
+// IACCEPTSQLLOCALDBLICENSETERMS), then create+start the MSSQLLocalDB instance.
+// Never aborts the setup: on failure the caller warns and the app can still
+// use any other SQL Server on the network.
+function InstallLocalDb(var Err: string): Boolean;
+var
+  Msi, ExePath: string;
+  R: Integer;
+begin
+  Result := False;
+  Err := '';
+  ExePath := FindSqlLocalDbExe;
+  if ExePath <> '' then
+  begin
+    Result := True;
+    Exit;
+  end;
+  Msi := ExpandConstant('{tmp}\SqlLocalDB.msi');
+  if not FileExists(Msi) then
+  begin
+    Err := 'فایل SqlLocalDB.msi در فایل نصب یافت نشد.';
+    Exit;
+  end;
+  if not Exec('msiexec.exe', '/i "' + Msi + '" /qn IACCEPTSQLLOCALDBLICENSETERMS=YES REBOOT=ReallySuppress', '', SW_HIDE, ewWaitUntilTerminated, R) then
+  begin
+    Err := 'اجرای نصب‌کنندهٔ LocalDB ممکن نشد (کد ' + IntToStr(R) + ').';
+    Exit;
+  end;
+  if (R <> 0) and (R <> 3010) then
+  begin
+    Err := 'msiexec کد خروج ' + IntToStr(R) + ' داد.';
+    Exit;
+  end;
+  ExePath := FindSqlLocalDbExe;
+  if ExePath = '' then
+  begin
+    Err := 'پس از نصب، sqllocaldb.exe پیدا نشد.';
+    Exit;
+  end;
+  Exec(ExePath, 'create MSSQLLocalDB -s', '', SW_HIDE, ewWaitUntilTerminated, R);
+  Exec(ExePath, 'start MSSQLLocalDB', '', SW_HIDE, ewWaitUntilTerminated, R);
+  Result := True;
+end;
 procedure KillRunningApp;
 var
   R: Integer;
@@ -346,6 +423,22 @@ var
   winAuth: Boolean;
 begin
   Result := True;
+  if CurPageID = wpSelectComponents then
+  begin
+    // the bundled LocalDB msi needs room to extract (~900 MB free recommended)
+    if IsComponentSelected('localdb') then
+    begin
+      if GetDiskFreeSpaceExW(ExpandConstant('{sd}'), FreeB, TotalB, Dummy) then
+      begin
+        if FreeB < 900 * 1024 * 1024 then
+        begin
+          MsgBox('برای نصب SQL Server LocalDB همراه حدود ۹۰۰ مگابایت فضای خالی دیسک لازم است.', mbError, MB_OK);
+          Result := False;
+          Exit;
+        end;
+      end;
+    end;
+  end;
   if CurPageID = DbPage.ID then
   begin
     if Trim(DbPage.Values[0]) = '' then
@@ -361,7 +454,10 @@ begin
       Exit;
     end;
     winAuth := OptPage.Values[0];
-    if OptPage.Values[1] then
+    // If the bundled LocalDB is being installed by THIS setup, it does not exist
+    // yet at page time — skip the live test and let ssPostInstall create everything.
+    if OptPage.Values[1] and not (IsComponentSelected('localdb') and
+       ((Trim(DbPage.Values[0]) = '') or (Trim(DbPage.Values[0]) = '(localdb)\MSSQLLocalDB'))) then
     begin
       if not TestSql(DbPage.Values[0], 'master', winAuth, DbPage.Values[2], DbPage.Values[3], Err) then
       begin
@@ -397,7 +493,23 @@ begin
   if CurStep = ssPostInstall then
   begin
     InstallFonts;
-    if OptPage.Values[1] then
+    LocalDbOk := False;
+    if IsComponentSelected('localdb') then
+    begin
+      if InstallLocalDb(Err) then
+      begin
+        LocalDbOk := True;
+        if Trim(DbPage.Values[0]) = '' then DbPage.Values[0] := '(localdb)\MSSQLLocalDB';
+        OptPage.Values[0] := True; // LocalDB همراه uses Windows auth
+        Log('MEHRA: bundled LocalDB ready at (localdb)\MSSQLLocalDB');
+      end
+      else
+      begin
+        MsgBox('نصب SQL Server LocalDB همراه ناموفق بود:' + #13#10#13#10 + Err + #13#10#13#10 +
+               'می‌توانید بعداً آن را دستی نصب کنید یا به SQL Server موجود در شبکه متصل شوید.', mbError, MB_OK);
+      end;
+    end;
+    if OptPage.Values[1] and (Trim(DbPage.Values[0]) <> '') then
     begin
       winAuth := OptPage.Values[0];
       SchemaPath := ExpandConstant('{app}\\db\\schema.sql');
@@ -411,6 +523,11 @@ begin
       begin
         MsgBox('اجرای اسکریپت ساخت جداول ناموفق بود:' + #13#10#13#10 + Err + #13#10#13#10 + 'برنامه بعداً می‌تواند از بخش تنظیمات دوباره تلاش کند («راه‌اندازی جداول پایگاه داده»).', mbError, MB_OK);
       end;
+    end
+    else if LocalDbOk then
+    begin
+      // LocalDB is installed: pre-fill the app settings so first launch connects out of the box.
+      WriteAppSettings(DbPage.Values[0], DbPage.Values[1], False, '');
     end;
   end;
   if CurStep = ssDone then
@@ -449,9 +566,8 @@ begin
   end;
   if not IsAdminLoggedOnSafe then
     WizardForm.DirEdit.Text := ExpandConstant('{localappdata}\Mehra');
-
   OptPage := CreateInputOptionPage(wpSelectTasks,
-    'پایگاه دادهٔ SQL Server', 'اگر SQL Server روی سیستم نصب کرده‌ید، این نصب‌گر می‌تواند جداول پایگاه داده را برای هر ورژن SQL Server (2008 به بالا) ایجاد کند.', 'توضیح: این بخش اختیاری است و به‌صورت خودکار از db\\schema.sql ساخته می‌شود.', False, False);
+    'پایگاه دادهٔ SQL Server', 'اگر «SQL Server LocalDB همراه» را در صفحهٔ مؤلفه‌ها انتخاب کرده‌اید، موتور پایگاه داده همراه نصب ساخته می‌شود و جداول به‌صورت خودکار از db\\schema.sql ایجاد می‌گردند؛ در غیر این صورت به هر SQL Server موجود (2008 به بالا) متصل می‌شود.', 'توضیح: این بخش اختیاری است و به‌صورت خودکار از db\\schema.sql ساخته می‌شود.', False, False);
   OptPage.Add('احراز هویت ویندوز (Windows Authentication)');
   OptPage.Values[0] := True;
   OptPage.Add('ایجاد/به‌روزانی جداول پایگاه داده در SQL Server هنگام نصب');
