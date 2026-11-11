@@ -306,7 +306,8 @@ begin
   Result := '';
   BestDir := '';
   DirPat := ExpandConstant('{pf}\Microsoft SQL Server\*');
-  if FindFirst(DirPat, $10, SR) // $10 = faDirectory then
+  // $10 = faDirectory attribute
+  if FindFirst(DirPat, $10, SR) then
   begin
     try
       repeat
