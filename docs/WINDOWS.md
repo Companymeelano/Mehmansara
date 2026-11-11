@@ -1,49 +1,48 @@
-# نسخهٔ ویندوز ۱.۱.۰ — نصب‌گر مهرآSetup.exe و برنامهٔ مهرآ.exe
+# نسخهٔ ویندوز ۱.۱.۱ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe (برنامه + SQL Server LocalDB همراه + فونت‌ها)
 
-## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۰)
+> **از نسخهٔ ۱.۱.۱ به بعد، فقط یک فایل `MehraSetup.exe` کافی است:** نصب‌گر همچنین برنامه، **SQL Server 2022 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۵۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
+
+## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۱)
 
 - انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
-- **نصب‌گر کامل (پیشنهادی):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
+- **نصب‌گر کاملِ یک‌فایله (پیشنهادی —viron ۹۲ مگابایت):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
 - لاگ ساخت نصب‌گر (Inno Setup): https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/setup/setup-build.log
 - exe خام (بدون نصب‌گر): https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
-- مرور فایل‌های: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
+- مرور فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش اندازهٔ باینری‌ها (اجرای CI `43104677701`)
+## هش و اندازهٔ باینری‌ها (اجرای CI `43111959077`)
 
-- `setup/MehraSetup.exe`: 31,429,444 بایت — sha256 `9401828560073dfcd35791e2291f94acd472a665d9a6e4988ac680a313f396ce`
-- `exe/Mehra.exe`: 94,110,600 بایت — sha256 `0fce32221cd4de0f84e25dffb75eb3111419a8f3fe3526509a56dcee2f082c0f`
-- تأیید بایت-be-بایت: MZ/PE mo'tabar; brand dar نصب‌گر be-surat UTF-16/UTF-8 موجود ast: `www.meelano.ir`, `09120219593`, `Milad Yaghoobi`, «میلاد یعقوبی», «مهرآ», نسخهٔ ۱.۱.۰.
+- `setup/MehraSetup.exe`: 91,907,455 بایت — sha256 `64edc58b061d60f3c3c780a32b1f7745f211bc8cb2f9bb29222c92c967dae1c3`
+- `exe/Mehra.exe`: 94,110,600 بایت — sha256 `9e9d9c8acf68220ad591e2bade1c8eeff4baa4a5d35fe0998821f220beba5af4`
+- `exe/Mehra-win-x64.zip`: 41,576,381 بایت — sha256 `28731344f6a06269f89fd49c3ff32a243b86587e0ce2b8b9b7991313c01c5ff1`
+- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۱.۱؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
 
-## نصب با MehraSetup.exe (فایل کامل)
+## نصب با MehraSetup.exe (یک فایل — همه‌چیز)
 
-1. اگر SQL Server نصب شده (از 2008 به تا bālā — LocalDB ya Express ya نسخهٔ-ye kāmil), نصب‌گر kār mikonad; اسکریپت-e جداول داخل exe nist و به‌صورت-جداگانه فایل `db\schema.sql` نصب mishavad.
-2. `MehraSetup.exe` rā اجرا کنید; همهٔ-ye مراحل-ye نصب با فارسی راست‌به‌چاپ ast, به‌ فونت وزیرمتن و رنگ‌های لوکس (سرمهای/طلایی).
-3. Dar صفحهٔ-ye «پایگاه داده SQL Server» نام سرور (مثالاً `.\SQLEXPRESS` ya `(localdb)\MSSQLLocalDB`) و نام پایگاه داده rā وارد کنید; اتصال تست زنده mishavad و dar صورت-ye خطا, پیام فارسی دقیق نمایش داده می‌شود.
-4. به‌ tik-e «ایجاد/به‌روزرانی جداول‌ها», پس از-ye کپی-ye فایل‌های, اسکریپت-e `db\schema.sql` batch-be-batch (GO) ejrā mishavad و 9 جداول ساخته mishavad; درصد پیشرفت فارسی نمایش داده می‌شود.
-5. بررسی-haye هوشمند: حداقل 300MB فضای آزاد دیسک, Windows 10 به bālā, خطا-e اتصال SQL Server — hame به‌ پیام فارسی.
-6. پس از-ye نصب, تنظیمات-e اتصال dar `%AppData%\mehra\settings.json` نوشته می‌شود mishavad و برنامهٔ آمادهٔ اجرا ast.
+1. `MehraSetup.exe` را اجرا کنید (نیاز به اجرای «به‌عنوان Administrator» دارد — UAC را تأیید کنید). تمام مراحل نصب فارسی و راست‌به‌چپ، با فونت وزیرمتن.
+2. در صفحهٔ **مؤلفه‌ها**، گزینهٔ «SQL Server LocalDB 2022 همراه (~۵۵ مگابایت)» به‌صورت پیش‌فرض فعال است — با نگه‌داشتن آن، موتور پایگاه داده همراه برنامه نصب می‌شود. (اگر SQL Server دیگری روی سیستم دارید و نمی‌خواهید LocalDB نصب شود، تیک آن را بردارید.)
+3. در صفحهٔ **پایگاه دادهٔ SQL Server** پیش‌فرض‌ها کافی است: سرور `(localdb)\MSSQLLocalDB`، پایگاه دادهٔ `Mehra`، احراز هویت ویندوز. چون LocalDB در همین نصب ساخته می‌شود، تست زندهٔ اتصال در این صفحه رد می‌شود و خود نصب‌گر پس از کپی فایل‌ها همه‌چیز را می‌سازد.
+4. هنگام نصب (مرحلهٔ post-install): ابتدا `SqlLocalDB.msi` به‌صورت silent نصب می‌شود (`msiexec /qn IACCEPTSQLLOCALDBLICENSETERMS=YES REBOOT=ReallySuppress`)، بعد `sqllocaldb create MSSQLLocalDB -s` و `start` اجرا می‌شود، سپس اسکریپت `db\schema.sql` batch‌به-batch (GO) اجرا و ۹ جدول + کاربر `admin` ساخته می‌شود، و در پایان `%AppData%\mehra\settings.json` نوشته می‌شود.
+5. بررسی‌های هوشمند: حداقل ۹۰۰ مگابایت فضای آزاد برای LocalDB (در صفحهٔ مؤلفه‌ها چک می‌شود)، حداقل ۳۰۰ مگابایت در شروع، Windows 10 نسخهٔ 1803 به بالا، خطای اتصال SQL — همگی با پیام فارسی.
+6. فونت‌های وزیرمتن (۶ وزن) نیز نصب دائمی می‌شوند و خود نصب‌گر هم با وزیرمتن نمایش داده می‌شود.
+7. پس از پایان، برنامه با حالت «ورود به SQL Server» و آدرس `(localdb)\MSSQLLocalDB` آمادهٔ ورود است — ورود اولیه: کاربر `admin` / رمز `Admin@1234`. از آن لحظه همهٔ ۱۲ صفحه (اتاق‌ها، مهمانان، رزرو، پذیرش، مالی، نظافت، تعمیرات، گزارش‌ها، کاربران، اعلان‌ها، تنظیمات، خانه) **دادهٔ واقعی** را در پایگاه داده ثبت می‌کنند.
 
+## اگر LocalDB همراه نصب نشود (مثلاً règles derechos): 
+- می‌توانید بعداً «SQL Server LocalDB» را دستی از مایکروسافت نصب کنید، یا در همان صفحهٔ نصب به SQL Server موجود در شبکه (مثلاً `192.168.1.10\SQLEXPRESS` با SQL Authentication) متصل شوید — نصب‌گر همان‌جا جداول را می‌سازد.
+- حذف برنامه (uninstall) **LocalDB را حذف نمی‌کند** (یک مؤلفهٔ sistمی ویندوز است) — فقط برنامهٔ مهرآ و فونت‌ها/تنظیمات حذف می‌شوند.
 
-## فونت‌ها (Vazirmatn)
+## حالت‌های ورود برنامه
 
-- نصب‌گر **6 وزن فونت وزیرمتن** (Regular, Medium, SemiBold, Bold, ExtraBold, Black — نسخهٔ 33.003) را به‌صورت دائمی نصب می‌کند: اگر ادمین باشید در پوشهٔ فونت‌های ویندوز (`{fonts}`), وگرنه به‌صورت per-user (`{userfonts}` — ویندوز 10 نسخهٔ 1803 به بالا) و همزمان session با AddFontResourceW ثبت می‌شوند.
-- خود نصب‌گر (همهٔ برچسب‌ها و صفحات) هم با فونت وزیرمتن نمایش داده می‌شود (ثبت خصوصی FR_PRIVATE).
-- خود برنامهٔ مهرآ فونت regular/bold را به‌صورت embedded (avares) داخل exe دارد, پس **حتی بدون نصب فونت هم در زمان اجرا با زیباترین شکل نمایش داده می‌شود** و حجم exe به‌خاطر فونت‌های اضافی بالا نرفته است.
-
-ورود avaliye: کاربر `admin` / رمز `Admin@1234` (dar `db\schema.sql` seed shode; dar حالت-e SQL Server هیچ دادهٔ نمونه‌ای-i وجود ندارد).
-
-## حالت-ye ورود برنامهٔ
-
-- «ورود نمایشی»: آفلاین, به‌ دادهٔ نمونه‌ای کامل (فقط همین حالت demo ast).
-- «ورود به‌ API»: اتصال به سرور web (envelope `{success,data,error}` + Bearer — docs/API.md).
-- «ورود به‌ SQL Server»: اتصال مستقیم به Microsoft SQL Server bā System.Data.SqlClient; جداول‌ها bā `db\schema.sql` ya دکمهٔ-ye «راه‌اندازی/به‌روزرانی جداول‌ها» dar تنظیمات ساخته mishavand.
+- «ورود نمایشی»: آفلاین، با دادهٔ نمونهٔ کامل (فقط دادهٔ نمایشی — روی دیسک ثبت نمی‌شود).
+- «ورود به API»: اتصال به سرور web (envelope `{success,data,error}` + Bearer — docs/API.md).
+- «ورود به SQL Server»: اتصال مستقیم به Microsoft SQL Server با System.Data.SqlClient؛ اگر جداول ساخته نشده باشند، دکمهٔ «راه‌اندازی/به‌روزرسانی جداول» در تنظیمات با `db\schema.sql` آن‌ها را می‌سازد.
 
 طراح و توسعه‌دهنده: Milad Yaghoobi (میلاد یعقوبی) — www.meelano.ir — 09120219593
 
-## صداقت dar گزارش
+## صداقت در گزارش
 
-- Bāynari-hā فقط توسط GitHub Actions (windows-latest) کامپایل و منتشر shode-and و بایت-be-بایت بررسی shode-and (MZ/PE, size, sha256, brand/نسخهٔ); **ru-ye Windows-e واقعی ejrā نشده-and**.
-- نصب‌گر و exe امضا نشده-and (unsigned); Windows ممکن ast SmartScreen نشان داده.
-- حالت-e SQL Server فقط به‌ کامپایل sabz-e CI + review-e script-e `schema.sql` taeed shode و hich-gah bar-xord SQL Server-e زنده test nashode; اگر لازم shod, az دکمهٔ-ye «راه‌اندازی-ye جداول‌ها» dar تنظیمات دوباره تلاش konid.
-- دادهٔ نمونه‌ای فقط dar «ورود نمایشی» وجود dārad.
+- باینری‌ها فقط توسط GitHub Actions (windows-latest) کامپایل و منتشر شده‌اند و بایت‌به‌بایت بررسی شده‌اند (MZ/PE، اندازه، sha256، برند/نسخهٔ، و وجود SqlLocalDB.msi داخل نصب‌گر)؛ **روی یک PC ویندوز واقعی با SQL Server زنده اجرا و تست نشده‌اند**.
+- نصب‌گر و exe امضا نشده‌اند (unsigned) — ممکن است SmartScreen نمایش دهد («More info → Run anyway»).
+- LocalDB یک مؤلفهٔ رسمی مایکروسافت با مجوز قابل‌توزیع (redistributable) است؛ نصب silent آن با `IACCEPTSQLLOCALDBLICENSETERMS=YES` پذیرش license را می‌پذیرد.
+- دادهٔ نمونه فقط در «ورود نمایشی» وجود دارد؛ حالت SQL Server هیچ دادهٔ نمونه‌ای ندارد.
