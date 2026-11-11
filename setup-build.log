@@ -93,6 +93,6 @@ Parsing [Files] section, line 107
 Parsing [Files] section, line 108
 Parsing [Files] section, line 109
 Compiling [Code] section
-Error on line 309 in D:\a\Mehmansara\Mehmansara\desktop\Setup\setup.iss: Column 27:
+Error on line 310 in D:\a\Mehmansara\Mehmansara\desktop\Setup\setup.iss: Column 27:
 Variable Expected.
 Compile aborted.
