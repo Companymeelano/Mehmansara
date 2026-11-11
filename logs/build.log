@@ -22,7 +22,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:extractProdReleaseNativeSymbolTables FROM-CACHE
 > Task :app:mergeProdReleaseNativeDebugMetadata NO-SOURCE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateProdReleaseBuildConfig FROM-CACHE
+> Task :app:generateProdReleaseBuildConfig
 > Task :app:generateProdReleaseResValues FROM-CACHE
 > Task :app:checkProdReleaseAarMetadata
 > Task :app:mapProdReleaseSourceSetPaths
@@ -37,9 +37,8 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:javaPreCompileProdRelease FROM-CACHE
 > Task :app:desugarProdReleaseFileDependencies FROM-CACHE
 > Task :app:mergeProdReleaseStartupProfile
-> Task :app:processProdReleaseManifestForPackage
 > Task :app:mergeExtDexProdRelease FROM-CACHE
-> Task :app:processProdReleaseResources
+> Task :app:processProdReleaseManifestForPackage
 > Task :app:mergeProdReleaseArtProfile
 > Task :app:mergeProdReleaseShaders
 > Task :app:compileProdReleaseShaders NO-SOURCE
@@ -48,16 +47,17 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:compressProdReleaseAssets FROM-CACHE
 > Task :app:extractProdReleaseVersionControlInfo
 > Task :app:collectProdReleaseDependencies
+> Task :app:processProdReleaseResources
 > Task :app:sdkProdReleaseDependencyData
 > Task :app:validateSigningProdRelease
 > Task :app:writeProdReleaseAppMetadata
-> Task :app:optimizeProdReleaseResources
 > Task :app:writeProdReleaseSigningConfigVersions
 > Task :app:preProdDebugBuild UP-TO-DATE
 > Task :app:mergeProdDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateProdDebugBuildConfig UP-TO-DATE
 > Task :app:checkProdDebugAarMetadata UP-TO-DATE
 > Task :app:generateProdDebugResValues UP-TO-DATE
+> Task :app:optimizeProdReleaseResources
 > Task :app:mapProdDebugSourceSetPaths UP-TO-DATE
 > Task :app:generateProdDebugResources UP-TO-DATE
 > Task :app:mergeProdDebugResources UP-TO-DATE
@@ -90,24 +90,23 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processProdDebugJavaRes UP-TO-DATE
 > Task :app:mergeProdDebugJniLibFolders
 > Task :app:mergeProdDebugNativeLibs
-> Task :app:kspProdReleaseKotlin
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:mergeProjectDexProdDebug
-> Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
 > Task :app:writeProdDebugSigningConfigVersions
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
-> Task :app:generateDemoDebugBuildConfig FROM-CACHE
-> Task :app:generateDemoDebugResValues FROM-CACHE
+> Task :app:generateDemoDebugBuildConfig
 > Task :app:checkDemoDebugAarMetadata
+> Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:mapDemoDebugSourceSetPaths
+> Task :app:mergeProdDebugJavaResource
 > Task :app:generateDemoDebugResources FROM-CACHE
 > Task :app:mergeDemoDebugResources FROM-CACHE
+> Task :app:mergeProjectDexProdDebug
 > Task :app:packageDemoDebugResources FROM-CACHE
 > Task :app:parseDemoDebugLocalResources FROM-CACHE
 > Task :app:createDemoDebugCompatibleScreenManifests
@@ -115,14 +114,15 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processDemoDebugMainManifest
 > Task :app:processDemoDebugManifest
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
-> Task :app:processDemoDebugManifestForPackage
 > Task :app:mergeDemoDebugShaders
+> Task :app:processDemoDebugManifestForPackage
 > Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:generateDemoDebugAssets UP-TO-DATE
 > Task :app:mergeDemoDebugAssets
 > Task :app:compressDemoDebugAssets FROM-CACHE
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
 > Task :app:checkDemoDebugDuplicateClasses
+> Task :app:kspProdReleaseKotlin
 > Task :app:processDemoDebugResources
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
 > Task :app:packageProdDebug
@@ -133,14 +133,22 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeDemoDebugNativeLibs
 > Task :app:validateSigningDemoDebug
 > Task :app:writeDemoDebugAppMetadata
+> Task :app:writeDemoDebugSigningConfigVersions
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:kspDemoDebugKotlin
 > Task :app:compileProdReleaseKotlin
 > Task :app:compileDemoDebugKotlin
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:251:42 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:259:42 'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:376:36 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
 
 > Task :app:compileProdReleaseKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
@@ -152,41 +160,31 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
 
-> Task :app:compileDemoDebugKotlin
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:251:42 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:259:42 'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:376:36 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
-
+> Task :app:compileDemoDebugJavaWithJavac
 > Task :app:compileProdReleaseJavaWithJavac
 > Task :app:hiltAggregateDepsProdRelease FROM-CACHE
 > Task :app:hiltJavaCompileProdRelease
 > Task :app:processProdReleaseJavaRes
+> Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
 > Task :app:mergeProdReleaseJavaResource
 > Task :app:transformProdReleaseClassesWithAsm
-> Task :app:compileDemoDebugJavaWithJavac
+> Task :app:hiltJavaCompileDemoDebug
 > Task :app:dexBuilderProdRelease
 > Task :app:mergeProdReleaseGlobalSynthetics FROM-CACHE
-> Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
-> Task :app:hiltJavaCompileDemoDebug
 > Task :app:processDemoDebugJavaRes
 > Task :app:mergeDemoDebugJavaResource
 > Task :app:transformDemoDebugClassesWithAsm
-> Task :app:mergeDexProdRelease
 > Task :app:dexBuilderDemoDebug
 > Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
 > Task :app:mergeProjectDexDemoDebug
-> Task :app:compileProdReleaseArtProfile
+> Task :app:mergeDexProdRelease
 > Task :app:packageDemoDebug
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
+> Task :app:compileProdReleaseArtProfile
 > Task :app:packageProdRelease
 > Task :app:createProdReleaseApkListingFileRedirect
 > Task :app:assembleProdRelease
 
-BUILD SUCCESSFUL in 2m 22s
-131 actionable tasks: 74 executed, 33 from cache, 24 up-to-date
+BUILD SUCCESSFUL in 2m 14s
+131 actionable tasks: 76 executed, 31 from cache, 24 up-to-date
