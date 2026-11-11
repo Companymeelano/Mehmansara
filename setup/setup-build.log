@@ -112,5 +112,5 @@ Warning: Message name "ReadyLabel" is not recognized by this version of Inno Set
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or consider using its "auto" form.
 
-Successful compile (22.515 sec). Resulting Setup program filename is:
+Successful compile (24.078 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
