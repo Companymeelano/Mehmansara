@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.ahvaz.mehra.core.common.AppResult
 import ir.ahvaz.mehra.core.common.parseLongInput
 import ir.ahvaz.mehra.core.common.toLatinDigits
+import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.network.NetworkMonitor
 import ir.ahvaz.mehra.core.ui.state.UiState
 import ir.ahvaz.mehra.data.sync.OfflineQueue
@@ -16,6 +17,8 @@ import ir.ahvaz.mehra.domain.model.CreateMaintenanceCommand
 import ir.ahvaz.mehra.domain.model.MaintenancePriority
 import ir.ahvaz.mehra.domain.model.Permissions
 import ir.ahvaz.mehra.domain.model.Room
+import ir.ahvaz.mehra.domain.model.DefaultRoomInventory
+import ir.ahvaz.mehra.domain.model.LookupItem
 import ir.ahvaz.mehra.domain.model.RoomDraft
 import ir.ahvaz.mehra.domain.model.RoomFilterState
 import ir.ahvaz.mehra.domain.model.RoomHistoryEntry
@@ -37,6 +40,7 @@ data class RoomsUiState(
     val status: RoomStatus? = null,
     val floor: Int? = null,
     val floors: List<Int> = emptyList(),
+    val roomTypes: List<LookupItem> = emptyList(),
     val pendingOperations: Int = 0,
     val isOnline: Boolean = true,
     val canManage: Boolean = false,
@@ -76,7 +80,9 @@ class RoomsViewModel @Inject constructor(
     private fun loadLookups() {
         viewModelScope.launch {
             when (val result = roomRepository.lookups()) {
-                is AppResult.Success -> _state.update { it.copy(floors = result.data.floors) }
+                is AppResult.Success -> _state.update {
+                    it.copy(floors = result.data.floors, roomTypes = result.data.roomTypes)
+                }
                 is AppResult.Failure -> Unit
             }
         }
@@ -113,6 +119,47 @@ class RoomsViewModel @Inject constructor(
                 RoomFilterState(query = current.query, status = current.status, floor = current.floor)
             )
             _state.update { it.copy(rooms = it.rooms.applyResult(result)) }
+        }
+    }
+
+    /**
+     * One-tap seed of the operator's own room inventory (DefaultRoomInventory) through the
+     * real create API — no sample data, these are the hotel's actual rooms.
+     */
+    fun seedDefaultRooms() {
+        if (!_state.value.canManage) {
+            _state.update { it.copy(actionMessage = "برای ثبت اتاق دسترسی gestionnaire ندارید.") }
+            return
+        }
+        _state.update { it.copy(actionInProgress = true, actionMessage = null) }
+        viewModelScope.launch {
+            val lookups = roomRepository.lookups()
+            val types = (lookups as? AppResult.Success)?.data?.roomTypes.orEmpty()
+            var created = 0
+            for ((number, beds) in DefaultRoomInventory.rooms) {
+                val digitsFa = beds.toString().toPersianDigits()
+                val typeId = types.firstOrNull { it.title.contains("$digitsFa\u200cتخته") || it.title.contains("$beds تخته") }?.id
+                    ?: types.firstOrNull()?.id.orEmpty()
+                val draft = RoomDraft(
+                    roomNumber = number,
+                    floor = number.take(1),
+                    capacity = beds.toString(),
+                    roomTypeId = typeId,
+                    ratePerNightRial = "3000000",
+                    status = RoomStatus.FREE,
+                )
+                when (roomRepository.save(draft)) {
+                    is AppResult.Success -> created++
+                    is AppResult.Failure -> Unit
+                }
+            }
+            _state.update {
+                it.copy(
+                    actionInProgress = false,
+                    actionMessage = "${created.toString().toPersianDigits()} اتاق از فهرست پیش‌فرض مجموعه ثبت شد.",
+                )
+            }
+            refresh()
         }
     }
 

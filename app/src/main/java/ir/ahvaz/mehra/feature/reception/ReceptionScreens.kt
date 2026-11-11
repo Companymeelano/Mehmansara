@@ -149,6 +149,7 @@ fun ReceptionScreen(
                                     viewModel.loadRooms()
                                     moveStay = stay
                                 },
+                                onOutput = { outputStay = stay },
                             )
                         }
                     }
@@ -219,6 +220,26 @@ fun ReceptionScreen(
         )
     }
 
+    outputStay?.let { stay ->
+        AlertDialog(
+            onDismissRequest = { outputStay = null },
+            title = { Text("خروجی پذیرش — ${stay.guestName}") },
+            text = { Text("خروجی با اطلاعات (فاکتور PDF) یا خروجی خام (JSON)؟") },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.exportStayOutputs(stay.id, raw = false)
+                    outputStay = null
+                }) { Text("فاکتور PDF") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    viewModel.exportStayOutputs(stay.id, raw = true)
+                    outputStay = null
+                }) { Text("خروجی خام JSON") }
+            },
+        )
+    }
+
     moveStay?.let { stay ->
         MoveRoomDialog(
             stay = stay,
@@ -233,7 +254,13 @@ fun ReceptionScreen(
 }
 
 @Composable
-private fun StayRow(stay: Stay, onCheckOut: () -> Unit, onExtend: () -> Unit, onMoveRoom: () -> Unit) {
+private fun StayRow(
+    stay: Stay,
+    onCheckOut: () -> Unit,
+    onExtend: () -> Unit,
+    onMoveRoom: () -> Unit,
+    onOutput: () -> Unit,
+) {
     MehraCard(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
@@ -261,6 +288,13 @@ private fun StayRow(stay: Stay, onCheckOut: () -> Unit, onExtend: () -> Unit, on
             CompactButton(text = "تمدید", onClick = onExtend, modifier = Modifier.weight(1f))
             CompactButton(text = "تغییر اتاق", onClick = onMoveRoom, modifier = Modifier.weight(1f))
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        CompactButton(
+            text = "خروجی پذیرش (فاکتور PDF / خروجی خام)",
+            onClick = onOutput,
+            icon = Icons.Rounded.Share,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -377,7 +411,18 @@ fun CheckInScreen(
                 }
 
                 MehraCard(modifier = Modifier.fillMaxWidth()) {
-                    Text("خلاصه رزرو", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "فرم پذیرش مهمان",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MehraTheme.colors.gold,
+                    )
+                    Text(
+                        text = ir.ahvaz.mehra.core.export.ReportExporter.HOTEL_NAME,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
                     InfoRow("کد رزرو", reservation.code)
                     InfoRow("مهمان", reservation.guestName)
                     InfoRow("ورود", reservation.checkIn.formatJalaliLongFa())
@@ -456,28 +501,30 @@ fun CheckInScreen(
                 }
 
                 Spacer(modifier = Modifier.height(14.dp))
-                SectionHeader(title = "پرداخت اولیه")
-                AmountField(
-                    label = "مبلغ دریافتی (ریال)",
-                    value = state.initialPayment,
-                    onValueChange = viewModel::updateInitialPayment,
-                    hint = "در صورت عدم پرداخت، خالی بگذارید.",
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                DropdownField(
-                    label = "روش پرداخت",
-                    options = PaymentMethod.entries,
-                    selected = state.paymentMethod,
-                    onSelect = viewModel::selectPaymentMethod,
-                    optionLabel = { it.labelFa },
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                MehraTextField(
-                    label = "یادداشت",
-                    value = state.note,
-                    onValueChange = viewModel::updateNote,
-                    singleLine = false,
-                )
+                SectionHeader(title = "پرداخت اولیه و یادداشت")
+                MehraCard(modifier = Modifier.fillMaxWidth()) {
+                    AmountField(
+                        label = "مبلغ دریافتی (ریال)",
+                        value = state.initialPayment,
+                        onValueChange = viewModel::updateInitialPayment,
+                        hint = "در صورت عدم پرداخت، خالی بگذارید.",
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    DropdownField(
+                        label = "روش پرداخت",
+                        options = PaymentMethod.entries,
+                        selected = state.paymentMethod,
+                        onSelect = viewModel::selectPaymentMethod,
+                        optionLabel = { it.labelFa },
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    MehraTextField(
+                        label = "یادداشت",
+                        value = state.note,
+                        onValueChange = viewModel::updateNote,
+                        singleLine = false,
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
                 PrimaryButton(

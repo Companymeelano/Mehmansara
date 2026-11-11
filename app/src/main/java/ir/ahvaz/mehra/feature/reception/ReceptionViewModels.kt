@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.ahvaz.mehra.core.common.AppResult
+import ir.ahvaz.mehra.core.export.ReportExporter
 import ir.ahvaz.mehra.core.common.parseLongInput
 import ir.ahvaz.mehra.core.common.toLatinDigits
 import ir.ahvaz.mehra.core.network.NetworkMonitor
@@ -48,6 +49,7 @@ class ReceptionViewModel @Inject constructor(
     private val roomRepository: RoomRepository,
     private val authRepository: AuthRepository,
     private val offlineQueue: OfflineQueue,
+    private val exporter: ReportExporter,
     networkMonitor: NetworkMonitor,
 ) : ViewModel() {
 
@@ -137,6 +139,37 @@ class ReceptionViewModel @Inject constructor(
                 )
             }
             refresh()
+        }
+    }
+
+    /** Output of a stay: formatted PDF receipt (with info) or raw JSON record. */
+    fun exportStayOutputs(stayId: String, raw: Boolean) {
+        viewModelScope.launch {
+            when (val stayRes = receptionRepository.stay(stayId)) {
+                is AppResult.Success -> {
+                    val stay = stayRes.data
+                    runCatching {
+                        val receiptRes = receptionRepository.receipt(stayId)
+                        val receipt = (receiptRes as? AppResult.Success)?.data
+                        if (raw) {
+                            val file = exporter.exportStayRawJson(stay, receipt)
+                            exporter.share(file, ReportExporter.MIME_JSON, "خروجی خام اقامت ${stay.reservationCode}")
+                        } else {
+                            when (receiptRes) {
+                                is AppResult.Success -> {
+                                    val file = exporter.receiptPdf(receiptRes.data)
+                                    exporter.share(file, ReportExporter.MIME_PDF, "فاکتور ${receiptRes.data.receiptNumber}")
+                                }
+                                is AppResult.Failure ->
+                                    _state.update { it.copy(actionMessage = receiptRes.error.userMessageFa) }
+                            }
+                        }
+                    }.onFailure {
+                        _state.update { it.copy(actionMessage = "ساخت خروجی ناموفق بود: ${it.message}") }
+                    }
+                }
+                is AppResult.Failure -> _state.update { it.copy(actionMessage = stayRes.error.userMessageFa) }
+            }
         }
     }
 

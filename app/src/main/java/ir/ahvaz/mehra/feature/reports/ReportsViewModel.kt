@@ -118,6 +118,41 @@ class ReportsViewModel @Inject constructor(
         }
     }
 
+    fun exportDocx() = exportWith { table -> exporter.exportDocx(table) to ReportExporter.MIME_DOCX }
+
+    fun exportPng() = exportWith { table -> exporter.exportPng(table) to ReportExporter.MIME_PNG }
+
+    fun exportRawCsv() = exportWith { table -> exporter.exportRawCsv(table) to ReportExporter.MIME_CSV }
+
+    /** PDF straight to the Bluetooth share flow. */
+    fun exportBluetooth() {
+        val table = _state.value.table.data ?: return
+        _state.update { it.copy(isExporting = true) }
+        viewModelScope.launch {
+            runCatching {
+                val file = exporter.exportPdf(table, _state.value.generatedBy)
+                exporter.shareViaBluetooth(file, ReportExporter.MIME_PDF, table.title)
+            }.onFailure { error ->
+                _state.update { it.copy(actionMessage = "ارسال بلوتوثی ناموفق بود: ${error.message}") }
+            }
+            _state.update { it.copy(isExporting = false) }
+        }
+    }
+
+    private fun exportWith(block: (ReportTable) -> Pair<java.io.File, String>) {
+        val table = _state.value.table.data ?: return
+        _state.update { it.copy(isExporting = true) }
+        viewModelScope.launch {
+            runCatching {
+                val (file, mime) = block(table)
+                exporter.share(file, mime, table.title)
+            }.onFailure { error ->
+                _state.update { it.copy(actionMessage = "ساخت فایل ناموفق بود: ${error.message}") }
+            }
+            _state.update { it.copy(isExporting = false) }
+        }
+    }
+
     fun clearMessage() {
         _state.update { it.copy(actionMessage = null) }
     }

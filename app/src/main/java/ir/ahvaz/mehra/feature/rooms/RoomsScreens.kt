@@ -139,11 +139,24 @@ fun RoomsScreen(
             when {
                 rooms.isLoading && rooms.data == null -> LoadingState()
                 rooms.error != null && rooms.data == null -> ErrorState(error = rooms.error!!, onRetry = viewModel::refresh)
-                rooms.data.isNullOrEmpty() -> EmptyState(
-                    title = "اتاقی یافت نشد",
-                    message = if (state.query.isBlank()) "برای شروع، اتاق‌های مجموعه را ثبت کنید." else "نتیجه‌ای برای جست‌وجو پیدا نشد.", 
-                    icon = Icons.Rounded.Bed,
-                )
+                rooms.data.isNullOrEmpty() -> {
+                    EmptyState(
+                        title = "اتاقی یافت نشد",
+                        message = if (state.query.isBlank()) "برای شروع، اتاق‌های مجموعه را ثبت کنید." else "نتیجه‌ای برای جست‌وجو پیدا نشد.",
+                        icon = Icons.Rounded.Bed,
+                    )
+                    if (state.canManage && state.query.isBlank()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        PrimaryButton(
+                            text = "بارگذاری پیش‌فرض اتاق‌ها (۱ تا ۱۷، ۲۰۷، ۲۱۱)",
+                            onClick = viewModel::seedDefaultRooms,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            loading = state.actionInProgress,
+                        )
+                    }
+                }
 
                 else -> {
                     val all = rooms.data.orEmpty()

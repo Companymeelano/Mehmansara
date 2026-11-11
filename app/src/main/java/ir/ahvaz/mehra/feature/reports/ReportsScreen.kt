@@ -54,7 +54,7 @@ fun ReportsScreen(viewModel: ReportsViewModel = hiltViewModel()) {
 
     MehraScreen(
         title = "گزارش‌ها",
-        subtitle = "گزارش‌های مدیریتی با خروجی PDF و اکسل",
+        subtitle = "گزارش‌های مدیریتی — خروجی PDF، اکسل، ورد، عکس، خام و بلوتوث",
         offline = table.fromCache,
         actions = {
             IconButton(onClick = viewModel::load) {
@@ -159,19 +159,50 @@ fun ReportsScreen(viewModel: ReportsViewModel = hiltViewModel()) {
 
                     if (state.canExport) {
                         Spacer(modifier = Modifier.height(12.dp))
-                        SectionHeader(title = "خروجی و ارسال")
+                        SectionHeader(title = "خروجی و ارسال (PDF • اکسل • ورد • عکس • خام • بلوتوث)")
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             CompactButton(
-                                text = if (state.isExporting) "در حال آماده‌سازی…" else "PDF و ارسال",
+                                text = if (state.isExporting) "…" else "PDF",
                                 onClick = viewModel::exportPdf,
                                 icon = Icons.Rounded.Description,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
                             CompactButton(
-                                text = "اکسل و ارسال",
+                                text = "اکسل",
                                 onClick = viewModel::exportXlsx,
                                 icon = Icons.Rounded.GridOn,
+                                enabled = !state.isExporting && !data.isEmpty,
+                                modifier = Modifier.weight(1f),
+                            )
+                            CompactButton(
+                                text = "ورد",
+                                onClick = viewModel::exportDocx,
+                                icon = Icons.Rounded.Article,
+                                enabled = !state.isExporting && !data.isEmpty,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            CompactButton(
+                                text = "عکس (PNG)",
+                                onClick = viewModel::exportPng,
+                                icon = Icons.Rounded.Image,
+                                enabled = !state.isExporting && !data.isEmpty,
+                                modifier = Modifier.weight(1f),
+                            )
+                            CompactButton(
+                                text = "خروجی خام",
+                                onClick = viewModel::exportRawCsv,
+                                icon = Icons.Rounded.Code,
+                                enabled = !state.isExporting && !data.isEmpty,
+                                modifier = Modifier.weight(1f),
+                            )
+                            CompactButton(
+                                text = "بلوتوث",
+                                onClick = viewModel::exportBluetooth,
+                                icon = Icons.Rounded.Bluetooth,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
