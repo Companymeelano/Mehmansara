@@ -8,6 +8,7 @@ b7063efa12249b90c20502b04dc788cf875ce6c9f30afc308033fcd84baa4e12  ci-artifacts:s
 d952e918cc0cfdec44a3d87211e3a5fd6bca64629ce72eb7f32fcb4ed9345b80  ci-artifacts:exe/Mehra.exe  (94,110,600 bytes)
 
 # Android v1.1.0 debug APKs (final, run 42698342228) — on branch ci-artifacts
-782ddd4d0acd83055aac72a700540d1ee4578b715d6a726c5da7677c536dfa75  ci-artifacts:apk/app-release.apk  (13,958,442 bytes, v1.3.0, run 42937262726)
 1ee76adaf430310a5a0481271844818c44bc7d57906be1a2351a1c8e658fb7206  ci-artifacts:apk/app-debug.apk  (20,938,162 bytes, v1.3.0, run 42937262726)
-077b93c914d413716e93c01b7313b393dcc0a37a4fff4356a70695f05a536428  ci-artifacts:apk/demo/mehra-demo-debug.apk  (21,036,498 bytes, v1.3.0, run 42937262726)
+92e3e3cb6af944a8c03edac4d7512f7611d97e5d5e580997ed4f232b8326f568  ci-artifacts:apk/app-release.apk  (13,975,078 bytes, v1.3.0 v1+v2+v3-signed, run 42995776791)
+de9312e14acee116efd978df6832c407e06267c3c66fc15146e9b6bd4549af46  ci-artifacts:apk/app-debug.apk  (20,956,823 bytes, v1.3.0 v1+v2+v3-signed, run 42995776791)
+d1efb80df52ad5594b6b3968c117ee625c7b8cedd344314320588465b0e380d3  ci-artifacts:apk/demo/mehra-demo-debug.apk  (21,055,165 bytes, v1.3.0 v1+v2+v3-signed, run 42995776791)
