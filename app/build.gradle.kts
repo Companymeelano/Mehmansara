@@ -63,12 +63,25 @@ android {
     }
 
     signingConfigs {
+        // Sideload-friendly signing: v1 (JAR) + v2 + v3. AGP disables v1 automatically when
+        // minSdk >= 24, but some OEM package installers (Xiaomi/HyperOS, some Samsung skins)
+        // reject v2-only APKs with "There was a problem parsing the package".
+        getByName("debug").apply {
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = false
+        }
         if (hasReleaseKeystore) {
             create("release") {
                 storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
                 storePassword = keystoreProperties.getProperty("storePassword")
                 keyAlias = keystoreProperties.getProperty("keyAlias")
                 keyPassword = keystoreProperties.getProperty("keyPassword")
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = false
             }
         }
     }
