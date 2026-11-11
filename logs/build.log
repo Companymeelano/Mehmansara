@@ -90,12 +90,12 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProdDebugAssets UP-TO-DATE
 > Task :app:compressProdDebugAssets FROM-CACHE
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
+> Task :app:mergeProdReleaseJavaResource
 > Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:checkProdDebugDuplicateClasses
-> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
-> Task :app:mergeProdReleaseJavaResource
 > Task :app:mergeExtDexProdDebug FROM-CACHE
 > Task :app:mergeLibDexProdDebug FROM-CACHE
+> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:transformProdDebugClassesWithAsm UP-TO-DATE
 > Task :app:dexBuilderProdDebug FROM-CACHE
 > Task :app:mergeProdDebugGlobalSynthetics FROM-CACHE
@@ -114,13 +114,13 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:packageProdRelease
+> Task :app:createProdReleaseApkListingFileRedirect
+> Task :app:assembleProdRelease
 > Task :app:checkDemoDebugAarMetadata
 > Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:mapDemoDebugSourceSetPaths
 > Task :app:generateDemoDebugResources FROM-CACHE
-> Task :app:packageProdRelease
-> Task :app:createProdReleaseApkListingFileRedirect
-> Task :app:assembleProdRelease
 > Task :app:mergeDemoDebugResources FROM-CACHE
 > Task :app:packageDemoDebugResources FROM-CACHE
 > Task :app:parseDemoDebugLocalResources FROM-CACHE
@@ -156,16 +156,16 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:mergeProjectDexDemoDebug FROM-CACHE
 > Task :app:validateSigningDemoDebug
+> Task :app:writeDemoDebugAppMetadata
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDemoDebugAppMetadata
 > Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:mergeDemoDebugJavaResource
 > Task :app:packageDemoDebug
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 25s
+BUILD SUCCESSFUL in 18s
 131 actionable tasks: 48 executed, 59 from cache, 24 up-to-date
