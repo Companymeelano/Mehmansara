@@ -74,15 +74,17 @@ class DemoStore @Inject constructor() {
     private data class TypeDef(val id: String, val title: String, val capacity: Int, val rate: Long)
 
     private val types = listOf(
+        TypeDef("rt-single", "اتاق یک\u200cتخته", 1, 1_800_000L),
         TypeDef("rt-double", "اتاق دو تخته", 2, 2_500_000L),
         TypeDef("rt-triple", "اتاق سه تخته", 3, 3_200_000L),
         TypeDef("rt-quad", "اتاق چهار تخته", 4, 3_900_000L),
-        TypeDef("rt-suite", "سوئیت خانوادگی", 5, 6_500_000L),
+        TypeDef("rt-family", "اتاق پنج\u200cتخته", 5, 5_200_000L),
+        TypeDef("rt-suite", "سوئیت شش\u200cتخته", 6, 7_800_000L),
     )
 
     val roomTypes: List<LookupItem> = types.map { LookupItem(it.id, it.title) }
 
-    val floors: List<Int> = listOf(1, 2, 3, 4)
+    val floors: List<Int> = listOf(1, 2)
 
     val amenities: List<LookupItem> = listOf(
         LookupItem("am-ac", "کولر گازی"),
@@ -101,19 +103,19 @@ class DemoStore @Inject constructor() {
 
     private fun defRoom(
         number: String,
-        typeIndex: Int,
+        capacity: Int,
         status: RoomStatus,
         guest: String? = null,
         stayId: String? = null,
         next: LocalDate? = null,
         notes: String? = null,
     ): Room {
-        val type = types[typeIndex]
+        val type = types.first { it.capacity == capacity }
         return Room(
             id = "room-$number",
             roomNumber = number,
             floor = number.take(1).toInt(),
-            capacity = type.capacity,
+            capacity = capacity,
             roomTypeId = type.id,
             roomTypeName = type.title,
             ratePerNightRial = type.rate,
@@ -128,37 +130,29 @@ class DemoStore @Inject constructor() {
     }
 
     val rooms: MutableList<Room> = mutableListOf(
-        // طبقه اول — دو تخته
-        defRoom("101", 0, RoomStatus.RESERVED, next = today.plusDays(1)),
-        defRoom("102", 0, RoomStatus.OCCUPIED, guest = "علی محمدی", stayId = "stay-201"),
-        defRoom("103", 0, RoomStatus.CLEANING),
-        defRoom("104", 0, RoomStatus.OCCUPIED, guest = "زهرا کریمی", stayId = "stay-202"),
-        defRoom("105", 0, RoomStatus.FREE),
-        defRoom("106", 0, RoomStatus.FREE),
-        // طبقه دوم — سه تخته
-        defRoom("201", 1, RoomStatus.OCCUPIED, guest = "رضا صادقی", stayId = "stay-203"),
-        defRoom("202", 1, RoomStatus.RESERVED, next = today.plusDays(2)),
-        defRoom("203", 1, RoomStatus.OCCUPIED, guest = "فاطمه موسوی", stayId = "stay-204"),
-        defRoom("204", 1, RoomStatus.CLEANING),
-        defRoom("205", 1, RoomStatus.OCCUPIED, guest = "حسین بهرامی", stayId = "stay-205"),
-        defRoom(
-            "206", 1, RoomStatus.OUT_OF_SERVICE,
-            notes = "نشتی آب سرویس بهداشتی — تا پایان تعمیرات قابل واگذاری نیست",
-        ),
-        // طبقه سوم — چهار تخته
-        defRoom("301", 2, RoomStatus.FREE),
-        defRoom("302", 2, RoomStatus.OCCUPIED, guest = "مریم دهقانی", stayId = "stay-206"),
-        defRoom("303", 2, RoomStatus.FREE),
-        defRoom("304", 2, RoomStatus.RESERVED, next = today.plusDays(3)),
-        defRoom("305", 2, RoomStatus.MAINTENANCE, notes = "کولر گازی خراب است — تیکت MT-2201"),
-        defRoom("306", 2, RoomStatus.CLEANING),
-        // طبقه چهارم — سوئیت خانوادگی
-        defRoom("401", 3, RoomStatus.OCCUPIED, guest = "امیر قاسمی", stayId = "stay-207"),
-        defRoom("402", 3, RoomStatus.RESERVED, next = today.plusDays(1)),
-        defRoom("403", 3, RoomStatus.OCCUPIED, guest = "سکینه فرجی", stayId = "stay-208"),
-        defRoom("404", 3, RoomStatus.FREE),
-        defRoom("405", 3, RoomStatus.RESERVED, next = today.plusDays(4)),
-        defRoom("406", 3, RoomStatus.FREE),
+        // موجودی اتاق‌ها بر اساس یادداشت دست‌نویس اپراتور: اتاق‌های ۱ تا ۱۷، ۲۰۷ و ۲۱۱
+        // (تعداد تخت هر اتاق مطابق همان یادداشت)
+        // طبقه اول
+        defRoom("1", 5, RoomStatus.RESERVED, next = today.plusDays(1)),
+        defRoom("2", 4, RoomStatus.OCCUPIED, guest = "علی محمدی", stayId = "stay-201"),
+        defRoom("3", 3, RoomStatus.CLEANING),
+        defRoom("4", 4, RoomStatus.OCCUPIED, guest = "زهرا کریمی", stayId = "stay-202"),
+        defRoom("5", 5, RoomStatus.FREE),
+        defRoom("6", 4, RoomStatus.OCCUPIED, guest = "مریم دهقانی", stayId = "stay-209"),
+        defRoom("7", 3, RoomStatus.OCCUPIED, guest = "رضا صادقی", stayId = "stay-203"),
+        defRoom("8", 3, RoomStatus.RESERVED, next = today.plusDays(2)),
+        defRoom("9", 4, RoomStatus.OCCUPIED, guest = "فاطمه موسوی", stayId = "stay-204"),
+        defRoom("10", 3, RoomStatus.CLEANING),
+        defRoom("11", 3, RoomStatus.OCCUPIED, guest = "حسین بهرامی", stayId = "stay-205"),
+        defRoom("12", 5, RoomStatus.OUT_OF_SERVICE, notes = "نشتی آب سرویس بهداشتی — تا پایان تعمیرات قابل واگذاری نیست"),
+        defRoom("13", 4, RoomStatus.OCCUPIED, guest = "امیر قاسمی", stayId = "stay-210"),
+        defRoom("14", 6, RoomStatus.OCCUPIED, guest = "سکینه فرجی", stayId = "stay-206"),
+        defRoom("15", 3, RoomStatus.OCCUPIED, guest = "سارا محمدی", stayId = "stay-208"),
+        defRoom("16", 3, RoomStatus.RESERVED, next = today.plusDays(3)),
+        defRoom("17", 3, RoomStatus.MAINTENANCE, notes = "کولر گازی خراب است — تیکت MT-2201"),
+        // طبقه دوم
+        defRoom("207", 2, RoomStatus.CLEANING),
+        defRoom("211", 1, RoomStatus.OCCUPIED, guest = "امیر قاسمی", stayId = "stay-207"),
     )
 
     fun room(roomId: String): Room? = rooms.firstOrNull { it.id == roomId }
@@ -301,23 +295,23 @@ class DemoStore @Inject constructor() {
     val reservations: MutableList<Reservation> = mutableListOf(
         // در اقامت
         defReservation(
-            "res-101", "MR-34101", guest("guest-01")!!, roomByNumber("102"),
+            "res-101", "MR-34101", guest("guest-01")!!, roomByNumber("2"),
             today.minusDays(2), today.plusDays(1), ReservationStatus.CHECKED_IN,
             guestsCount = 2, paid = 4_000_000,
             companions = listOf(GuestCompanion(fullName = "سمیه محمدی", relation = "همسر")),
         ),
         defReservation(
-            "res-102", "MR-34102", guest("guest-02")!!, roomByNumber("104"),
+            "res-102", "MR-34102", guest("guest-02")!!, roomByNumber("4"),
             today.minusDays(1), today.plusDays(2), ReservationStatus.CHECKED_IN,
             guestsCount = 1, paid = 7_500_000,
         ),
         defReservation(
-            "res-103", "MR-34103", guest("guest-03")!!, roomByNumber("201"),
+            "res-103", "MR-34103", guest("guest-03")!!, roomByNumber("7"),
             today.minusDays(3), today, ReservationStatus.CHECKED_IN,
             guestsCount = 3, paid = 6_000_000,
         ),
         defReservation(
-            "res-104", "MR-34104", guest("guest-04")!!, roomByNumber("203"),
+            "res-104", "MR-34104", guest("guest-04")!!, roomByNumber("9"),
             today, today.plusDays(3), ReservationStatus.CHECKED_IN,
             guestsCount = 3, paid = 3_000_000,
             companions = listOf(
@@ -326,17 +320,17 @@ class DemoStore @Inject constructor() {
             ),
         ),
         defReservation(
-            "res-105", "MR-34105", guest("guest-05")!!, roomByNumber("205"),
+            "res-105", "MR-34105", guest("guest-05")!!, roomByNumber("11"),
             today.minusDays(2), today.plusDays(2), ReservationStatus.CHECKED_IN,
             guestsCount = 4, paid = 12_800_000,
         ),
         defReservation(
-            "res-106", "MR-34106", guest("guest-06")!!, roomByNumber("302"),
+            "res-106", "MR-34106", guest("guest-06")!!, roomByNumber("14"),
             today.minusDays(4), today.plusDays(2), ReservationStatus.CHECKED_IN,
             guestsCount = 4, paid = 10_000_000,
         ),
         defReservation(
-            "res-107", "MR-34107", guest("guest-07")!!, roomByNumber("401"),
+            "res-107", "MR-34107", guest("guest-07")!!, roomByNumber("211"),
             today.minusDays(1), today.plusDays(4), ReservationStatus.CHECKED_IN,
             guestsCount = 5, paid = 20_000_000,
             companions = listOf(
@@ -345,45 +339,45 @@ class DemoStore @Inject constructor() {
             ),
         ),
         defReservation(
-            "res-108", "MR-34108", guest("guest-08")!!, roomByNumber("403"),
+            "res-108", "MR-34108", guest("guest-08")!!, roomByNumber("15"),
             today.minusDays(1), today.plusDays(1), ReservationStatus.CHECKED_IN,
             guestsCount = 4, paid = 13_000_000,
         ),
         // رزروهای آینده
         defReservation(
-            "res-109", "MR-34109", guest("guest-09")!!, roomByNumber("101"),
+            "res-109", "MR-34109", guest("guest-09")!!, roomByNumber("1"),
             today.plusDays(1), today.plusDays(3), ReservationStatus.CONFIRMED,
             guestsCount = 2, discount = 500_000, paid = 3_000_000,
         ),
         defReservation(
-            "res-110", "MR-34110", guest("guest-10")!!, roomByNumber("202"),
+            "res-110", "MR-34110", guest("guest-10")!!, roomByNumber("8"),
             today.plusDays(2), today.plusDays(5), ReservationStatus.CONFIRMED,
             guestsCount = 3, paid = 0,
         ),
         defReservation(
-            "res-111", "MR-34111", guest("guest-11")!!, roomByNumber("304"),
+            "res-111", "MR-34111", guest("guest-11")!!, roomByNumber("16"),
             today.plusDays(3), today.plusDays(6), ReservationStatus.CONFIRMED,
             guestsCount = 4, paid = 5_000_000,
         ),
         defReservation(
-            "res-112", "MR-34112", guest("guest-12")!!, roomByNumber("402"),
+            "res-112", "MR-34112", guest("guest-12")!!, roomByNumber("10"),
             today.plusDays(1), today.plusDays(2), ReservationStatus.CONFIRMED,
             guestsCount = 4, paid = 0,
             notes = "درخواست اتاق رو به حیاط",
         ),
         defReservation(
-            "res-113", "MR-34113", guest("guest-02")!!, roomByNumber("405"),
+            "res-113", "MR-34113", guest("guest-02")!!, roomByNumber("5"),
             today.plusDays(4), today.plusDays(7), ReservationStatus.CONFIRMED,
             guestsCount = 5, paid = 2_000_000,
         ),
         // در انتظار تأیید
         defReservation(
-            "res-114", "MR-34114", guest("guest-03")!!, roomByNumber("105"),
+            "res-114", "MR-34114", guest("guest-03")!!, roomByNumber("5"),
             today.plusDays(2), today.plusDays(4), ReservationStatus.PENDING,
             guestsCount = 2, paid = 0,
         ),
         defReservation(
-            "res-115", "MR-34115", guest("guest-04")!!, roomByNumber("106"),
+            "res-115", "MR-34115", guest("guest-04")!!, roomByNumber("6"),
             today.plusDays(5), today.plusDays(6), ReservationStatus.PENDING,
             guestsCount = 2, paid = 0,
             notes = "رزرو تلفنی — تأیید مدیریت لازم است",
@@ -397,19 +391,19 @@ class DemoStore @Inject constructor() {
         ),
         // لغو شده
         defReservation(
-            "res-117", "MR-34117", guest("guest-06")!!, roomByNumber("301"),
+            "res-117", "MR-34117", guest("guest-06")!!, roomByNumber("13"),
             today.minusDays(1), today.plusDays(1), ReservationStatus.CANCELLED,
             guestsCount = 3, paid = 0,
             notes = "انصراف مهمان به دلیل تغییر برنامه سفر",
         ),
         // خروج شده
         defReservation(
-            "res-118", "MR-34118", guest("guest-07")!!, roomByNumber("404"),
+            "res-118", "MR-34118", guest("guest-07")!!, roomByNumber("6"),
             today.minusDays(9), today.minusDays(7), ReservationStatus.CHECKED_OUT,
             guestsCount = 4, paid = 13_000_000,
         ),
         defReservation(
-            "res-119", "MR-34119", guest("guest-08")!!, roomByNumber("303"),
+            "res-119", "MR-34119", guest("guest-08")!!, roomByNumber("15"),
             today.minusDays(12), today.minusDays(10), ReservationStatus.CHECKED_OUT,
             guestsCount = 3, paid = 7_800_000,
         ),
@@ -449,44 +443,44 @@ class DemoStore @Inject constructor() {
 
     val stays: MutableList<Stay> = mutableListOf(
         defStay(
-            "stay-201", reservation("res-101")!!, roomByNumber("102")!!,
+            "stay-201", reservation("res-101")!!, roomByNumber("2")!!,
             at(-2, 14, 20), today.plusDays(1), total = 7_500_000, paid = 4_000_000,
         ),
         defStay(
-            "stay-202", reservation("res-102")!!, roomByNumber("104")!!,
+            "stay-202", reservation("res-102")!!, roomByNumber("4")!!,
             at(-1, 17, 40), today.plusDays(2), total = 7_500_000, paid = 7_500_000,
         ),
         defStay(
-            "stay-203", reservation("res-103")!!, roomByNumber("201")!!,
+            "stay-203", reservation("res-103")!!, roomByNumber("7")!!,
             at(-3, 12, 10), today, total = 9_600_000, paid = 6_000_000,
         ),
         defStay(
-            "stay-204", reservation("res-104")!!, roomByNumber("203")!!,
+            "stay-204", reservation("res-104")!!, roomByNumber("9")!!,
             at(0, 12, 30), today.plusDays(3), total = 9_600_000, paid = 3_000_000,
         ),
         defStay(
-            "stay-205", reservation("res-105")!!, roomByNumber("205")!!,
+            "stay-205", reservation("res-105")!!, roomByNumber("11")!!,
             at(-2, 10, 0), today.plusDays(2), total = 12_800_000, paid = 12_800_000,
         ),
         defStay(
-            "stay-206", reservation("res-106")!!, roomByNumber("302")!!,
+            "stay-206", reservation("res-106")!!, roomByNumber("14")!!,
             at(-4, 11, 15), today.plusDays(2), total = 15_600_000, paid = 10_000_000,
         ),
         defStay(
-            "stay-207", reservation("res-107")!!, roomByNumber("401")!!,
+            "stay-207", reservation("res-107")!!, roomByNumber("211")!!,
             at(-1, 16, 45), today.plusDays(4), total = 32_500_000, paid = 20_000_000,
         ),
         defStay(
-            "stay-208", reservation("res-108")!!, roomByNumber("403")!!,
+            "stay-208", reservation("res-108")!!, roomByNumber("15")!!,
             at(-1, 8, 30), today.plusDays(1), total = 13_000_000, paid = 13_000_000,
         ),
         defStay(
-            "stay-209", reservation("res-118")!!, roomByNumber("404")!!,
+            "stay-209", reservation("res-118")!!, roomByNumber("6")!!,
             at(-9, 15, 0), today.minusDays(7), StayStatus.CHECKED_OUT, at(-7, 10, 30),
             total = 13_000_000, paid = 13_000_000,
         ),
         defStay(
-            "stay-210", reservation("res-119")!!, roomByNumber("303")!!,
+            "stay-210", reservation("res-119")!!, roomByNumber("15")!!,
             at(-12, 18, 20), today.minusDays(10), StayStatus.CHECKED_OUT, at(-10, 9, 50),
             total = 7_800_000, paid = 7_800_000,
         ),
@@ -652,32 +646,32 @@ class DemoStore @Inject constructor() {
 
     val housekeepingTasks: MutableList<HousekeepingTask> = mutableListOf(
         HousekeepingTask(
-            id = "hk-01", roomId = "room-103", roomNumber = "103",
+            id = "hk-01", roomId = "room-3", roomNumber = "3",
             type = CleaningType.CHECKOUT, status = HousekeepingTaskStatus.PENDING,
             notes = "نظافت پس از خروج مهمان", createdAt = at(0, 9, 10),
         ),
         HousekeepingTask(
-            id = "hk-02", roomId = "room-204", roomNumber = "204",
+            id = "hk-02", roomId = "room-10", roomNumber = "10",
             type = CleaningType.DAILY, status = HousekeepingTaskStatus.ASSIGNED,
             assignedToId = "staff-hk-1", assignedToName = "فاطمه رسولی",
             createdAt = at(0, 9, 30), notes = "تعویض ملحفه و جارو",
         ),
         HousekeepingTask(
-            id = "hk-03", roomId = "room-306", roomNumber = "306",
+            id = "hk-03", roomId = "room-207", roomNumber = "207",
             type = CleaningType.DEEP, status = HousekeepingTaskStatus.IN_PROGRESS,
             assignedToId = "staff-hk-2", assignedToName = "رقیه نیسی",
             createdAt = at(0, 8, 0), startedAt = at(0, 10, 0),
             notes = "نظافت اساسی و شست‌وشوی پرده",
         ),
         HousekeepingTask(
-            id = "hk-04", roomId = "room-302", roomNumber = "302",
+            id = "hk-04", roomId = "room-14", roomNumber = "14",
             type = CleaningType.DAILY, status = HousekeepingTaskStatus.DONE,
             assignedToId = "staff-hk-1", assignedToName = "فاطمه رسولی",
             createdAt = at(0, 8, 10), startedAt = at(0, 10, 20), finishedAt = at(0, 11, 20),
             notes = "نظافت روزانه انجام شد",
         ),
         HousekeepingTask(
-            id = "hk-05", roomId = "room-401", roomNumber = "401",
+            id = "hk-05", roomId = "room-211", roomNumber = "211",
             type = CleaningType.TURNDOWN, status = HousekeepingTaskStatus.APPROVED,
             assignedToId = "staff-hk-3", assignedToName = "سمیرا حیدری",
             createdAt = at(-1, 18, 0), startedAt = at(-1, 18, 30), finishedAt = at(-1, 19, 0),
@@ -685,13 +679,13 @@ class DemoStore @Inject constructor() {
             notes = "آماده‌سازی شب — تأیید سرپرست پذیرش",
         ),
         HousekeepingTask(
-            id = "hk-06", roomId = "room-105", roomNumber = "105",
+            id = "hk-06", roomId = "room-5", roomNumber = "5",
             type = CleaningType.CHECKOUT, status = HousekeepingTaskStatus.DONE,
             assignedToId = "staff-hk-4", assignedToName = "علی زبیدی",
             createdAt = at(-1, 11, 0), startedAt = at(-1, 11, 15), finishedAt = at(-1, 11, 55),
         ),
         HousekeepingTask(
-            id = "hk-07", roomId = "room-203", roomNumber = "203",
+            id = "hk-07", roomId = "room-9", roomNumber = "9",
             type = CleaningType.DAILY, status = HousekeepingTaskStatus.PENDING,
             createdAt = at(0, 12, 40), notes = "درخواست مهمان برای نظافت بعدازظهر",
         ),
@@ -699,7 +693,7 @@ class DemoStore @Inject constructor() {
 
     val maintenanceTickets: MutableList<MaintenanceTicket> = mutableListOf(
         MaintenanceTicket(
-            id = "mt-01", code = "MT-2201", roomId = "room-305", roomNumber = "305",
+            id = "mt-01", code = "MT-2201", roomId = "room-17", roomNumber = "17",
             title = "خرید کولر گازی",
             description = "کولر گازی اتاق روشن نمی‌شود و کمپرسور صدا می‌دهد.",
             priority = MaintenancePriority.URGENT, status = MaintenanceStatus.IN_PROGRESS,
@@ -708,7 +702,7 @@ class DemoStore @Inject constructor() {
             createdAt = at(-3, 9, 15), roomReleased = false,
         ),
         MaintenanceTicket(
-            id = "mt-02", code = "MT-2202", roomId = "room-206", roomNumber = "206",
+            id = "mt-02", code = "MT-2202", roomId = "room-12", roomNumber = "12",
             title = "نشتی آب سرویس بهداشتی",
             description = "نشتی از لوله زیر روشویی، کف سرویس خیس می‌شود.",
             priority = MaintenancePriority.HIGH, status = MaintenanceStatus.ASSIGNED,
@@ -716,14 +710,14 @@ class DemoStore @Inject constructor() {
             reporterName = "رقیه نیسی", createdAt = at(-1, 8, 40),
         ),
         MaintenanceTicket(
-            id = "mt-03", code = "MT-2203", roomId = "room-402", roomNumber = "402",
+            id = "mt-03", code = "MT-2203", roomId = "room-10", roomNumber = "10",
             title = "لامپ اتاق سوخته",
             description = "دو عدد لامپ سقفی نیاز به تعویض دارد.",
             priority = MaintenancePriority.LOW, status = MaintenanceStatus.OPEN,
             reporterName = "فاطمه رسولی", createdAt = at(0, 8, 50),
         ),
         MaintenanceTicket(
-            id = "mt-04", code = "MT-2204", roomId = "room-301", roomNumber = "301",
+            id = "mt-04", code = "MT-2204", roomId = "room-13", roomNumber = "13",
             title = "قفل درب ورودی",
             description = "قفل درب کند باز می‌شود.",
             priority = MaintenancePriority.NORMAL, status = MaintenanceStatus.RESOLVED,
@@ -732,7 +726,7 @@ class DemoStore @Inject constructor() {
             createdAt = at(-5, 10, 0), resolvedAt = at(-4, 16, 30), roomReleased = true,
         ),
         MaintenanceTicket(
-            id = "mt-05", code = "MT-2205", roomId = "room-105", roomNumber = "105",
+            id = "mt-05", code = "MT-2205", roomId = "room-5", roomNumber = "5",
             title = "تلویزیون روشن نمی‌شود",
             description = "برد تلویزیون خراب است؛ در انتظار قطعه یدکی.",
             priority = MaintenancePriority.NORMAL, status = MaintenanceStatus.WAITING_PARTS,
@@ -817,7 +811,7 @@ class DemoStore @Inject constructor() {
             "دریافت ۱۳٬۰۰۰٬۰۰۰ ریال — کارت‌خوان", "محمد صالحی", at(0, 8, 41),
         ),
         AuditLogEntry(
-            "au-04", "تغییر وضعیت اتاق", "Room", "room-103",
+            "au-04", "تغییر وضعیت اتاق", "Room", "room-3",
             "اتاق ۱۰۳ از اشغال به در حال نظافت تغییر کرد", "نگار شریفی", at(0, 8, 35),
         ),
         AuditLogEntry(

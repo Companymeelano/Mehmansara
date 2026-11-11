@@ -10,8 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -24,6 +28,8 @@ import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -138,13 +145,36 @@ fun RoomsScreen(
                     icon = Icons.Rounded.Bed,
                 )
 
-                else -> LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    items(rooms.data.orEmpty(), key = { it.id }) { room ->
-                        RoomRow(room = room, onClick = { onOpenRoom(room.id) })
+                else -> {
+                    val all = rooms.data.orEmpty()
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            RoomSummaryStrip(rooms = all)
+                        }
+                        all.groupBy { it.floor }
+                            .toSortedMap()
+                            .forEach { (floor, floorRooms) ->
+                                item(span = { GridItemSpan(maxLineSpan) }) {
+                                    SectionHeader(
+                                        title = "طبقه ${(floor.toString()).toPersianDigits()}",
+                                        modifier = Modifier.padding(top = 6.dp, bottom = 2.dp),
+                                    )
+                                }
+                                items(
+                                    floorRooms.sortedWith(
+                                        compareBy({ it.roomNumber.toIntOrNull() ?: Int.MAX_VALUE }, { it.roomNumber })
+                                    ),
+                                    key = { it.id },
+                                ) { room ->
+                                    LuxuryRoomCard(room = room, onClick = { onOpenRoom(room.id) })
+                                }
+                            }
                     }
                 }
             }
@@ -153,42 +183,136 @@ fun RoomsScreen(
 }
 
 @Composable
-private fun RoomRow(room: Room, onClick: () -> Unit) {
+private fun LuxuryRoomCard(room: Room, onClick: () -> Unit) {
     MehraCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(modifier = Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "اتاق ${room.roomNumber}",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    StatusPill(text = room.status.labelFa, tint = room.status.tint())
-                }
-                Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = room.roomNumber.toPersianDigits(),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MehraTheme.colors.gold,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "اتاق",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(modifier = Modifier.height(6.dp))
+        StatusPill(text = room.status.labelFa, tint = room.status.tint())
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = room.roomTypeName.ifBlank { "—" },
+            style = MaterialTheme.typography.bodySmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = "${(room.capacity.toString()).toPersianDigits()} تخت • طبقه ${(room.floor.toString()).toPersianDigits()}",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = formatMoneyFa(room.ratePerNightRial) + " / شب",
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MehraTheme.colors.gold,
+        )
+        if (!room.currentGuestName.isNullOrBlank()) {
+            Text(
+                text = "مهمان: ${room.currentGuestName}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+@Composable
+private fun RoomSummaryStrip(rooms: List<Room>) {
+    val total = rooms.size
+    val free = rooms.count { it.status == RoomStatus.FREE }
+    val occupied = rooms.count { it.status == RoomStatus.OCCUPIED }
+    val reserved = rooms.count { it.status == RoomStatus.RESERVED }
+    val cleaning = rooms.count { it.status == RoomStatus.CLEANING }
+    val blocked = rooms.count { it.status == RoomStatus.MAINTENANCE || it.status == RoomStatus.OUT_OF_SERVICE }
+    val occupancy = if (total == 0) 0 else occupied * 100 / total
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            SummaryChip(label = "کل اتاق‌ها", value = total.toString().toPersianDigits(), tint = MehraTheme.colors.gold)
+            SummaryChip(label = "آزاد", value = free.toString().toPersianDigits(), tint = RoomStatus.FREE.tint())
+            SummaryChip(label = "اشغال", value = occupied.toString().toPersianDigits(), tint = RoomStatus.OCCUPIED.tint())
+            SummaryChip(label = "رزرو", value = reserved.toString().toPersianDigits(), tint = RoomStatus.RESERVED.tint())
+            SummaryChip(label = "نظافت", value = cleaning.toString().toPersianDigits(), tint = RoomStatus.CLEANING.tint())
+            SummaryChip(label = "تعمیر", value = blocked.toString().toPersianDigits(), tint = RoomStatus.MAINTENANCE.tint())
+        }
+        if (total > 0) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
-                    text = listOfNotNull(
-                        room.roomTypeName.takeIf { it.isNotBlank() },
-                        "طبقه ${(room.floor.toString()).toPersianDigits()}",
-                        "ظرفیت ${(room.capacity.toString()).toPersianDigits()} نفر",
-                    ).joinToString(" • "),
-                    style = MaterialTheme.typography.bodySmall,
+                    text = "درصد اشغال",
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    text = formatMoneyFa(room.ratePerNightRial) + " / شب",
+                    text = "${occupancy.toString().toPersianDigits()}٪",
                     style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
                     color = MehraTheme.colors.gold,
                 )
-                if (!room.currentGuestName.isNullOrBlank()) {
-                    Text(
-                        text = "مهمان: ${room.currentGuestName}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
             }
+            Spacer(modifier = Modifier.height(4.dp))
+            LinearProgressIndicator(
+                progress = { occupancy / 100f },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(6.dp),
+                color = MehraTheme.colors.gold,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SummaryChip(
+    label: String,
+    value: String,
+    tint: androidx.compose.ui.graphics.Color,
+) {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = tint.copy(alpha = if (MehraTheme.colors.isDark) 0.20f else 0.10f),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = tint,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
