@@ -21,7 +21,6 @@ DefaultDirName={autopf}\Mehra
 DefaultGroupName=مهرآ
 DisableProgramGroupPage=yes
 PrivilegesRequired=admin
-PrivilegesRequiredOverrides=yes
 CloseApplications=yes
 RestartApplications=yes
 OutputDir=..\..\setup-out
