@@ -126,7 +126,7 @@ function IsAdminLoggedOn: Boolean;
   external 'IsAdminLoggedOn@shell32.dll stdcall delayload';
 
 { Never let a shell32 hiccup abort the whole setup: on any failure assume admin
-  (system-wide {fonts}); the {userfonts} fallback is only an optimisation. }
+  (system-wide fonts dir); the per-user fonts fallback is only an optimisation. }
 function IsAdminLoggedOnSafe: Boolean;
 begin
   try
@@ -447,7 +447,7 @@ begin
     WizardForm.Font.Name := 'Vazirmatn';
   except
   end;
-  if not IsAdminLoggedOn then
+  if not IsAdminLoggedOnSafe then
     WizardForm.DirEdit.Text := ExpandConstant('{localappdata}\Mehra');
 
   OptPage := CreateInputOptionPage(wpSelectTasks,
