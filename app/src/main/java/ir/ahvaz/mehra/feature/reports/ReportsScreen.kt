@@ -194,21 +194,21 @@ fun ReportsScreen(viewModel: ReportsViewModel = hiltViewModel()) {
                             CompactButton(
                                 text = "عکس (PNG)",
                                 onClick = viewModel::exportPng,
-                                icon = PhotoCamera,
+                                icon = Icons.Rounded.PhotoCamera,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
                             CompactButton(
                                 text = "خروجی خام",
                                 onClick = viewModel::exportRawCsv,
-                                icon = Badge,
+                                icon = Icons.Rounded.Badge,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
                             CompactButton(
                                 text = "بلوتوث",
                                 onClick = viewModel::exportBluetooth,
-                                icon = Share,
+                                icon = Icons.Rounded.Share,
                                 enabled = !state.isExporting && !data.isEmpty,
                                 modifier = Modifier.weight(1f),
                             )
