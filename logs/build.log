@@ -13,11 +13,11 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preProdReleaseBuild UP-TO-DATE
 > Task :app:mergeProdReleaseJniLibFolders
 > Task :app:mergeProdReleaseNativeLibs
-> Task :app:checkProdReleaseDuplicateClasses
 
 > Task :app:stripProdReleaseDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:checkProdReleaseDuplicateClasses
 > Task :app:buildKotlinToolingMetadata
 > Task :app:extractProdReleaseNativeSymbolTables FROM-CACHE
 > Task :app:mergeProdReleaseNativeDebugMetadata NO-SOURCE
@@ -90,12 +90,12 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProdDebugAssets UP-TO-DATE
 > Task :app:compressProdDebugAssets FROM-CACHE
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
-> Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:checkProdDebugDuplicateClasses
+> Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:mergeProdReleaseJavaResource
-> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:mergeExtDexProdDebug FROM-CACHE
 > Task :app:mergeLibDexProdDebug FROM-CACHE
+> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:transformProdDebugClassesWithAsm UP-TO-DATE
 > Task :app:dexBuilderProdDebug FROM-CACHE
 > Task :app:mergeProdDebugGlobalSynthetics FROM-CACHE
@@ -105,7 +105,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProdDebugNativeLibs
 > Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
-> Task :app:writeProdDebugAppMetadata
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
@@ -113,12 +112,13 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:packageProdRelease
 > Task :app:createProdReleaseApkListingFileRedirect
 > Task :app:assembleProdRelease
+> Task :app:writeProdDebugAppMetadata
 > Task :app:writeProdDebugSigningConfigVersions
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDemoDebugBuildConfig FROM-CACHE
-> Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:checkDemoDebugAarMetadata
+> Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:mapDemoDebugSourceSetPaths
 > Task :app:generateDemoDebugResources FROM-CACHE
 > Task :app:mergeDemoDebugResources FROM-CACHE
@@ -142,30 +142,30 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
 > Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
 > Task :app:hiltJavaCompileDemoDebug FROM-CACHE
-> Task :app:packageProdDebug
-> Task :app:createProdDebugApkListingFileRedirect
-> Task :app:assembleProdDebug
 > Task :app:transformDemoDebugClassesWithAsm FROM-CACHE
 > Task :app:dexBuilderDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
 > Task :app:processDemoDebugJavaRes
-> Task :app:mergeDemoDebugJniLibFolders
 > Task :app:checkDemoDebugDuplicateClasses
-> Task :app:mergeDemoDebugNativeLibs
-> Task :app:validateSigningDemoDebug
+> Task :app:packageProdDebug
+> Task :app:createProdDebugApkListingFileRedirect
+> Task :app:assembleProdDebug
 > Task :app:mergeExtDexDemoDebug FROM-CACHE
 > Task :app:mergeLibDexDemoDebug FROM-CACHE
 > Task :app:mergeProjectDexDemoDebug FROM-CACHE
+> Task :app:mergeDemoDebugJavaResource
+> Task :app:mergeDemoDebugJniLibFolders
+> Task :app:mergeDemoDebugNativeLibs
+> Task :app:validateSigningDemoDebug
+> Task :app:writeDemoDebugAppMetadata
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDemoDebugAppMetadata
 > Task :app:writeDemoDebugSigningConfigVersions
-> Task :app:mergeDemoDebugJavaResource
 > Task :app:packageDemoDebug
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 19s
+BUILD SUCCESSFUL in 21s
 131 actionable tasks: 48 executed, 59 from cache, 24 up-to-date
