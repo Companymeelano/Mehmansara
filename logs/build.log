@@ -13,11 +13,11 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preProdReleaseBuild UP-TO-DATE
 > Task :app:mergeProdReleaseJniLibFolders
 > Task :app:mergeProdReleaseNativeLibs
+> Task :app:checkProdReleaseDuplicateClasses
 
 > Task :app:stripProdReleaseDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:checkProdReleaseDuplicateClasses
 > Task :app:buildKotlinToolingMetadata
 > Task :app:extractProdReleaseNativeSymbolTables FROM-CACHE
 > Task :app:mergeProdReleaseNativeDebugMetadata NO-SOURCE
@@ -92,8 +92,8 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
 > Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:checkProdDebugDuplicateClasses
-> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:mergeProdReleaseJavaResource
+> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:mergeExtDexProdDebug FROM-CACHE
 > Task :app:mergeLibDexProdDebug FROM-CACHE
 > Task :app:transformProdDebugClassesWithAsm UP-TO-DATE
@@ -106,13 +106,16 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
 > Task :app:writeProdDebugAppMetadata
-> Task :app:writeProdDebugSigningConfigVersions
-> Task :app:preDemoDebugBuild UP-TO-DATE
-> Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:packageProdRelease
+> Task :app:createProdReleaseApkListingFileRedirect
+> Task :app:assembleProdRelease
+> Task :app:writeProdDebugSigningConfigVersions
+> Task :app:preDemoDebugBuild UP-TO-DATE
+> Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDemoDebugBuildConfig FROM-CACHE
 > Task :app:generateDemoDebugResValues FROM-CACHE
 > Task :app:checkDemoDebugAarMetadata
@@ -128,9 +131,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processDemoDebugManifestForPackage FROM-CACHE
 > Task :app:processDemoDebugResources FROM-CACHE
 > Task :app:kspDemoDebugKotlin FROM-CACHE
-> Task :app:packageProdRelease
-> Task :app:createProdReleaseApkListingFileRedirect
-> Task :app:assembleProdRelease
 > Task :app:compileDemoDebugKotlin FROM-CACHE
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:compileDemoDebugJavaWithJavac FROM-CACHE
@@ -140,28 +140,28 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeDemoDebugAssets
 > Task :app:compressDemoDebugAssets FROM-CACHE
 > Task :app:desugarDemoDebugFileDependencies FROM-CACHE
+> Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
+> Task :app:hiltJavaCompileDemoDebug FROM-CACHE
 > Task :app:packageProdDebug
 > Task :app:createProdDebugApkListingFileRedirect
 > Task :app:assembleProdDebug
-> Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
-> Task :app:hiltJavaCompileDemoDebug FROM-CACHE
 > Task :app:transformDemoDebugClassesWithAsm FROM-CACHE
 > Task :app:dexBuilderDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
 > Task :app:processDemoDebugJavaRes
 > Task :app:mergeDemoDebugJniLibFolders
+> Task :app:checkDemoDebugDuplicateClasses
 > Task :app:mergeDemoDebugNativeLibs
 > Task :app:validateSigningDemoDebug
-> Task :app:writeDemoDebugAppMetadata
-> Task :app:checkDemoDebugDuplicateClasses
-> Task :app:writeDemoDebugSigningConfigVersions
+> Task :app:mergeExtDexDemoDebug FROM-CACHE
+> Task :app:mergeLibDexDemoDebug FROM-CACHE
+> Task :app:mergeProjectDexDemoDebug FROM-CACHE
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:mergeExtDexDemoDebug FROM-CACHE
-> Task :app:mergeLibDexDemoDebug FROM-CACHE
-> Task :app:mergeProjectDexDemoDebug FROM-CACHE
+> Task :app:writeDemoDebugAppMetadata
+> Task :app:writeDemoDebugSigningConfigVersions
 > Task :app:mergeDemoDebugJavaResource
 > Task :app:packageDemoDebug
 > Task :app:createDemoDebugApkListingFileRedirect
