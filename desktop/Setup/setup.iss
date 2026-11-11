@@ -422,6 +422,7 @@ function NextButtonClick(CurPageID: Integer): Boolean;
 var
   Err: string;
   winAuth: Boolean;
+  FreeB, TotalB, Dummy: Int64;
 begin
   Result := True;
   if CurPageID = wpSelectComponents then
