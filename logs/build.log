@@ -83,6 +83,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:kspProdDebugKotlin UP-TO-DATE
 > Task :app:compileProdDebugKotlin UP-TO-DATE
 > Task :app:javaPreCompileProdDebug UP-TO-DATE
+> Task :app:mergeProdReleaseJavaResource
 > Task :app:compileProdDebugJavaWithJavac UP-TO-DATE
 > Task :app:mergeProdDebugShaders UP-TO-DATE
 > Task :app:compileProdDebugShaders NO-SOURCE
@@ -90,12 +91,11 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProdDebugAssets UP-TO-DATE
 > Task :app:compressProdDebugAssets FROM-CACHE
 > Task :app:desugarProdDebugFileDependencies FROM-CACHE
-> Task :app:mergeProdReleaseJavaResource
 > Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
 > Task :app:checkProdDebugDuplicateClasses
+> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:mergeExtDexProdDebug FROM-CACHE
 > Task :app:mergeLibDexProdDebug FROM-CACHE
-> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
 > Task :app:transformProdDebugClassesWithAsm UP-TO-DATE
 > Task :app:dexBuilderProdDebug FROM-CACHE
 > Task :app:mergeProdDebugGlobalSynthetics FROM-CACHE
@@ -103,22 +103,22 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProjectDexProdDebug FROM-CACHE
 > Task :app:mergeProdDebugJniLibFolders
 > Task :app:mergeProdDebugNativeLibs
-> Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
+> Task :app:mergeProdDebugJavaResource
 > Task :app:writeProdDebugAppMetadata
-> Task :app:writeProdDebugSigningConfigVersions
-> Task :app:preDemoDebugBuild UP-TO-DATE
-> Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
-> Task :app:generateDemoDebugBuildConfig FROM-CACHE
 
 > Task :app:stripProdDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:writeProdDebugSigningConfigVersions
 > Task :app:packageProdRelease
 > Task :app:createProdReleaseApkListingFileRedirect
 > Task :app:assembleProdRelease
-> Task :app:checkDemoDebugAarMetadata
+> Task :app:preDemoDebugBuild UP-TO-DATE
+> Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDemoDebugBuildConfig FROM-CACHE
 > Task :app:generateDemoDebugResValues FROM-CACHE
+> Task :app:checkDemoDebugAarMetadata
 > Task :app:mapDemoDebugSourceSetPaths
 > Task :app:generateDemoDebugResources FROM-CACHE
 > Task :app:mergeDemoDebugResources FROM-CACHE
@@ -135,6 +135,9 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:javaPreCompileDemoDebug FROM-CACHE
 > Task :app:compileDemoDebugJavaWithJavac FROM-CACHE
 > Task :app:mergeDemoDebugShaders
+> Task :app:packageProdDebug
+> Task :app:createProdDebugApkListingFileRedirect
+> Task :app:assembleProdDebug
 > Task :app:compileDemoDebugShaders NO-SOURCE
 > Task :app:generateDemoDebugAssets UP-TO-DATE
 > Task :app:mergeDemoDebugAssets
@@ -143,9 +146,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
 > Task :app:hiltJavaCompileDemoDebug FROM-CACHE
 > Task :app:transformDemoDebugClassesWithAsm FROM-CACHE
-> Task :app:packageProdDebug
-> Task :app:createProdDebugApkListingFileRedirect
-> Task :app:assembleProdDebug
 > Task :app:dexBuilderDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
 > Task :app:processDemoDebugJavaRes
@@ -167,5 +167,5 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 18s
+BUILD SUCCESSFUL in 15s
 131 actionable tasks: 48 executed, 59 from cache, 24 up-to-date
