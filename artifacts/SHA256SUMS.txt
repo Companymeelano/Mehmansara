@@ -3,11 +3,11 @@ b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0
 # Windows desktop exe (final, run 42276592462) — on branch ci-artifacts (exe/Mehra.exe); not pinned locally (size).
 6a55794e74559c720ede4da08d362f263a211f1720b5fcca192fdb53a8eb27f4  ci-artifacts:exe/Mehra.exe  (92,797,563 bytes)
 
-# Windows v1.1.1 (final, run 43111959077) — MehraSetup.exe now BUNDLES SQL Server 2022 LocalDB (SqlLocalDB.msi)
-# and installs it silently during setup; app+installer version 1.1.1 — all on branch ci-artifacts
-64edc58b061d60f3c3c780a32b1f7745f211bc8cb2f9bb29222c92c967dae1c3  ci-artifacts:setup/MehraSetup.exe  (91,907,455 bytes)
-9e9d9c8acf68220ad591e2bade1c8eeff4baa4a5d35fe0998821f220beba5af4  ci-artifacts:exe/Mehra.exe  (94,110,600 bytes)
-28731344f6a06269f89fd49c3ff32a243b86587e0ce2b8b9b7991313c01c5ff1  ci-artifacts:exe/Mehra-win-x64.zip  (41,576,381 bytes)
+# Windows v1.1.2 (final, run 43278279919) — one-file setup bundling SQL Server 2016 LocalDB x64 (~45MB),
+# embedded schema.sql in the exe, luxury 3D icon/banners, startup+openfolder tasks — on branch ci-artifacts
+c290c2b56b6b144bb7e566e223b75afb63c34d3be8374d1ff666a3595d86377e  ci-artifacts:setup/MehraSetup.exe  (75,931,382 bytes)
+c45b501cf738f2b2419004d427d3e34e5af170cac86cab3c5a1c55f69524f1fe  ci-artifacts:exe/Mehra.exe  (94,192,520 bytes)
+8f3074c44c2f7234bb061a0abbd02064de714f63bb906c3dbd3f0bce8c014cd4  ci-artifacts:exe/Mehra-win-x64.zip  (41,814,119 bytes)
 
 # Android v1.1.0 debug APKs (final, run 42698342228) — on branch ci-artifacts
 1ee76adaf430310a5a0481271844818c44bc7d57906be1a2351a1c8e658fb7206  ci-artifacts:apk/app-debug.apk  (20,938,162 bytes, v1.3.0, run 42937262726)
