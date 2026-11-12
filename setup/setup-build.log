@@ -64,17 +64,17 @@ Parsing [Components] section, line 78
 Parsing [Components] section, line 79
 Parsing [Components] section, line 80
 Parsing [Components] section, line 81
-Parsing [Tasks] section, line 84
+Parsing [Components] section, line 82
 Parsing [Tasks] section, line 85
 Parsing [Tasks] section, line 86
 Parsing [Tasks] section, line 87
-Parsing [Icons] section, line 113
-Parsing [Icons] section, line 114
+Parsing [Tasks] section, line 88
 Parsing [Icons] section, line 115
 Parsing [Icons] section, line 116
-Parsing [Run] section, line 119
-Parsing [Run] section, line 120
-Parsing [Files] section, line 90
+Parsing [Icons] section, line 117
+Parsing [Icons] section, line 118
+Parsing [Run] section, line 121
+Parsing [Run] section, line 122
 Parsing [Files] section, line 91
 Parsing [Files] section, line 92
 Parsing [Files] section, line 93
@@ -95,12 +95,15 @@ Parsing [Files] section, line 107
 Parsing [Files] section, line 108
 Parsing [Files] section, line 109
 Parsing [Files] section, line 110
+Parsing [Files] section, line 111
+Parsing [Files] section, line 112
 Compiling [Code] section
 Creating setup files
    Verification successful
    Updating icons (Setup.exe)
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\..\publish\Mehra.exe
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\redist\SqlLocalDB.msi
+   Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\redist\msoledbsql.msi
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\..\Mehra.Desktop\db\schema.sql
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_regular.ttf
    Compressing: D:\a\Mehmansara\Mehmansara\desktop\Setup\vazirmatn_medium.ttf
@@ -118,7 +121,7 @@ Warning: Message name "ReadyLabel" is not recognized by this version of Inno Set
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or consider using its "auto" form.
 Warning: The [Setup] section directive "PrivilegesRequired" is set to "admin" but per-user areas (userdesktop,userfonts,userstartup) are used by the script. Regardless of the version of Windows, if the installation is running in administrative install mode then you should be careful about making any per-user area changes: such changes may not achieve what you are intending. See the "UsedUserAreasWarning" topic in help file for more information.
-Warning: Line 437, Column 10: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
+Warning: Line 484, Column 10: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
 
-Successful compile (34.828 sec). Resulting Setup program filename is:
+Successful compile (39.969 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
