@@ -23,42 +23,43 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
-> Task :app:generateDebugResValues FROM-CACHE
 > Task :app:checkDebugAarMetadata
+> Task :app:generateDebugResValues FROM-CACHE
 > Task :app:mapDebugSourceSetPaths
-> Task :app:generateDebugResources
-> Task :app:packageDebugResources
+> Task :app:generateDebugResources FROM-CACHE
+> Task :app:mergeDebugResources FROM-CACHE
+> Task :app:packageDebugResources FROM-CACHE
 > Task :app:parseDebugLocalResources FROM-CACHE
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug FROM-CACHE
-> Task :app:mergeDebugResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
 > Task :app:javaPreCompileDebug FROM-CACHE
 > Task :app:mergeDebugShaders
-> Task :app:processDebugManifestForPackage
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:preDebugUnitTestBuild UP-TO-DATE
 > Task :app:javaPreCompileDebugUnitTest FROM-CACHE
+> Task :app:processDebugManifestForPackage
 > Task :app:processDebugResources
 > Task :app:packageDebugUnitTestForUnitTest
 > Task :app:generateDebugUnitTestConfig
 > Task :app:kspDebugKotlin
-
 > Task :app:compileDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:251:42 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:259:42 'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:376:36 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:279:42 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:287:42 'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:404:36 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:494:75 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
+w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:534:53 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
 
 > Task :app:compileDebugJavaWithJavac
-> Task :app:hiltAggregateDepsDebug
+> Task :app:hiltAggregateDepsDebug FROM-CACHE
 > Task :app:hiltJavaCompileDebug
 > Task :app:processDebugJavaRes
 > Task :app:bundleDebugClassesToCompileJar
@@ -67,11 +68,11 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 > Task :app:kspDebugUnitTestKotlin
 > Task :app:compileDebugUnitTestKotlin
 > Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
-> Task :app:hiltAggregateDepsDebugUnitTest
+> Task :app:hiltAggregateDepsDebugUnitTest FROM-CACHE
 > Task :app:hiltJavaCompileDebugUnitTest NO-SOURCE
 > Task :app:processDebugUnitTestJavaRes
 > Task :app:transformDebugUnitTestClassesWithAsm
 > Task :app:testDebugUnitTest
 
-BUILD SUCCESSFUL in 58s
-35 actionable tasks: 30 executed, 5 from cache
+BUILD SUCCESSFUL in 1m 32s
+35 actionable tasks: 25 executed, 10 from cache
