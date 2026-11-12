@@ -46,9 +46,9 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:mergeProdDebugShaders
 > Task :app:compileProdDebugShaders NO-SOURCE
 > Task :app:generateProdDebugAssets UP-TO-DATE
-> Task :app:bundleProdDebugClassesToRuntimeJar
 > Task :app:mergeProdDebugAssets
 > Task :app:preProdDebugUnitTestBuild UP-TO-DATE
+> Task :app:bundleProdDebugClassesToRuntimeJar
 > Task :app:packageProdDebugUnitTestForUnitTest
 > Task :app:generateProdDebugUnitTestConfig
 > Task :app:processProdDebugJavaRes
