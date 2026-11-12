@@ -3,6 +3,15 @@ name: Android CI
 on:
   push:
     branches: [ "**" ]
+    # Only rebuild APKs when Android sources or this workflow change — docs-only pushes
+    # must NOT re-sign (each run uses a fresh ephemeral key, which would change the APK
+    # sha256 and invalidate the hashes pinned in artifacts/SHA256SUMS.txt).
+    paths:
+      - "app/**"
+      - "gradle/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - ".github/workflows/android-ci.yml"
   workflow_dispatch:
 
 permissions:
