@@ -1,5 +1,5 @@
 ﻿; ============================================================================
-;  MEHRA 1.1.3 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
+;  MEHRA 1.1.4 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
 ;  Luxury Persian (RTL) installer for the MEHRA Windows client.
 ;  Brand: Milad Yaghoobi — www.meelano.ir — 09120219593
 ;  Features: branded welcome/finish, Vazirmatn font, SQL Server config page,
@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.3
-AppVerName=مهرآ ۱.۱.۳ — ویندوز
+AppVersion=1.1.4
+AppVerName=مهرآ ۱.۱.۴ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -35,7 +35,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.3.0
+VersionInfoVersion=1.1.4.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -72,7 +72,7 @@ StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
 FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱.۳ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۱.۴ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed

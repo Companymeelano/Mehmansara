@@ -96,6 +96,40 @@ public class SqlServerApi : IHotelApi
     /// <summary>Authenticates against dbo.users. IHotelApi.LoginAsync repurposes serverUrl as the server name.</summary>
     public async Task<Result<SessionUser>> LoginAsync(string serverUrl, string username, string password)
     {
+        var first = await TryLoginAsync(username, password);
+        if (first.Ok) return first;
+        // Connected, but the database/tables are missing (e.g. the installer's schema step
+        // failed): create them from the bundled/embedded schema.sql and retry once.
+        if (LooksLikeMissingSchema(first.Error))
+        {
+            var schema = await EnsureSchemaAsync(MasterConnectionString, SchemaFilePath(), Database);
+            if (!schema.Ok)
+                return Result<SessionUser>.Fail("ساخت خودکار جداول پایگاه داده ناموفق بود: " + schema.Error);
+            return await TryLoginAsync(username, password);
+        }
+        return first;
+    }
+
+    private static bool LooksLikeMissingSchema(string error) =>
+        error.Contains("Invalid object name") || error.Contains("Cannot open database") || error.Contains("4060");
+
+    private static string SchemaFilePath()
+    {
+        var p = Path.Combine(AppContext.BaseDirectory, "db", "schema.sql");
+        if (File.Exists(p)) return p;
+        var asm = System.Reflection.Assembly.GetExecutingAssembly();
+        using var rs = asm.GetManifestResourceStream("Mehra.Desktop.db.schema.sql");
+        if (rs != null)
+        {
+            var tmp = Path.Combine(Path.GetTempPath(), "mehra-schema.sql");
+            using (var fs = File.Create(tmp)) rs.CopyTo(fs);
+            return tmp;
+        }
+        return p; // EnsureSchemaAsync will report the missing file itself
+    }
+
+    private async Task<Result<SessionUser>> TryLoginAsync(string username, string password)
+    {
         try
         {
             await using var con = new SqlConnection(ConnectionString);
@@ -121,6 +155,15 @@ public class SqlServerApi : IHotelApi
                 Username = username,
                 RoleTitle = r.IsDBNull(4) ? (r.GetString(5)) : r.GetString(4)
             });
+        }
+        catch (SqlException ex)
+        {
+            return ex.Number switch
+            {
+                4060 => Result<SessionUser>.Fail("Cannot open database «" + Database + "» (4060) — پایگاه داده هنوز ساخته نشده است."),
+                -2 or 258 => Result<SessionUser>.Fail("اتصال به SQL Server برقرار نشد؛ وضعیت instance «" + Server + "» را بررسی کنید. " + ex.Message),
+                _ => Result<SessionUser>.Fail("خطا در ورود به پایگاه داده: " + ex.Message),
+            };
         }
         catch (Exception ex)
         {
