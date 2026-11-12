@@ -6,7 +6,7 @@ a69e7d6438fd8fe63beafb588be53fa6b63deb31d27d1564b5b1ef5fe8dab2cb  ci-artifacts:s
 3e07c8fdf9d7649efc97b827f449eacde28185b1dc0f682cf9ee85ba5eab2c1c  ci-artifacts:exe/Mehra.exe  (94,192,520 bytes)
 ebca0d83517dae418a83b5824ce62b587fa2ef475ad969be6523635a73cf5fe5  ci-artifacts:exe/Mehra-win-x64.zip  (41,815,275 bytes)
 
-# Android v1.3.1 (final, run 43295346135) — release APK always signed (v1+v2+v3 verified: META-INF/CERT.RSA + sig-block 0x7109871a + 0xf05368c0) — on branch ci-artifacts
-b0b4461b332dbcf55ed2068330661bfe03c6f9e983f94f7e5f63d9204d45c3f0  ci-artifacts:apk/app-release.apk  (13,975,072 bytes, v1.3.1 prod release, run 43295346135)
-a3d3cceaa059c96d62601ee223c075888eefee5a1884c945795b0788408c384a  ci-artifacts:apk/app-debug.apk  (20,956,833 bytes, v1.3.1 prod debug, run 43295346135)
-8e337ee04cd647bb4140dd42aa69bcc3b2a880ef364e218d8cf65d1edb3cb727  ci-artifacts:apk/demo/mehra-demo-debug.apk  (21,055,174 bytes, v1.3.1 demo, run 43295346135)
+# Android v1.3.2 (final, run 43305595321) — release APK always signed (sig block present) — demo starts EMPTY (no seeded data, manual entry) — on branch ci-artifacts
+579a4ec1c4f95d457751c23ad983d6fcb6f36eccfd446a97d978fb84e918ee20  ci-artifacts:apk/app-release.apk  (13,975,080 bytes, v1.3.2 prod release, run 43305595321)
+19b94e1e624d19ba85b262c72ae6ce369614e9b7cb697aee3725aa3e5a283e66  ci-artifacts:apk/app-debug.apk  (20,956,833 bytes, v1.3.2 prod debug, run 43305595321)
+abf1e2262122169f920d529b88a04c22dbc57c54e0b4ecc465585742d5c4a526  ci-artifacts:apk/demo/mehra-demo-debug.apk  (21,038,781 bytes, v1.3.2 demo — empty start, run 43305595321)

@@ -16,11 +16,11 @@
 | نمایشی (نسخه ثابت‌شده) | https://github.com/Companymeelano/Mehmansara/raw/arena/276c0f62-mehmansara/artifacts/mehra-demo-1.0.0-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/arena/276c0f62-mehmansara/artifacts/mehra-demo-1.0.0-debug.apk |
 | عملیاتی | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
 | صفحه انتشار | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-test | — |
-| نصب‌گر ویندوز ۱.۱.۳ (یک‌فایله با LocalDB+OLEDB) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/setup/MehraSetup.exe |
-| اندروید ۱.۳.۱ — عملیاتی debug (v1.3.1) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
-| اندروید ۱.۳.۱ — نمایشی demo (v1.3.1) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/demo/mehra-demo-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/demo/mehra-demo-debug.apk |
-| **اندروید ۱.۳.۱ — نهایی/واقعی (prod RELEASE، امضاشده v1+v2+v3)** ⭐ | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-release.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-release.apk |
-| انتشار اندروید ۱.۳.۱ | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.3.0-android | — |
+| نصب‌گر ویندوز ۱.۱.۴ (یک‌فایله با LocalDB+OLEDB) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/setup/MehraSetup.exe |
+| اندروید ۱.۳.۲ — عملیاتی debug (v1.3.2) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-debug.apk |
+| اندروید ۱.۳.۲ — نمایشی demo (v1.3.2 — شروع خالی، ورود دستی اطلاعات) | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/demo/mehra-demo-debug.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/demo/mehra-demo-debug.apk |
+| **اندروید ۱.۳.۲ — نهایی/واقعی (prod RELEASE، امضاشده v1+v2+v3)** ⭐ | https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/apk/app-release.apk | https://github.com/Companymeelano/Mehmansara/blob/ci-artifacts/apk/app-release.apk |
+| انتشار اندروید ۱.۳.۲ | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.3.0-android | — |
 | انتشار نسخهٔ ویندوز | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows | — |
 | انتشار نسخهٔ ویندوز | https://github.com/Companymeelano/Mehmansara/releases/tag/v1.0.0-windows | — |
 | اجرای CI و آرتیفکت‌ها | https://github.com/Companymeelano/Mehmansara/actions | — |
