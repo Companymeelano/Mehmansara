@@ -20,33 +20,34 @@ To keep using this feature, add the following to your module-level build.gradle 
 or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build Files`.
 
 > Task :app:preBuild UP-TO-DATE
-> Task :app:preProdDebugBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateProdDebugBuildConfig
-> Task :app:checkProdDebugAarMetadata
-> Task :app:generateProdDebugResValues FROM-CACHE
-> Task :app:mapProdDebugSourceSetPaths
-> Task :app:generateProdDebugResources FROM-CACHE
-> Task :app:mergeProdDebugResources FROM-CACHE
-> Task :app:packageProdDebugResources FROM-CACHE
-> Task :app:parseProdDebugLocalResources FROM-CACHE
-> Task :app:createProdDebugCompatibleScreenManifests
-> Task :app:extractDeepLinksProdDebug FROM-CACHE
-> Task :app:processProdDebugMainManifest
-> Task :app:processProdDebugManifest
-> Task :app:javaPreCompileProdDebug FROM-CACHE
-> Task :app:mergeProdDebugShaders
-> Task :app:compileProdDebugShaders NO-SOURCE
-> Task :app:processProdDebugManifestForPackage
-> Task :app:generateProdDebugAssets UP-TO-DATE
-> Task :app:mergeProdDebugAssets
-> Task :app:preProdDebugUnitTestBuild UP-TO-DATE
-> Task :app:javaPreCompileProdDebugUnitTest FROM-CACHE
-> Task :app:processProdDebugResources
-> Task :app:packageProdDebugUnitTestForUnitTest
-> Task :app:generateProdDebugUnitTestConfig
-> Task :app:kspProdDebugKotlin
-> Task :app:compileProdDebugKotlin
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues FROM-CACHE
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:parseDebugLocalResources FROM-CACHE
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug FROM-CACHE
+> Task :app:mergeDebugResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:javaPreCompileDebug FROM-CACHE
+> Task :app:mergeDebugShaders
+> Task :app:processDebugManifestForPackage
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest FROM-CACHE
+> Task :app:processDebugResources
+> Task :app:packageDebugUnitTestForUnitTest
+> Task :app:generateDebugUnitTestConfig
+> Task :app:kspDebugKotlin
+
+> Task :app:compileDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
@@ -56,21 +57,21 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
 
-> Task :app:compileProdDebugJavaWithJavac
-> Task :app:hiltAggregateDepsProdDebug FROM-CACHE
-> Task :app:hiltJavaCompileProdDebug
-> Task :app:processProdDebugJavaRes
-> Task :app:bundleProdDebugClassesToCompileJar
-> Task :app:transformProdDebugClassesWithAsm
-> Task :app:bundleProdDebugClassesToRuntimeJar
-> Task :app:kspProdDebugUnitTestKotlin
-> Task :app:compileProdDebugUnitTestKotlin
-> Task :app:compileProdDebugUnitTestJavaWithJavac NO-SOURCE
-> Task :app:hiltAggregateDepsProdDebugUnitTest FROM-CACHE
-> Task :app:hiltJavaCompileProdDebugUnitTest NO-SOURCE
-> Task :app:processProdDebugUnitTestJavaRes
-> Task :app:transformProdDebugUnitTestClassesWithAsm
-> Task :app:testProdDebugUnitTest
+> Task :app:compileDebugJavaWithJavac
+> Task :app:hiltAggregateDepsDebug
+> Task :app:hiltJavaCompileDebug
+> Task :app:processDebugJavaRes
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:transformDebugClassesWithAsm
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:kspDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:hiltAggregateDepsDebugUnitTest
+> Task :app:hiltJavaCompileDebugUnitTest NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes
+> Task :app:transformDebugUnitTestClassesWithAsm
+> Task :app:testDebugUnitTest
 
-BUILD SUCCESSFUL in 1m 31s
-35 actionable tasks: 25 executed, 10 from cache
+BUILD SUCCESSFUL in 58s
+35 actionable tasks: 30 executed, 5 from cache

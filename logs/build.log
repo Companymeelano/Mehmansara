@@ -10,137 +10,101 @@ To keep using this feature, add the following to your module-level build.gradle 
 or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build Files`.
 
 > Task :app:preBuild UP-TO-DATE
-> Task :app:preProdReleaseBuild UP-TO-DATE
-> Task :app:mergeProdReleaseJniLibFolders
-> Task :app:mergeProdReleaseNativeLibs
-> Task :app:checkProdReleaseDuplicateClasses
-
-> Task :app:stripProdReleaseDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
-
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders
+> Task :app:mergeReleaseNativeLibs
+> Task :app:checkReleaseDuplicateClasses
 > Task :app:buildKotlinToolingMetadata
-> Task :app:extractProdReleaseNativeSymbolTables FROM-CACHE
-> Task :app:mergeProdReleaseNativeDebugMetadata NO-SOURCE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateProdReleaseBuildConfig
-> Task :app:generateProdReleaseResValues FROM-CACHE
-> Task :app:checkProdReleaseAarMetadata
-> Task :app:mapProdReleaseSourceSetPaths
-> Task :app:generateProdReleaseResources FROM-CACHE
-> Task :app:mergeProdReleaseResources FROM-CACHE
-> Task :app:packageProdReleaseResources FROM-CACHE
-> Task :app:parseProdReleaseLocalResources FROM-CACHE
-> Task :app:createProdReleaseCompatibleScreenManifests
-> Task :app:extractDeepLinksProdRelease FROM-CACHE
-> Task :app:processProdReleaseMainManifest
-> Task :app:processProdReleaseManifest
-> Task :app:javaPreCompileProdRelease FROM-CACHE
-> Task :app:desugarProdReleaseFileDependencies FROM-CACHE
-> Task :app:mergeProdReleaseStartupProfile
-> Task :app:processProdReleaseManifestForPackage
-> Task :app:mergeExtDexProdRelease FROM-CACHE
-> Task :app:processProdReleaseResources
-> Task :app:mergeProdReleaseArtProfile
-> Task :app:mergeProdReleaseShaders
-> Task :app:compileProdReleaseShaders NO-SOURCE
-> Task :app:generateProdReleaseAssets UP-TO-DATE
-> Task :app:mergeProdReleaseAssets
-> Task :app:compressProdReleaseAssets FROM-CACHE
-> Task :app:extractProdReleaseVersionControlInfo
-> Task :app:collectProdReleaseDependencies
-> Task :app:optimizeProdReleaseResources
-> Task :app:sdkProdReleaseDependencyData
-> Task :app:validateSigningProdRelease
-> Task :app:writeProdReleaseAppMetadata
-> Task :app:writeProdReleaseSigningConfigVersions
-> Task :app:preProdDebugBuild UP-TO-DATE
-> Task :app:mergeProdDebugNativeDebugMetadata NO-SOURCE
-> Task :app:generateProdDebugBuildConfig UP-TO-DATE
-> Task :app:checkProdDebugAarMetadata UP-TO-DATE
-> Task :app:generateProdDebugResValues UP-TO-DATE
-> Task :app:mapProdDebugSourceSetPaths UP-TO-DATE
-> Task :app:generateProdDebugResources UP-TO-DATE
-> Task :app:mergeProdDebugResources UP-TO-DATE
-> Task :app:packageProdDebugResources UP-TO-DATE
-> Task :app:parseProdDebugLocalResources UP-TO-DATE
-> Task :app:createProdDebugCompatibleScreenManifests UP-TO-DATE
-> Task :app:extractDeepLinksProdDebug UP-TO-DATE
-> Task :app:processProdDebugMainManifest UP-TO-DATE
-> Task :app:processProdDebugManifest UP-TO-DATE
-> Task :app:processProdDebugManifestForPackage UP-TO-DATE
-> Task :app:processProdDebugResources UP-TO-DATE
-> Task :app:kspProdDebugKotlin UP-TO-DATE
-> Task :app:compileProdDebugKotlin UP-TO-DATE
-> Task :app:javaPreCompileProdDebug UP-TO-DATE
-> Task :app:compileProdDebugJavaWithJavac UP-TO-DATE
-> Task :app:mergeProdDebugShaders UP-TO-DATE
-> Task :app:compileProdDebugShaders NO-SOURCE
-> Task :app:generateProdDebugAssets UP-TO-DATE
-> Task :app:mergeProdDebugAssets UP-TO-DATE
-> Task :app:compressProdDebugAssets FROM-CACHE
-> Task :app:desugarProdDebugFileDependencies FROM-CACHE
-> Task :app:checkProdDebugDuplicateClasses
-> Task :app:hiltAggregateDepsProdDebug UP-TO-DATE
-> Task :app:mergeExtDexProdDebug FROM-CACHE
-> Task :app:mergeLibDexProdDebug FROM-CACHE
-> Task :app:hiltJavaCompileProdDebug UP-TO-DATE
-> Task :app:transformProdDebugClassesWithAsm UP-TO-DATE
-> Task :app:dexBuilderProdDebug
-> Task :app:mergeProdDebugGlobalSynthetics FROM-CACHE
-> Task :app:processProdDebugJavaRes UP-TO-DATE
-> Task :app:mergeProdDebugJniLibFolders
-> Task :app:mergeProdDebugNativeLibs
 
-> Task :app:stripProdDebugDebugSymbols
+> Task :app:stripReleaseDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:kspProdReleaseKotlin
-> Task :app:validateSigningProdDebug
-> Task :app:writeProdDebugAppMetadata
-> Task :app:writeProdDebugSigningConfigVersions
-> Task :app:preDemoDebugBuild UP-TO-DATE
-> Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
-> Task :app:generateDemoDebugBuildConfig
-> Task :app:checkDemoDebugAarMetadata
-> Task :app:generateDemoDebugResValues FROM-CACHE
-> Task :app:mapDemoDebugSourceSetPaths
-> Task :app:mergeProjectDexProdDebug
-> Task :app:mergeProdDebugJavaResource
-> Task :app:generateDemoDebugResources FROM-CACHE
-> Task :app:mergeDemoDebugResources FROM-CACHE
-> Task :app:packageDemoDebugResources FROM-CACHE
-> Task :app:parseDemoDebugLocalResources FROM-CACHE
-> Task :app:createDemoDebugCompatibleScreenManifests
-> Task :app:extractDeepLinksDemoDebug FROM-CACHE
-> Task :app:processDemoDebugMainManifest
-> Task :app:processDemoDebugManifest
-> Task :app:javaPreCompileDemoDebug FROM-CACHE
-> Task :app:mergeDemoDebugShaders
-> Task :app:compileDemoDebugShaders NO-SOURCE
-> Task :app:generateDemoDebugAssets UP-TO-DATE
-> Task :app:mergeDemoDebugAssets
-> Task :app:processDemoDebugManifestForPackage
-> Task :app:compressDemoDebugAssets FROM-CACHE
-> Task :app:desugarDemoDebugFileDependencies FROM-CACHE
-> Task :app:checkDemoDebugDuplicateClasses
-> Task :app:mergeExtDexDemoDebug FROM-CACHE
-> Task :app:processDemoDebugResources
-> Task :app:packageProdDebug
-> Task :app:createProdDebugApkListingFileRedirect
-> Task :app:assembleProdDebug
-> Task :app:mergeLibDexDemoDebug FROM-CACHE
-> Task :app:mergeDemoDebugJniLibFolders
-> Task :app:mergeDemoDebugNativeLibs
-> Task :app:validateSigningDemoDebug
-> Task :app:writeDemoDebugAppMetadata
-> Task :app:writeDemoDebugSigningConfigVersions
+> Task :app:generateReleaseBuildConfig
+> Task :app:extractReleaseNativeSymbolTables FROM-CACHE
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:generateReleaseResValues FROM-CACHE
+> Task :app:checkReleaseAarMetadata
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:generateReleaseResources
+> Task :app:packageReleaseResources
+> Task :app:parseReleaseLocalResources FROM-CACHE
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease FROM-CACHE
+> Task :app:processReleaseMainManifest
+> Task :app:mergeReleaseResources
+> Task :app:processReleaseManifest
+> Task :app:javaPreCompileRelease FROM-CACHE
+> Task :app:desugarReleaseFileDependencies FROM-CACHE
+> Task :app:mergeReleaseStartupProfile
+> Task :app:mergeExtDexRelease FROM-CACHE
+> Task :app:processReleaseManifestForPackage
+> Task :app:mergeReleaseArtProfile
+> Task :app:mergeReleaseShaders
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets
+> Task :app:compressReleaseAssets FROM-CACHE
+> Task :app:extractReleaseVersionControlInfo
+> Task :app:collectReleaseDependencies
+> Task :app:processReleaseResources
+> Task :app:sdkReleaseDependencyData
+> Task :app:validateSigningRelease
+> Task :app:writeReleaseAppMetadata
+> Task :app:writeReleaseSigningConfigVersions
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:optimizeReleaseResources
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:kspDebugKotlin UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets FROM-CACHE
+> Task :app:desugarDebugFileDependencies FROM-CACHE
+> Task :app:hiltAggregateDepsDebug UP-TO-DATE
+> Task :app:hiltJavaCompileDebug UP-TO-DATE
+> Task :app:transformDebugClassesWithAsm UP-TO-DATE
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics FROM-CACHE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders
+> Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugNativeLibs
+> Task :app:mergeExtDexDebug FROM-CACHE
+> Task :app:mergeLibDexDebug FROM-CACHE
 
-> Task :app:stripDemoDebugDebugSymbols
+> Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:kspDemoDebugKotlin
-> Task :app:compileProdReleaseKotlin
-> Task :app:compileDemoDebugKotlin
+> Task :app:mergeDebugJavaResource
+> Task :app:mergeProjectDexDebug
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:kspReleaseKotlin
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+
+> Task :app:compileReleaseKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
@@ -150,41 +114,19 @@ w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/meh
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
 
-> Task :app:compileProdReleaseKotlin
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/TokenRefreshCoordinator.kt:75:50 Condition is always 'false'.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/state/UiState.kt:71:1 Expected performance impact from inlining is insignificant. Inlining works best for functions with parameters of function types.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:251:42 'val Icons.Rounded.Login: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Login.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:259:42 'val Icons.Rounded.Logout: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Logout.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/dashboard/DashboardScreen.kt:376:36 'val Icons.Rounded.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.KeyboardArrowLeft.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/reservations/ReservationsScreens.kt:130:42 'val Icons.Rounded.EventNote: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.EventNote.
-w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/root/LockScreen.kt:169:52 'val Icons.Rounded.Backspace: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Rounded.Backspace.
+> Task :app:compileReleaseJavaWithJavac
+> Task :app:hiltAggregateDepsRelease FROM-CACHE
+> Task :app:hiltJavaCompileRelease
+> Task :app:processReleaseJavaRes
+> Task :app:mergeReleaseJavaResource
+> Task :app:transformReleaseClassesWithAsm
+> Task :app:dexBuilderRelease
+> Task :app:mergeReleaseGlobalSynthetics FROM-CACHE
+> Task :app:mergeDexRelease
+> Task :app:compileReleaseArtProfile
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
 
-> Task :app:compileProdReleaseJavaWithJavac
-> Task :app:hiltAggregateDepsProdRelease FROM-CACHE
-> Task :app:hiltJavaCompileProdRelease
-> Task :app:processProdReleaseJavaRes
-> Task :app:mergeProdReleaseJavaResource
-> Task :app:transformProdReleaseClassesWithAsm
-> Task :app:compileDemoDebugJavaWithJavac
-> Task :app:dexBuilderProdRelease
-> Task :app:mergeProdReleaseGlobalSynthetics FROM-CACHE
-> Task :app:hiltAggregateDepsDemoDebug FROM-CACHE
-> Task :app:hiltJavaCompileDemoDebug
-> Task :app:processDemoDebugJavaRes
-> Task :app:mergeDemoDebugJavaResource
-> Task :app:transformDemoDebugClassesWithAsm
-> Task :app:mergeDexProdRelease
-> Task :app:dexBuilderDemoDebug
-> Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
-> Task :app:mergeProjectDexDemoDebug
-> Task :app:compileProdReleaseArtProfile
-> Task :app:packageDemoDebug
-> Task :app:createDemoDebugApkListingFileRedirect
-> Task :app:assembleDemoDebug
-> Task :app:packageProdRelease
-> Task :app:createProdReleaseApkListingFileRedirect
-> Task :app:assembleProdRelease
-
-BUILD SUCCESSFUL in 2m 27s
-131 actionable tasks: 76 executed, 31 from cache, 24 up-to-date
+BUILD SUCCESSFUL in 1m 10s
+90 actionable tasks: 51 executed, 15 from cache, 24 up-to-date
