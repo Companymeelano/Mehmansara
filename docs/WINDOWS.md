@@ -1,8 +1,8 @@
-# نسخهٔ ویندوز ۱.۱.۲ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe (برنامه + SQL Server LocalDB همراه + فونت‌ها)
+# نسخهٔ ویندوز ۱.۱.۳ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe (برنامه + SQL Server LocalDB همراه + فونت‌ها)
 
-> **از نسخهٔ ۱.۱.۲ به بعد، فقط یک فایل `MehraSetup.exe` کافی است:** نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
+> **از نسخهٔ ۱.۱.۳ به بعد، فقط یک فایل `MehraSetup.exe` کافی است:** نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
 
-## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۲)
+## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۳)
 
 - انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
 - **نصب‌گر کاملِ یک‌فایله (پیشنهادی —viron ۹۲ مگابایت):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
@@ -11,12 +11,12 @@
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - مرور فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش و اندازهٔ باینری‌ها (اجرای CI `43278279919`)
+## هش و اندازهٔ باینری‌ها (اجرای CI `43284139706`)
 
-- `setup/MehraSetup.exe`: 75,931,382 بایت — sha256 `c290c2b56b6b144bb7e566e223b75afb63c34d3be8374d1ff666a3595d86377e`
-- `exe/Mehra.exe`: 94,192,520 بایت — sha256 `c45b501cf738f2b2419004d427d3e34e5af170cac86cab3c5a1c55f69524f1fe`
-- `exe/Mehra-win-x64.zip`: 41,814,119 بایت — sha256 `8f3074c44c2f7234bb061a0abbd02064de714f63bb906c3dbd3f0bce8c014cd4`
-- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۱.۲؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
+- `setup/MehraSetup.exe`: 89,551,070 بایت — sha256 `45976852a84a415df4a52ba3f5cb85fd6960690c06f1b055005ec19e2d4e6871`
+- `exe/Mehra.exe`: 94,192,520 بایت — sha256 `5584e5041430a40f6036f15326f7c18eff707fca20f598da4819e202ea173a6c`
+- `exe/Mehra-win-x64.zip`: 41,814,306 بایت — sha256 `f64f35d2f47318ef64b09a777b769ec68b8ffb9cd10a941d0dba42b125c9ae88`
+- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۱.۳؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
 
 ## نصب با MehraSetup.exe (یک فایل — همه‌چیز)
 
@@ -24,7 +24,7 @@
 2. در صفحهٔ **مؤلفه‌ها**، گزینهٔ «SQL Server LocalDB 2016 همراه (~۴۵ مگابایت)» به‌صورت پیش‌فرض فعال است — با نگه‌داشتن آن، موتور پایگاه داده همراه برنامه نصب می‌شود. (اگر SQL Server دیگری روی سیستم دارید و نمی‌خواهید LocalDB نصب شود، تیک آن را بردارید.)
 3. در صفحهٔ **پایگاه دادهٔ SQL Server** پیش‌فرض‌ها کافی است: سرور `(localdb)\MSSQLLocalDB`، پایگاه دادهٔ `Mehra`، احراز هویت ویندوز. چون LocalDB در همین نصب ساخته می‌شود، تست زندهٔ اتصال در این صفحه رد می‌شود و خود نصب‌گر پس از کپی فایل‌ها همه‌چیز را می‌سازد.
 4. هنگام نصب (مرحلهٔ post-install): ابتدا `SqlLocalDB.msi` به‌صورت silent نصب می‌شود (`msiexec /qn IACCEPTSQLLOCALDBLICENSETERMS=YES REBOOT=ReallySuppress`)، بعد `sqllocaldb create MSSQLLocalDB -s` و `start` اجرا می‌شود، سپس اسکریپت `db\schema.sql` batch‌به-batch (GO) اجرا و ۹ جدول + کاربر `admin` ساخته می‌شود، و در پایان `%AppData%\mehra\settings.json` نوشته می‌شود.
-5. بررسی‌های هوشمند: حداقل ۹۰۰ مگابایت فضای آزاد برای LocalDB (در صفحهٔ مؤلفه‌ها چک می‌شود)، حداقل ۳۰۰ مگابایت در شروع، Windows 10 نسخهٔ 1803 به بالا، خطای اتصال SQL — همگی با پیام فارسی.
+5. بررسی‌های هوشمند: حداقل ۹۰۰ مگابایت فضای آزاد برای LocalDB (در صفحهٔ مؤلفه‌ها چک می‌شود)، حداقل ۳۰۰ مگابایت در شروع، Windows 10 نسخهٔ 1607 (build 14393) / Server 2016 به بالا — فقط ۶۴ بیت، خطای اتصال SQL — همگی با پیام فارسی.
 
 6. فونت‌های وزیرمتن (۶ وزن) نیز نصب دائمی می‌شوند و خود نصب‌گر هم با وزیرمتن نمایش داده می‌شود.
 7. گزینه‌های پیشرفتهٔ نصب (صفحهٔ «امکانات نصب»): مسیر نصب پیش‌فرض `{autopf}\Mehra` با امکان تغییر (صفحهٔ مقصد نصب — با چک هوشمند فضای خالی همان درایو: ۹۰۰MB با LocalDB، ۳۵۰MB بدون آن)، «میان‌بر دسکتاپ»، «اجرای خودکار هنگام بالا آمدن ویندوز (Startup)»، «اجرای برنامه پس از پایان نصب» و «باز کردن پوشهٔ نصب پس از پایان».
