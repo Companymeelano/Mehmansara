@@ -1,5 +1,6 @@
 package ir.ahvaz.mehra.core.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.ErrorOutline
@@ -26,6 +28,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import ir.ahvaz.mehra.core.common.AppError
 import ir.ahvaz.mehra.core.common.ErrorKind
 import ir.ahvaz.mehra.core.date.formatEpochDateTimeFa
+import ir.ahvaz.mehra.core.ui.theme.LocalAccentBrush
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 
 @Composable
@@ -105,19 +110,42 @@ fun EmptyState(
     onAction: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
+    val colors = MehraTheme.colors
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(28.dp),
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.55f),
-                modifier = Modifier.size(48.dp),
+            // glowing brand halo behind the glyph — keeps empty screens on-brand, not grey
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(96.dp)
+                    .shadow(10.dp, CircleShape)
+                    .background(
+                        Brush.radialGradient(
+                            listOf(
+                                colors.accentStart.copy(alpha = 0.85f),
+                                colors.accentMid.copy(alpha = 0.55f),
+                                colors.accentEnd.copy(alpha = 0.18f),
+                            ),
+                        ),
+                        CircleShape,
+                    ),
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = colors.onAccent,
+                    modifier = Modifier.size(44.dp),
+                )
+            }
+            Spacer(modifier = Modifier.height(14.dp))
+            GradientText(
+                text = title,
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                brush = LocalAccentBrush.current,
             )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(text = title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             if (!message.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(

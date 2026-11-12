@@ -42,6 +42,7 @@ object Routes {
 val TopLevelRoutes = setOf(
     Routes.DASHBOARD,
     Routes.ROOMS,
+    Routes.GUESTS,
     Routes.RESERVATIONS,
     Routes.RECEPTION,
     Routes.MORE,

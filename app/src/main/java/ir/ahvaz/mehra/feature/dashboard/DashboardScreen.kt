@@ -13,6 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.rounded.Bed
 import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material.icons.rounded.EventAvailable
@@ -21,9 +26,16 @@ import androidx.compose.material.icons.rounded.Handyman
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Login
 import androidx.compose.material.icons.rounded.Logout
+import androidx.compose.material.icons.rounded.MoreHoriz
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Payments
+import androidx.compose.material.icons.rounded.PersonAdd
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,6 +61,8 @@ import ir.ahvaz.mehra.core.ui.components.DonutChart
 import ir.ahvaz.mehra.core.ui.components.DonutSegment
 import ir.ahvaz.mehra.core.ui.components.EmptyState
 import ir.ahvaz.mehra.core.ui.components.ErrorState
+import ir.ahvaz.mehra.core.ui.components.GradientText
+import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.components.FreshnessRow
 import ir.ahvaz.mehra.core.ui.components.LoadingState
 import ir.ahvaz.mehra.core.ui.components.MehraCard
@@ -56,7 +70,10 @@ import ir.ahvaz.mehra.core.ui.components.MehraScreen
 import ir.ahvaz.mehra.core.ui.components.SectionHeader
 import ir.ahvaz.mehra.core.ui.components.StatTile
 import ir.ahvaz.mehra.core.ui.components.StatusPill
+import ir.ahvaz.mehra.core.ui.icons.MehraIcons
+import ir.ahvaz.mehra.core.ui.theme.LocalAccentBrush
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
+import ir.ahvaz.mehra.core.common.Constants
 import ir.ahvaz.mehra.core.ui.theme.tint
 import ir.ahvaz.mehra.domain.model.DashboardSnapshot
 
@@ -69,6 +86,11 @@ fun DashboardScreen(
     onOpenNotifications: () -> Unit,
     onOpenMaintenance: () -> Unit,
     onOpenHousekeeping: () -> Unit,
+    onOpenGuests: () -> Unit,
+    onOpenMore: () -> Unit,
+    onCreateRoom: () -> Unit,
+    onCreateGuest: () -> Unit,
+    onNewReservation: () -> Unit,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -77,7 +99,7 @@ fun DashboardScreen(
 
     MehraScreen(
         title = "خانه",
-        subtitle = TehranTime.today().formatJalaliLongFa() + " • " + (state.user?.fullName ?: ""),
+        subtitle = Constants.HOTEL_NAME + " • " + TehranTime.today().formatJalaliLongFa(),
         offline = dashboard.fromCache || !state.isOnline,
         pendingCount = state.pendingOperations,
         actions = {
@@ -97,10 +119,16 @@ fun DashboardScreen(
                 modifier = Modifier.padding(padding),
             )
 
-            snapshot == null || !snapshot.hasRooms -> EmptyState(
-                title = "اطلاعاتی برای نمایش نیست",
-                message = "پس از ثبت اتاق‌ها و رزروها، خلاصه وضعیت مجموعه اینجا نمایش داده می‌شود.",
-                modifier = Modifier.padding(padding),
+            snapshot == null || !snapshot.hasRooms -> WelcomeContent(
+                onCreateRoom = onCreateRoom,
+                onCreateGuest = onCreateGuest,
+                onNewReservation = onNewReservation,
+                onOpenReception = onOpenReception,
+                onOpenRooms = onOpenRooms,
+                onOpenGuests = onOpenGuests,
+                onOpenReservations = onOpenReservations,
+                onOpenMore = onOpenMore,
+                contentPadding = padding,
             )
 
             else -> DashboardContent(
@@ -376,6 +404,164 @@ private fun DashboardContent(
                 Icon(Icons.Rounded.KeyboardArrowLeft, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(
                     text = "برای مشاهده رزروهای امروز به بخش رزروها مراجعه کنید.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+
+/**
+ * Rich first-run dashboard (1.4.1): even with zero data the home screen feels alive —
+ * a gradient hero with the 3D brand chip, quick actions for the daily work, a live
+ * overview row and a shortcut to the full module grid.
+ */
+@Composable
+private fun WelcomeContent(
+    onCreateRoom: () -> Unit,
+    onCreateGuest: () -> Unit,
+    onNewReservation: () -> Unit,
+    onOpenReception: () -> Unit,
+    onOpenRooms: () -> Unit,
+    onOpenGuests: () -> Unit,
+    onOpenReservations: () -> Unit,
+    onOpenMore: () -> Unit,
+    contentPadding: PaddingValues,
+) {
+    val colors = MehraTheme.colors
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(contentPadding),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        item {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(12.dp, RoundedCornerShape(24.dp))
+                    .background(
+                        Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd)),
+                        RoundedCornerShape(24.dp),
+                    )
+                    .padding(20.dp),
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 64.dp)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    GradientText(
+                        text = "مهرآ",
+                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                        brush = LocalAccentBrush.current,
+                    )
+                    Text(
+                        text = Constants.HOTEL_NAME,
+                        color = Color.White.copy(alpha = 0.92f),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Text(
+                        text = TehranTime.today().formatJalaliLongFa(),
+                        color = Color.White.copy(alpha = 0.66f),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "به سامانهٔ مدیریت مهمان‌پذیر خوش آمدید؛ همهٔ کارها را از اینجا شروع کنید.",
+                        color = Color.White.copy(alpha = 0.82f),
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        }
+
+        item { SectionHeader(title = "اقدام سریع") }
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    QuickActionTile("اتاق جدید", "ثبت اتاق در مجموعه", Icons.Rounded.Bed, Modifier.weight(1f), onCreateRoom)
+                    QuickActionTile("مهمان جدید", "پروندهٔ مهمان", Icons.Rounded.PersonAdd, Modifier.weight(1f), onCreateGuest)
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    QuickActionTile("رزرو جدید", "ثبت رزرو", Icons.Rounded.EventAvailable, Modifier.weight(1f), onNewReservation)
+                    QuickActionTile("پذیرش", "ورود و خروج", Icons.Rounded.Login, Modifier.weight(1f), onOpenReception)
+                }
+            }
+        }
+
+        item { SectionHeader(title = "نمای کلی امروز") }
+        item {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                StatTile(label = "اتاق‌ها", value = "0".toPersianDigits(), icon = Icons.Rounded.Bed, modifier = Modifier.weight(1f), onClick = onOpenRooms)
+                StatTile(label = "مهمانان", value = "0".toPersianDigits(), icon = Icons.Rounded.PersonAdd, modifier = Modifier.weight(1f), onClick = onOpenGuests)
+            }
+        }
+        item {
+            StatTile(
+                label = "رزروهای امروز",
+                value = "0".toPersianDigits(),
+                icon = Icons.Rounded.EventAvailable,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onOpenReservations,
+            )
+        }
+
+        item {
+            MehraCard(modifier = Modifier.fillMaxWidth(), onClick = onOpenMore) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon3D(icon = Icons.Rounded.MoreHoriz, contentDescription = null, size = 42.dp)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "همهٔ بخش‌ها",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                        Text(
+                            text = "مالی، نظافت، تعمیرات، گزارش‌ها، کاربران، اعلانات و تنظیمات",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Rounded.KeyboardArrowLeft,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** One quick-action tile of the welcome dashboard: 3D icon chip + two-line label. */
+@Composable
+private fun QuickActionTile(
+    title: String,
+    description: String,
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    MehraCard(modifier = modifier, onClick = onClick) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon3D(icon = icon, contentDescription = null, size = 42.dp)
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = description,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

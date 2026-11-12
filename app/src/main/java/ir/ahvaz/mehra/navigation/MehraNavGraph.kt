@@ -78,12 +78,14 @@ private data class BottomDestination(
     val permission: String?,
 )
 
+// The bottom bar carries ONLY the high-usage daily sections (1.4.1): home, rooms, guests,
+// reservations, reception. Everything else lives in the «بخش‌ها» grid reachable from home.
 private val bottomDestinations = listOf(
     BottomDestination(Routes.DASHBOARD, "خانه", R.drawable.ic_mehra_dashboard, Permissions.DASHBOARD_VIEW),
     BottomDestination(Routes.ROOMS, "اتاق‌ها", R.drawable.ic_mehra_rooms, Permissions.ROOMS_VIEW),
+    BottomDestination(Routes.GUESTS, "مهمانان", R.drawable.ic_mehra_guests, Permissions.GUESTS_VIEW),
     BottomDestination(Routes.RESERVATIONS, "رزروها", R.drawable.ic_mehra_reservations, Permissions.RESERVATIONS_VIEW),
     BottomDestination(Routes.RECEPTION, "پذیرش", R.drawable.ic_mehra_reception, Permissions.RECEPTION_OPERATE),
-    BottomDestination(Routes.MORE, "بخش‌ها", R.drawable.ic_mehra_more, null),
 )
 
 @Composable
@@ -135,6 +137,11 @@ fun MehraNavGraph(
                     onOpenNotifications = { navController.navigate(Routes.NOTIFICATIONS) },
                     onOpenMaintenance = { navController.navigate(Routes.MAINTENANCE) },
                     onOpenHousekeeping = { navController.navigate(Routes.HOUSEKEEPING) },
+                    onOpenGuests = { navController.navigate(Routes.GUESTS) },
+                    onOpenMore = { navController.navigate(Routes.MORE) },
+                    onCreateRoom = { navController.navigate(Routes.roomForm(null)) },
+                    onCreateGuest = { navController.navigate(Routes.guestForm(null)) },
+                    onNewReservation = { navController.navigate(Routes.reservationNew()) },
                 )
             }
 

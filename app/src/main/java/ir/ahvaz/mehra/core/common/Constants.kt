@@ -19,6 +19,7 @@ object Constants {
     const val TOKEN_REFRESH_SKEW_SECONDS = 60L
 
     const val DEFAULT_CURRENCY_UNIT = "ریال"
+    const val HOTEL_NAME = "مهمان‌پذیر فرهنگیان اهواز"
     const val DEFAULT_LOCK_TIMEOUT_MINUTES = 5
 
     /** Cache lifetime used to decide whether a cached payload may still be shown offline. */
