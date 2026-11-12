@@ -103,6 +103,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeProjectDexProdDebug FROM-CACHE
 > Task :app:mergeProdDebugJniLibFolders
 > Task :app:mergeProdDebugNativeLibs
+> Task :app:mergeProdDebugJavaResource
 > Task :app:validateSigningProdDebug
 
 > Task :app:stripProdDebugDebugSymbols
@@ -116,10 +117,9 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:preDemoDebugBuild UP-TO-DATE
 > Task :app:mergeDemoDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDemoDebugBuildConfig FROM-CACHE
-> Task :app:generateDemoDebugResValues FROM-CACHE
-> Task :app:mergeProdDebugJavaResource
-> Task :app:mapDemoDebugSourceSetPaths
 > Task :app:checkDemoDebugAarMetadata
+> Task :app:generateDemoDebugResValues FROM-CACHE
+> Task :app:mapDemoDebugSourceSetPaths
 > Task :app:generateDemoDebugResources FROM-CACHE
 > Task :app:mergeDemoDebugResources FROM-CACHE
 > Task :app:packageDemoDebugResources FROM-CACHE
@@ -144,28 +144,28 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:hiltJavaCompileDemoDebug FROM-CACHE
 > Task :app:transformDemoDebugClassesWithAsm FROM-CACHE
 > Task :app:dexBuilderDemoDebug FROM-CACHE
-> Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
-> Task :app:processDemoDebugJavaRes
 > Task :app:packageProdDebug
 > Task :app:createProdDebugApkListingFileRedirect
 > Task :app:assembleProdDebug
+> Task :app:mergeDemoDebugGlobalSynthetics FROM-CACHE
+> Task :app:processDemoDebugJavaRes
 > Task :app:mergeDemoDebugJniLibFolders
-> Task :app:checkDemoDebugDuplicateClasses
 > Task :app:validateSigningDemoDebug
 > Task :app:mergeDemoDebugNativeLibs
-> Task :app:mergeExtDexDemoDebug FROM-CACHE
-> Task :app:mergeLibDexDemoDebug FROM-CACHE
-> Task :app:mergeProjectDexDemoDebug FROM-CACHE
 > Task :app:writeDemoDebugAppMetadata
+> Task :app:checkDemoDebugDuplicateClasses
+> Task :app:writeDemoDebugSigningConfigVersions
 
 > Task :app:stripDemoDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDemoDebugSigningConfigVersions
+> Task :app:mergeExtDexDemoDebug FROM-CACHE
+> Task :app:mergeLibDexDemoDebug FROM-CACHE
+> Task :app:mergeProjectDexDemoDebug FROM-CACHE
 > Task :app:mergeDemoDebugJavaResource
 > Task :app:packageDemoDebug
 > Task :app:createDemoDebugApkListingFileRedirect
 > Task :app:assembleDemoDebug
 
-BUILD SUCCESSFUL in 23s
+BUILD SUCCESSFUL in 17s
 131 actionable tasks: 48 executed, 59 from cache, 24 up-to-date
