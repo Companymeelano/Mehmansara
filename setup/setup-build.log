@@ -67,11 +67,13 @@ Parsing [Components] section, line 81
 Parsing [Tasks] section, line 84
 Parsing [Tasks] section, line 85
 Parsing [Tasks] section, line 86
-Parsing [Icons] section, line 112
+Parsing [Tasks] section, line 87
 Parsing [Icons] section, line 113
 Parsing [Icons] section, line 114
-Parsing [Run] section, line 117
-Parsing [Files] section, line 89
+Parsing [Icons] section, line 115
+Parsing [Icons] section, line 116
+Parsing [Run] section, line 119
+Parsing [Run] section, line 120
 Parsing [Files] section, line 90
 Parsing [Files] section, line 91
 Parsing [Files] section, line 92
@@ -92,6 +94,7 @@ Parsing [Files] section, line 106
 Parsing [Files] section, line 107
 Parsing [Files] section, line 108
 Parsing [Files] section, line 109
+Parsing [Files] section, line 110
 Compiling [Code] section
 Creating setup files
    Verification successful
@@ -114,8 +117,8 @@ Warning: Message name "TasksLabel" is not recognized by this version of Inno Set
 Warning: Message name "ReadyLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or consider using its "auto" form.
-Warning: The [Setup] section directive "PrivilegesRequired" is set to "admin" but per-user areas (userdesktop,userfonts) are used by the script. Regardless of the version of Windows, if the installation is running in administrative install mode then you should be careful about making any per-user area changes: such changes may not achieve what you are intending. See the "UsedUserAreasWarning" topic in help file for more information.
-Warning: Line 431, Column 8: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
+Warning: The [Setup] section directive "PrivilegesRequired" is set to "admin" but per-user areas (userdesktop,userfonts,userstartup) are used by the script. Regardless of the version of Windows, if the installation is running in administrative install mode then you should be careful about making any per-user area changes: such changes may not achieve what you are intending. See the "UsedUserAreasWarning" topic in help file for more information.
+Warning: Line 437, Column 10: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
 
-Successful compile (37.829 sec). Resulting Setup program filename is:
+Successful compile (34.828 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
