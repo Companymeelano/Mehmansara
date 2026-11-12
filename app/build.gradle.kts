@@ -30,8 +30,8 @@ android {
         applicationId = "ir.ahvaz.mehra"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 4
-        versionName = "1.3.0"
+        versionCode = 5
+        versionName = "1.3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += listOf("fa", "en")
@@ -103,8 +103,13 @@ android {
             isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("boolean", "ALLOW_CLEARTEXT", "false")
-            if (hasReleaseKeystore) {
-                signingConfig = signingConfigs.getByName("release")
+            // Never ship an unsigned release APK: without a keystore the OS rejects the
+            // install outright. CI/store builds provide keystore.properties; local builds
+            // fall back to the debug key so the APK is always installable.
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
             }
         }
     }
