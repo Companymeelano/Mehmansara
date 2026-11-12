@@ -272,7 +272,9 @@ public class SqlServerApi : IHotelApi
             for (int i = 6; i >= 0; i--)
             {
                 var day = DateTime.Today.AddDays(-i).ToString("yyyy-MM-dd");
-                var occ = (int)await Scalar($"SELECT COUNT(DISTINCT roomNumber) FROM dbo.reservations WHERE status IN ('CONFIRMED','CHECKED_IN') AND checkInDate <= '{day}' AND checkOutDate > '{day}'");
+                await using var oc = new SqlCommand("SELECT COUNT(DISTINCT roomNumber) FROM dbo.reservations WHERE status IN ('CONFIRMED','CHECKED_IN') AND checkInDate <= @d AND checkOutDate > @d", con);
+                oc.Parameters.AddWithValue("@d", day);
+                var occ = Convert.ToInt32(await oc.ExecuteScalarAsync() ?? 0);
                 d.OccupancySeries.Add(new OccupancyPointDto { Date = day, Occupied = occ, Total = d.TotalRooms });
             }
             d.Alerts = new List<DashboardAlertDto>();
@@ -300,15 +302,18 @@ public class SqlServerApi : IHotelApi
         {
             await using var con = await OpenAsync();
             var rep = new ReportDto { Type = key, From = fromIso, To = toIso, GeneratedAtUtc = DateTime.UtcNow.ToString("o") };
+            if (!DateTime.TryParse(fromIso, out var from) || !DateTime.TryParse(toIso, out var to) || from > to)
+                return Result<ReportDto>.Fail("بازهٔ تاریخ نامعتبر است.");
             switch (key)
             {
                 case "occupancy":
                     rep.Title = "گزارش اشغال اتاق‌ها"; rep.Columns = new() { "تاریخ", "اشغال", "کل" };
-                    for (var d = DateTime.Parse(fromIso); d <= DateTime.Parse(toIso); d = d.AddDays(1))
+                    for (var d = from; d <= to; d = d.AddDays(1))
                     {
                         var day = d.ToString("yyyy-MM-dd");
-                        await using var c = new SqlCommand($"SELECT COUNT(DISTINCT roomNumber) FROM dbo.reservations WHERE status IN ('CONFIRMED','CHECKED_IN') AND checkInDate <= '{day}' AND checkOutDate > '{day}'", con);
-                        var occ = Convert.ToInt32(await c.ExecuteScalarAsync());
+                        await using var c = new SqlCommand("SELECT COUNT(DISTINCT roomNumber) FROM dbo.reservations WHERE status IN ('CONFIRMED','CHECKED_IN') AND checkInDate <= @d AND checkOutDate > @d", con);
+                        c.Parameters.AddWithValue("@d", day);
+                        var occ = Convert.ToInt32(await c.ExecuteScalarAsync() ?? 0);
                         await using var c2 = new SqlCommand("SELECT COUNT(*) FROM dbo.rooms", con);
                         var tot = Convert.ToInt32(await c2.ExecuteScalarAsync());
                         rep.Rows ??= new(); rep.Rows.Add(new() { day, occ.ToString(), tot.ToString() });
@@ -325,7 +330,7 @@ public class SqlServerApi : IHotelApi
                 case "revenue":
                     rep.Title = "گزارش درآمد"; rep.Columns = new() { "روش پرداخت", "تعداد", "مبلغ (ریال)" };
                     rep.Rows = (await QueryAsync(ConnectionString, "SELECT method, CAST(COUNT(*) AS NVARCHAR(10)), CAST(SUM(amountRial) AS NVARCHAR(30)) FROM dbo.transactions WHERE isReversed=0 AND CAST(createdAtUtc AS DATE) BETWEEN @f AND @t AND type IN ('RECEIVE','DISCOUNT') GROUP BY method", r => new List<string> { S(r,0), S(r,1), S(r,2) }, ("@f", fromIso), ("@t", toIso))).Value ?? new();
-                    rep.Totals = new() { "جمع دریافتی بازه: " + (await ScalarStatic(ConnectionString, $"SELECT ISNULL(SUM(amountRial),0) FROM dbo.transactions WHERE isReversed=0 AND CAST(createdAtUtc AS DATE) BETWEEN '{fromIso}' AND '{toIso}' AND type IN ('RECEIVE','DISCOUNT')")).ToString() };
+                    rep.Totals = new() { "جمع دریافتی بازه: " + (await ScalarStatic(ConnectionString, "SELECT ISNULL(SUM(amountRial),0) FROM dbo.transactions WHERE isReversed=0 AND CAST(createdAtUtc AS DATE) BETWEEN @f AND @t AND type IN ('RECEIVE','DISCOUNT')", ("@f", fromIso), ("@t", toIso))).ToString() };
                     break;
                 case "debtors":
                     rep.Title = "گزارش بدهکاران"; rep.Columns = new() { "مهمان", "تلفن", "مانده (ریال)" };
@@ -351,11 +356,12 @@ public class SqlServerApi : IHotelApi
         catch (Exception ex) { return Result<ReportDto>.Fail("خطای گزارش: " + ex.Message); }
     }
 
-    private static async Task<long> ScalarStatic(string cs, string sql)
+    private static async Task<long> ScalarStatic(string cs, string sql, params (string, object)[] ps)
     {
         await using var con = new SqlConnection(cs);
         await con.OpenAsync();
         await using var c = new SqlCommand(sql, con);
+        foreach (var (n, v) in ps) c.Parameters.AddWithValue(n, v);
         var v = await c.ExecuteScalarAsync();
         return v is null or DBNull ? 0 : Convert.ToInt64(v);
     }

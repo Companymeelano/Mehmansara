@@ -41,7 +41,7 @@ jobs:
           if (-not (Test-Path desktop\publish\Mehra.exe)) { throw "Mehra.exe was not produced" }
           (Get-Item desktop\publish\Mehra.exe).Length
 
-      - name: Download SQL Server 2016 LocalDB MSI x64 (bundled into the setup, ~45 MB)
+      - name: Download SQL Server 2016 LocalDB + OLE DB Driver 19 MSIs (bundled into the setup)
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -54,6 +54,15 @@ jobs:
           $hash = (Get-FileHash $out -Algorithm SHA256).Hash.ToLower()
           Write-Host "SqlLocalDB.msi bytes=$($f.Length) sha256=$hash"
           "$hash  SqlLocalDB.msi" | Out-File -FilePath setup-localdb-sha256.txt -Encoding utf8
+          # OLE DB driver 19.3.5 x64 (MSOLEDBSQL19) — guarantees table creation on any 64-bit Windows
+          $url2 = 'https://download.microsoft.com/download/f/1/3/f13ce329-0835-44e7-b110-44decd29b0ad/en-US/19.3.5.0/x64/msoledbsql.msi'
+          $out2 = 'desktop\Setup\redist\msoledbsql.msi'
+          Invoke-WebRequest -Uri $url2 -OutFile $out2 -UseBasicParsing
+          $f2 = Get-Item $out2
+          if ($f2.Length -lt 5MB) { throw "msoledbsql.msi looks truncated: $($f2.Length) bytes" }
+          $hash2 = (Get-FileHash $out2 -Algorithm SHA256).Hash.ToLower()
+          Write-Host "msoledbsql.msi bytes=$($f2.Length) sha256=$hash2"
+          "$hash2  msoledbsql.msi" | Out-File -FilePath setup-oledb-sha256.txt -Encoding utf8
 
       - name: Build MehraSetup.exe with Inno Setup (ISCC)
         shell: pwsh
@@ -80,7 +89,7 @@ jobs:
         env:
           MEHRA_README: |-
             مهرآ — نسخٔ ویندوز (Mehra.exe)
-            سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخٔ ۱.۱.۲
+            سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخٔ ۱.۱.۳
             
             1. فایل Mehra.exe را اجرا کنید (win-x64، self-contained — نیازی به نصب .NET نیست).
             2. «ورود نمایشی»: بدون سرور — با دادهٔ نمونه کامل.

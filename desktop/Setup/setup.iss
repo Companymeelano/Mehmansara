@@ -1,5 +1,5 @@
 ﻿; ============================================================================
-;  MEHRA 1.1.2 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
+;  MEHRA 1.1.3 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
 ;  Luxury Persian (RTL) installer for the MEHRA Windows client.
 ;  Brand: Milad Yaghoobi — www.meelano.ir — 09120219593
 ;  Features: branded welcome/finish, Vazirmatn font, SQL Server config page,
@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.2
-AppVerName=مهرآ ۱.۱.۲ — ویندوز
+AppVersion=1.1.3
+AppVerName=مهرآ ۱.۱.۳ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -35,7 +35,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.2.0
+VersionInfoVersion=1.1.3.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -72,11 +72,12 @@ StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
 FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱.۲ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۱.۳ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
 Name: "localdb"; Description: "SQL Server LocalDB 2016 همراه (حدود ۴۵ مگابایت) — موتور پایگاه دادهٔ سبک؛ ثبت واقعی داده روی همین PC بدون نصب جداگانه"; Types: full custom
+Name: "oledb"; Description: "درایور OLE DB مایکروسافت برای SQL Server (MSOLEDBSQL 19، حدود ۱۵ مگابایت) —تضمین ساخت جداول روی هر ویندوز ۶۴ بیتی بدون خطای provider"; Types: full custom
 Name: "schema"; Description: "فایل کامل اسکریپت پایگاه داده (db\schema.sql) — داخل همین فایل نصب؛ هیچ دانلودی لازم نیست"; Types: full compact custom
 Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — نصب دائمی در سیستم"; Types: full
 
@@ -89,6 +90,7 @@ Name: "openfolder"; Description: "باز کردن پوشهٔ نصب پس از پ
 [Files]
 Source: "..\publish\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace; Components: app
 Source: "redist\SqlLocalDB.msi"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: localdb
+Source: "redist\msoledbsql.msi"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: oledb
 Source: "..\Mehra.Desktop\db\schema.sql"; DestDir: "{app}\db"; Flags: ignoreversion; Components: schema
 Source: "vazirmatn_regular.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
 Source: "vazirmatn_medium.ttf"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall; Components: fonts
@@ -219,14 +221,14 @@ end;
 
 function TestSql(server, db: string; winAuth: Boolean; user, pass: string; var Err: string): Boolean;
 var
-  Providers: array[0..3] of string;
+  Providers: array[0..4] of string;
   i: Integer;
   Conn: Variant;
 begin
   Result := False; Err := '';
-  Providers[0] := 'MSOLEDBSQL'; Providers[1] := 'MSOLEDBSQL.1';
-  Providers[2] := 'SQLOLEDB.1'; Providers[3] := 'SQLOLEDB';
-  for i := 0 to 3 do
+  Providers[0] := 'MSOLEDBSQL19'; Providers[1] := 'MSOLEDBSQL'; Providers[2] := 'MSOLEDBSQL.1';
+  Providers[3] := 'SQLOLEDB.1'; Providers[4] := 'SQLOLEDB';
+  for i := 0 to 4 do
   begin
     if TryProviderOpen(Providers[i], server, db, winAuth, user, pass, Conn) then
     begin
@@ -245,7 +247,7 @@ end;
 
 function RunSchema(server, db: string; winAuth: Boolean; user, pass: string; schemaFile: string; var Err: string): Boolean;
 var
-  Providers: array[0..3] of string;
+  Providers: array[0..4] of string;
   i: Integer;
   Conn: Variant;
   Lines: TArrayOfString;
@@ -254,8 +256,8 @@ var
   Cur: string;
 begin
   Result := False; Err := '';
-  Providers[0] := 'MSOLEDBSQL'; Providers[1] := 'MSOLEDBSQL.1';
-  Providers[2] := 'SQLOLEDB.1'; Providers[3] := 'SQLOLEDB';
+  Providers[0] := 'MSOLEDBSQL19'; Providers[1] := 'MSOLEDBSQL'; Providers[2] := 'MSOLEDBSQL.1';
+  Providers[3] := 'SQLOLEDB.1'; Providers[4] := 'SQLOLEDB';
   Batches := TStringList.Create;
   try
     if not LoadStringsFromFile(schemaFile, Lines) then
@@ -277,7 +279,7 @@ begin
         Cur := Cur + Lines[j] + #13#10;
     end;
     if Trim(Cur) <> '' then Batches.Add(Cur);
-    for i := 0 to 3 do
+    for i := 0 to 4 do
     begin
       if TryProviderOpen(Providers[i], server, 'master', winAuth, user, pass, Conn) then
       begin
@@ -375,6 +377,51 @@ begin
   Exec(ExePath, 'start MSSQLLocalDB', '', SW_HIDE, ewWaitUntilTerminated, R);
   Result := True;
 end;
+// True if any usable OLE DB provider is registered (MSOLEDBSQL19/18 or in-box SQLOLEDB).
+function OleDbProviderAvailable: Boolean;
+var
+  C: Variant;
+begin
+  Result := False;
+  try C := CreateOleObject('MSOLEDBSQL19'); Result := True; Exit; except end;
+  try C := CreateOleObject('MSOLEDBSQL'); Result := True; Exit; except end;
+  try C := CreateOleObject('SQLOLEDB.1'); Result := True; Exit; except end;
+end;
+
+// Silently install the bundled msoledbsql.msi so table creation works on ANY 64-bit Windows.
+// Failure is non-fatal: in-box SQLOLEDB remains as fallback.
+function InstallOleDb(var Err: string): Boolean;
+var
+  Msi: string;
+  R: Integer;
+begin
+  Result := False;
+  Err := '';
+  if OleDbProviderAvailable then
+  begin
+    Result := True;
+    Exit;
+  end;
+  Msi := ExpandConstant('{tmp}\msoledbsql.msi');
+  if not FileExists(Msi) then
+  begin
+    Err := 'msoledbsql.msi یافت نشد.';
+    Exit;
+  end;
+  if not Exec('msiexec.exe', '/i "' + Msi + '" /qn IACCEPTMSOLEDBSQLLICENSETERMS=YES REBOOT=ReallySuppress', '', SW_HIDE, ewWaitUntilTerminated, R) then
+  begin
+    Err := 'msiexec کد ' + IntToStr(R);
+    Exit;
+  end;
+  if (R <> 0) and (R <> 3010) then
+  begin
+    Err := 'msiexec کد خروج ' + IntToStr(R) + ' داد (احتمالاً Visual C++ Redistributable نصب نیست).';
+    Exit;
+  end;
+  Result := OleDbProviderAvailable;
+  if not Result then Err := 'پس از نصب، provider ثبت نشد.';
+end;
+
 procedure KillRunningApp;
 var
   R: Integer;
@@ -530,6 +577,13 @@ begin
                'می‌توانید بعداً آن را دستی نصب کنید یا به SQL Server موجود در شبکه متصل شوید.', mbError, MB_OK);
       end;
     end;
+    if IsComponentSelected('oledb') then
+    begin
+      if InstallOleDb(Err) then
+        Log('MEHRA: OLE DB driver ready')
+      else
+        Log('MEHRA: OLE DB driver install skipped/failed (SQLOLEDB fallback): ' + Err);
+    end;
     if OptPage.Values[1] and (Trim(DbPage.Values[0]) <> '') then
     begin
       winAuth := OptPage.Values[0];
@@ -564,9 +618,10 @@ var
   FreeB, TotalB, Dummy: Int64;
 begin
   Result := True;
-  if GetWindowsVersion < $0A004246 then
+  // .NET 8 runtime floor: Windows 10 1607 (build 14393) / Server 2016+; x64 only (ArchitecturesAllowed).
+  if GetWindowsVersion < $0A003839 then
   begin
-    MsgBox('نسخهٔ ویندوز شما باید Windows 10 نسخهٔ 1803 (build 17134) یا جدیدتر باشد.', mbError, MB_OK);
+    MsgBox('نسخهٔ ویندوز شما باید Windows 10 نسخهٔ 1607 (build 14393) یا Windows Server 2016 به بالا باشد ( فقط ۶۴ بیت).', mbError, MB_OK);
     Result := False;
     Exit;
   end;
