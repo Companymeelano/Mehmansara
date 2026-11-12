@@ -18,9 +18,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Demo session: there is no backend, so the showcase build signs the reviewer in as the
- * hotel manager straight away. The login screen still works (any username/password) so the
- * flow can be demonstrated end to end.
+ * Demo session: there is no backend and NO automatic sign-in - the operator must type a
+ * username and password manually on the login screen (any non-empty values are accepted in
+ * the showcase build, so the flow can be demonstrated end to end).
  */
 @Singleton
 class DemoAuthRepository @Inject constructor(
@@ -36,12 +36,6 @@ class DemoAuthRepository @Inject constructor(
         roleTitleFa = UserRole.SUPER_ADMIN.labelFa,
         permissions = Permissions.all,
     )
-
-    init {
-        if (sessionManager.currentUser == null) {
-            persistSession(manager)
-        }
-    }
 
     override suspend fun login(username: String, password: String): AppResult<SessionUser> {
         delay(280)

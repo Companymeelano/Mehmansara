@@ -22,7 +22,7 @@ fun RootScreen(
     var forceServerSetup by remember { mutableStateOf(false) }
 
     when {
-        // The showcase build (flavour `demo`) ships an in-memory dataset, so it never asks the
+        // The showcase build (flavour `demo`) starts with an empty in-memory store, so it never asks the
         // reviewer to type a server address. `prod` keeps the strict behaviour below.
         forceServerSetup || (!state.serverConfigured && !BuildConfig.DEMO_MODE) -> {
             ServerSetupScreen(onSaved = { forceServerSetup = false })
