@@ -55,9 +55,11 @@ jobs:
           Write-Host "SqlLocalDB.msi bytes=$($f.Length) sha256=$hash"
           "$hash  SqlLocalDB.msi" | Out-File -FilePath setup-localdb-sha256.txt -Encoding utf8
           # OLE DB driver 19.3.5 x64 (MSOLEDBSQL19) — guarantees table creation on any 64-bit Windows
-          $url2 = 'https://download.microsoft.com/download/f/1/3/f13ce329-0835-44e7-b110-44decd29b0ad/en-US/19.3.5.0/x64/msoledbsql.msi'
+          # OLE DB Driver 19.4.1 x64 en-US (ProgID MSOLEDBSQL19); fallback: 18.7.6 x64 (ProgID MSOLEDBSQL)
+          $url2 = 'https://download.microsoft.com/download/b5865bb8-7bc6-4068-9c1d-fb77c256a865/amd64/1033/msoledbsql.msi'
+          $url2b = 'https://download.microsoft.com/download/1bf0a51f-dd1e-4cd6-98fb-22f5ea9ce0b2/amd64/1033/msoledbsql.msi'
           $out2 = 'desktop\Setup\redist\msoledbsql.msi'
-          Invoke-WebRequest -Uri $url2 -OutFile $out2 -UseBasicParsing
+          try { Invoke-WebRequest -Uri $url2 -OutFile $out2 -UseBasicParsing } catch { Write-Host "primary oledb url failed, trying 18.7.6: $_"; Invoke-WebRequest -Uri $url2b -OutFile $out2 -UseBasicParsing }
           $f2 = Get-Item $out2
           if ($f2.Length -lt 5MB) { throw "msoledbsql.msi looks truncated: $($f2.Length) bytes" }
           $hash2 = (Get-FileHash $out2 -Algorithm SHA256).Hash.ToLower()
