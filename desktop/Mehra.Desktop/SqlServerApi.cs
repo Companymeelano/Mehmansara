@@ -361,7 +361,7 @@ public class SqlServerApi : IHotelApi
         await using var con = new SqlConnection(cs);
         await con.OpenAsync();
         await using var c = new SqlCommand(sql, con);
-        foreach (var (n, v) in ps) c.Parameters.AddWithValue(n, v);
+        foreach (var (n, val) in ps) c.Parameters.AddWithValue(n, val);
         var v = await c.ExecuteScalarAsync();
         return v is null or DBNull ? 0 : Convert.ToInt64(v);
     }
