@@ -1,10 +1,10 @@
 b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0.0-debug.apk
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
-# Windows v1.1.3 (final, run 43284139706) — one-file setup bundling SQL Server 2016 LocalDB x64 (~45MB)
-# AND MSOLEDBSQL 19 OLE DB driver (~15MB) + embedded schema.sql + luxury 3D assets — branch ci-artifacts
-45976852a84a415df4a52ba3f5cb85fd6960690c06f1b055005ec19e2d4e6871  ci-artifacts:setup/MehraSetup.exe  (89,551,070 bytes)
-5584e5041430a40f6036f15326f7c18eff707fca20f598da4819e202ea173a6c  ci-artifacts:exe/Mehra.exe  (94,192,520 bytes)
-f64f35d2f47318ef64b09a777b769ec68b8ffb9cd10a941d0dba42b125c9ae88  ci-artifacts:exe/Mehra-win-x64.zip  (41,814,306 bytes)
+# Windows v1.1.4 (final, run 43301411566) — one-file setup bundling SQL Server 2016 LocalDB x64 (~45MB)
+# AND MSOLEDBSQL 19 OLE DB driver (~15MB) + embedded schema.sql + luxury 3D assets; login auto-creates tables — branch ci-artifacts
+a69e7d6438fd8fe63beafb588be53fa6b63deb31d27d1564b5b1ef5fe8dab2cb  ci-artifacts:setup/MehraSetup.exe  (89,558,970 bytes)
+3e07c8fdf9d7649efc97b827f449eacde28185b1dc0f682cf9ee85ba5eab2c1c  ci-artifacts:exe/Mehra.exe  (94,192,520 bytes)
+ebca0d83517dae418a83b5824ce62b587fa2ef475ad969be6523635a73cf5fe5  ci-artifacts:exe/Mehra-win-x64.zip  (41,815,275 bytes)
 
 # Android v1.3.1 (final, run 43295346135) — release APK always signed (v1+v2+v3 verified: META-INF/CERT.RSA + sig-block 0x7109871a + 0xf05368c0) — on branch ci-artifacts
 b0b4461b332dbcf55ed2068330661bfe03c6f9e983f94f7e5f63d9204d45c3f0  ci-artifacts:apk/app-release.apk  (13,975,072 bytes, v1.3.1 prod release, run 43295346135)
