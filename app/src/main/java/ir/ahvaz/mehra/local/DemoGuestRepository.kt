@@ -1,4 +1,4 @@
-package ir.ahvaz.mehra.demo
+package ir.ahvaz.mehra.local
 
 import ir.ahvaz.mehra.core.common.AppResult
 import ir.ahvaz.mehra.core.common.CachedData
@@ -25,6 +25,7 @@ class DemoGuestRepository @Inject constructor(
             q.isEmpty() ||
                 guest.fullName.contains(q) ||
                 guest.city?.contains(q) == true ||
+                guest.carPlate?.contains(q) == true ||
                 (digits.isNotEmpty() && guest.phone?.contains(digits) == true) ||
                 (digits.isNotEmpty() && guest.nationalId?.contains(digits) == true)
         }.sortedBy { it.fullName }
@@ -81,6 +82,7 @@ class DemoGuestRepository @Inject constructor(
             lastName = lastName,
             nationalId = draft.nationalId.demoDigits().ifBlank { null },
             phone = phone,
+            carPlate = draft.carPlate.trim().ifBlank { null },
             city = draft.city.trim().ifBlank { null },
             address = draft.address.trim().ifBlank { null },
             notes = draft.notes.trim().ifBlank { null },
@@ -100,6 +102,7 @@ class DemoGuestRepository @Inject constructor(
         val digits = q.demoDigits()
         val list = store.guests.filter { guest ->
             guest.fullName.contains(q) ||
+                guest.carPlate?.contains(q) == true ||
                 (digits.isNotEmpty() && guest.phone?.contains(digits) == true) ||
                 (digits.isNotEmpty() && guest.nationalId?.contains(digits) == true)
         }.take(8)

@@ -1,4 +1,4 @@
-package ir.ahvaz.mehra.demo
+package ir.ahvaz.mehra.local
 
 import ir.ahvaz.mehra.core.common.AppResult
 import ir.ahvaz.mehra.core.common.CachedData

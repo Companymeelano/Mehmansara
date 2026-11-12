@@ -156,6 +156,7 @@ class GuestFormViewModel @Inject constructor(
                                     lastName = guest.lastName,
                                     nationalId = guest.nationalId.orEmpty(),
                                     phone = guest.phone.orEmpty(),
+                                    carPlate = guest.carPlate.orEmpty(),
                                     city = guest.city.orEmpty(),
                                     address = guest.address.orEmpty(),
                                     notes = guest.notes.orEmpty(),
@@ -204,6 +205,10 @@ class GuestFormViewModel @Inject constructor(
         if (draft.lastName.isBlank()) fields["lastName"] = "نام خانوادگی الزامی است."
         if (draft.nationalId.isNotBlank() && !Validators.isValidIranNationalId(draft.nationalId)) {
             fields["nationalId"] = "کد ملی معتبر نیست."
+        }
+        val plate = draft.carPlate.trim()
+        if (plate.isNotBlank() && plate.length !in 6..12) {
+            fields["carPlate"] = "پلاک را کامل وارد کنید (مثال: ۱۲ب۳۴۵-۶۷)."
         }
         if (draft.phone.isNotBlank() && !Validators.isValidIranMobile(draft.phone)) {
             fields["phone"] = "شماره تماس معتبر نیست (مثال: ۰۹۱۲۳۴۵۶۷۸۹)."

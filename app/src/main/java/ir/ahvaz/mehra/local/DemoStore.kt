@@ -1,4 +1,4 @@
-package ir.ahvaz.mehra.demo
+package ir.ahvaz.mehra.local
 
 import ir.ahvaz.mehra.domain.model.ActivityItem
 import ir.ahvaz.mehra.domain.model.ActivityKind
@@ -34,11 +34,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * In-memory dataset that backs the `demo` flavour only.
- *
- * This file lives in `src/demo`, so it is compiled **only** into the showcase build: the
- * production app (`prod`) contains no sample data at all and renders real server responses
- * or honest empty states.
+ * In-memory store that backs the whole app since 1.4.0 (single local build, no server).
  *
  * The store starts EMPTY on purpose: no rooms, guests, reservations, stays, payments,
  * tasks, tickets, notifications or users are pre-seeded. The operator enters every piece

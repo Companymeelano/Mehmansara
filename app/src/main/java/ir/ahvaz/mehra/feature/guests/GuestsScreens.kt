@@ -134,6 +134,7 @@ private fun GuestRow(guest: Guest, showNationalId: Boolean, onClick: () -> Unit)
                 Text(
                     text = listOfNotNull(
                         guest.phone,
+                        guest.carPlate?.let { "پلاک: $it" },
                         guest.city,
                         if (showNationalId && !guest.nationalId.isNullOrBlank()) "کد ملی: ${(guest.nationalId).toPersianDigits()}" else null,
                     ).joinToString(" • "),
@@ -209,6 +210,7 @@ fun GuestDetailScreen(
                             },
                         )
                         InfoRow("تلفن", guest.phone ?: "—")
+                        InfoRow("پلاک خودرو", guest.carPlate ?: "—")
                         InfoRow("شهر", guest.city ?: "—")
                         InfoRow("نشانی", guest.address ?: "—")
                         InfoRow("مانده حساب", formatMoneyFa(guest.balanceRial))
@@ -415,6 +417,15 @@ fun GuestFormScreen(
                 numeric = true,
                 error = state.fieldErrors["phone"],
                 placeholder = "۰۹۱۲۳۴۵۶۷۸۹",
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            MehraTextField(
+                label = "پلاک خودرو",
+                value = draft.carPlate,
+                onValueChange = { value -> viewModel.updateDraft { it.copy(carPlate = value) } },
+                error = state.fieldErrors["carPlate"],
+                placeholder = "۱۲ب۳۴۵-۶۷",
+                hint = "اختیاری — برای شناسایی کردن خودروی مهمان (جستجو با پلاک هم کار می‌کند).",
             )
             Spacer(modifier = Modifier.height(10.dp))
             MehraTextField(

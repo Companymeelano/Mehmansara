@@ -1,4 +1,4 @@
-package ir.ahvaz.mehra.demo
+package ir.ahvaz.mehra.local
 
 import dagger.Binds
 import dagger.Module
@@ -19,15 +19,15 @@ import ir.ahvaz.mehra.domain.repository.UserRepository
 import javax.inject.Singleton
 
 /**
- * Hilt bindings for the showcase build.
+ * Hilt bindings for the app (single build since 1.4.0).
  *
- * The production flavour has its own `RepositoryModule` (in `src/prod`) that binds the real
- * network backed implementations; both flavours contain exactly one such module, so no
- * sample data can ever reach the production app.
+ * The app is fully local: these in-memory implementations (package `ir.ahvaz.mehra.local`)
+ * back every repository. The network-backed implementations under `data/repository` still
+ * compile but are no longer bound.
  */
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DemoRepositoryModule {
+abstract class LocalRepositoryModule {
 
     @Binds
     @Singleton

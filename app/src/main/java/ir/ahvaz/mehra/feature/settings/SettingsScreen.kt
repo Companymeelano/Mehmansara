@@ -91,54 +91,19 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            SectionHeader(title = "اتصال به سرور")
+            SectionHeader(title = "نحوهٔ کار برنامه")
             MehraCard(modifier = Modifier.fillMaxWidth()) {
-                MehraTextField(
-                    label = "نشانی سرور",
-                    value = state.serverUrl,
-                    onValueChange = viewModel::onServerUrlChange,
-                    placeholder = "https://mehra.example.ir",
-                    hint = "برای شبکه داخلی می‌توانید http://192.168.x.x:5000 وارد کنید.",
+                Text(
+                    text = "این نسخه کاملاً آفلاین است: نیازی به سرور و ورود با نام کاربری نیست. " +
+                        "پس از نصب، برنامه مستقیم باز می‌شود و همهٔ اطلاعات (اتاق‌ها، مهمان‌ها، رزروها، صندوق) " +
+                        "را خودتان به‌صورت دستی روی دستگاه وارد می‌کنید.",
+                    style = MaterialTheme.typography.bodyMedium,
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    CompactButton(
-                        text = "ذخیره نشانی",
-                        onClick = viewModel::saveServerUrl,
-                        enabled = !state.isSavingServer,
-                        modifier = Modifier.weight(1f),
-                    )
-                    CompactButton(
-                        text = if (state.isVerifyingServer) "در حال بررسی…" else "بررسی اتصال",
-                        onClick = viewModel::testServer,
-                        enabled = !state.isVerifyingServer,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     StatusPill(
                         text = if (state.isOnline) "شبکه در دسترس" else "بدون شبکه",
                         tint = if (state.isOnline) MehraTheme.colors.success else MehraTheme.colors.danger,
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    StatusPill(
-                        text = if (state.realtime.isConnected) "رویداد زنده متصل" else "رویداد زنده قطع",
-                        tint = if (state.realtime.isConnected) MehraTheme.colors.info else MehraTheme.colors.warning,
-                    )
-                }
-                if (state.realtime.lastEventAt != null) {
-                    Text(
-                        text = "آخرین رویداد: ${relativeTimeFa(state.realtime.lastEventAt)}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                state.serverVersion?.let { version ->
-                    Text(
-                        text = "نسخه سرور: ${(version).toPersianDigits()}",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }

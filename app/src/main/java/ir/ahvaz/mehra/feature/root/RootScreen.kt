@@ -1,47 +1,25 @@
 package ir.ahvaz.mehra.feature.root
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import ir.ahvaz.mehra.BuildConfig
-import ir.ahvaz.mehra.feature.auth.LoginScreen
-import ir.ahvaz.mehra.feature.auth.ServerSetupScreen
+import ir.ahvaz.mehra.core.security.LocalOperator
 import ir.ahvaz.mehra.navigation.MehraNavGraph
 
 /**
- * Single decision point of the app: server configuration, then authentication, then the
- * local lock screen, then the authenticated navigation graph.
+ * Single decision point of the app.
+ *
+ * Since 1.4.0 the app is fully local: there is no server configuration and no login screen.
+ * After install it opens straight into the main navigation graph; a local operator session
+ * is created silently by [RootViewModel]. Only the optional app-lock (PIN) screen remains.
  */
 @Composable
 fun RootScreen(
     state: RootUiState,
     viewModel: RootViewModel,
 ) {
-    var forceServerSetup by remember { mutableStateOf(false) }
-
     when {
-        // The showcase build (flavour `demo`) starts with an empty in-memory store, so it never asks the
-        // reviewer to type a server address. `prod` keeps the strict behaviour below.
-        forceServerSetup || (!state.serverConfigured && !BuildConfig.DEMO_MODE) -> {
-            ServerSetupScreen(onSaved = { forceServerSetup = false })
-        }
-
-        state.session == null -> {
-            LoginScreen(
-                onLoggedIn = {
-                    viewModel.dismissSessionExpired()
-                    viewModel.onAuthenticationSucceeded()
-                },
-                onOpenServerSettings = { forceServerSetup = true },
-                sessionExpired = state.sessionExpired,
-            )
-        }
-
         state.pinSet && state.locked -> {
             LockScreen(
-                userName = state.session.fullName,
+                userName = (state.session ?: LocalOperator.session()).fullName,
                 onUnlock = viewModel::tryUnlock,
                 onLogout = { viewModel.logout() },
             )
@@ -49,11 +27,9 @@ fun RootScreen(
 
         else -> {
             MehraNavGraph(
-                user = state.session,
+                user = state.session ?: LocalOperator.session(),
                 onSessionInvalid = { viewModel.logout() },
             )
         }
     }
-
-    DemoIntroDialog()
 }

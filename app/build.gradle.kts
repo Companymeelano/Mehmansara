@@ -9,9 +9,9 @@ plugins {
 }
 
 /**
- * Release signing is optional: if `keystore.properties` is present at the project root
- * the release build is signed, otherwise Gradle produces an unsigned release APK.
- * See docs/INSTALL.md for the expected file format.
+ * Release signing: if `keystore.properties` is present at the project root the release
+ * keystore is used, otherwise the debug key — a release APK is ALWAYS signed, because
+ * Android's PackageManager rejects unsigned packages (INSTALL_PARSE_FAILED_NO_CERTIFICATES).
  */
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties().apply {
@@ -30,37 +30,18 @@ android {
         applicationId = "ir.ahvaz.mehra"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 6
-        versionName = "1.3.2"
+        versionCode = 7
+        versionName = "1.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += listOf("fa", "en")
         vectorDrawables.useSupportLibrary = true
     }
 
-    /**
-     * Two delivery flavours:
-     *
-     *  * `prod` — the real app. It only ever talks to the operator's MEHRA server and ships
-     *    zero sample data (see docs/API_CONTRACT.md).
-     *  * `demo` — a self-contained showcase build for customer presentations. All screens are
-     *    driven by an in-memory dataset inside this flavour (`src/demo`), so it installs next
-     *    to the real app, needs no server and can never be shipped by accident: its
-     *    applicationId is suffixed and none of its code exists in `prod`.
-     */
-    flavorDimensions += "mode"
-    productFlavors {
-        create("prod") {
-            dimension = "mode"
-            buildConfigField("boolean", "DEMO_MODE", "false")
-        }
-        create("demo") {
-            dimension = "mode"
-            applicationIdSuffix = ".demo"
-            versionNameSuffix = "-demo"
-            buildConfigField("boolean", "DEMO_MODE", "true")
-        }
-    }
+    // Single, fully local build since 1.4.0: no server, no login — the app opens straight
+    // into the main screens and all data is entered manually on the device (in-memory,
+    // see ir.ahvaz.mehra.local). The remote (server) implementations still compile but are
+    // no longer bound by Hilt.
 
     signingConfigs {
         // Sideload-friendly signing: v1 (JAR) + v2 + v3. AGP disables v1 automatically when

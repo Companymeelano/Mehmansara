@@ -9,6 +9,7 @@ import ir.ahvaz.mehra.core.network.NetworkMonitor
 import ir.ahvaz.mehra.core.network.SessionEvent
 import ir.ahvaz.mehra.core.network.SessionEventBus
 import ir.ahvaz.mehra.core.security.AppLockManager
+import ir.ahvaz.mehra.core.security.LocalOperator
 import ir.ahvaz.mehra.core.security.ServerUrlProvider
 import ir.ahvaz.mehra.core.security.SessionManager
 import ir.ahvaz.mehra.data.sync.OfflineQueue
@@ -63,6 +64,10 @@ class RootViewModel @Inject constructor(
     val state: StateFlow<RootUiState> = _state.asStateFlow()
 
     init {
+        // Fully local app (1.4.0): no login screen — make sure a local operator session exists.
+        if (sessionManager.currentUser == null) {
+            sessionManager.updateUser(LocalOperator.session())
+        }
         viewModelScope.launch {
             settingsRepository.settings.collect { settings ->
                 _state.update {

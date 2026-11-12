@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Showcase build only: the launcher label makes it impossible to confuse with the real app. -->
-<resources>
-    <string name="app_name">مهرآ نمایشی</string>
-    <string name="app_name_full">مهرآ — نسخه نمایشی (داده‌های نمونه)</string>
-</resources>

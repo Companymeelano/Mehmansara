@@ -71,5 +71,5 @@ screen, بخش‌ها footer and تنظیمات → درباره سامانه**,
 ./gradlew :app:assembleProdDebug :app:assembleDemoDebug
 ```
 
-CI builds both flavours on every push (`.github/workflows/android-ci.yml`); APKs are
+CI builds the single local APK (release+debug) on every push (`.github/workflows/android-ci.yml`); APKs are
 published to the `ci-artifacts` branch.
