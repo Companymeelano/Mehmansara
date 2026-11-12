@@ -48,8 +48,8 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:generateProdDebugAssets UP-TO-DATE
 > Task :app:mergeProdDebugAssets
 > Task :app:preProdDebugUnitTestBuild UP-TO-DATE
-> Task :app:bundleProdDebugClassesToRuntimeJar
 > Task :app:packageProdDebugUnitTestForUnitTest
+> Task :app:bundleProdDebugClassesToRuntimeJar
 > Task :app:generateProdDebugUnitTestConfig
 > Task :app:processProdDebugJavaRes
 > Task :app:javaPreCompileProdDebugUnitTest FROM-CACHE
