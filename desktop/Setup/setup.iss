@@ -1,5 +1,5 @@
 ﻿; ============================================================================
-;  MEHRA 1.1 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
+;  MEHRA 1.1.2 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
 ;  Luxury Persian (RTL) installer for the MEHRA Windows client.
 ;  Brand: Milad Yaghoobi — www.meelano.ir — 09120219593
 ;  Features: branded welcome/finish, Vazirmatn font, SQL Server config page,
@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.1
-AppVerName=مهرآ ۱.۱.۱ — ویندوز
+AppVersion=1.1.2
+AppVerName=مهرآ ۱.۱.۲ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -35,7 +35,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.1.0
+VersionInfoVersion=1.1.2.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -72,18 +72,19 @@ StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
 FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱.۱ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۱.۲ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
-Name: "localdb"; Description: "SQL Server LocalDB 2022 همراه (حدود ۵۵ مگابایت) — موتور پایگاه دادهٔ سبک؛ ثبت واقعی داده روی همین PC بدون نصب جداگانه"; Types: full custom
-Name: "schema"; Description: "فایل اسکریپت پایگاه داده (db‌schema.sql) — برای ساخت جداول روی SQL Server"; Types: full
+Name: "localdb"; Description: "SQL Server LocalDB 2016 همراه (حدود ۴۵ مگابایت) — موتور پایگاه دادهٔ سبک؛ ثبت واقعی داده روی همین PC بدون نصب جداگانه"; Types: full custom
+Name: "schema"; Description: "فایل کامل اسکریپت پایگاه داده (db\schema.sql) — داخل همین فایل نصب؛ هیچ دانلودی لازم نیست"; Types: full compact custom
 Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — نصب دائمی در سیستم"; Types: full
 
 [Tasks]
-Name: "desktopicon"; Description: "ایجاد میان‌بر روی دسکتاپ"; GroupDescription: "گزینه‌های اضافی:"
+Name: "desktopicon"; Description: "ایجاد میان‌بر روی دسکتاپ"; GroupDescription: "گزینه‌های Durata controlada:"
+Name: "startup"; Description: "اجرای خودکار مهرآ هنگام بالا آمدن ویندوز (پوشهٔ Startup)"; GroupDescription: "گزینه‌های اضافی:"
 Name: "runapp"; Description: "اجرای برنامه پس از پایان نصب"; GroupDescription: "گزینه‌های اضافی:"
-Name: "createdb"; Description: "ایجاد/به‌روزرانی جداول پایگاه داده در SQL Server هنگام نصب (اجرای db\schema.sql)"; GroupDescription: "پایگاه دادهٔ SQL Server"
+Name: "openfolder"; Description: "باز کردن پوشهٔ نصب پس از پایان"; GroupDescription: "گزینه‌های اضافی:"
 
 [Files]
 Source: "..\publish\Mehra.exe"; DestDir: "{app}"; Flags: ignoreversion restartreplace; Components: app
@@ -112,9 +113,11 @@ Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion rest
 Name: "{group}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"
 Name: "{group}\حذف برنامه"; Filename: "{uninstallexe}"
 Name: "{userdesktop}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"; Tasks: desktopicon
+Name: "{userstartup}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"; Tasks: startup
 
 [Run]
 Filename: "{app}\Mehra.exe"; Description: "اجرای مهرآ"; Flags: nowait postinstall skipifsilent; Tasks: runapp
+Filename: "explorer.exe"; Parameters: """{app}"""; Description: "باز کردن پوشهٔ نصب"; Flags: nowait postinstall skipifsilent; Tasks: openfolder
 
 [Code]
 var
@@ -422,9 +425,24 @@ function NextButtonClick(CurPageID: Integer): Boolean;
 var
   Err: string;
   winAuth: Boolean;
-  FreeB, TotalB, Dummy: Int64;
+  FreeB, TotalB, Dummy, NeedB: Int64;
 begin
   Result := True;
+  if CurPageID = wpSelectDir then
+  begin
+    // smart disk check on the drive of the CHOSEN install folder
+    if GetDiskFreeSpaceExW(ExtractFileDrive(WizardDirValue), FreeB, TotalB, Dummy) then
+    begin
+      NeedB := 350 * 1024 * 1024;
+      if IsComponentSelected('localdb') then NeedB := 900 * 1024 * 1024;
+      if FreeB < NeedB then
+      begin
+        MsgBox('فضای خالی درایوِ انتخاب‌شده کافی نیست — برای این نصب حدود ' + IntToStr(NeedB div (1024 * 1024)) + ' مگابایت لازم است.', mbError, MB_OK);
+        Result := False;
+        Exit;
+      end;
+    end;
+  end;
   if CurPageID = wpSelectComponents then
   begin
     // the bundled LocalDB msi needs room to extract (~900 MB free recommended)
@@ -502,7 +520,8 @@ begin
       begin
         LocalDbOk := True;
         if Trim(DbPage.Values[0]) = '' then DbPage.Values[0] := '(localdb)\MSSQLLocalDB';
-        OptPage.Values[0] := True; // LocalDB همراه uses Windows auth
+        if (Trim(DbPage.Values[0]) = '') or (Trim(DbPage.Values[0]) = '(localdb)\MSSQLLocalDB') then
+          OptPage.Values[0] := True; // bundled LocalDB uses Windows auth
         Log('MEHRA: bundled LocalDB ready at (localdb)\MSSQLLocalDB');
       end
       else
@@ -524,6 +543,8 @@ begin
       else
       begin
         MsgBox('اجرای اسکریپت ساخت جداول ناموفق بود:' + #13#10#13#10 + Err + #13#10#13#10 + 'برنامه بعداً می‌تواند از بخش تنظیمات دوباره تلاش کند («راه‌اندازی جداول پایگاه داده»).', mbError, MB_OK);
+        if LocalDbOk then
+          WriteAppSettings(DbPage.Values[0], DbPage.Values[1], not OptPage.Values[0], DbPage.Values[2]);
       end;
     end
     else if LocalDbOk then

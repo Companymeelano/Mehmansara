@@ -205,6 +205,17 @@ public class SettingsVm : VmBase
         if (_session.Api is not SqlServerApi sql) return;
         SchemaStatus = "در حال اجرای اسکریپت db\\schema.sql …";
         var path = Path.Combine(AppContext.BaseDirectory, "db", "schema.sql");
+        if (!File.Exists(path))
+        {
+            // fallback: schema.sql is embedded inside the exe — extract it to temp
+            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            using var rs = asm.GetManifestResourceStream("Mehra.Desktop.db.schema.sql");
+            if (rs != null)
+            {
+                path = Path.Combine(Path.GetTempPath(), "mehra-schema.sql");
+                using (var fs = File.Create(path)) rs.CopyTo(fs);
+            }
+        }
         var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path, sql.Database);
         SchemaStatus = r.Ok ? r.Value! : r.Error;
     }
