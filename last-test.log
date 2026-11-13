@@ -23,38 +23,62 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
-> Task :app:generateDebugResValues FROM-CACHE
 > Task :app:checkDebugAarMetadata
+> Task :app:generateDebugResValues FROM-CACHE
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug FROM-CACHE
-> Task :app:parseDebugLocalResources
 > Task :app:mergeDebugResources
+> Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
 > Task :app:javaPreCompileDebug FROM-CACHE
 > Task :app:mergeDebugShaders
+> Task :app:processDebugManifestForPackage
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:preDebugUnitTestBuild UP-TO-DATE
 > Task :app:javaPreCompileDebugUnitTest FROM-CACHE
-> Task :app:processDebugManifestForPackage
 > Task :app:processDebugResources
 > Task :app:packageDebugUnitTestForUnitTest
 > Task :app:generateDebugUnitTestConfig
-
 > Task :app:kspDebugKotlin
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:3:72 imports are only allowed in the beginning of file
 
-> Task :app:kspDebugKotlin FAILED
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:222:43 Overload resolution ambiguity between candidates:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:274:73 Unresolved reference 'size'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:278:45 Unresolved reference 'size'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsViewModels.kt:108:5 Conflicting overloads:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsViewModels.kt:188:5 Conflicting overloads:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:181:81 Unresolved reference 'EXTRA_RESULTS'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:62 Unresolved reference 'ACTION_RECOGNIZE_SPEECH'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:87 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:87 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T> T.apply(block: T.() -> Unit): T
+    [R|Contract description]
+     <
+        CallsInPlace(block, EXACTLY_ONCE)
+    >
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:93 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:55 Unresolved reference 'EXTRA_LANGUAGE_MODEL'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:94 Unresolved reference 'LANGUAGE_MODEL_FREE_FORM'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:217:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:217:55 Unresolved reference 'EXTRA_LANGUAGE'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:218:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:218:55 Unresolved reference 'EXTRA_PROMPT'.
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-Execution failed for task ':app:kspDebugKotlin'.
+Execution failed for task ':app:compileDebugKotlin'.
 > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
    > Compilation error. See log for more details
 
@@ -64,7 +88,7 @@ Execution failed for task ':app:kspDebugKotlin'.
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:kspDebugKotlin'.
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileDebugKotlin'.
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
 	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
@@ -258,5 +282,5 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	... 2 more
 
 
-BUILD FAILED in 25s
-21 actionable tasks: 17 executed, 4 from cache
+BUILD FAILED in 39s
+22 actionable tasks: 18 executed, 4 from cache

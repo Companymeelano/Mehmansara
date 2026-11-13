@@ -13,7 +13,6 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preReleaseBuild UP-TO-DATE
 > Task :app:mergeReleaseJniLibFolders
 > Task :app:mergeReleaseNativeLibs
-> Task :app:checkReleaseDuplicateClasses
 
 > Task :app:stripReleaseDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
@@ -23,6 +22,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateReleaseBuildConfig
+> Task :app:checkReleaseDuplicateClasses
 > Task :app:generateReleaseResValues FROM-CACHE
 > Task :app:checkReleaseAarMetadata
 > Task :app:mapReleaseSourceSetPaths
@@ -31,32 +31,32 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:createReleaseCompatibleScreenManifests
 > Task :app:extractDeepLinksRelease FROM-CACHE
 > Task :app:parseReleaseLocalResources
-> Task :app:processReleaseMainManifest
 > Task :app:mergeReleaseResources
+> Task :app:processReleaseMainManifest
 > Task :app:processReleaseManifest
 > Task :app:javaPreCompileRelease FROM-CACHE
-> Task :app:processReleaseManifestForPackage
 > Task :app:desugarReleaseFileDependencies FROM-CACHE
 > Task :app:mergeReleaseStartupProfile
 > Task :app:mergeExtDexRelease FROM-CACHE
-> Task :app:processReleaseResources
+> Task :app:processReleaseManifestForPackage
+> Task :app:mergeReleaseArtProfile
 > Task :app:mergeReleaseShaders
 > Task :app:compileReleaseShaders NO-SOURCE
 > Task :app:generateReleaseAssets UP-TO-DATE
-> Task :app:mergeReleaseArtProfile
 > Task :app:mergeReleaseAssets
 > Task :app:compressReleaseAssets FROM-CACHE
 > Task :app:extractReleaseVersionControlInfo
 > Task :app:collectReleaseDependencies
+> Task :app:processReleaseResources
 > Task :app:sdkReleaseDependencyData
 > Task :app:validateSigningRelease
 > Task :app:writeReleaseAppMetadata
 > Task :app:writeReleaseSigningConfigVersions
-> Task :app:optimizeReleaseResources
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
 > Task :app:generateDebugBuildConfig UP-TO-DATE
 > Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:optimizeReleaseResources
 > Task :app:generateDebugResValues UP-TO-DATE
 > Task :app:mapDebugSourceSetPaths UP-TO-DATE
 > Task :app:generateDebugResources UP-TO-DATE
@@ -69,6 +69,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processDebugManifest UP-TO-DATE
 > Task :app:processDebugManifestForPackage UP-TO-DATE
 > Task :app:processDebugResources UP-TO-DATE
+> Task :app:kspDebugKotlin UP-TO-DATE
 > Task :app:javaPreCompileDebug UP-TO-DATE
 > Task :app:mergeDebugShaders UP-TO-DATE
 > Task :app:compileDebugShaders NO-SOURCE
@@ -88,21 +89,70 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:validateSigningDebug
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
-
 > Task :app:kspReleaseKotlin
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:3:72 imports are only allowed in the beginning of file
 
-> Task :app:kspDebugKotlin FAILED
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:3:72 imports are only allowed in the beginning of file
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:222:43 Overload resolution ambiguity between candidates:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:274:73 Unresolved reference 'size'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:278:45 Unresolved reference 'size'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsViewModels.kt:108:5 Conflicting overloads:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsViewModels.kt:188:5 Conflicting overloads:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:181:81 Unresolved reference 'EXTRA_RESULTS'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:62 Unresolved reference 'ACTION_RECOGNIZE_SPEECH'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:87 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:87 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T> T.apply(block: T.() -> Unit): T
+    [R|Contract description]
+     <
+        CallsInPlace(block, EXACTLY_ONCE)
+    >
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:93 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:55 Unresolved reference 'EXTRA_LANGUAGE_MODEL'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:94 Unresolved reference 'LANGUAGE_MODEL_FREE_FORM'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:217:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:217:55 Unresolved reference 'EXTRA_LANGUAGE'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:218:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:218:55 Unresolved reference 'EXTRA_PROMPT'.
 
-> Task :app:kspReleaseKotlin FAILED
+> Task :app:compileReleaseKotlin FAILED
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:222:43 Overload resolution ambiguity between candidates:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:274:73 Unresolved reference 'size'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsScreens.kt:278:45 Unresolved reference 'size'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsViewModels.kt:108:5 Conflicting overloads:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/rooms/RoomsViewModels.kt:188:5 Conflicting overloads:
+fun changeStatus(room: Room, status: RoomStatus): Unit
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:181:81 Unresolved reference 'EXTRA_RESULTS'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:62 Unresolved reference 'ACTION_RECOGNIZE_SPEECH'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:87 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:87 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T> T.apply(block: T.() -> Unit): T
+    [R|Contract description]
+     <
+        CallsInPlace(block, EXACTLY_ONCE)
+    >
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:215:93 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:55 Unresolved reference 'EXTRA_LANGUAGE_MODEL'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:216:94 Unresolved reference 'LANGUAGE_MODEL_FREE_FORM'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:217:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:217:55 Unresolved reference 'EXTRA_LANGUAGE'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:218:29 Unresolved reference 'putExtra'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/feature/search/CommandPalette.kt:218:55 Unresolved reference 'EXTRA_PROMPT'.
 
 FAILURE: Build completed with 2 failures.
 
 1: Task failed with an exception.
 -----------
 * What went wrong:
-Execution failed for task ':app:kspReleaseKotlin'.
+Execution failed for task ':app:compileDebugKotlin'.
 > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
    > Compilation error. See log for more details
 
@@ -112,7 +162,7 @@ Execution failed for task ':app:kspReleaseKotlin'.
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:kspReleaseKotlin'.
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileDebugKotlin'.
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
 	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
@@ -310,7 +360,7 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 2: Task failed with an exception.
 -----------
 * What went wrong:
-Execution failed for task ':app:kspDebugKotlin'.
+Execution failed for task ':app:compileReleaseKotlin'.
 > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
    > Compilation error. See log for more details
 
@@ -320,7 +370,7 @@ Execution failed for task ':app:kspDebugKotlin'.
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:kspDebugKotlin'.
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileReleaseKotlin'.
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
 	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
@@ -527,5 +577,5 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 
 ==============================================================================
 
-BUILD FAILED in 21s
-65 actionable tasks: 37 executed, 11 from cache, 17 up-to-date
+BUILD FAILED in 35s
+67 actionable tasks: 38 executed, 11 from cache, 18 up-to-date
