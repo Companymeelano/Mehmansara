@@ -38,6 +38,10 @@ import ir.ahvaz.mehra.core.ui.components.MehraTextField
 import ir.ahvaz.mehra.core.ui.components.PrimaryButton
 import ir.ahvaz.mehra.core.ui.components.SectionHeader
 import ir.ahvaz.mehra.core.ui.components.SecondaryButton
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -62,8 +66,8 @@ data class DbToolState(
 @HiltViewModel
 class DbToolViewModel @Inject constructor() : ViewModel() {
 
-    private var _state = kotlinx.coroutines.flow.MutableStateFlow(DbToolState())
-    val state: kotlinx.coroutines.flow.StateFlow<DbToolState> = _state
+    private val _state = MutableStateFlow(DbToolState())
+    val state: StateFlow<DbToolState> = _state.asStateFlow()
 
     fun update(patch: (DbToolState) -> DbToolState) = _state.update(patch)
 

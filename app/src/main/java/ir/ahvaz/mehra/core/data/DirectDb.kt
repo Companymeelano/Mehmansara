@@ -41,7 +41,7 @@ object DirectDb {
         "jdbc:sqlserver://$host:$port;databaseName=$db;user=$user;password=$pass;" +
             "encrypt=true;trustServerCertificate=true;loginTimeout=8"
 
-    private fun mapError(ex: Exception): String = when {
+    private fun mapError(ex: Exception, host: String, port: String): String = when {
         ex.message?.contains("Login failed", ignoreCase = true) == true ->
             "ورود به SQL Server ناموفق بود؛ نام کاربری/رمز یا فعال بودن SQL Server Authentication را بررسی کنید. (${ex.message})"
         ex.message?.contains("TCP Provider", ignoreCase = true) == true ||
@@ -67,7 +67,7 @@ object DirectDb {
                     }
                 }
             } catch (ex: Exception) {
-                AppResult.Failure(AppError(ErrorKind.NETWORK, message = mapError(ex), cause = ex))
+                AppResult.Failure(AppError(ErrorKind.NETWORK, message = mapError(ex, host, port), cause = ex))
             }
         }
 
@@ -86,7 +86,7 @@ object DirectDb {
                     }
                 }
             } catch (ex: Exception) {
-                AppResult.Failure(AppError(ErrorKind.NETWORK, message = mapError(ex), cause = ex))
+                AppResult.Failure(AppError(ErrorKind.NETWORK, message = mapError(ex, host, port), cause = ex))
             }
         }
 
@@ -111,7 +111,7 @@ object DirectDb {
                 }
             }
         } catch (ex: Exception) {
-            AppResult.Failure(AppError(ErrorKind.NETWORK, message = mapError(ex), cause = ex))
+            AppResult.Failure(AppError(ErrorKind.NETWORK, message = mapError(ex, host, port), cause = ex))
         }
     }
 }

@@ -60,7 +60,7 @@ public class SqlServerApi : IHotelApi
             // Reachable — make sure the database itself exists (error 4060 otherwise).
             try
             {
-                var api = probe.Data!;
+                var api = probe.Value!;
                 await using var con = new SqlConnection(api.MasterConnectionString);
                 await con.OpenAsync();
                 await using var cmd = new SqlCommand(
@@ -68,7 +68,7 @@ public class SqlServerApi : IHotelApi
                     con);
                 cmd.Parameters.AddWithValue("@db", database);
                 await cmd.ExecuteNonQueryAsync();
-                return Result<(SqlServerApi, string)>.Good((api, server));
+                return Result<(SqlServerApi Api, string ResolvedServer)>.Good((api, server));
             }
             catch { /* try next candidate */ }
         }
