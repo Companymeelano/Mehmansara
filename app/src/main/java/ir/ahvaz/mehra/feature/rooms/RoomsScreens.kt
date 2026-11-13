@@ -1,7 +1,5 @@
 package ir.ahvaz.mehra.feature.rooms
 
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -81,6 +79,7 @@ import ir.ahvaz.mehra.domain.model.MaintenancePriority
 import ir.ahvaz.mehra.domain.model.Room
 import ir.ahvaz.mehra.domain.model.RoomStatus
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun RoomsScreen(
     onOpenRoom: (String) -> Unit,
