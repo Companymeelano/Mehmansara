@@ -1,8 +1,8 @@
-# نسخهٔ ویندوز ۱.۱.۴ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe (برنامه + SQL Server LocalDB همراه + فونت‌ها)
+# نسخهٔ ویندوز ۱.۱.۵ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe (برنامه + SQL Server LocalDB همراه + فونت‌ها)
 
-> **از نسخهٔ ۱.۱.۴ به بعد، فقط یک فایل `MehraSetup.exe` کافی است:** نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
+> **از نسخهٔ ۱.۱.۵ به بعد، فقط یک فایل `MehraSetup.exe` کافی است:** نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
 
-## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۴)
+## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۵)
 
 - انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
 - **نصب‌گر کاملِ یک‌فایله (پیشنهادی —viron ۹۲ مگابایت):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
@@ -16,7 +16,7 @@
 - `setup/MehraSetup.exe`: 89,558,970 بایت — sha256 `a69e7d6438fd8fe63beafb588be53fa6b63deb31d27d1564b5b1ef5fe8dab2cb`
 - `exe/Mehra.exe`: 94,192,520 بایت — sha256 `3e07c8fdf9d7649efc97b827f449eacde28185b1dc0f682cf9ee85ba5eab2c1c`
 - `exe/Mehra-win-x64.zip`: 41,815,275 بایت — sha256 `ebca0d83517dae418a83b5824ce62b587fa2ef475ad969be6523635a73cf5fe5`
-- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۱.۴؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
+- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۱.۵؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
 
 ## نصب با MehraSetup.exe (یک فایل — همه‌چیز)
 

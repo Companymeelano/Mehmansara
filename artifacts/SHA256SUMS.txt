@@ -1,11 +1,10 @@
 b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0.0-debug.apk
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
-# Windows v1.1.4 (final, run 43301411566) — one-file setup bundling SQL Server 2016 LocalDB x64 (~45MB)
-# AND MSOLEDBSQL 19 OLE DB driver (~15MB) + embedded schema.sql + luxury 3D assets; login auto-creates tables — branch ci-artifacts
-a69e7d6438fd8fe63beafb588be53fa6b63deb31d27d1564b5b1ef5fe8dab2cb  ci-artifacts:setup/MehraSetup.exe  (89,558,970 bytes)
-3e07c8fdf9d7649efc97b827f449eacde28185b1dc0f682cf9ee85ba5eab2c1c  ci-artifacts:exe/Mehra.exe  (94,192,520 bytes)
-ebca0d83517dae418a83b5824ce62b587fa2ef475ad969be6523635a73cf5fe5  ci-artifacts:exe/Mehra-win-x64.zip  (41,815,275 bytes)
+# Windows v1.1.5 (final, run 43501180645) — SQL-2022-proof: installer+app auto-resolve server ((localdb)/localhost/.SQLEXPRESS), DB auto-created, schema auto-run — branch ci-artifacts
+7e6eea99aa6341720d6eaf857efbad074d7e5ef90e92d18d09ccbec7bf716403  ci-artifacts:setup/MehraSetup.exe  (89,554,821 bytes)
+ab05b91557ba29f128266b414279a395ff3116b6976a53a771c435222ec59bd8  ci-artifacts:exe/Mehra.exe  (94,196,616 bytes)
+b6603ac63fa3ef4d3f1029a025c505e96ecd8505c7a13bfc22951f9d42681d59  ci-artifacts:exe/Mehra-win-x64.zip  (41,817,177 bytes)
 
-# Android v1.4.1 (final, run 43317293901) — single LOCAL build, no login/server; luxury UI (bottom bar = 5 daily sections, welcome dashboard, 3D tiles) — release always signed — on branch ci-artifacts
-5c2473621d1664078d188a8d2caaec61710f4255303903c627b377f9d3815936  ci-artifacts:apk/app-release.apk  (14,007,857 bytes, v1.4.1 release, run 43317293901)
-8510e959dd36b66f04f22f0c37f43218b18a2577512e38e8afdda3c64092ed2c  ci-artifacts:apk/app-debug.apk  (21,022,357 bytes, v1.4.1 debug, run 43317293901)
+# Android v1.4.2 (final, run 43502863931) — local no-login app + direct SQL test screen (port 1433, mssql-jdbc bundled) — release always signed — branch ci-artifacts
+f2bece0c75ebd2a9cfde5c67a7ecdeadbc2ec095ec26365fd9491f082f485de9  ci-artifacts:apk/app-release.apk  (14,745,429 bytes, v1.4.2 release, run 43502863931)
+5a2bf028704fa56fefe8d0a9e997c1638f6b754fe33c7d3c10ecf9323830e9e3  ci-artifacts:apk/app-debug.apk  (21,923,777 bytes, v1.4.2 debug, run 43502863931)
