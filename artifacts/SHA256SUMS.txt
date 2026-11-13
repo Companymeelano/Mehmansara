@@ -5,6 +5,6 @@ b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0
 ab05b91557ba29f128266b414279a395ff3116b6976a53a771c435222ec59bd8  ci-artifacts:exe/Mehra.exe  (94,196,616 bytes)
 b6603ac63fa3ef4d3f1029a025c505e96ecd8505c7a13bfc22951f9d42681d59  ci-artifacts:exe/Mehra-win-x64.zip  (41,817,177 bytes)
 
-# Android v1.4.2 (final, run 43502863931) — local no-login app + direct SQL test screen (port 1433, mssql-jdbc bundled) — release always signed — branch ci-artifacts
-f2bece0c75ebd2a9cfde5c67a7ecdeadbc2ec095ec26365fd9491f082f485de9  ci-artifacts:apk/app-release.apk  (14,745,429 bytes, v1.4.2 release, run 43502863931)
-5a2bf028704fa56fefe8d0a9e997c1638f6b754fe33c7d3c10ecf9323830e9e3  ci-artifacts:apk/app-debug.apk  (21,923,777 bytes, v1.4.2 debug, run 43502863931)
+# Android v1.4.3 (final, run 43506490567) — local app, data now PERSISTED on-device (encrypted), direct SQL test screen (1433) — release always signed — branch ci-artifacts
+3a77217ef585a0aabd23d50c19d24e3a3788d8a5f568e340560800209300b094  ci-artifacts:apk/app-release.apk  (14,745,419 bytes, v1.4.3 release, run 43506490567)
+e9d2aac4a24cf1ed230165a7f93274968a7c4ae77405a20dee003a2a64beeb48  ci-artifacts:apk/app-debug.apk  (21,940,156 bytes, v1.4.3 debug, run 43506490567)
