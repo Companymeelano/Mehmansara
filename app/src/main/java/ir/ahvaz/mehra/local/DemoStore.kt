@@ -1,5 +1,6 @@
 package ir.ahvaz.mehra.local
 
+import ir.ahvaz.mehra.core.security.SecureStore
 import ir.ahvaz.mehra.domain.model.ActivityItem
 import ir.ahvaz.mehra.domain.model.ActivityKind
 import ir.ahvaz.mehra.domain.model.AlertItem
@@ -38,11 +39,12 @@ import javax.inject.Singleton
  *
  * The store starts EMPTY on purpose: no rooms, guests, reservations, stays, payments,
  * tasks, tickets, notifications or users are pre-seeded. The operator enters every piece
- * of data manually through the app forms. Only the reference catalogues (room types,
+ * of data manually through the app forms, and everything is persisted on-device (encrypted)
+ * after each change, so data survives app restarts. Only the reference catalogues (room types,
  * floors, amenities) are provided, because the forms need them as selectable options.
  */
 @Singleton
-class DemoStore @Inject constructor() {
+class DemoStore @Inject constructor(private val secureStore: SecureStore) {
 
     companion object {
         private val TEHRAN: ZoneId = ZoneId.of("Asia/Tehran")
@@ -52,11 +54,38 @@ class DemoStore @Inject constructor() {
 
     val today: LocalDate = LocalDate.now()
 
-    private var sequence: Int = 4210
+    // Since 1.4.3 the whole store is durable: it is loaded from encrypted storage at startup
+    // and re-saved automatically after every mutation (see PersistingList / persist()).
+    private val snapshot: StoreSnapshot? = LocalStorePersistence.load(secureStore)
+
+    private var sequence: Int = snapshot?.sequence ?: 4210
+
+    private fun <T> persisting(initial: List<T>): MutableList<T> = PersistingList(initial) { persist() }
+
+    /** Serializes the entire store into encrypted storage. Called after every mutation. */
+    fun persist() {
+        LocalStorePersistence.save(
+            secureStore,
+            StoreSnapshot(
+                rooms = rooms.toList(),
+                guests = guests.toList(),
+                reservations = reservations.toList(),
+                stays = stays.toList(),
+                transactions = transactions.toList(),
+                housekeepingTasks = housekeepingTasks.toList(),
+                maintenanceTickets = maintenanceTickets.toList(),
+                notifications = notifications.toList(),
+                users = users.toList(),
+                auditLogs = auditLogs.toList(),
+                sequence = sequence,
+            ),
+        )
+    }
 
     /** Deterministic id generator so newly created records look like server ids. */
     fun nextId(prefix: String): String {
         sequence += 1
+        persist()
         return "$prefix-$sequence"
     }
 
@@ -94,7 +123,7 @@ class DemoStore @Inject constructor() {
 
     // ------------------------------------------------------------------ rooms
 
-    val rooms: MutableList<Room> = mutableListOf()
+    val rooms: MutableList<Room> = persisting(snapshot?.rooms ?: emptyList())
 
     fun room(roomId: String): Room? = rooms.firstOrNull { it.id == roomId }
 
@@ -102,7 +131,7 @@ class DemoStore @Inject constructor() {
 
     // ------------------------------------------------------------------ guests
 
-    val guests: MutableList<Guest> = mutableListOf()
+    val guests: MutableList<Guest> = persisting(snapshot?.guests ?: emptyList())
 
     fun guest(guestId: String): Guest? = guests.firstOrNull { it.id == guestId }
 
@@ -151,7 +180,7 @@ class DemoStore @Inject constructor() {
         )
     }
 
-    val reservations: MutableList<Reservation> = mutableListOf()
+    val reservations: MutableList<Reservation> = persisting(snapshot?.reservations ?: emptyList())
 
     fun reservation(reservationId: String): Reservation? =
         reservations.firstOrNull { it.id == reservationId }
@@ -185,7 +214,7 @@ class DemoStore @Inject constructor() {
         paidRial = paid,
     )
 
-    val stays: MutableList<Stay> = mutableListOf()
+    val stays: MutableList<Stay> = persisting(snapshot?.stays ?: emptyList())
 
     fun stay(stayId: String): Stay? = stays.firstOrNull { it.id == stayId }
 
@@ -227,7 +256,7 @@ class DemoStore @Inject constructor() {
         createdAt = at(dayOffset, hour, minute),
     )
 
-    val transactions: MutableList<Transaction> = mutableListOf()
+    val transactions: MutableList<Transaction> = persisting(snapshot?.transactions ?: emptyList())
 
     // ------------------------------------------------------------------ housekeeping & maintenance
 
@@ -244,17 +273,17 @@ class DemoStore @Inject constructor() {
         StaffMember("staff-tc-3", "سعید فرجی", "Maintenance", "تعمیرات", "09169990011"),
     )
 
-    val housekeepingTasks: MutableList<HousekeepingTask> = mutableListOf()
+    val housekeepingTasks: MutableList<HousekeepingTask> = persisting(snapshot?.housekeepingTasks ?: emptyList())
 
-    val maintenanceTickets: MutableList<MaintenanceTicket> = mutableListOf()
+    val maintenanceTickets: MutableList<MaintenanceTicket> = persisting(snapshot?.maintenanceTickets ?: emptyList())
 
     // ------------------------------------------------------------------ notifications, users, audit
 
-    val notifications: MutableList<NotificationItem> = mutableListOf()
+    val notifications: MutableList<NotificationItem> = persisting(snapshot?.notifications ?: emptyList())
 
-    val users: MutableList<AppUser> = mutableListOf()
+    val users: MutableList<AppUser> = persisting(snapshot?.users ?: emptyList())
 
-    val auditLogs: MutableList<AuditLogEntry> = mutableListOf()
+    val auditLogs: MutableList<AuditLogEntry> = persisting(snapshot?.auditLogs ?: emptyList())
 
     // ------------------------------------------------------------------ derived helpers
 
