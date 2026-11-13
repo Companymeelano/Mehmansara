@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,6 +63,7 @@ import ir.ahvaz.mehra.core.ui.components.StatusPill
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.core.ui.theme.tint
 import ir.ahvaz.mehra.domain.model.Guest
+import ir.ahvaz.mehra.domain.model.LoyaltyTier
 
 @Composable
 fun GuestsScreen(
@@ -370,7 +372,9 @@ fun GuestDetailScreen(
 @Composable
 private fun GuestHeroCard(guest: Guest) {
     val colors = MehraTheme.colors
-    val isVip = guest.totalStays >= 5
+    val tier = LoyaltyTier.tierOf(guest.totalStays)
+    val nextTier = LoyaltyTier.nextTier(guest.totalStays)
+    val isVip = tier.minStays >= LoyaltyTier.GOLD.minStays
     val balanceColor = when {
         guest.balanceRial > 0 -> colors.danger
         guest.balanceRial < 0 -> colors.success
@@ -404,17 +408,17 @@ private fun GuestHeroCard(guest: Guest) {
                             Spacer(modifier = Modifier.width(6.dp))
                             Icon(
                                 imageVector = Icons.Rounded.Star,
-                                contentDescription = "مهمان VIP",
+                                contentDescription = "سطح ${tier.labelFa}",
                                 tint = colors.gold,
                             )
-                            Spacer(modifier = Modifier.width(2.dp))
-                            Text(
-                                text = "VIP",
-                                color = colors.gold,
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                            )
                         }
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = tier.labelFa,
+                            color = colors.gold,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
                     Text(
                         text = guest.phone?.let { "تلفن: ${it.toPersianDigits()}" } ?: "بدون شماره تماس",
@@ -441,6 +445,25 @@ private fun GuestHeroCard(guest: Guest) {
                     modifier = Modifier.weight(1.4f),
                 )
                 HeroChip(label = "همراهان", value = guest.companions.size.toString().toPersianDigits(), modifier = Modifier.weight(1f))
+            }
+            if (nextTier != null) {
+                Spacer(modifier = Modifier.height(10.dp))
+                val progress = (guest.totalStays.toFloat() / nextTier.minStays).coerceIn(0f, 1f)
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp),
+                    color = colors.gold,
+                    trackColor = Color.White.copy(alpha = 0.25f),
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = (nextTier.minStays - guest.totalStays).toString().toPersianDigits() +
+                        " اقامت تا سطح ${nextTier.labelFa}",
+                    color = Color.White.copy(alpha = 0.8f),
+                    style = MaterialTheme.typography.labelSmall,
+                )
             }
         }
     }

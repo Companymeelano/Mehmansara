@@ -1,6 +1,11 @@
 package ir.ahvaz.mehra.feature.reservations
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -21,6 +28,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,7 +47,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.ahvaz.mehra.core.common.formatMoneyFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.date.formatJalaliFaOrDash
+import ir.ahvaz.mehra.core.date.TehranTime
 import ir.ahvaz.mehra.core.date.formatJalaliLongFa
+import ir.ahvaz.mehra.core.date.toJalali
 import ir.ahvaz.mehra.core.date.nightsLabelFa
 import ir.ahvaz.mehra.core.ui.components.CompactButton
 import ir.ahvaz.mehra.core.ui.components.DropdownField
@@ -66,6 +76,7 @@ import ir.ahvaz.mehra.domain.model.AvailableRoom
 import ir.ahvaz.mehra.domain.model.PaymentMethod
 import ir.ahvaz.mehra.domain.model.Reservation
 import ir.ahvaz.mehra.domain.model.ReservationStatus
+import java.time.LocalDate
 
 @Composable
 fun ReservationsScreen(
@@ -108,6 +119,12 @@ fun ReservationsScreen(
                     selected = state.status,
                     onSelect = viewModel::onStatusChange,
                     label = { it.labelFa },
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                WeekStrip(
+                    selected = state.selectedDay,
+                    reservations = reservations.data.orEmpty(),
+                    onSelect = viewModel::onDaySelected,
                 )
                 FreshnessRow(
                     updatedAtMillis = reservations.updatedAtMillis,
@@ -530,6 +547,81 @@ fun NewReservationScreen(
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
+        }
+    }
+}
+
+/** Horizontal 7-day strip (v1.6.0): tap a day to filter reservations overlapping it. */
+@Composable
+private fun WeekStrip(
+    selected: LocalDate?,
+    reservations: List<Reservation>,
+    onSelect: (LocalDate?) -> Unit,
+) {
+    val colors = MehraTheme.colors
+    val today = TehranTime.today()
+    val days = remember { List(7) { i -> today.plusDays(i.toLong()) } }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        days.forEach { day ->
+            val j = day.toJalali()
+            val active = reservations.filter { r ->
+                r.status !in setOf(
+                    ReservationStatus.CANCELLED,
+                    ReservationStatus.EXPIRED,
+                    ReservationStatus.CHECKED_OUT,
+                    ReservationStatus.NO_SHOW,
+                ) && r.checkIn <= day && day < r.checkOut
+            }
+            val isSelected = selected == day
+            Surface(
+                shape = RoundedCornerShape(14.dp),
+                color = if (isSelected) colors.accentMid else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+                border = if (day == today && !isSelected) BorderStroke(1.5.dp, colors.gold) else null,
+                modifier = Modifier
+                    .width(66.dp)
+                    .clickable { onSelect(if (isSelected) null else day) },
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
+                ) {
+                    Text(
+                        text = j.dayOfWeekNameFa,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (isSelected) colors.onAccent else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        text = j.day.toString().toPersianDigits(),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isSelected) colors.onAccent else MaterialTheme.colorScheme.onSurface,
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(3.dp),
+                        modifier = Modifier.height(8.dp),
+                    ) {
+                        active.take(3).forEach { r ->
+                            Box(
+                                modifier = Modifier
+                                    .size(6.dp)
+                                    .background(r.status.tint(), RoundedCornerShape(3.dp)),
+                            )
+                        }
+                        if (active.size > 3) {
+                            Text(
+                                text = "+${(active.size - 3).toString().toPersianDigits()}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = if (isSelected) colors.onAccent else MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

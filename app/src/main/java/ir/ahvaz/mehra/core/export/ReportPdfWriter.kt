@@ -158,23 +158,29 @@ class ReportPdfWriter(private val context: Context) {
         generatedBy: String?,
         pageNumber: Int,
     ): Float {
-        var y = MARGIN
-        y = drawText(canvas, hotelName, y, PAGE_WIDTH - 2 * MARGIN, 18f, alignCenter = true, bold = true, offsetX = MARGIN)
-        y = drawText(canvas, table.title, y + 2, PAGE_WIDTH - 2 * MARGIN, 15f, alignCenter = true, bold = true, offsetX = MARGIN)
+        // Brand band (v1.6.0): dark navy strip with a gold rule — every page is branded.
+        val bandHeight = 88f
+        val band = Paint().apply { color = Color.parseColor("#232B3A") }
+        canvas.drawRect(0f, 0f, PAGE_WIDTH.toFloat(), bandHeight, band)
+        val goldRule = Paint().apply { color = Color.parseColor("#C8A96A"); strokeWidth = 3f }
+        canvas.drawLine(0f, bandHeight, PAGE_WIDTH.toFloat(), bandHeight, goldRule)
+        var y = 14f
+        y = drawText(canvas, hotelName, y, PAGE_WIDTH - 2 * MARGIN, 17f, alignCenter = true, bold = true, offsetX = MARGIN, ink = Color.parseColor("#C8A96A"))
+        y = drawText(canvas, table.title, y + 2, PAGE_WIDTH - 2 * MARGIN, 13f, alignCenter = true, bold = true, offsetX = MARGIN, ink = Color.WHITE)
         val range = buildString {
             table.from?.let { append("از ${it.toJalali().formatShortFa()} ") }
             table.to?.let { append("تا ${it.toJalali().formatShortFa()}") }
         }
         if (range.isNotBlank()) {
-            y = drawText(canvas, range, y + 2, PAGE_WIDTH - 2 * MARGIN, 11f, alignCenter = true, offsetX = MARGIN)
+            y = drawText(canvas, range, y + 2, PAGE_WIDTH - 2 * MARGIN, 10f, alignCenter = true, offsetX = MARGIN, ink = Color.parseColor("#D8DDE6"))
         }
         val meta = buildString {
             append("تاریخ تولید: ${table.generatedAt.formatJalaliDateTime()}")
             if (!generatedBy.isNullOrBlank()) append(" • تولیدکننده: $generatedBy")
             append(" • صفحه ${pageNumber.toString().toPersianDigits()}")
         }
-        y = drawText(canvas, meta, y + 2, PAGE_WIDTH - 2 * MARGIN, 9f, alignCenter = true, offsetX = MARGIN)
-        return y + 10
+        y = drawText(canvas, meta, y + 2, PAGE_WIDTH - 2 * MARGIN, 8.5f, alignCenter = true, offsetX = MARGIN, ink = Color.parseColor("#9AA7C7"))
+        return y + 12
     }
 
     private fun drawFooter(canvas: Canvas, pageNumber: Int, table: ReportTable, generatedBy: String?) {
@@ -272,11 +278,11 @@ class ReportPdfWriter(private val context: Context) {
         canvas.restore()
     }
 
-    private fun buildLayout(text: String, width: Float, fontSize: Float, bold: Boolean): StaticLayout {
+    private fun buildLayout(text: String, width: Float, fontSize: Float, bold: Boolean, ink: Int = Color.parseColor("#1F2126")): StaticLayout {
         val paint = TextPaint().apply {
             this.textSize = fontSize
             typeface = if (bold) this@ReportPdfWriter.bold else regular
-            color = Color.parseColor("#1F2126")
+            color = ink
             isAntiAlias = true
         }
         return StaticLayout.Builder
@@ -297,8 +303,9 @@ class ReportPdfWriter(private val context: Context) {
         alignCenter: Boolean = false,
         bold: Boolean = false,
         offsetX: Float = MARGIN,
+        ink: Int = Color.parseColor("#1F2126"),
     ): Float {
-        val layout = buildLayout(text, width, fontSize, bold)
+        val layout = buildLayout(text, width, fontSize, bold, ink)
         canvas.save()
         val totalWidth = RectF(offsetX, y, offsetX + width, y + layout.height)
         if (alignCenter) {

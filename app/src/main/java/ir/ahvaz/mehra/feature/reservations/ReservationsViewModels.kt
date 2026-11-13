@@ -10,6 +10,7 @@ import ir.ahvaz.mehra.core.common.toLatinDigits
 import ir.ahvaz.mehra.core.date.JalaliDate
 import ir.ahvaz.mehra.core.network.NetworkMonitor
 import ir.ahvaz.mehra.core.ui.state.UiState
+import java.time.LocalDate
 import ir.ahvaz.mehra.data.sync.OfflineQueue
 import ir.ahvaz.mehra.domain.model.AvailabilityQuery
 import ir.ahvaz.mehra.domain.model.AvailableRoom
@@ -37,6 +38,7 @@ data class ReservationsUiState(
     val waitlist: List<WaitlistEntry> = emptyList(),
     val query: String = "",
     val status: ReservationStatus? = null,
+    val selectedDay: LocalDate? = null,
     val canManage: Boolean = false,
     val pendingOperations: Int = 0,
     val isOnline: Boolean = true,
@@ -82,6 +84,12 @@ class ReservationsViewModel @Inject constructor(
         refresh()
     }
 
+    /** Week-strip day selection (v1.6.0): null clears the day filter. */
+    fun onDaySelected(day: LocalDate?) {
+        _state.update { it.copy(selectedDay = day) }
+        refresh()
+    }
+
     fun refresh() {
         _state.update {
             it.copy(
@@ -94,7 +102,12 @@ class ReservationsViewModel @Inject constructor(
         viewModelScope.launch {
             val current = _state.value
             val result = reservationRepository.list(
-                ReservationFilter(query = current.query, status = current.status)
+                ReservationFilter(
+                    query = current.query,
+                    status = current.status,
+                    from = current.selectedDay,
+                    to = current.selectedDay,
+                )
             )
             _state.update { it.copy(reservations = it.reservations.applyResult(result)) }
         }

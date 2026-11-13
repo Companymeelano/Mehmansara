@@ -1,10 +1,5 @@
 package ir.ahvaz.mehra.feature.search
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +47,7 @@ import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.components.InlineMessage
 import ir.ahvaz.mehra.core.ui.components.MehraCard
 import ir.ahvaz.mehra.core.ui.components.MehraSearchField
+import ir.ahvaz.mehra.core.ui.components.rememberVoiceSearch
 import ir.ahvaz.mehra.core.ui.components.StatusPill
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.core.ui.theme.tint
@@ -72,18 +68,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-/**
- * Speech-recognizer intent contract as literal strings (the public constant values are
- * stable; using literals keeps this file independent of the android.speech stub on some
- * compile classpaths).
- */
-private const val ACTION_RECOGNIZE_SPEECH = "android.speech.action.RECOGNIZE_SPEECH"
-private const val EXTRA_RESULTS = "android.speech.extra.RESULTS"
-private const val EXTRA_LANGUAGE_MODEL = "android.speech.extra.LANGUAGE_MODEL"
-private const val EXTRA_LANGUAGE = "android.speech.extra.LANGUAGE"
-private const val EXTRA_PROMPT = "android.speech.extra.PROMPT"
-private const val LANGUAGE_MODEL_FREE_FORM = "free_form"
 
 /** One searchable record of the command palette. */
 sealed interface SearchHit {
@@ -132,7 +116,7 @@ class CommandPaletteViewModel @Inject constructor(
         }
         searchJob = viewModelScope.launch {
             delay(250) // debounce while typing / after voice input
-            val nq = normalize(raw)
+            val nq = normalizeSearchText(raw)
             val rooms = roomRepository.rooms(RoomFilterState(query = raw)).dataOrNull()?.data.orEmpty()
             val guests = guestRepository.quickSearch(raw).dataOrNull().orEmpty()
             val reservations = reservationRepository.list(ReservationFilter(query = raw)).dataOrNull()?.data.orEmpty()
@@ -149,29 +133,34 @@ class CommandPaletteViewModel @Inject constructor(
         is SearchHit.RoomHit -> {
             val r = hit.room
             listOf(r.roomNumber, r.roomTypeName, r.status.labelFa, r.floor.toString(), r.currentGuestName.orEmpty())
-                .any { normalize(it).contains(nq) }
+                .any { normalizeSearchText(it).contains(nq) }
         }
         is SearchHit.GuestHit -> {
             val g = hit.guest
             listOf(g.fullName, g.phone.orEmpty(), g.nationalId.orEmpty(), g.carPlate.orEmpty(), g.city.orEmpty())
-                .any { normalize(it).contains(nq) }
+                .any { normalizeSearchText(it).contains(nq) }
         }
         is SearchHit.ReservationHit -> {
             val r = hit.reservation
             listOf(r.code, r.guestName, r.roomNumber.orEmpty(), r.status.labelFa)
-                .any { normalize(it).contains(nq) }
+                .any { normalizeSearchText(it).contains(nq) }
         }
     }
 
-    private fun normalize(raw: String): String = raw
-        .lowercase()
-        .replace('ي', 'ی')
-        .replace('ك', 'ک')
-        .replace('\u200c', ' ')
-        .map { ch -> if (ch in '۰'..'۹') ('0' + (ch - '۰')) else ch }
-        .joinToString("")
-        .trim()
 }
+
+/**
+ * Normalizes a search phrase for fuzzy Persian matching: lowercases, unifies Arabic/Persian
+ * ی and ک, converts Persian digits to Latin and strips zero-width non-joiners.
+ */
+internal fun normalizeSearchText(raw: String): String = raw
+    .lowercase()
+    .replace('ي', 'ی')
+    .replace('ك', 'ک')
+    .replace('\u200c', ' ')
+    .map { ch -> if (ch in '۰'..'۹') ('0' + (ch - '۰')) else ch }
+    .joinToString("")
+    .trim()
 
 /**
  * Global command palette (v1.5.0): a Ctrl+K-style overlay that fuzzy-searches rooms, guests
@@ -187,18 +176,14 @@ fun CommandPalette(
     val state by viewModel.state.collectAsStateWithLifecycle()
     var voiceError by remember { mutableStateOf<String?>(null) }
 
-    val voiceLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val matches = result.data?.getStringArrayListExtra(EXTRA_RESULTS)
-            val spoken = matches?.firstOrNull()
-            if (!spoken.isNullOrBlank()) {
-                voiceError = null
-                viewModel.onQueryChange(spoken)
-            } else {
-                voiceError = "چیزی شنیده نشد؛ دوباره امتحان کنید."
-            }
-        }
-    }
+    val launchVoiceSearch = rememberVoiceSearch(
+        prompt = "نام مهمان، شمارهٔ اتاق یا کد رزرو را بگویید",
+        onResult = { spoken ->
+            voiceError = null
+            viewModel.onQueryChange(spoken)
+        },
+        onUnavailable = { voiceError = "تشخیص صدا در این دستگاه در دسترس نیست." },
+    )
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -222,18 +207,7 @@ fun CommandPalette(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f),
                     )
-                    IconButton(onClick = {
-                        val intent = Intent(ACTION_RECOGNIZE_SPEECH).apply {
-                            putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM)
-                            putExtra(EXTRA_LANGUAGE, "fa-IR")
-                            putExtra(EXTRA_PROMPT, "نام مهمان، شمارهٔ اتاق یا کد رزرو را بگویید")
-                        }
-                        try {
-                            voiceLauncher.launch(intent)
-                        } catch (_: ActivityNotFoundException) {
-                            voiceError = "تشخیص صدا در این دستگاه در دسترس نیست."
-                        }
-                    }) {
+                    IconButton(onClick = launchVoiceSearch) {
                         Icon(Icons.Rounded.Mic, contentDescription = "جست‌وجوی صوتی")
                     }
                     IconButton(onClick = onDismiss) {

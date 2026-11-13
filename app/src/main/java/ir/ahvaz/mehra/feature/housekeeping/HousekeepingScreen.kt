@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.item
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -182,21 +183,53 @@ private fun TasksTab(
             icon = Icons.Rounded.CleaningServices,
         )
 
-        else -> LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            items(tasks.data.orEmpty(), key = { it.id }) { task ->
-                TaskCard(
-                    task = task,
-                    canManage = state.canManage,
-                    busy = state.actionInProgress,
-                    onAssign = { onAssign(task) },
-                    onStart = { viewModel.start(task) },
-                    onComplete = { onComplete(task) },
-                    onApprove = { viewModel.approve(task) },
-                )
+        else -> {
+            val all = tasks.data.orEmpty()
+            // Floor-board style grouping (v1.6.0): when no status filter is active, tasks are
+            // grouped under coloured status headers with counts — otherwise one flat list.
+            val grouped: List<Pair<HousekeepingTaskStatus?, List<HousekeepingTask>>> =
+                if (state.statusFilter == null) {
+                    HousekeepingTaskStatus.entries.map { st -> st to all.filter { it.status == st } }
+                        .filter { it.second.isNotEmpty() }
+                        .ifEmpty { listOf(null to all) }
+                } else {
+                    listOf(state.statusFilter to all)
+                }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                grouped.forEach { (status, groupTasks) ->
+                    item(key = "header-${status?.name ?: "all"}") {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(top = 4.dp),
+                        ) {
+                            SectionHeader(
+                                title = status?.labelFa ?: "همهٔ درخواست‌ها",
+                                modifier = Modifier.weight(1f),
+                            )
+                            if (status != null) {
+                                StatusPill(
+                                    text = groupTasks.size.toString().toPersianDigits(),
+                                    tint = status.tint(),
+                                )
+                            }
+                        }
+                    }
+                    items(groupTasks, key = { it.id }) { task ->
+                        TaskCard(
+                            task = task,
+                            canManage = state.canManage,
+                            busy = state.actionInProgress,
+                            onAssign = { onAssign(task) },
+                            onStart = { viewModel.start(task) },
+                            onComplete = { onComplete(task) },
+                            onApprove = { viewModel.approve(task) },
+                        )
+                    }
+                }
             }
         }
     }

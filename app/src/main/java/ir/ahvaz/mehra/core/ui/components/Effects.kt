@@ -1,6 +1,19 @@
 package ir.ahvaz.mehra.core.ui.components
 import androidx.compose.foundation.background
+import android.view.HapticFeedbackConstants
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,7 +28,10 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,6 +67,7 @@ fun GradientText(
 fun Modifier.pressScale(): Modifier {
     var pressed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val view = LocalView.current
     return this
         .graphicsLayer {
             val target = if (pressed) 0.955f else 1f
@@ -61,6 +78,7 @@ fun Modifier.pressScale(): Modifier {
             detectTapGestures(
                 onPress = {
                     pressed = true
+                    view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
                     scope.launch {
                         delay(140)
                         pressed = false
@@ -70,4 +88,28 @@ fun Modifier.pressScale(): Modifier {
                 },
             )
         }
+}
+
+/**
+ * Shimmer placeholder block (v1.6.0): a soft pulsing bar used in loading/empty states
+ * instead of a dead grey rectangle.
+ */
+@Composable
+fun ShimmerBox(
+    modifier: Modifier = Modifier,
+    height: Dp = 14.dp,
+) {
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val alpha by transition.animateFloat(
+        initialValue = 0.25f,
+        targetValue = 0.6f,
+        animationSpec = infiniteRepeatable(tween(900, easing = LinearEasing), RepeatMode.Reverse),
+        label = "shimmerAlpha",
+    )
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height)
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = alpha), RoundedCornerShape(6.dp)),
+    )
 }

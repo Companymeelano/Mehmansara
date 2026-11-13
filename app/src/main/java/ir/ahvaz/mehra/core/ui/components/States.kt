@@ -51,6 +51,10 @@ fun LoadingState(message: String = "در حال دریافت اطلاعات…",
             )
             Spacer(modifier = Modifier.height(14.dp))
             Text(text = message, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(modifier = Modifier.height(18.dp))
+            ShimmerBox(modifier = Modifier.fillMaxWidth(0.7f), height = 12.dp)
+            Spacer(modifier = Modifier.height(8.dp))
+            ShimmerBox(modifier = Modifier.fillMaxWidth(0.5f), height = 12.dp)
         }
     }
 }
