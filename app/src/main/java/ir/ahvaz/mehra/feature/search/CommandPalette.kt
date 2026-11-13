@@ -3,7 +3,6 @@ package ir.ahvaz.mehra.feature.search
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.speech.SpeechRecognizer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -73,6 +72,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+/**
+ * Speech-recognizer intent contract as literal strings (the public constant values are
+ * stable; using literals keeps this file independent of the android.speech stub on some
+ * compile classpaths).
+ */
+private const val ACTION_RECOGNIZE_SPEECH = "android.speech.action.RECOGNIZE_SPEECH"
+private const val EXTRA_RESULTS = "android.speech.extra.RESULTS"
+private const val EXTRA_LANGUAGE_MODEL = "android.speech.extra.LANGUAGE_MODEL"
+private const val EXTRA_LANGUAGE = "android.speech.extra.LANGUAGE"
+private const val EXTRA_PROMPT = "android.speech.extra.PROMPT"
+private const val LANGUAGE_MODEL_FREE_FORM = "free_form"
 
 /** One searchable record of the command palette. */
 sealed interface SearchHit {
@@ -178,7 +189,7 @@ fun CommandPalette(
 
     val voiceLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val matches = result.data?.getStringArrayListExtra(SpeechRecognizer.EXTRA_RESULTS)
+            val matches = result.data?.getStringArrayListExtra(EXTRA_RESULTS)
             val spoken = matches?.firstOrNull()
             if (!spoken.isNullOrBlank()) {
                 voiceError = null
@@ -212,10 +223,10 @@ fun CommandPalette(
                         modifier = Modifier.weight(1f),
                     )
                     IconButton(onClick = {
-                        val intent = Intent(SpeechRecognizer.ACTION_RECOGNIZE_SPEECH).apply {
-                            putExtra(SpeechRecognizer.EXTRA_LANGUAGE_MODEL, SpeechRecognizer.LANGUAGE_MODEL_FREE_FORM)
-                            putExtra(SpeechRecognizer.EXTRA_LANGUAGE, "fa-IR")
-                            putExtra(SpeechRecognizer.EXTRA_PROMPT, "نام مهمان، شمارهٔ اتاق یا کد رزرو را بگویید")
+                        val intent = Intent(ACTION_RECOGNIZE_SPEECH).apply {
+                            putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM)
+                            putExtra(EXTRA_LANGUAGE, "fa-IR")
+                            putExtra(EXTRA_PROMPT, "نام مهمان، شمارهٔ اتاق یا کد رزرو را بگویید")
                         }
                         try {
                             voiceLauncher.launch(intent)
