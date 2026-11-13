@@ -204,7 +204,7 @@ fun MehraCard(
     val colors = MehraTheme.colors
     val shape = RoundedCornerShape(20.dp)
     val base = modifier.then(
-        if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier
+        if (onClick != null) Modifier.clickable(onClick = onClick).pressScale() else Modifier
     )
     Surface(
         modifier = base.shadow(8.dp, shape),

@@ -104,6 +104,28 @@ class RoomsViewModel @Inject constructor(
 
     fun applySearch() = refresh()
 
+    /** One-tap status change from the floor board (v1.5.0). */
+    fun changeStatus(room: Room, status: RoomStatus) {
+        if (!_state.value.canManage) return
+        viewModelScope.launch {
+            _state.update { it.copy(actionInProgress = true) }
+            when (val result = roomRepository.changeStatus(room.id, status)) {
+                is AppResult.Success -> {
+                    _state.update {
+                        it.copy(
+                            actionInProgress = false,
+                            actionMessage = "وضعیت اتاق ${room.roomNumber.toPersianDigits()} به «${status.labelFa}» تغییر کرد.",
+                        )
+                    }
+                    refresh()
+                }
+                is AppResult.Failure -> _state.update {
+                    it.copy(actionInProgress = false, actionMessage = "تغییر وضعیت انجام نشد.")
+                }
+            }
+        }
+    }
+
     fun refresh() {
         val current = _state.value
         _state.update {
@@ -128,7 +150,7 @@ class RoomsViewModel @Inject constructor(
      */
     fun seedDefaultRooms() {
         if (!_state.value.canManage) {
-            _state.update { it.copy(actionMessage = "برای ثبت اتاق دسترسی gestionnaire ندارید.") }
+            _state.update { it.copy(actionMessage = "برای ثبت اتاق دسترسی ندارید.") }
             return
         }
         _state.update { it.copy(actionInProgress = true, actionMessage = null) }

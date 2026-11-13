@@ -1,7 +1,11 @@
 package ir.ahvaz.mehra.feature.rooms
 
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +29,7 @@ import androidx.compose.material.icons.rounded.CleaningServices
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Handyman
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,6 +37,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -83,6 +89,7 @@ fun RoomsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val rooms = state.rooms
+    var statusRoom by remember { mutableStateOf<Room?>(null) }
 
     MehraScreen(
         title = "مدیریت اتاق‌ها",
@@ -185,19 +192,71 @@ fun RoomsScreen(
                                     ),
                                     key = { it.id },
                                 ) { room ->
-                                    LuxuryRoomCard(room = room, onClick = { onOpenRoom(room.id) })
+                                    LuxuryRoomCard(
+                                        room = room,
+                                        canManage = state.canManage,
+                                        onClick = { onOpenRoom(room.id) },
+                                        onStatusClick = { statusRoom = room },
+                                    )
                                 }
                             }
                     }
                 }
             }
         }
+
+        if (statusRoom != null) {
+            val room = statusRoom!!
+            ModalBottomSheet(onDismissRequest = { statusRoom = null }) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    SectionHeader(title = "تغییر وضعیت اتاق ${room.roomNumber.toPersianDigits()}")
+                    RoomStatus.entries.filter { it != room.status }.forEach { status ->
+                        MehraCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                statusRoom = null
+                                viewModel.changeStatus(room, status)
+                            },
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                StatusPill(text = status.labelFa, tint = status.tint())
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "تغییر به «${status.labelFa}»",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            }
+        }
     }
 }
 
+/** Floor-board card (v1.5.0): status-coloured strip on top + one-tap status change. */
 @Composable
-private fun LuxuryRoomCard(room: Room, onClick: () -> Unit) {
+private fun LuxuryRoomCard(
+    room: Room,
+    canManage: Boolean,
+    onClick: () -> Unit,
+    onStatusClick: () -> Unit,
+) {
     MehraCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(4.dp)
+                .background(room.status.tint(), RoundedCornerShape(2.dp)),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = room.roomNumber.toPersianDigits(),
@@ -211,6 +270,16 @@ private fun LuxuryRoomCard(room: Room, onClick: () -> Unit) {
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            Spacer(modifier = Modifier.weight(1f))
+            if (canManage) {
+                IconButton(onClick = onStatusClick, modifier = Modifier.size(32.dp)) {
+                    Icon(
+                        imageVector = Icons.Rounded.SwapHoriz,
+                        contentDescription = "تغییر وضعیت",
+                        modifier = Modifier.size(20.dp),
+                    )
+                }
+            }
         }
         Spacer(modifier = Modifier.height(6.dp))
         StatusPill(text = room.status.labelFa, tint = room.status.tint())

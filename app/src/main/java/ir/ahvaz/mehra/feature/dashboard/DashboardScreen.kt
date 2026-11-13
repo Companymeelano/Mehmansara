@@ -36,9 +36,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,6 +58,7 @@ import ir.ahvaz.mehra.core.date.formatJalaliLongFa
 import ir.ahvaz.mehra.core.date.formatTimeFa
 import ir.ahvaz.mehra.core.date.relativeTimeFa
 import ir.ahvaz.mehra.core.date.TehranTime
+import ir.ahvaz.mehra.core.ui.components.AnimatedInt
 import ir.ahvaz.mehra.core.ui.components.BarSeriesChart
 import ir.ahvaz.mehra.core.ui.components.ChartLegend
 import ir.ahvaz.mehra.core.ui.components.DonutChart
@@ -67,6 +71,9 @@ import ir.ahvaz.mehra.core.ui.components.FreshnessRow
 import ir.ahvaz.mehra.core.ui.components.LoadingState
 import ir.ahvaz.mehra.core.ui.components.MehraCard
 import ir.ahvaz.mehra.core.ui.components.MehraScreen
+import ir.ahvaz.mehra.core.ui.components.clockFa
+import ir.ahvaz.mehra.core.ui.components.rememberTehranClock
+import ir.ahvaz.mehra.core.ui.components.timeOfDayGreetingFa
 import ir.ahvaz.mehra.core.ui.components.SectionHeader
 import ir.ahvaz.mehra.core.ui.components.StatTile
 import ir.ahvaz.mehra.core.ui.components.StatusPill
@@ -104,7 +111,15 @@ fun DashboardScreen(
         pendingCount = state.pendingOperations,
         actions = {
             IconButton(onClick = onOpenNotifications) {
-                Icon(Icons.Rounded.Notifications, contentDescription = "اعلان‌ها")
+                if (snapshot != null && snapshot.alerts.isNotEmpty()) {
+                    BadgedBox(badge = {
+                        Badge { Text(text = snapshot.alerts.size.toString().toPersianDigits()) }
+                    }) {
+                        Icon(Icons.Rounded.Notifications, contentDescription = "اعلان‌ها")
+                    }
+                } else {
+                    Icon(Icons.Rounded.Notifications, contentDescription = "اعلان‌ها")
+                }
             }
             IconButton(onClick = viewModel::refresh) {
                 Icon(Icons.Rounded.Refresh, contentDescription = "به‌روزرسانی")
@@ -175,6 +190,10 @@ private fun DashboardContent(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item {
+            DashboardHero(snapshot = snapshot)
+        }
+
+        item {
             FreshnessRow(
                 updatedAtMillis = updatedAtMillis,
                 isRefreshing = isRefreshing,
@@ -194,7 +213,7 @@ private fun DashboardContent(
                             DonutSegment(snapshot.maintenanceRooms.toFloat(), colors.statusMaintenance, "تعمیرات"),
                         ),
                         modifier = Modifier.size(140.dp),
-                        centerValue = "${(snapshot.occupancyPercent.toString()).toPersianDigits()}٪",
+                        centerValue = AnimatedInt(snapshot.occupancyPercent).toString().toPersianDigits() + "٪",
                         centerLabel = "اشغال",
                     )
                     Spacer(modifier = Modifier.width(16.dp))
@@ -566,6 +585,100 @@ private fun QuickActionTile(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+        }
+    }
+}
+
+/**
+ * Live hero card (v1.5.0): big Jalali date, a Tehran clock that ticks every second, a
+ * time-of-day greeting and count-up stats — the dashboard feels alive at a glance.
+ */
+@Composable
+private fun DashboardHero(snapshot: DashboardSnapshot) {
+    val colors = MehraTheme.colors
+    val now = rememberTehranClock()
+    val occupancy = AnimatedInt(snapshot.occupancyPercent)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(12.dp, RoundedCornerShape(24.dp))
+            .background(
+                Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd)),
+                RoundedCornerShape(24.dp),
+            )
+            .padding(18.dp),
+    ) {
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = timeOfDayGreetingFa(now.hour),
+                        color = Color.White.copy(alpha = 0.85f),
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                    Text(
+                        text = TehranTime.today().formatJalaliLongFa(),
+                        color = Color.White,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                Text(
+                    text = now.clockFa(),
+                    color = Color.White.copy(alpha = 0.92f),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                HeroStat(
+                    label = "اشغال امروز",
+                    value = occupancy.toString().toPersianDigits() + "٪",
+                    modifier = Modifier.weight(1f),
+                )
+                HeroStat(
+                    label = "ورود امروز",
+                    value = snapshot.todayCheckIns.toString().toPersianDigits(),
+                    modifier = Modifier.weight(1f),
+                )
+                HeroStat(
+                    label = "خروج امروز",
+                    value = snapshot.todayCheckOuts.toString().toPersianDigits(),
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            if (snapshot.alerts.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = snapshot.alerts.size.toString().toPersianDigits() + " اعلان مهم — از بخش اعلان‌ها ببینید",
+                    color = Color.White.copy(alpha = 0.9f),
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HeroStat(label: String, value: String, modifier: Modifier = Modifier) {
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = Color.White.copy(alpha = 0.14f),
+        modifier = modifier,
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Text(
+                text = value,
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = label,
+                color = Color.White.copy(alpha = 0.75f),
+                style = MaterialTheme.typography.labelSmall,
+            )
         }
     }
 }

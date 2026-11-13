@@ -56,6 +56,27 @@ enum class ThemePreset(
         titleEn = "Ruby Night",
         descriptionFa = "قرمز یاقوتی، رزگلد و مشکی",
         isDark = true,
+    ),
+    MIDNIGHT_SAPPHIRE(
+        id = "midnight_sapphire",
+        titleFa = "یاقوت نیمه‌شب",
+        titleEn = "Midnight Sapphire",
+        descriptionFa = "سرمه‌ای نیمه‌شب، آبی یاقوتی و طلایی سرد",
+        isDark = true,
+    ),
+    EMERALD_GOLD(
+        id = "emerald_gold",
+        titleFa = "زمرد طلایی",
+        titleEn = "Emerald Gold",
+        descriptionFa = "سبز یشمی عمیق، طلایی براق و دودی",
+        isDark = true,
+    ),
+    ONYX_BLACK(
+        id = "onyx_black",
+        titleFa = "اونیکس سیاه",
+        titleEn = "Onyx Black",
+        descriptionFa = "سیاه اونیکس، خاکستری دودی و نقره‌ای براق",
+        isDark = true,
     );
 
     companion object {

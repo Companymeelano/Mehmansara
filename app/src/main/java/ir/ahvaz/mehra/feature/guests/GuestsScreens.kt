@@ -1,6 +1,8 @@
 package ir.ahvaz.mehra.feature.guests
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +14,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -27,6 +31,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,10 +43,12 @@ import ir.ahvaz.mehra.core.common.formatMoneyFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.date.formatJalaliDateTimeFa
 import ir.ahvaz.mehra.core.date.formatJalaliFaOrDash
+import ir.ahvaz.mehra.core.date.relativeTimeFa
 import ir.ahvaz.mehra.core.ui.components.CompactButton
 import ir.ahvaz.mehra.core.ui.components.EmptyState
 import ir.ahvaz.mehra.core.ui.components.ErrorState
 import ir.ahvaz.mehra.core.ui.components.FreshnessRow
+import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.components.InfoRow
 import ir.ahvaz.mehra.core.ui.components.InlineMessage
 import ir.ahvaz.mehra.core.ui.components.LoadingState
@@ -188,6 +197,8 @@ fun GuestDetailScreen(
                         .padding(padding)
                         .padding(16.dp),
                 ) {
+                    GuestHeroCard(guest = guest)
+                    Spacer(modifier = Modifier.height(12.dp))
                     MehraCard(modifier = Modifier.fillMaxWidth()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
@@ -348,6 +359,112 @@ fun GuestDetailScreen(
                 }
             }
         }
+    }
+}
+
+/**
+ * Gamified guest header (v1.5.0): gradient hero with the 3D avatar chip, a golden VIP star
+ * for loyal guests (۵+ اقامت), a colour-coded balance and a stat strip — the profile feels
+ * like a loyalty card, not a form.
+ */
+@Composable
+private fun GuestHeroCard(guest: Guest) {
+    val colors = MehraTheme.colors
+    val isVip = guest.totalStays >= 5
+    val balanceColor = when {
+        guest.balanceRial > 0 -> colors.danger
+        guest.balanceRial < 0 -> colors.success
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(12.dp, RoundedCornerShape(24.dp))
+            .background(
+                Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd)),
+                RoundedCornerShape(24.dp),
+            )
+            .padding(18.dp),
+    ) {
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon3D(icon = Icons.Rounded.Person, contentDescription = null, size = 56.dp)
+                Spacer(modifier = Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = guest.fullName.ifBlank { "بدون نام" },
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f, fill = false),
+                            maxLines = 1,
+                        )
+                        if (isVip) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(
+                                imageVector = Icons.Rounded.Star,
+                                contentDescription = "مهمان VIP",
+                                tint = colors.gold,
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = "VIP",
+                                color = colors.gold,
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+                    Text(
+                        text = guest.phone?.let { "تلفن: ${it.toPersianDigits()}" } ?: "بدون شماره تماس",
+                        color = Color.White.copy(alpha = 0.75f),
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
+                Text(
+                    text = formatMoneyFa(guest.balanceRial),
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .background(balanceColor.copy(alpha = 0.35f), RoundedCornerShape(10.dp))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                HeroChip(label = "اقامت‌ها", value = guest.totalStays.toString().toPersianDigits(), modifier = Modifier.weight(1f))
+                HeroChip(
+                    label = "آخرین اقامت",
+                    value = relativeTimeFa(guest.lastStayAt).ifBlank { "—" },
+                    modifier = Modifier.weight(1.4f),
+                )
+                HeroChip(label = "همراهان", value = guest.companions.size.toString().toPersianDigits(), modifier = Modifier.weight(1f))
+            }
+        }
+    }
+}
+
+@Composable
+private fun HeroChip(label: String, value: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .background(Color.White.copy(alpha = 0.14f), RoundedCornerShape(12.dp))
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+    ) {
+        Text(
+            text = value,
+            color = Color.White,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+        )
+        Text(
+            text = label,
+            color = Color.White.copy(alpha = 0.7f),
+            style = MaterialTheme.typography.labelSmall,
+        )
     }
 }
 

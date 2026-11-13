@@ -1,10 +1,23 @@
 package ir.ahvaz.mehra.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +30,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +61,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ir.ahvaz.mehra.R
 import ir.ahvaz.mehra.core.ui.components.Icon3D
+import ir.ahvaz.mehra.core.ui.components.MehraCard
+import ir.ahvaz.mehra.core.ui.components.SectionHeader
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.feature.dashboard.DashboardScreen
 import ir.ahvaz.mehra.feature.dbtool.DbToolScreen
@@ -61,6 +80,7 @@ import ir.ahvaz.mehra.feature.reception.CheckInScreen
 import ir.ahvaz.mehra.feature.reception.CheckOutScreen
 import ir.ahvaz.mehra.feature.reception.ReceptionScreen
 import ir.ahvaz.mehra.feature.reports.ReportsScreen
+import ir.ahvaz.mehra.feature.search.CommandPalette
 import ir.ahvaz.mehra.feature.reservations.NewReservationScreen
 import ir.ahvaz.mehra.feature.reservations.ReservationDetailScreen
 import ir.ahvaz.mehra.feature.reservations.ReservationsScreen
@@ -101,6 +121,8 @@ fun MehraNavGraph(
 
     val can = { permission: String? -> permission == null || user?.can(permission) == true }
     val destinations = bottomDestinations.filter { can(it.permission) }
+    var showQuickActions by remember { mutableStateOf(false) }
+    var showPalette by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -109,6 +131,8 @@ fun MehraNavGraph(
                 MehraBottomBar(
                     destinations = destinations,
                     backStackEntry = backStackEntry,
+                    onCenterAction = { showQuickActions = true },
+                    onSearch = { showPalette = true },
                     onSelect = { destination ->
                         if (currentRoute != destination.route) {
                             navController.navigate(destination.route) {
@@ -127,6 +151,16 @@ fun MehraNavGraph(
         NavHost(
             navController = navController,
             startDestination = if (can(Permissions.DASHBOARD_VIEW)) Routes.DASHBOARD else Routes.RECEPTION,
+            enterTransition = {
+                fadeIn(animationSpec = tween(240)) +
+                    slideInHorizontally(animationSpec = tween(240)) { offset -> offset / 8 }
+            },
+            exitTransition = { fadeOut(animationSpec = tween(180)) },
+            popEnterTransition = { fadeIn(animationSpec = tween(240)) },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(180)) +
+                    slideOutHorizontally(animationSpec = tween(240)) { offset -> -offset / 8 }
+            },
             modifier = Modifier.padding(padding),
         ) {
             composable(Routes.DASHBOARD) {
@@ -319,6 +353,101 @@ fun MehraNavGraph(
             }
         }
     }
+
+    if (showPalette) {
+        CommandPalette(
+            onDismiss = { showPalette = false },
+            onNavigate = { route ->
+                showPalette = false
+                navController.navigate(route)
+            },
+        )
+    }
+
+    if (showQuickActions) {
+        QuickActionsSheet(
+            onDismiss = { showQuickActions = false },
+            actions = listOf(
+                QuickAction("جست‌وجوی سراسری", "اتاق، مهمان، رزرو", R.drawable.ic_mehra_search) {
+                    showPalette = true
+                },
+                QuickAction("مهمان جدید", "پروندهٔ مهمان", R.drawable.ic_mehra_guests) {
+                    navController.navigate(Routes.guestForm(null))
+                },
+                QuickAction("رزرو جدید", "ثبت رزرو", R.drawable.ic_mehra_reservations) {
+                    navController.navigate(Routes.reservationNew())
+                },
+                QuickAction("اتاق جدید", "ثبت اتاق", R.drawable.ic_mehra_rooms) {
+                    navController.navigate(Routes.roomForm(null))
+                },
+                QuickAction("پذیرش", "ورود و خروج", R.drawable.ic_mehra_reception) {
+                    navController.navigate(Routes.RECEPTION)
+                },
+                QuickAction("مالی", "ثبت تراکنش", R.drawable.ic_mehra_finance) {
+                    navController.navigate(Routes.FINANCE)
+                },
+                QuickAction("دیتابیس", "اتصال مستقیم ۱۴۳۳", R.drawable.ic_mehra_reports) {
+                    navController.navigate(Routes.DBTOOL)
+                },
+            ),
+        )
+    }
+}
+
+private data class QuickAction(
+    val label: String,
+    val description: String,
+    @androidx.annotation.DrawableRes val iconRes: Int,
+    val action: () -> Unit,
+)
+
+/** Radial-style quick-action sheet opened from the center FAB of the bottom bar. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun QuickActionsSheet(
+    onDismiss: () -> Unit,
+    actions: List<QuickAction>,
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            SectionHeader(title = "اقدام سریع")
+            actions.chunked(3).forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    row.forEach { a ->
+                        MehraCard(
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                onDismiss()
+                                a.action()
+                            },
+                        ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon3D(
+                                    icon = ImageVector.vectorResource(a.iconRes),
+                                    contentDescription = null,
+                                    size = 40.dp,
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = a.label,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                                )
+                            }
+                        }
+                    }
+                    if (row.size < 3) Spacer(modifier = Modifier.weight(3 - row.size.toFloat()))
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+    }
 }
 
 /**
@@ -330,6 +459,8 @@ fun MehraNavGraph(
 private fun MehraBottomBar(
     destinations: List<BottomDestination>,
     backStackEntry: NavBackStackEntry?,
+    onCenterAction: () -> Unit,
+    onSearch: () -> Unit,
     onSelect: (BottomDestination) -> Unit,
 ) {
     val colors = MehraTheme.colors
@@ -341,6 +472,17 @@ private fun MehraBottomBar(
             .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 14.dp, vertical = 8.dp),
     ) {
+        FloatingActionButton(
+            onClick = onCenterAction,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = (-26).dp),
+            shape = CircleShape,
+            containerColor = colors.accentMid,
+            contentColor = colors.onAccent,
+        ) {
+            Icon(Icons.Rounded.Add, contentDescription = "اقدام سریع")
+        }
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -366,6 +508,14 @@ private fun MehraBottomBar(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                IconButton(onClick = onSearch, modifier = Modifier.size(42.dp)) {
+                    Icon(
+                        imageVector = Icons.Rounded.Search,
+                        contentDescription = "جست‌وجوی سراسری",
+                        tint = scheme.onSurfaceVariant,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
                 destinations.forEach { destination ->
                     val selected = backStackEntry?.destination?.hierarchy?.any {
                         it.route == destination.route

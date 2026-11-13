@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,7 +40,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.date.formatJalaliLongFa
+import ir.ahvaz.mehra.core.ui.components.BarSeriesChart
+import ir.ahvaz.mehra.core.ui.components.ChartLegend
 import ir.ahvaz.mehra.core.ui.components.CompactButton
+import ir.ahvaz.mehra.core.ui.components.DonutChart
+import ir.ahvaz.mehra.core.ui.components.DonutSegment
 import ir.ahvaz.mehra.core.ui.components.DropdownField
 import ir.ahvaz.mehra.core.ui.components.EmptyState
 import ir.ahvaz.mehra.core.ui.components.ErrorState
@@ -114,6 +120,44 @@ fun ReportsScreen(viewModel: ReportsViewModel = hiltViewModel()) {
                 isRefreshing = table.isRefreshing,
                 onRefresh = viewModel::load,
             )
+
+            state.dashboard?.let { snap ->
+                if (snap.hasRooms) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    SectionHeader(title = "خلاصهٔ تصویری")
+                    val colors = MehraTheme.colors
+                    val segments = listOf(
+                        DonutSegment(snap.occupiedRooms.toFloat(), colors.statusOccupied, "اشغال"),
+                        DonutSegment(snap.reservedRooms.toFloat(), colors.statusReserved, "رزرو"),
+                        DonutSegment(snap.freeRooms.toFloat(), colors.statusFree, "آزاد"),
+                        DonutSegment(snap.cleaningRooms.toFloat(), colors.statusCleaning, "نظافت"),
+                        DonutSegment(snap.maintenanceRooms.toFloat(), colors.statusMaintenance, "تعمیرات"),
+                    )
+                    MehraCard(modifier = Modifier.fillMaxWidth()) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            DonutChart(
+                                segments = segments,
+                                modifier = Modifier.size(120.dp),
+                                centerValue = snap.occupancyPercent.toString().toPersianDigits() + "٪",
+                                centerLabel = "اشغال",
+                            )
+                            Spacer(modifier = Modifier.width(14.dp))
+                            ChartLegend(segments = segments, modifier = Modifier.weight(1f))
+                        }
+                    }
+                    if (snap.occupancySeries.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        MehraCard(modifier = Modifier.fillMaxWidth()) {
+                            BarSeriesChart(
+                                values = snap.occupancySeries.map { it.percent.toFloat() },
+                                labels = snap.occupancySeries.map { it.date.formatJalaliLongFa().split(" ").firstOrNull() ?: "" },
+                                barColor = colors.chartPrimary,
+                                showValueOnTop = true,
+                            )
+                        }
+                    }
+                }
+            }
 
             when {
                 table.isLoading && table.data == null -> LoadingState(message = "در حال دریافت گزارش…")

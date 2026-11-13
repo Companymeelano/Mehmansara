@@ -7,10 +7,12 @@ import ir.ahvaz.mehra.core.common.AppResult
 import ir.ahvaz.mehra.core.date.JalaliDate
 import ir.ahvaz.mehra.core.export.ReportExporter
 import ir.ahvaz.mehra.core.ui.state.UiState
+import ir.ahvaz.mehra.domain.model.DashboardSnapshot
 import ir.ahvaz.mehra.domain.model.Permissions
 import ir.ahvaz.mehra.domain.model.ReportTable
 import ir.ahvaz.mehra.domain.model.ReportType
 import ir.ahvaz.mehra.domain.repository.AuthRepository
+import ir.ahvaz.mehra.domain.repository.DashboardRepository
 import ir.ahvaz.mehra.domain.repository.ReportRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,11 +31,13 @@ data class ReportsUiState(
     val actionMessage: String? = null,
     val isExporting: Boolean = false,
     val generatedBy: String? = null,
+    val dashboard: DashboardSnapshot? = null,
 )
 
 @HiltViewModel
 class ReportsViewModel @Inject constructor(
     private val reportRepository: ReportRepository,
+    private val dashboardRepository: DashboardRepository,
     private val exporter: ReportExporter,
     authRepository: AuthRepository,
 ) : ViewModel() {
@@ -54,6 +58,12 @@ class ReportsViewModel @Inject constructor(
             }
         }
         load()
+        viewModelScope.launch {
+            when (val result = dashboardRepository.load()) {
+                is AppResult.Success -> _state.update { it.copy(dashboard = result.data.data) }
+                is AppResult.Failure -> Unit
+            }
+        }
     }
 
     fun onTypeChange(type: ReportType) {
