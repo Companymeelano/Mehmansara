@@ -30,8 +30,8 @@ android {
         applicationId = "ir.ahvaz.mehra"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 8
-        versionName = "1.4.1"
+        versionCode = 9
+        versionName = "1.4.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += listOf("fa", "en")
@@ -172,6 +172,10 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.work.runtime.ktx)
+
+    // Direct SQL Server (TDS, port 1433) access for the personal test screen (feature/dbtool).
+    // Pure-Java driver; SQL auth only (no native integrated auth on Android).
+    implementation("com.microsoft.sqlserver:mssql-jdbc:12.8.1.jre11")
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)

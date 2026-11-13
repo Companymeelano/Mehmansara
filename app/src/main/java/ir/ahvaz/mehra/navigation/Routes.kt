@@ -25,6 +25,7 @@ object Routes {
     const val NOTIFICATIONS = "notifications"
     const val SETTINGS = "settings"
     const val MORE = "more"
+    const val DBTOOL = "dbtool"
 
     fun roomDetail(roomId: String) = "room/$roomId"
     fun roomForm(roomId: String?) = if (roomId.isNullOrBlank()) "room-form?roomId=" else "room-form?roomId=$roomId"

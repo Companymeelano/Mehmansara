@@ -69,10 +69,13 @@ public partial class LoginWindow : Window
             var winAuth = (this.FindControl<ComboBox>("SqlAuthCombo")!.SelectedItem as ComboBoxItem)?.Tag as string == "win";
             var sqlUser = this.FindControl<TextBox>("SqlUserBox")!.Text ?? "";
             var sqlPass = this.FindControl<TextBox>("SqlPassBox")!.Text ?? "";
-            if (server.Length == 0) { error.Text = "نام سرور SQL Server را وارد کنید."; error.IsVisible = true; return; }
-            var created = await SqlServerApi.TryCreateAsync(server, db, winAuth, winAuth ? null : sqlUser, winAuth ? null : sqlPass);
-            if (!created.Ok) { error.Text = created.Error; error.IsVisible = true; return; }
-            api = created.Value!;
+            if (server.Length == 0) { error.Text = "نام سرور SQL Server را وارد کنید (مثال: localhost یا (localdb)\\MSSQLLocalDB)."; error.IsVisible = true; return; }
+            // SQL Server 2022 may be installed as a normal instance (localhost / named instance),
+            // not LocalDB — resolve against a candidate list and remember the working server.
+            var resolved = await SqlServerApi.ResolveAsync(server, db, winAuth, winAuth ? null : sqlUser, winAuth ? null : sqlPass);
+            if (!resolved.Ok) { error.Text = resolved.Error; error.IsVisible = true; return; }
+            server = resolved.Value.ResolvedServer;
+            api = resolved.Value.Api;
             result = await api.LoginAsync(server, user.Trim(), pass);
             if (result.Ok)
                 SettingsStore.Save(new AppSettings { Mode = "sql", SqlServer = server, SqlDb = db, SqlAuth = winAuth ? "win" : "sql", SqlUser = sqlUser });

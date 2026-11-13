@@ -31,6 +31,51 @@ public class SqlServerApi : IHotelApi
         ? $"Data Source={Server};Initial Catalog={Database};Integrated Security=True;Encrypt=False;TrustServerCertificate=True;Connection Timeout=15"
         : $"Data Source={Server};Initial Catalog={Database};User ID={SqlUser};Password={_sqlPass};Encrypt=False;TrustServerCertificate=True;Connection Timeout=15";
 
+    /// <summary>
+    /// Server names tried in order when the configured one does not answer. Covers the common
+    /// SQL Server 2022 installs: a LocalDB shared instance, the default instance on localhost,
+    /// or a named SQLEXPRESS instance.
+    /// </summary>
+    public static readonly string[] ServerCandidates =
+    {
+        "(localdb)\\MSSQLLocalDB", "localhost", "(local)", ".\\SQLEXPRESS", "localhost\\SQLEXPRESS", "127.0.0.1",
+    };
+
+    /// <summary>
+    /// Probes the preferred server first, then every known candidate; for the first reachable
+    /// server it makes sure the database exists (CREATE DATABASE if missing) and returns an api
+    /// bound to that server. Used when the PC already runs SQL Server 2022 as a normal instance
+    /// (not LocalDB), so «(localdb)\MSSQLLocalDB» in settings would otherwise fail.
+    /// </summary>
+    public static async Task<Result<(SqlServerApi Api, string ResolvedServer)>> ResolveAsync(
+        string preferred, string database, bool windowsAuth, string? sqlUser, string? sqlPass)
+    {
+        var tried = new List<string>();
+        foreach (var server in new[] { preferred }.Concat(ServerCandidates.Where(c => !c.Equals(preferred, StringComparison.OrdinalIgnoreCase))))
+        {
+            if (string.IsNullOrWhiteSpace(server) || tried.Contains(server)) continue;
+            tried.Add(server);
+            var probe = await TryCreateAsync(server, database, windowsAuth, sqlUser, sqlPass);
+            if (!probe.Ok) continue;
+            // Reachable — make sure the database itself exists (error 4060 otherwise).
+            try
+            {
+                var api = probe.Data!;
+                await using var con = new SqlConnection(api.MasterConnectionString);
+                await con.OpenAsync();
+                await using var cmd = new SqlCommand(
+                    "IF DB_ID(@db) IS NULL EXEC('CREATE DATABASE [' + REPLACE(@db, ']', ']]') + ']')",
+                    con);
+                cmd.Parameters.AddWithValue("@db", database);
+                await cmd.ExecuteNonQueryAsync();
+                return Result<(SqlServerApi, string)>.Good((api, server));
+            }
+            catch { /* try next candidate */ }
+        }
+        return Result<(SqlServerApi, string)>.Fail(
+            "اتصال به هیچ‌یک از سرورهای SQL Server برقرار نشد: " + string.Join("، ", tried));
+    }
+
     /// <summary>Tests the connection (SELECT 1) without touching the DB schema.</summary>
     public static async Task<Result<SqlServerApi>> TryCreateAsync(string server, string database, bool windowsAuth, string? sqlUser, string? sqlPass)
     {

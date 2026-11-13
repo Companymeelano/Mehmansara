@@ -46,6 +46,7 @@ import ir.ahvaz.mehra.R
 import ir.ahvaz.mehra.core.ui.components.Icon3D
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 import ir.ahvaz.mehra.feature.dashboard.DashboardScreen
+import ir.ahvaz.mehra.feature.dbtool.DbToolScreen
 import ir.ahvaz.mehra.feature.finance.FinanceScreen
 import ir.ahvaz.mehra.feature.guests.GuestDetailScreen
 import ir.ahvaz.mehra.feature.guests.GuestFormScreen
@@ -299,9 +300,13 @@ fun MehraNavGraph(
             composable(Routes.SETTINGS) {
                 SettingsScreen(onLoggedOut = onSessionInvalid)
             }
+            composable(Routes.DBTOOL) {
+                DbToolScreen(onBack = { navController.popBackStack() })
+            }
             composable(Routes.MORE) {
                 MoreScreen(
                     user = user,
+                    onOpenDbTool = { navController.navigate(Routes.DBTOOL) },
                     onOpenGuests = { navController.navigate(Routes.GUESTS) },
                     onOpenFinance = { navController.navigate(Routes.FINANCE) },
                     onOpenHousekeeping = { navController.navigate(Routes.HOUSEKEEPING) },

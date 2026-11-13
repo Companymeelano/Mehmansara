@@ -1,5 +1,5 @@
 ﻿; ============================================================================
-;  MEHRA 1.1.4 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
+;  MEHRA 1.1.5 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
 ;  Luxury Persian (RTL) installer for the MEHRA Windows client.
 ;  Brand: Milad Yaghoobi — www.meelano.ir — 09120219593
 ;  Features: branded welcome/finish, Vazirmatn font, SQL Server config page,
@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.4
-AppVerName=مهرآ ۱.۱.۴ — ویندوز
+AppVersion=1.1.5
+AppVerName=مهرآ ۱.۱.۵ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -35,7 +35,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.4.0
+VersionInfoVersion=1.1.5.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -72,7 +72,7 @@ StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
 FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱.۴ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۱.۵ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
@@ -348,6 +348,16 @@ begin
   ExePath := FindSqlLocalDbExe;
   if ExePath <> '' then
   begin
+    { LocalDB already present (e.g. SQL Server 2022 was installed before): make sure the
+      shared MSSQLLocalDB instance exists and is started. Errors are ignored — the app
+      falls back to localhost / a named instance through its candidate list. }
+    if not Exec(ExePath, 'info MSSQLLocalDB', '', SW_HIDE, ewWaitUntilTerminated, R) or (R <> 0) then
+    begin
+      Exec(ExePath, 'create MSSQLLocalDB -s', '', SW_HIDE, ewWaitUntilTerminated, R);
+      Exec(ExePath, 'start MSSQLLocalDB', '', SW_HIDE, ewWaitUntilTerminated, R);
+    end
+    else
+      Exec(ExePath, 'start MSSQLLocalDB', '', SW_HIDE, ewWaitUntilTerminated, R);
     Result := True;
     Exit;
   end;
@@ -422,6 +432,42 @@ begin
   if not Result then Err := 'پس از نصب، provider ثبت نشد.';
 end;
 
+{ Try the preferred server first, then the common local instances (SQL Server 2022 default
+  instance = localhost, named SQLEXPRESS, LocalDB shared instance, loopback). Returns the
+  first server that answers via OLE DB. Lets setup work on PCs that already run SQL Server
+  2022 as a normal instance instead of LocalDB. }
+function ResolveSqlServer(preferred: string; winAuth: Boolean; user, pass: string; var resolved: string): Boolean;
+var
+  Candidates: TStringList;
+  i: Integer;
+  Err: string;
+begin
+  Result := False;
+  resolved := '';
+  Candidates := TStringList.Create;
+  try
+    Candidates.Add(preferred);
+    Candidates.Add('(localdb)\MSSQLLocalDB');
+    Candidates.Add('localhost');
+    Candidates.Add('(local)');
+    Candidates.Add('.\SQLEXPRESS');
+    Candidates.Add('localhost\SQLEXPRESS');
+    Candidates.Add('127.0.0.1');
+    for i := 0 to Candidates.Count - 1 do
+    begin
+      if Trim(Candidates[i]) = '' then Continue;
+      if TestSql(Candidates[i], 'master', winAuth, user, pass, Err) then
+      begin
+        resolved := Candidates[i];
+        Result := True;
+        Exit;
+      end;
+    end;
+  finally
+    Candidates.Free;
+  end;
+end;
+
 procedure KillRunningApp;
 var
   R: Integer;
@@ -472,6 +518,7 @@ function NextButtonClick(CurPageID: Integer): Boolean;
 var
   Err: string;
   winAuth: Boolean;
+  Resolved: string;
   FreeB, TotalB, Dummy, NeedB: Int64;
 begin
   Result := True;
@@ -526,9 +573,15 @@ begin
     if OptPage.Values[1] and not (IsComponentSelected('localdb') and
        ((Trim(DbPage.Values[0]) = '') or (Trim(DbPage.Values[0]) = '(localdb)\MSSQLLocalDB'))) then
     begin
-      if not TestSql(DbPage.Values[0], 'master', winAuth, DbPage.Values[2], DbPage.Values[3], Err) then
+      // SQL Server 2022 may run as default/named instance (localhost, .\SQLEXPRESS) instead
+      // of LocalDB: instead of blocking with an error, probe the candidate list and auto-fill
+      // the first server that answers.
+      Resolved := '';
+      if ResolveSqlServer(DbPage.Values[0], winAuth, DbPage.Values[2], DbPage.Values[3], Resolved) then
+        DbPage.Values[0] := Resolved
+      else if not TestSql(DbPage.Values[0], 'master', winAuth, DbPage.Values[2], DbPage.Values[3], Err) then
       begin
-        MsgBox('اتصال به SQL Server برقرار نشد:' + #13#10#13#10 + Err + #13#10#13#10 + 'نام سرور/نمونه (instance)، وضع سرویس SQL Server و شبکه را بررسی کنید.', mbError, MB_OK);
+        MsgBox('اتصال به SQL Server برقرار نشد:' + #13#10#13#10 + Err + #13#10#13#10 + 'نام سرور/نمونه (instance)، وضع سرویس SQL Server و شبکه را بررسی کنید. (نمونهٔ SQL Server 2022: localhost یا .\SQLEXPRESS)', mbError, MB_OK);
         Result := False;
         Exit;
       end;
@@ -550,6 +603,7 @@ var
   Err: string;
   winAuth: Boolean;
   SchemaPath: string;
+  Resolved: string;
 begin
   if CurStep = ssInstall then
   begin
@@ -587,7 +641,13 @@ begin
     if OptPage.Values[1] and (Trim(DbPage.Values[0]) <> '') then
     begin
       winAuth := OptPage.Values[0];
-      SchemaPath := ExpandConstant('{app}\\db\\schema.sql');
+      SchemaPath := ExpandConstant('{app}\db\schema.sql');
+      Resolved := '';
+      if ResolveSqlServer(DbPage.Values[0], winAuth, DbPage.Values[2], DbPage.Values[3], Resolved) then
+      begin
+        DbPage.Values[0] := Resolved;
+        Log('MEHRA: resolved SQL Server = ' + Resolved);
+      end;
       if RunSchema(DbPage.Values[0], DbPage.Values[1], winAuth, DbPage.Values[2], DbPage.Values[3],
                    SchemaPath, Err) then
       begin
@@ -652,7 +712,7 @@ begin
   OptPage.Values[1] := True;
 
   DbPage := CreateInputQueryPage(wpSelectTasks,
-    'تنظیمات اتصال SQL Server', 'نام سرور (نمونه): .\\SQLEXPRESS یا (localdb)\\MSSQLLocalDB و نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شود و اگر پایگاه داده وجود ندارد، به‌صورت خودکار ساخته می‌شود.');
+    'تنظیمات اتصال SQL Server', 'نام سرور — اگر SQL Server 2022 نصب کرده‌اید: localhost یا .\SQLEXPRESS یا .\MSSQLSERVER؛ اگر LocalDB: (localdb)\MSSQLLocalDB. نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شود و اگر پایگاه داده وجود ندارد، به‌صورت خودکار ساخته می‌شود.');
   DbPage.Add('سرور SQL Server:', False);
   DbPage.Values[0] := '(localdb)\MSSQLLocalDB';
   DbPage.Add('نام پایگاه داده:', False);

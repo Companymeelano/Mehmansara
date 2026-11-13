@@ -60,6 +60,7 @@ private data class MenuEntry(
 @Composable
 fun MoreScreen(
     user: SessionUser?,
+    onOpenDbTool: () -> Unit,
     onOpenGuests: () -> Unit,
     onOpenFinance: () -> Unit,
     onOpenHousekeeping: () -> Unit,
@@ -84,6 +85,7 @@ fun MoreScreen(
             .takeIf { has(Permissions.REPORTS_VIEW) },
         MenuEntry("کاربران", "مدیریت کاربران", R.drawable.ic_mehra_users, Permissions.USERS_VIEW, onOpenUsers)
             .takeIf { has(Permissions.USERS_VIEW) },
+        MenuEntry("دیتابیس (تست مستقیم)", "اتصال مستقیم به SQL Server از طریق WiFi — پورت 1433، بدون ورود", R.drawable.ic_mehra_reports, null, onOpenDbTool),
         MenuEntry("اعلان‌ها", "پیام‌ها و هشدارها", R.drawable.ic_mehra_notifications, null, onOpenNotifications),
         MenuEntry("تنظیمات", "تنظیمات برنامه", R.drawable.ic_mehra_settings, null, onOpenSettings),
     )
