@@ -155,7 +155,7 @@ fun DbToolScreen(
                     MehraTextField(
                         label = "آدرس سرور (IP روی WiFi)",
                         value = state.host,
-                        onValueChange = { viewModel.update { it.copy(host = it) } },
+                        onValueChange = { v -> viewModel.update { it.copy(host = v) } },
                         placeholder = "192.168.1.20",
                         singleLine = true,
                     )
@@ -164,7 +164,7 @@ fun DbToolScreen(
                         MehraTextField(
                             label = "پورت",
                             value = state.port,
-                            onValueChange = { viewModel.update { it.copy(port = it) } },
+                            onValueChange = { v -> viewModel.update { it.copy(port = v) } },
                             numeric = true,
                             modifier = Modifier.weight(1f),
                             singleLine = true,
@@ -172,7 +172,7 @@ fun DbToolScreen(
                         MehraTextField(
                             label = "نام پایگاه داده",
                             value = state.database,
-                            onValueChange = { viewModel.update { it.copy(database = it) } },
+                            onValueChange = { v -> viewModel.update { it.copy(database = v) } },
                             modifier = Modifier.weight(1.4f),
                             singleLine = true,
                         )
@@ -181,14 +181,14 @@ fun DbToolScreen(
                     MehraTextField(
                         label = "نام کاربری SQL",
                         value = state.user,
-                        onValueChange = { viewModel.update { it.copy(user = it) } },
+                        onValueChange = { v -> viewModel.update { it.copy(user = v) } },
                         singleLine = true,
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     MehraTextField(
                         label = "رمز عبور SQL",
                         value = state.password,
-                        onValueChange = { viewModel.update { it.copy(password = it) } },
+                        onValueChange = { v -> viewModel.update { it.copy(password = v) } },
                         password = true,
                         singleLine = true,
                     )
@@ -240,7 +240,7 @@ fun DbToolScreen(
                     MehraTextField(
                         label = "Query",
                         value = state.customQuery,
-                        onValueChange = { viewModel.update { it.copy(customQuery = it) } },
+                        onValueChange = { v -> viewModel.update { it.copy(customQuery = v) } },
                         placeholder = "SELECT TOP 50 * FROM dbo.guests",
                         singleLine = false,
                     )
