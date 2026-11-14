@@ -14,7 +14,9 @@ import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.ui.graphics.luminance
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
+import ir.ahvaz.mehra.core.ui.theme.mehraColors
 import ir.ahvaz.mehra.core.ui.theme.ThemePreset
 import ir.ahvaz.mehra.feature.root.RootScreen
 import ir.ahvaz.mehra.feature.root.RootViewModel
@@ -39,8 +41,11 @@ class MainActivity : ComponentActivity() {
             DisposableEffect(preset.isDark) {
                 val window = (view.context as? Activity)?.window
                 if (window != null) {
+                    // The top app bar is dark in most presets but white in Platinum/Silver —
+                    // derive icon appearance from the bar's actual luminance, not the preset.
+                    val barIsLight = preset.mehraColors().topBarStart.luminance() > 0.5f
                     WindowCompat.getInsetsController(window, view).apply {
-                        isAppearanceLightStatusBars = !preset.isDark
+                        isAppearanceLightStatusBars = barIsLight
                         isAppearanceLightNavigationBars = !preset.isDark
                     }
                 }

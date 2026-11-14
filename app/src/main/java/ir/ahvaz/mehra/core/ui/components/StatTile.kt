@@ -41,7 +41,9 @@ fun StatTile(
     caption: String? = null,
     onClick: (() -> Unit)? = null,
 ) {
-    val accent = tone ?: MaterialTheme.colorScheme.primary
+    // No explicit tone -> the brand gold gradient chip (consistent with quick actions);
+    // a semantic tone (status colour) is used when the caller passes one.
+    val accent = tone
     val shape = RoundedCornerShape(16.dp)
     val surfaceModifier = if (onClick != null) modifier.clickable(onClick = onClick) else modifier
     Surface(

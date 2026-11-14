@@ -50,12 +50,10 @@ fun GradientText(
     Text(
         text = text,
         style = style,
-        modifier = modifier
-            .background(brush)
-            .drawWithContent {
-                drawContent()
-                drawRect(brush, blendMode = BlendMode.SrcAtop)
-            },
+        modifier = modifier.drawWithContent {
+            drawContent()
+            drawRect(brush, blendMode = BlendMode.SrcAtop)
+        },
     )
 }
 

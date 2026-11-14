@@ -472,17 +472,6 @@ private fun MehraBottomBar(
             .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 14.dp, vertical = 8.dp),
     ) {
-        FloatingActionButton(
-            onClick = onCenterAction,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .offset(y = (-26).dp),
-            shape = CircleShape,
-            containerColor = colors.accentMid,
-            contentColor = colors.onAccent,
-        ) {
-            Icon(Icons.Rounded.Add, contentDescription = "اقدام سریع")
-        }
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -553,6 +542,19 @@ private fun MehraBottomBar(
                     }
                 }
             }
+        }
+        // Raised center action — drawn AFTER the pill so it is never clipped by it.
+        FloatingActionButton(
+            onClick = onCenterAction,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = (-30).dp)
+                .shadow(10.dp, CircleShape),
+            shape = CircleShape,
+            containerColor = colors.accentMid,
+            contentColor = colors.onAccent,
+        ) {
+            Icon(Icons.Rounded.Add, contentDescription = "اقدام سریع")
         }
     }
 }
