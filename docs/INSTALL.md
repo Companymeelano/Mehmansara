@@ -52,7 +52,7 @@ adb install -r app/build/outputs/apk/release/app-release.apk
 ## 6. تنظیمات مهم نسخه
 
 - `applicationId` = `ir.ahvaz.mehra` (دیباگ: `ir.ahvaz.mehra.debug`)
-- `versionName` = `1.7.0`، `versionCode` = 13
+- `versionName` = `1.8.0`، `versionCode` = 14
 - `allowBackup=false` — دادهٔ مهمان در بکاپ ابری قرار نمی‌گیرد.
 
 ## 7. عیب‌یابی
