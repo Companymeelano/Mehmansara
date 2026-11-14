@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.ahvaz.mehra.core.common.AppResult
+import ir.ahvaz.mehra.core.common.PLATE_LENGTH
+import ir.ahvaz.mehra.core.common.normalizePlate
+import ir.ahvaz.mehra.core.common.toLatinDigits
+import ir.ahvaz.mehra.core.date.JalaliDate
 import ir.ahvaz.mehra.core.common.Validators
 import ir.ahvaz.mehra.core.network.NetworkMonitor
 import ir.ahvaz.mehra.core.ui.state.UiState
@@ -13,9 +17,14 @@ import ir.ahvaz.mehra.domain.model.Companion
 import ir.ahvaz.mehra.domain.model.Guest
 import ir.ahvaz.mehra.domain.model.GuestDetail
 import ir.ahvaz.mehra.domain.model.GuestDraft
+import ir.ahvaz.mehra.domain.model.ReservationDraft
+import ir.ahvaz.mehra.domain.model.Room
+import ir.ahvaz.mehra.domain.model.RoomStatus
 import ir.ahvaz.mehra.domain.model.Permissions
 import ir.ahvaz.mehra.domain.repository.AuthRepository
 import ir.ahvaz.mehra.domain.repository.GuestRepository
+import ir.ahvaz.mehra.domain.repository.ReservationRepository
+import ir.ahvaz.mehra.domain.repository.RoomRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -129,12 +138,17 @@ data class GuestFormUiState(
     val errorMessage: String? = null,
     val fieldErrors: Map<String, String> = emptyMap(),
     val saved: Boolean = false,
+    // v2.2.0: smart stay assignment from the guest form
+    val rooms: List<Room> = emptyList(),
+    val vehicleSearch: String = "",
 )
 
 @HiltViewModel
 class GuestFormViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val guestRepository: GuestRepository,
+    private val roomRepository: RoomRepository,
+    private val reservationRepository: ReservationRepository,
 ) : ViewModel() {
 
     private val guestId: String? = savedStateHandle.get<String>("guestId")?.takeIf { it.isNotBlank() && it != "null" }
@@ -143,6 +157,15 @@ class GuestFormViewModel @Inject constructor(
     val state: StateFlow<GuestFormUiState> = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            when (val result = roomRepository.rooms()) {
+                is AppResult.Success -> _state.update {
+                    it.copy(rooms = result.data.data.filter { room -> room.status == RoomStatus.FREE }
+                        .sortedBy { room -> room.roomNumber.toIntOrNull() ?: 999 })
+                }
+                is AppResult.Failure -> Unit
+            }
+        }
         if (guestId != null) {
             viewModelScope.launch {
                 when (val result = guestRepository.guest(guestId)) {
@@ -157,6 +180,8 @@ class GuestFormViewModel @Inject constructor(
                                     nationalId = guest.nationalId.orEmpty(),
                                     phone = guest.phone.orEmpty(),
                                     carPlate = guest.carPlate.orEmpty(),
+                                    vehicleType = guest.vehicleType.orEmpty(),
+                                    vehicleColor = guest.vehicleColor.orEmpty(),
                                     city = guest.city.orEmpty(),
                                     address = guest.address.orEmpty(),
                                     notes = guest.notes.orEmpty(),
@@ -206,9 +231,9 @@ class GuestFormViewModel @Inject constructor(
         if (draft.nationalId.isNotBlank() && !Validators.isValidIranNationalId(draft.nationalId)) {
             fields["nationalId"] = "کد ملی معتبر نیست."
         }
-        val plate = draft.carPlate.trim()
-        if (plate.isNotBlank() && plate.length !in 6..12) {
-            fields["carPlate"] = "پلاک را کامل وارد کنید (مثال: ۱۲ب۳۴۵-۶۷)."
+        val plate = normalizePlate(draft.carPlate)
+        if (draft.carPlate.isNotBlank() && plate.length != PLATE_LENGTH) {
+            fields["carPlate"] = "پلاک را کامل وارد کنید (۸ حرف/رقم؛ مثال: ۱۲ب۳۴۵۶۷)."
         }
         if (draft.phone.isNotBlank() && !Validators.isValidIranMobile(draft.phone)) {
             fields["phone"] = "شماره تماس معتبر نیست (مثال: ۰۹۱۲۳۴۵۶۷۸۹)."
@@ -220,8 +245,40 @@ class GuestFormViewModel @Inject constructor(
         }
         _state.update { it.copy(isSaving = true, errorMessage = null) }
         viewModelScope.launch {
-            when (val result = guestRepository.save(draft.copy(companions = companions))) {
-                is AppResult.Success -> _state.update { it.copy(isSaving = false, saved = true) }
+            when (val result = guestRepository.save(draft.copy(companions = companions, carPlate = plate))) {
+                is AppResult.Success -> {
+                    // v2.2.0: optional smart stay assignment (room + nights + discount)
+                    val guest = result.data
+                    val roomId = draft.roomId
+                    val nights = draft.stayNights.toLatinDigits().toIntOrNull() ?: 0
+                    if (roomId.isBlank() || nights <= 0) {
+                        _state.update { it.copy(isSaving = false, saved = true) }
+                    } else {
+                        val checkIn = JalaliDate.today()
+                        val resDraft = ReservationDraft(
+                            guestId = guest.id,
+                            guestName = guest.fullName,
+                            roomId = roomId,
+                            roomNumber = _state.value.rooms.firstOrNull { it.id == roomId }?.roomNumber,
+                            checkIn = checkIn,
+                            checkOut = checkIn.plusDays(nights.toLong()),
+                            guestsCount = "1",
+                            discountRial = draft.discountRial,
+                            notes = "تخصیص اتاق از فرم معرفی مهمان",
+                        )
+                        when (val rr = reservationRepository.create(resDraft)) {
+                            is AppResult.Success -> _state.update { it.copy(isSaving = false, saved = true) }
+                            is AppResult.Failure -> _state.update {
+                                // keep the guest id on the draft so a retry UPDATES instead of duplicating
+                                it.copy(
+                                    isSaving = false,
+                                    draft = it.draft.copy(id = guest.id),
+                                    errorMessage = "مهمان ثبت شد؛ تخصیص اتاق ناموفق بود: " + rr.error.userMessageFa,
+                                )
+                            }
+                        }
+                    }
+                }
                 is AppResult.Failure -> _state.update {
                     it.copy(
                         isSaving = false,
@@ -231,5 +288,9 @@ class GuestFormViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onVehicleSearchChange(value: String) {
+        _state.update { it.copy(vehicleSearch = value) }
     }
 }

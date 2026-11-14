@@ -110,15 +110,15 @@ class DemoStore @Inject constructor(private val secureStore: SecureStore) {
 
     val roomTypes: List<LookupItem> = types.map { LookupItem(it.id, it.title) }
 
-    val floors: List<Int> = listOf(1, 2)
+    val floors: List<Int> = listOf(0, 1, 2)
 
     val amenities: List<LookupItem> = listOf(
         LookupItem("am-ac", "کولر گازی"),
         LookupItem("am-tv", "تلویزیون"),
         LookupItem("am-fridge", "یخچال"),
         LookupItem("am-wc", "سرویس بهداشتی اختصاصی"),
-        LookupItem("am-wifi", "اینترنت بی‌سیم"),
-        LookupItem("am-balcony", "بالکن"),
+        LookupItem("am-wardrobe", "کمد لباس"),
+        LookupItem("am-towels", "حوله"),
     )
 
     // ------------------------------------------------------------------ rooms

@@ -336,6 +336,12 @@ class RoomFormViewModel @Inject constructor(
                     it.copy(isLoading = false, errorMessage = result.error.userMessageFa)
                 }
             }
+            if (roomId == null) {
+                // v2.2.0: the four essential amenities start ticked on a new room.
+                _state.update {
+                    it.copy(draft = it.draft.copy(amenities = setOf("am-ac", "am-tv", "am-fridge", "am-wc")))
+                }
+            }
             if (roomId != null) {
                 when (val result = roomRepository.room(roomId)) {
                     is AppResult.Success -> _state.update {

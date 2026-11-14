@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.ahvaz.mehra.core.common.formatMoneyFa
+import ir.ahvaz.mehra.core.common.floorLabelFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.date.formatJalaliFaOrDash
 import ir.ahvaz.mehra.core.ui.components.AmountField
@@ -93,7 +94,7 @@ fun RoomsScreen(
 
     MehraScreen(
         title = "مدیریت اتاق‌ها",
-        subtitle = if (state.floor != null) "طبقه ${(state.floor.toString()).toPersianDigits()}" else null,
+        subtitle = state.floor?.floorLabelFa(),
         offline = rooms.fromCache || !state.isOnline,
         pendingCount = state.pendingOperations,
         actions = {
@@ -182,7 +183,7 @@ fun RoomsScreen(
                             .forEach { (floor, floorRooms) ->
                                 item(span = { GridItemSpan(maxLineSpan) }) {
                                     SectionHeader(
-                                        title = "طبقه ${(floor.toString()).toPersianDigits()}",
+                                        title = floor.floorLabelFa(),
                                         modifier = Modifier.padding(top = 6.dp, bottom = 2.dp),
                                     )
                                 }
@@ -291,7 +292,7 @@ private fun LuxuryRoomCard(
             overflow = TextOverflow.Ellipsis,
         )
         Text(
-            text = "${(room.capacity.toString()).toPersianDigits()} تخت • طبقه ${(room.floor.toString()).toPersianDigits()}",
+            text = "${(room.capacity.toString()).toPersianDigits()} تخت • ${room.floor.floorLabelFa()}",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -455,7 +456,7 @@ fun RoomDetailScreen(
                     }
                     InfoRow("شماره اتاق", (room.roomNumber).toPersianDigits())
                     InfoRow("نوع اتاق", room.roomTypeName.ifBlank { "—" })
-                    InfoRow("طبقه", (room.floor.toString()).toPersianDigits())
+                    InfoRow("طبقه", room.floor.floorLabelFa())
                     InfoRow("ظرفیت", "${(room.capacity.toString()).toPersianDigits()} نفر")
                     InfoRow("تعرفه شبانه", formatMoneyFa(room.ratePerNightRial))
                     if (room.amenities.isNotEmpty()) {
@@ -684,12 +685,17 @@ fun RoomFormScreen(
             )
             Spacer(modifier = Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                MehraTextField(
+                DropdownField(
                     label = "طبقه",
-                    value = draft.floor,
-                    onValueChange = { value -> viewModel.updateDraft { it.copy(floor = value) } },
+                    options = run {
+                        val base = (listOf(0) + state.lookups.floors).distinct().sorted()
+                        val current = draft.floor.toIntOrNull()
+                        if (current != null && current !in base) (base + current).sorted() else base
+                    },
+                    selected = draft.floor.toIntOrNull(),
+                    onSelect = { floor -> viewModel.updateDraft { it.copy(floor = floor.toString()) } },
+                    optionLabel = { it.floorLabelFa() },
                     modifier = Modifier.weight(1f),
-                    numeric = true,
                     error = state.fieldErrors["floor"],
                 )
                 MehraTextField(

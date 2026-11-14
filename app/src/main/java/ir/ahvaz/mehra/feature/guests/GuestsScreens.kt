@@ -40,6 +40,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ir.ahvaz.mehra.core.common.VEHICLE_COLORS
+import ir.ahvaz.mehra.core.common.VEHICLE_TYPES
 import ir.ahvaz.mehra.core.common.formatMoneyFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.date.formatJalaliDateTimeFa
@@ -55,6 +57,9 @@ import ir.ahvaz.mehra.core.ui.components.InlineMessage
 import ir.ahvaz.mehra.core.ui.components.LoadingState
 import ir.ahvaz.mehra.core.ui.components.MehraCard
 import ir.ahvaz.mehra.core.ui.components.MehraScreen
+import ir.ahvaz.mehra.core.ui.components.AmountField
+import ir.ahvaz.mehra.core.ui.components.DropdownField
+import ir.ahvaz.mehra.core.ui.components.IranPlateInput
 import ir.ahvaz.mehra.core.ui.components.MehraSearchField
 import ir.ahvaz.mehra.core.ui.components.MehraTextField
 import ir.ahvaz.mehra.core.ui.components.PrimaryButton
@@ -224,6 +229,8 @@ fun GuestDetailScreen(
                         )
                         InfoRow("تلفن", guest.phone ?: "—")
                         InfoRow("پلاک خودرو", guest.carPlate ?: "—")
+                        guest.vehicleType?.let { InfoRow("نوع خودرو", it) }
+                        guest.vehicleColor?.let { InfoRow("رنگ خودرو", it) }
                         InfoRow("شهر", guest.city ?: "—")
                         InfoRow("نشانی", guest.address ?: "—")
                         InfoRow("مانده حساب", formatMoneyFa(guest.balanceRial))
@@ -560,13 +567,53 @@ fun GuestFormScreen(
                 placeholder = "۰۹۱۲۳۴۵۶۷۸۹",
             )
             Spacer(modifier = Modifier.height(10.dp))
-            MehraTextField(
-                label = "پلاک خودرو",
+            Text(
+                text = "پلاک خودرو (اختیاری)",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            IranPlateInput(
                 value = draft.carPlate,
                 onValueChange = { value -> viewModel.updateDraft { it.copy(carPlate = value) } },
-                error = state.fieldErrors["carPlate"],
-                placeholder = "۱۲ب۳۴۵-۶۷",
-                hint = "اختیاری — برای شناسایی کردن خودروی مهمان (جستجو با پلاک هم کار می‌کند).",
+            )
+            if (state.fieldErrors["carPlate"] != null) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = state.fieldErrors["carPlate"]!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall,
+                )
+            } else {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "برای شناسایی خودروی مهمان؛ با پلاک هم می‌توان مهمان را جست‌وجو کرد.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelSmall,
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            MehraSearchField(
+                value = state.vehicleSearch,
+                onValueChange = viewModel::onVehicleSearchChange,
+                placeholder = "جست‌وجوی نوع خودرو…",
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            DropdownField(
+                label = "نوع خودرو",
+                options = VEHICLE_TYPES.filter { state.vehicleSearch.isBlank() || it.contains(state.vehicleSearch) },
+                selected = draft.vehicleType.ifBlank { null },
+                onSelect = { viewModel.updateDraft { d -> d.copy(vehicleType = it) } },
+                optionLabel = { it },
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            DropdownField(
+                label = "رنگ خودرو",
+                options = VEHICLE_COLORS,
+                selected = draft.vehicleColor.ifBlank { null },
+                onSelect = { viewModel.updateDraft { d -> d.copy(vehicleColor = it) } },
+                optionLabel = { it },
             )
             Spacer(modifier = Modifier.height(10.dp))
             MehraTextField(
@@ -581,6 +628,33 @@ fun GuestFormScreen(
                 onValueChange = { value -> viewModel.updateDraft { it.copy(address = value) } },
                 singleLine = false,
             )
+            Spacer(modifier = Modifier.height(14.dp))
+            SectionHeader(title = "اقامت (اختیاری)")
+            DropdownField(
+                label = "اتاق / سوئیت",
+                options = state.rooms,
+                selected = state.rooms.firstOrNull { it.id == draft.roomId },
+                onSelect = { room -> viewModel.updateDraft { it.copy(roomId = room.id) } },
+                optionLabel = { "اتاق ${room.roomNumber.toPersianDigits()} — ${room.roomTypeName}" },
+                placeholder = "بدون تخصیص اتاق",
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                MehraTextField(
+                    label = "تعداد روز اقامت",
+                    value = draft.stayNights,
+                    onValueChange = { value -> viewModel.updateDraft { it.copy(stayNights = value) } },
+                    modifier = Modifier.weight(1f),
+                    numeric = true,
+                    placeholder = "۱",
+                )
+                AmountField(
+                    label = "تخفیف (ریال)",
+                    value = draft.discountRial,
+                    onValueChange = { value -> viewModel.updateDraft { it.copy(discountRial = value) } },
+                    modifier = Modifier.weight(1f),
+                )
+            }
             Spacer(modifier = Modifier.height(10.dp))
             MehraTextField(
                 label = "یادداشت",

@@ -16,6 +16,8 @@ data class Guest(
     val nationalId: String? = null,
     val phone: String? = null,
     val carPlate: String? = null,
+    val vehicleType: String? = null,
+    val vehicleColor: String? = null,
     val city: String? = null,
     val address: String? = null,
     val notes: String? = null,
@@ -52,10 +54,16 @@ data class GuestDraft(
     val nationalId: String = "",
     val phone: String = "",
     val carPlate: String = "",
+    val vehicleType: String = "",
+    val vehicleColor: String = "",
     val city: String = "",
     val address: String = "",
     val notes: String = "",
     val companions: List<Companion> = emptyList(),
+    // optional stay assignment made right from the guest form (v2.2.0)
+    val roomId: String = "",
+    val stayNights: String = "",
+    val discountRial: String = "",
 ) {
     val isEdit: Boolean get() = id != null
 }
