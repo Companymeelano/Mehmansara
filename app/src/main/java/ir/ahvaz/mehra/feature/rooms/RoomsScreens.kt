@@ -675,9 +675,9 @@ fun RoomFormScreen(
                 InlineMessage(text = state.errorMessage!!)
                 Spacer(modifier = Modifier.height(8.dp))
             }
+            MehraCard(modifier = Modifier.fillMaxWidth()) {
             MehraTextField(
                 label = "شماره اتاق",
-            MehraCard(modifier = Modifier.fillMaxWidth()) {
                 value = draft.roomNumber,
                 onValueChange = { value -> viewModel.updateDraft { it.copy(roomNumber = value) } },
                 error = state.fieldErrors["roomNumber"],
