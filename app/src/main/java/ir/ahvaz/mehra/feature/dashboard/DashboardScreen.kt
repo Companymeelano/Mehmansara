@@ -489,7 +489,7 @@ private fun WelcomeContent(
                         Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd)),
                         RoundedCornerShape(24.dp),
                     )
-                    .padding(20.dp),
+                    .padding(16.dp),
             ) {
                 // soft spotlight behind the brand block — luxury depth on the hero
                 Box(
@@ -511,7 +511,7 @@ private fun WelcomeContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 64.dp)
+                    Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 56.dp)
                     Spacer(modifier = Modifier.height(10.dp))
                     GradientText(
                         text = "مهرآ",
@@ -550,33 +550,16 @@ private fun WelcomeContent(
 
         item { SectionHeader(title = "اقدام سریع") }
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     QuickActionTile("اتاق جدید", "ثبت اتاق در مجموعه", Icons.Rounded.Bed, Modifier.weight(1f), onCreateRoom)
                     QuickActionTile("مهمان جدید", "پروندهٔ مهمان", Icons.Rounded.PersonAdd, Modifier.weight(1f), onCreateGuest)
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     QuickActionTile("رزرو جدید", "ثبت رزرو", Icons.Rounded.EventAvailable, Modifier.weight(1f), onNewReservation)
                     QuickActionTile("پذیرش", "ورود و خروج", Icons.Rounded.Login, Modifier.weight(1f), onOpenReception)
                 }
             }
-        }
-
-        item { SectionHeader(title = "نمای کلی امروز") }
-        item {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatTile(label = "اتاق‌ها", value = "0".toPersianDigits(), icon = Icons.Rounded.Bed, modifier = Modifier.weight(1f), onClick = onOpenRooms)
-                StatTile(label = "مهمانان", value = "0".toPersianDigits(), icon = Icons.Rounded.PersonAdd, modifier = Modifier.weight(1f), onClick = onOpenGuests)
-            }
-        }
-        item {
-            StatTile(
-                label = "رزروهای امروز",
-                value = "0".toPersianDigits(),
-                icon = Icons.Rounded.EventAvailable,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onOpenReservations,
-            )
         }
 
         item {

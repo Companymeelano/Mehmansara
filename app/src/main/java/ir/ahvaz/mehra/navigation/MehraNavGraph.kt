@@ -132,7 +132,6 @@ fun MehraNavGraph(
                     destinations = destinations,
                     backStackEntry = backStackEntry,
                     onCenterAction = { showQuickActions = true },
-                    onSearch = { showPalette = true },
                     onSelect = { destination ->
                         if (currentRoute != destination.route) {
                             navController.navigate(destination.route) {
@@ -460,7 +459,6 @@ private fun MehraBottomBar(
     destinations: List<BottomDestination>,
     backStackEntry: NavBackStackEntry?,
     onCenterAction: () -> Unit,
-    onSearch: () -> Unit,
     onSelect: (BottomDestination) -> Unit,
 ) {
     val colors = MehraTheme.colors
@@ -497,20 +495,11 @@ private fun MehraBottomBar(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    IconButton(onClick = onSearch, modifier = Modifier.size(42.dp)) {
-                        Icon(
-                            imageVector = Icons.Rounded.Search,
-                            contentDescription = "جست‌وجوی سراسری",
-                            tint = scheme.onSurfaceVariant,
-                            modifier = Modifier.size(24.dp),
-                        )
-                    }
-                }
                 destinations.forEachIndexed { index, destination ->
-                    // Reserve the exact centre slot of the bar for the raised FAB (1.9.1:
-                    // it used to sit on top of the middle tab and swallowed its clicks).
-                    if (index == destinations.size / 2) Spacer(modifier = Modifier.weight(1f))
+                    // Wide centre gap reserved for the raised FAB. weight(2f) keeps the FAB
+                    // exactly centred; the global search moved into the quick-actions sheet
+                    // (2.1.0: the search glyph in the bar made it look cluttered).
+                    if (index == destinations.size / 2) Spacer(modifier = Modifier.weight(2f))
                     val selected = backStackEntry?.destination?.hierarchy?.any {
                         it.route == destination.route
                     } == true

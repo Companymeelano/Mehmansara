@@ -106,7 +106,7 @@ fun MehraTopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.statusBars)
-                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                    .padding(horizontal = 8.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (onBack != null) {
@@ -231,7 +231,7 @@ fun MehraCard(
         },
     ).pressScale(isPressed)
     Surface(
-        modifier = base.shadow(8.dp, shape),
+        modifier = base.shadow(6.dp, shape),
         shape = shape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = if (colors.isDark) 0.82f else 0.90f),
         contentColor = MaterialTheme.colorScheme.onSurface,
