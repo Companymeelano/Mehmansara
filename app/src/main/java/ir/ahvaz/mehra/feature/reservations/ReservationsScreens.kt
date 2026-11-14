@@ -76,7 +76,6 @@ import ir.ahvaz.mehra.domain.model.AvailableRoom
 import ir.ahvaz.mehra.domain.model.PaymentMethod
 import ir.ahvaz.mehra.domain.model.Reservation
 import ir.ahvaz.mehra.domain.model.ReservationStatus
-import ir.ahvaz.mehra.domain.model.isActiveOn
 import java.time.LocalDate
 
 @Composable
