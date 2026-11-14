@@ -2,7 +2,10 @@ package ir.ahvaz.mehra.core.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +34,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -203,9 +210,26 @@ fun MehraCard(
 ) {
     val colors = MehraTheme.colors
     val shape = RoundedCornerShape(20.dp)
+    // One shared InteractionSource drives BOTH the click and the press-scale effect.
+    // (1.9.1 bugfix: a separate pointerInput in pressScale used to consume the tap and
+    // silently killed every card click.)
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val view = LocalView.current
+    LaunchedEffect(isPressed) {
+        if (isPressed) view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+    }
     val base = modifier.then(
-        if (onClick != null) Modifier.clickable(onClick = onClick).pressScale() else Modifier
-    )
+        if (onClick != null) {
+            Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick,
+            )
+        } else {
+            Modifier
+        },
+    ).pressScale(isPressed)
     Surface(
         modifier = base.shadow(8.dp, shape),
         shape = shape,

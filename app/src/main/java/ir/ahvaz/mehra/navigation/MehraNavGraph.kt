@@ -497,15 +497,20 @@ private fun MehraBottomBar(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(onClick = onSearch, modifier = Modifier.size(42.dp)) {
-                    Icon(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = "جست‌وجوی سراسری",
-                        tint = scheme.onSurfaceVariant,
-                        modifier = Modifier.size(24.dp),
-                    )
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    IconButton(onClick = onSearch, modifier = Modifier.size(42.dp)) {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = "جست‌وجوی سراسری",
+                            tint = scheme.onSurfaceVariant,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
                 }
-                destinations.forEach { destination ->
+                destinations.forEachIndexed { index, destination ->
+                    // Reserve the exact centre slot of the bar for the raised FAB (1.9.1:
+                    // it used to sit on top of the middle tab and swallowed its clicks).
+                    if (index == destinations.size / 2) Spacer(modifier = Modifier.weight(1f))
                     val selected = backStackEntry?.destination?.hierarchy?.any {
                         it.route == destination.route
                     } == true
@@ -548,7 +553,8 @@ private fun MehraBottomBar(
             onClick = onCenterAction,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = (-30).dp)
+                .offset(y = (-28).dp)
+                .size(52.dp)
                 .shadow(10.dp, CircleShape),
             shape = CircleShape,
             containerColor = colors.accentMid,

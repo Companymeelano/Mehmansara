@@ -1,6 +1,5 @@
 package ir.ahvaz.mehra.core.ui.components
 import androidx.compose.foundation.background
-import android.view.HapticFeedbackConstants
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -20,20 +19,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 /**
@@ -59,33 +53,19 @@ fun GradientText(
 
 /**
  * Micro-interaction: the element gently scales down (0.955) while pressed — gives every
- * card / button a tactile, "physical 3D" feel. Usage: `Modifier.clickable { }.pressScale()`.
+ * card / button a tactile, "physical 3D" feel.
+ *
+ * IMPORTANT (bugfix 1.9.1): this must NOT use its own `pointerInput`/`detectTapGestures`.
+ * A second gesture detector chained after `clickable` receives the pointer events first
+ * (innermost modifier wins) and consumes the tap, so the `clickable` onClick never fired —
+ * every MehraCard option was dead. The pressed state is now driven by the SAME
+ * InteractionSource that the clickable uses (see MehraCard).
  */
 @Composable
-fun Modifier.pressScale(): Modifier {
-    var pressed by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    val view = LocalView.current
-    return this
-        .graphicsLayer {
-            val target = if (pressed) 0.955f else 1f
-            scaleX = target
-            scaleY = target
-        }
-        .pointerInput(Unit) {
-            detectTapGestures(
-                onPress = {
-                    pressed = true
-                    view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
-                    scope.launch {
-                        delay(140)
-                        pressed = false
-                    }
-                    tryAwaitRelease()
-                    pressed = false
-                },
-            )
-        }
+fun Modifier.pressScale(pressed: Boolean): Modifier = graphicsLayer {
+    val target = if (pressed) 0.955f else 1f
+    scaleX = target
+    scaleY = target
 }
 
 /**
