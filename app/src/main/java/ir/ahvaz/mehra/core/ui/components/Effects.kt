@@ -1,5 +1,4 @@
 package ir.ahvaz.mehra.core.ui.components
-import androidx.compose.foundation.background
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -7,7 +6,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,8 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
@@ -41,13 +37,13 @@ fun GradientText(
     brush: Brush,
     modifier: Modifier = Modifier,
 ) {
+    // The brush goes straight into the TextStyle: Compose paints it as a shader on the
+    // glyphs. (2.1.1: the previous drawWithContent/SrcAtop trick painted a SOLID block
+    // over the whole text bounds on real devices — visible as the gold square in the hero.)
     Text(
         text = text,
-        style = style,
-        modifier = modifier.drawWithContent {
-            drawContent()
-            drawRect(brush, blendMode = BlendMode.SrcAtop)
-        },
+        style = style.copy(brush = brush),
+        modifier = modifier,
     )
 }
 

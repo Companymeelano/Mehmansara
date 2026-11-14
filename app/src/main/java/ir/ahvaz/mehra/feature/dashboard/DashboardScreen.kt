@@ -529,13 +529,6 @@ private fun WelcomeContent(
                         color = Color.White.copy(alpha = 0.66f),
                         style = MaterialTheme.typography.labelMedium,
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "به سامانهٔ مدیریت مهمان‌پذیر خوش آمدید؛ همهٔ کارها را از اینجا شروع کنید.",
-                        color = Color.White.copy(alpha = 0.82f),
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                    )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
                         text = "نکتهٔ روز: " + DailyTips.tipFor(TehranTime.today()),
