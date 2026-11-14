@@ -1,5 +1,6 @@
 package ir.ahvaz.mehra.core.ui.components
 
+import ir.ahvaz.mehra.core.common.toLatinDigits
 import ir.ahvaz.mehra.core.common.toPersianDigits
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ fun StatTile(
     tone: Color? = null,
     caption: String? = null,
     onClick: (() -> Unit)? = null,
+    animateValue: Boolean = false,
 ) {
     // No explicit tone -> the brand gold gradient chip (consistent with quick actions);
     // a semantic tone (status colour) is used when the caller passes one.
@@ -73,8 +75,13 @@ fun StatTile(
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
+            val displayValue = if (animateValue) {
+                AnimatedInt(value.toLatinDigits().toIntOrNull() ?: 0).toString().toPersianDigits()
+            } else {
+                value
+            }
             Text(
-                text = value,
+                text = displayValue,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,

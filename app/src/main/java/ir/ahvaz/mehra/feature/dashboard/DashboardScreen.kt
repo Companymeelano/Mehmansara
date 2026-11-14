@@ -51,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ir.ahvaz.mehra.core.common.DailyTips
 import ir.ahvaz.mehra.core.common.formatMoneyCompactFa
 import ir.ahvaz.mehra.core.common.formatMoneyFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
@@ -236,6 +237,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "کل اتاق‌ها",
                     value = (snapshot.totalRooms.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.Bed,
                     modifier = Modifier.weight(1f),
                     onClick = onOpenRooms,
@@ -243,6 +245,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "آزاد",
                     value = (snapshot.freeRooms.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.EventAvailable,
                     tone = colors.statusFree,
                     modifier = Modifier.weight(1f),
@@ -255,6 +258,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "رزرو‌شده",
                     value = (snapshot.reservedRooms.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.EventBusy,
                     tone = colors.statusReserved,
                     modifier = Modifier.weight(1f),
@@ -263,6 +267,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "اشغال",
                     value = (snapshot.occupiedRooms.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.Bed,
                     tone = colors.statusOccupied,
                     modifier = Modifier.weight(1f),
@@ -275,6 +280,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "در حال نظافت",
                     value = (snapshot.cleaningRooms.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.CleaningServices,
                     tone = colors.statusCleaning,
                     modifier = Modifier.weight(1f),
@@ -283,6 +289,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "تعمیراتی",
                     value = (snapshot.maintenanceRooms.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.Handyman,
                     tone = colors.statusMaintenance,
                     modifier = Modifier.weight(1f),
@@ -295,6 +302,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "ورود امروز",
                     value = (snapshot.todayCheckIns.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.Login,
                     tone = colors.info,
                     modifier = Modifier.weight(1f),
@@ -303,6 +311,7 @@ private fun DashboardContent(
                 StatTile(
                     label = "خروج امروز",
                     value = (snapshot.todayCheckOuts.toString()).toPersianDigits(),
+                    animateValue = true,
                     icon = Icons.Rounded.Logout,
                     tone = colors.warning,
                     modifier = Modifier.weight(1f),
@@ -509,6 +518,14 @@ private fun WelcomeContent(
                         text = "به سامانهٔ مدیریت مهمان‌پذیر خوش آمدید؛ همهٔ کارها را از اینجا شروع کنید.",
                         color = Color.White.copy(alpha = 0.82f),
                         style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "نکتهٔ روز: " + DailyTips.tipFor(TehranTime.today()),
+                        color = Color.White.copy(alpha = 0.88f),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Center,
                     )
                 }
