@@ -5,6 +5,7 @@ import ir.ahvaz.mehra.core.common.CachedData
 import ir.ahvaz.mehra.domain.model.DashboardSnapshot
 import ir.ahvaz.mehra.domain.model.OccupancyPoint
 import ir.ahvaz.mehra.domain.model.ReservationStatus
+import ir.ahvaz.mehra.domain.model.RevenuePoint
 import ir.ahvaz.mehra.domain.model.RoomStatus
 import ir.ahvaz.mehra.domain.model.TransactionType
 import ir.ahvaz.mehra.domain.repository.DashboardRepository
@@ -45,6 +46,15 @@ class DemoDashboardRepository @Inject constructor(
             occupancySeries = (6 downTo 0).map { offset ->
                 val date = today.minusDays(offset.toLong())
                 OccupancyPoint(date = date, occupied = store.occupiedOn(date), total = total)
+            },
+            revenueSeries = (6 downTo 0).map { offset ->
+                val date = today.minusDays(offset.toLong())
+                RevenuePoint(
+                    date = date,
+                    amountRial = store.transactionsOn(date)
+                        .filter { it.type == TransactionType.RECEIVE }
+                        .sumOf { it.amountRial },
+                )
             },
             recentActivities = store.recentActivities(),
             alerts = store.alerts(),

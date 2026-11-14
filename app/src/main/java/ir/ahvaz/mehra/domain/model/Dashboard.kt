@@ -11,6 +11,12 @@ data class OccupancyPoint(
     val percent: Int get() = if (total <= 0) 0 else (occupied * 100) / total
 }
 
+/** One day of received revenue (rial) — feeds the 7-day revenue chart. */
+data class RevenuePoint(
+    val date: LocalDate,
+    val amountRial: Long,
+)
+
 enum class ActivityKind(val labelFa: String) {
     RESERVATION("رزرو"),
     CHECK_IN("پذیرش"),
@@ -58,6 +64,7 @@ data class DashboardSnapshot(
     val revenueTodayRial: Long = 0L,
     val occupancyPercent: Int = 0,
     val occupancySeries: List<OccupancyPoint> = emptyList(),
+    val revenueSeries: List<RevenuePoint> = emptyList(),
     val recentActivities: List<ActivityItem> = emptyList(),
     val alerts: List<AlertItem> = emptyList(),
     val businessDate: LocalDate? = null,

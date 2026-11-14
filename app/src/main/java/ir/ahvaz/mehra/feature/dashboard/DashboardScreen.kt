@@ -336,6 +336,20 @@ private fun DashboardContent(
             }
         }
 
+        if (snapshot.revenueSeries.any { it.amountRial > 0 }) {
+            item { SectionHeader(title = "درآمد ۷ روز اخیر (میلیون ریال)") }
+            item {
+                MehraCard(modifier = Modifier.fillMaxWidth()) {
+                    BarSeriesChart(
+                        values = snapshot.revenueSeries.map { it.amountRial / 1_000_000f },
+                        labels = snapshot.revenueSeries.map { it.date.formatJalaliLongFa().split(" ").firstOrNull() ?: "" },
+                        barColor = colors.chartSecondary,
+                        showValueOnTop = true,
+                    )
+                }
+            }
+        }
+
         if (snapshot.alerts.isNotEmpty()) {
             item { SectionHeader(title = "اعلان‌های مهم") }
             items(snapshot.alerts, key = { it.id }) { alert ->

@@ -30,6 +30,15 @@ data class Reservation(
     val nights: Int get() = nightsBetween(checkIn, checkOut)
     val payableRial: Long get() = (totalRial - discountRial).coerceAtLeast(0L)
     val remainingRial: Long get() = (payableRial - paidRial).coerceAtLeast(0L)
+
+    /** True when the reservation is still live (not cancelled/expired/finished) and covers [day]. */
+    fun isActiveOn(day: LocalDate): Boolean =
+        status !in setOf(
+            ReservationStatus.CANCELLED,
+            ReservationStatus.EXPIRED,
+            ReservationStatus.CHECKED_OUT,
+            ReservationStatus.NO_SHOW,
+        ) && checkIn <= day && day < checkOut
 }
 
 /** An in-house stay created by check-in. */

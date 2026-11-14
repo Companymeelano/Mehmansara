@@ -76,6 +76,7 @@ import ir.ahvaz.mehra.domain.model.AvailableRoom
 import ir.ahvaz.mehra.domain.model.PaymentMethod
 import ir.ahvaz.mehra.domain.model.Reservation
 import ir.ahvaz.mehra.domain.model.ReservationStatus
+import ir.ahvaz.mehra.domain.model.isActiveOn
 import java.time.LocalDate
 
 @Composable
@@ -569,14 +570,7 @@ private fun WeekStrip(
     ) {
         days.forEach { day ->
             val j = day.toJalali()
-            val active = reservations.filter { r ->
-                r.status !in setOf(
-                    ReservationStatus.CANCELLED,
-                    ReservationStatus.EXPIRED,
-                    ReservationStatus.CHECKED_OUT,
-                    ReservationStatus.NO_SHOW,
-                ) && r.checkIn <= day && day < r.checkOut
-            }
+            val active = reservations.filter { it.isActiveOn(day) }
             val isSelected = selected == day
             Surface(
                 shape = RoundedCornerShape(14.dp),

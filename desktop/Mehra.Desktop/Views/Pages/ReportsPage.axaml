@@ -2,7 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Mehra.Desktop.Views.Pages.ReportsPage">
   <StackPanel Spacing="12">
-    <TextBlock Text="گزارش‌ها" FontSize="22" Classes="bold" />
+    <Border Background="#232B3A" CornerRadius="10" Padding="16,12" Margin="0,0,0,6">
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <Border Width="10" Height="10" CornerRadius="5" Background="#C8A96A" VerticalAlignment="Center" />
+        <TextBlock Text="گزارش‌ها" FontSize="22" FontWeight="Bold" Foreground="#C8A96A" />
+        <TextBlock Text="مهرآ — مهمان‌پذیر فرهنگیان اهواز" FontSize="12" Foreground="#9AA7C7" VerticalAlignment="Center" />
+      </StackPanel>
+    </Border>
     <StackPanel Orientation="Horizontal" Spacing="10">
       <TextBlock Text="نوع گزارش:" VerticalAlignment="Center" />
       <ComboBox x:Name="ReportCombo" Width="280" SelectionChanged="OnReportChanged" />
