@@ -1,11 +1,18 @@
 b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0.0-debug.apk
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
-# Windows v1.1.5 (final, run 43501180645) — SQL-2022-proof: installer+app auto-resolve server ((localdb)/localhost/.SQLEXPRESS), DB auto-created, schema auto-run — branch ci-artifacts
+# Windows v1.1.6 (final, run 43537948834) — branded reports page; SQL-2022-proof installer+app unchanged in behaviour — branch ci-artifacts
+72bd3e1c43076e03daa5ad5bb3cce5c539216b8aab60ab60b70ed204a8951603  ci-artifacts:setup/MehraSetup.exe  (89,554,739 bytes)
+d51878f009a1a1ab428cf737dcdb810b154fc09685cebd904b55dd39fac859f5  ci-artifacts:exe/Mehra.exe  (94,196,616 bytes)
+7cb56b08ff79b4a33b66e7a41a90cb5d04223eb6591de327152ef1389d96597b  ci-artifacts:exe/Mehra-win-x64.zip  (41,817,414 bytes)
+# Windows v1.1.5 (superseded, run 43501180645) — SQL-2022-proof: installer+app auto-resolve server ((localdb)/localhost/.SQLEXPRESS), DB auto-created, schema auto-run — branch ci-artifacts
 7e6eea99aa6341720d6eaf857efbad074d7e5ef90e92d18d09ccbec7bf716403  ci-artifacts:setup/MehraSetup.exe  (89,554,821 bytes)
 ab05b91557ba29f128266b414279a395ff3116b6976a53a771c435222ec59bd8  ci-artifacts:exe/Mehra.exe  (94,196,616 bytes)
 b6603ac63fa3ef4d3f1029a025c505e96ecd8505c7a13bfc22951f9d42681d59  ci-artifacts:exe/Mehra-win-x64.zip  (41,817,177 bytes)
 
-# Android v1.6.0 (final, run 43522632918) — loyalty tiers + progress, reservation week strip, housekeeping board, branded PDF, haptics/shimmer, contrast, unit tests — branch ci-artifacts
+# Android v1.7.0 (final, run 43538450369) — revenue 7-day chart, isActiveOn, unit+Robolectric tests, CHANGELOG — branch ci-artifacts
+9890050dac39ab82c07e9c1b7f47b19ffdf29ea779c8982a359e0f7f5e9591c4  ci-artifacts:apk/app-release.apk  (14,795,230 bytes, v1.7.0 release, run 43538450369)
+a3a6733f7a66757a9201ecfcf7876b14a484f3436bd57587db3d3c88031ed2ba  ci-artifacts:apk/app-debug.apk  (22,039,221 bytes, v1.7.0 debug, run 43538450369)
+# Android v1.6.0 (superseded, run 43522632918) — loyalty tiers + progress, reservation week strip, housekeeping board, branded PDF, haptics/shimmer, contrast, unit tests — branch ci-artifacts
 3061976fae90cf40cdd5485a09b7b1c8e0edb93472efcb4e2f7e962773c213f9  ci-artifacts:apk/app-release.apk  (14,795,247 bytes, v1.6.0 release, run 43522632918)
 316ce532d7a3a1bc8227373c4f0a4cb764f46171bb4e1bf670e187b9a98a09e6  ci-artifacts:apk/app-debug.apk  (22,039,200 bytes, v1.6.0 debug, run 43522632918)
 # Android v1.5.0 (superseded by v1.6.0, run 43518639511) — luxury UX upgrade: command palette + voice search, radial quick-actions FAB, floor-board rooms, live dashboard hero, +3 themes, VIP guest hero, visual reports; data PERSISTED on-device (encrypted); direct SQL test screen (1433) — release always signed — branch ci-artifacts
