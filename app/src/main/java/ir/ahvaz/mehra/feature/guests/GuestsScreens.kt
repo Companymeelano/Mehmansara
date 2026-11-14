@@ -635,7 +635,7 @@ fun GuestFormScreen(
                 options = state.rooms,
                 selected = state.rooms.firstOrNull { it.id == draft.roomId },
                 onSelect = { room -> viewModel.updateDraft { it.copy(roomId = room.id) } },
-                optionLabel = { "اتاق ${room.roomNumber.toPersianDigits()} — ${room.roomTypeName}" },
+                optionLabel = { "اتاق ${it.roomNumber.toPersianDigits()} — ${it.roomTypeName}" },
                 placeholder = "بدون تخصیص اتاق",
             )
             Spacer(modifier = Modifier.height(10.dp))
