@@ -123,5 +123,5 @@ Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or conside
 Warning: The [Setup] section directive "PrivilegesRequired" is set to "admin" but per-user areas (userdesktop,userfonts,userstartup) are used by the script. Regardless of the version of Windows, if the installation is running in administrative install mode then you should be careful about making any per-user area changes: such changes may not achieve what you are intending. See the "UsedUserAreasWarning" topic in help file for more information.
 Warning: Line 531, Column 10: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
 
-Successful compile (35.172 sec). Resulting Setup program filename is:
+Successful compile (34.484 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
