@@ -9,7 +9,10 @@ d51878f009a1a1ab428cf737dcdb810b154fc09685cebd904b55dd39fac859f5  ci-artifacts:e
 ab05b91557ba29f128266b414279a395ff3116b6976a53a771c435222ec59bd8  ci-artifacts:exe/Mehra.exe  (94,196,616 bytes)
 b6603ac63fa3ef4d3f1029a025c505e96ecd8505c7a13bfc22951f9d42681d59  ci-artifacts:exe/Mehra-win-x64.zip  (41,817,177 bytes)
 
-# Android v1.8.0 (final, run 43636732290) — UI fixes from device screenshots: GradientText block bug, clipped center FAB, gold stat chips, luminance-aware status bar — branch ci-artifacts
+# Android v1.9.0 (final, run 43637719011) — count-up on dashboard tiles + tip-of-the-day on hero — branch ci-artifacts
+6f12411ce36a1f4f8d5b8844ef3622c002d06c0fedbed294edd62895b5485b3c0  ci-artifacts:apk/app-release.apk  (14,795,242 bytes, v1.9.0 release, run 43637719011)
+67d3a072ea13a01d685f3572715021dc0f6bbf9cdfde41430383ff4a19072a1b  ci-artifacts:apk/app-debug.apk  (22,039,233 bytes, v1.9.0 debug, run 43637719011)
+# Android v1.8.0 (superseded, run 43636732290) — UI fixes from device screenshots: GradientText block bug, clipped center FAB, gold stat chips, luminance-aware status bar — branch ci-artifacts
 fdeeaa04350b9fdcaf9d12de47dcf841b1270f8bdc1d5b6a824319798b50f16d  ci-artifacts:apk/app-release.apk  (14,795,243 bytes, v1.8.0 release, run 43636732290)
 e9c7efefc071101285c61f34b75b8859dac1e39504f77fb04bb99fa442b1ffb6  ci-artifacts:apk/app-debug.apk  (22,039,227 bytes, v1.8.0 debug, run 43636732290)
 # Android v1.7.0 (superseded, run 43538450369) — revenue 7-day chart, isActiveOn, unit+Robolectric tests, CHANGELOG — branch ci-artifacts
