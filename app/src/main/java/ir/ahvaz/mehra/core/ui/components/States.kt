@@ -124,8 +124,8 @@ fun EmptyState(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(96.dp)
-                    .shadow(10.dp, CircleShape)
+                    .size(112.dp)
+                    .shadow(12.dp, CircleShape)
                     .background(
                         Brush.radialGradient(
                             listOf(
@@ -141,7 +141,7 @@ fun EmptyState(
                     imageVector = icon,
                     contentDescription = null,
                     tint = colors.onAccent,
-                    modifier = Modifier.size(44.dp),
+                    modifier = Modifier.size(52.dp),
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
@@ -160,8 +160,12 @@ fun EmptyState(
                 )
             }
             if (actionLabel != null && onAction != null) {
-                Spacer(modifier = Modifier.height(10.dp))
-                TextButton(onClick = onAction) { Text(actionLabel) }
+                Spacer(modifier = Modifier.height(18.dp))
+                PrimaryButton(
+                    text = actionLabel!!,
+                    onClick = onAction!!,
+                    modifier = Modifier.width(240.dp),
+                )
             }
         }
     }

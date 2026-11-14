@@ -528,6 +528,7 @@ fun GuestFormScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 MehraTextField(
                     label = "نام",
+            MehraCard(modifier = Modifier.fillMaxWidth()) {
                     value = draft.firstName,
                     onValueChange = { value -> viewModel.updateDraft { it.copy(firstName = value) } },
                     modifier = Modifier.weight(1f),
@@ -635,6 +636,8 @@ fun GuestFormScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
+            }
+
             }
 
             Spacer(modifier = Modifier.height(20.dp))

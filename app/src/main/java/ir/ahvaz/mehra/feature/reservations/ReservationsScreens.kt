@@ -389,6 +389,7 @@ fun NewReservationScreen(
             }
 
             SectionHeader(title = "مهمان")
+            MehraCard(modifier = Modifier.fillMaxWidth()) {
             MehraSearchField(
                 value = state.guestSearch,
                 onValueChange = viewModel::onGuestSearchChange,
@@ -530,6 +531,8 @@ fun NewReservationScreen(
                 onValueChange = { value -> viewModel.updateDraft { it.copy(notes = value) } },
                 singleLine = false,
             )
+
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
             PrimaryButton(
