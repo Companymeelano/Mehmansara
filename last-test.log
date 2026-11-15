@@ -23,8 +23,8 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
-> Task :app:generateDebugResValues FROM-CACHE
 > Task :app:checkDebugAarMetadata
+> Task :app:generateDebugResValues FROM-CACHE
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources FROM-CACHE
 > Task :app:mergeDebugResources FROM-CACHE
@@ -48,15 +48,12 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:kspDebugKotlin
 
 > Task :app:compileDebugKotlin FAILED
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/components/Buttons.kt:64:15 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:14:47 Unresolved reference 'drawCircle'.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:83:20 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:84:20 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:85:20 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:96:85 Unresolved reference 'Color'.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:103:40 Unresolved reference 'Color'.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:103:79 Unresolved reference 'Color'.
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:110:83 Unresolved reference 'Color'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/components/Buttons.kt:81:27 None of the following candidates is applicable:
+fun verticalGradient(vararg colorStops: Pair<Float, Color>, startY: Float = ..., endY: Float = ..., tileMode: TileMode = ...): Brush
+fun verticalGradient(colors: List<Color>, startY: Float = ..., endY: Float = ..., tileMode: TileMode = ...): Brush
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/components/Buttons.kt:88:27 None of the following candidates is applicable:
+fun verticalGradient(vararg colorStops: Pair<Float, Color>, startY: Float = ..., endY: Float = ..., tileMode: TileMode = ...): Brush
+fun verticalGradient(colors: List<Color>, startY: Float = ..., endY: Float = ..., tileMode: TileMode = ...): Brush
 
 FAILURE: Build failed with an exception.
 
@@ -265,5 +262,5 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	... 2 more
 
 
-BUILD FAILED in 44s
+BUILD FAILED in 40s
 22 actionable tasks: 14 executed, 8 from cache
