@@ -80,15 +80,15 @@ fun PrimaryButton(
                 drawRect(
                     Brush.verticalGradient(
                         listOf(Color.White.copy(alpha = 0.35f), Color.Transparent),
-                        start = Offset(0f, 0f),
-                        end = Offset(0f, size.height * 0.30f),
+                        startY = 0f,
+                        endY = size.height * 0.30f,
                     ),
                 )
                 drawRect(
                     Brush.verticalGradient(
                         listOf(Color.Transparent, Color(0xFF0A1128).copy(alpha = 0.28f)),
-                        start = Offset(0f, size.height * 0.72f),
-                        end = Offset(0f, size.height),
+                        startY = size.height * 0.72f,
+                        endY = size.height,
                     ),
                 )
                 val bandW = size.width * 0.35f
