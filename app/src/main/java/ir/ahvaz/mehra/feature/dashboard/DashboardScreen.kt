@@ -3,10 +3,17 @@ package ir.ahvaz.mehra.feature.dashboard
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.StrokeCap
+import androidx.compose.ui.layout.matchParentSize
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
@@ -20,6 +27,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
@@ -117,10 +127,11 @@ fun DashboardScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val dashboard = state.dashboard
     val snapshot = dashboard.data
+    val now = rememberTehranClock()
 
     MehraScreen(
-        title = "خانه",
-        subtitle = Constants.HOTEL_NAME + " • " + TehranTime.today().formatJalaliLongFa(),
+        title = timeOfDayGreetingFa(now.hour),
+        subtitle = TehranTime.today().formatJalaliLongFa(),
         offline = dashboard.fromCache || !state.isOnline,
         pendingCount = state.pendingOperations,
         actions = {
@@ -245,6 +256,8 @@ private fun DashboardContent(
                 }
             }
         }
+
+        item { SectionHeader(title = "نمای کلی امروز") }
 
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -505,9 +518,9 @@ private fun WelcomeContent(
                         Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
                         RoundedCornerShape(24.dp),
                     )
-                    .padding(16.dp),
+                    .padding(14.dp),
             ) {
-                // soft spotlight behind the brand block — luxury depth on the hero
+                // soft gold spotlight behind the brand block — luxury depth on the hero
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -523,40 +536,15 @@ private fun WelcomeContent(
                             ),
                         ),
                 )
+                // v4.0.0: compact hero — brand only; greeting + date live in the header,
+                // so nothing is repeated between header and card.
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    val floatT = rememberInfiniteTransition(label = "heroFloat")
-                    val floatY by floatT.animateFloat(
-                        initialValue = -3f,
-                        targetValue = 3f,
-                        animationSpec = infiniteRepeatable(
-                            tween(durationMillis = 2600, easing = FastOutSlowInEasing),
-                            RepeatMode.Reverse,
-                        ),
-                        label = "heroFloatY",
-                    )
-                    Box(
-                        modifier = Modifier.graphicsLayer { translationY = floatY.dp.toPx() },
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(88.dp)
-                                .align(Alignment.Center)
-                                .background(
-                                    Brush.radialGradient(
-                                        listOf(colors.accentMid.copy(alpha = 0.50f), Color.Transparent),
-                                    ),
-                                    CircleShape,
-                                ),
-                        )
-                        Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 56.dp)
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
                     GradientText(
                         text = "مهرآ",
-                        style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
                         brush = LocalAccentBrush.current,
                     )
                     Text(
@@ -565,12 +553,7 @@ private fun WelcomeContent(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
-                    Text(
-                        text = TehranTime.today().formatJalaliLongFa(),
-                        color = Color.White.copy(alpha = 0.66f),
-                        style = MaterialTheme.typography.labelMedium,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     GradientText(
                         text = "سامانهٔ هوشمند مدیریت اقامت",
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
@@ -582,17 +565,56 @@ private fun WelcomeContent(
 
         item { SectionHeader(title = "اقدام سریع") }
         item {
+            val quickActions = rememberLazyListState()
+            Box {
+                LazyRow(
+                    state = quickActions,
+                    modifier = Modifier.fillMaxWidth(),
+                    // peek: the next card peeks in from the edge so scrolling is discoverable
+                    contentPadding = PaddingValues(end = 76.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    item { QuickActionTile("پذیرش", "ورود و خروج", Icons.Rounded.Login, onOpenReception) }
+                    item { QuickActionTile("رزرو جدید", "ثبت رزرو", Icons.Rounded.EventAvailable, onNewReservation) }
+                    item { QuickActionTile("مهمان جدید", "پروندهٔ مهمان", Icons.Rounded.PersonAdd, onCreateGuest) }
+                    item { QuickActionTile("اتاق جدید", "ثبت اتاق", Icons.Rounded.Bed, onCreateRoom) }
+                    item { QuickActionTile("جست‌وجو", "همهٔ اطلاعات", Icons.Rounded.Search, onOpenSearch) }
+                }
+                // fade on the cut-off edge
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .drawWithContent {
+                            drawContent()
+                            val w = 26.dp.toPx()
+                            drawRect(
+                                Brush.horizontalGradient(
+                                    listOf(colors.bgBottom.copy(alpha = 0.95f), Color.Transparent),
+                                    start = Offset(0f, 0f),
+                                    end = Offset(w, 0f),
+                                ),
+                            )
+                        },
+                )
+            }
+            // scroll indicator dots
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    .padding(top = 6.dp),
+                horizontalArrangement = Arrangement.Center,
             ) {
-                QuickActionTile("پذیرش", "ورود و خروج", Icons.Rounded.Login, onOpenReception)
-                QuickActionTile("رزرو جدید", "ثبت رزرو", Icons.Rounded.EventAvailable, onNewReservation)
-                QuickActionTile("مهمان جدید", "پروندهٔ مهمان", Icons.Rounded.PersonAdd, onCreateGuest)
-                QuickActionTile("اتاق جدید", "ثبت اتاق", Icons.Rounded.Bed, onCreateRoom)
-                QuickActionTile("جست‌وجو", "همهٔ اطلاعات", Icons.Rounded.Search, onOpenSearch)
+                repeat(5) { i ->
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 3.dp)
+                            .size(if (i == quickActions.firstVisibleItemIndex) 7.dp else 5.dp)
+                            .background(
+                                if (i == quickActions.firstVisibleItemIndex) colors.accentMid else colors.accentMid.copy(alpha = 0.30f),
+                                CircleShape,
+                            ),
+                    )
+                }
             }
         }
 
@@ -633,12 +655,12 @@ private fun QuickActionTile(
     onClick: () -> Unit,
 ) {
     MehraCard(
-        modifier = Modifier.width(104.dp),
+        modifier = Modifier.width(112.dp),
         onClick = onClick,
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 14.dp),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon3D(icon = icon, contentDescription = null, size = 40.dp)
+            Icon3D(icon = icon, contentDescription = null, size = 44.dp)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
@@ -666,8 +688,6 @@ private fun QuickActionTile(
 @Composable
 private fun DashboardHero(snapshot: DashboardSnapshot) {
     val colors = MehraTheme.colors
-    val now = rememberTehranClock()
-    val occupancy = AnimatedInt(snapshot.occupancyPercent)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -683,31 +703,22 @@ private fun DashboardHero(snapshot: DashboardSnapshot) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = timeOfDayGreetingFa(now.hour),
-                        color = Color.White.copy(alpha = 0.85f),
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                    Text(
-                        text = TehranTime.today().formatJalaliLongFa(),
+                        text = Constants.HOTEL_NAME,
                         color = Color.White,
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                     )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    GradientText(
+                        text = "سامانهٔ هوشمند مدیریت اقامت",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                        brush = LocalAccentBrush.current,
+                    )
                 }
-                Text(
-                    text = now.clockFa(),
-                    color = Color.White.copy(alpha = 0.92f),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
+                OccupancyRing(percent = snapshot.occupancyPercent, modifier = Modifier.size(88.dp))
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                HeroStat(
-                    label = "اشغال امروز",
-                    value = occupancy.toString().toPersianDigits() + "٪",
-                    modifier = Modifier.weight(1f),
-                )
                 HeroStat(
                     label = "ورود امروز",
                     value = snapshot.todayCheckIns.toString().toPersianDigits(),
@@ -727,6 +738,56 @@ private fun DashboardHero(snapshot: DashboardSnapshot) {
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
+        }
+    }
+}
+
+/** v4.0.0: animated champagne-gold progress ring for the hero card's occupancy. */
+@Composable
+private fun OccupancyRing(percent: Int, modifier: Modifier = Modifier) {
+    val colors = MehraTheme.colors
+    val animated by animateFloatAsState(
+        targetValue = percent.coerceIn(0, 100) / 100f,
+        animationSpec = tween(durationMillis = 900, easing = FastOutSlowInEasing),
+        label = "occupancyRing",
+    )
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val stroke = 9.dp.toPx()
+            val diameter = size.minDimension - stroke
+            val topLeft = Offset((size.width - diameter) / 2f, (size.height - diameter) / 2f)
+            val arcSize = Size(diameter, diameter)
+            drawArc(
+                color = Color.White.copy(alpha = 0.16f),
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                topLeft = topLeft,
+                size = arcSize,
+                style = Stroke(width = stroke, cap = StrokeCap.Round),
+            )
+            drawArc(
+                brush = Brush.sweepGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd)),
+                startAngle = -90f,
+                sweepAngle = 360f * animated,
+                useCenter = false,
+                topLeft = topLeft,
+                size = arcSize,
+                style = Stroke(width = stroke, cap = StrokeCap.Round),
+            )
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = AnimatedInt(percent).toString().toPersianDigits() + "٪",
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = "اشغال",
+                color = Color.White.copy(alpha = 0.75f),
+                style = MaterialTheme.typography.labelSmall,
+            )
         }
     }
 }

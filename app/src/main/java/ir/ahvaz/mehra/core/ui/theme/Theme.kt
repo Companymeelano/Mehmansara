@@ -84,11 +84,27 @@ fun MehraTheme(
             val g1 by aurora.animateFloat(0f, 1f, infiniteRepeatable(tween(24000, easing = LinearEasing), RepeatMode.Reverse), label = "g1")
             val g2 by aurora.animateFloat(1f, 0f, infiniteRepeatable(tween(32000, easing = LinearEasing), RepeatMode.Reverse), label = "g2")
             val g3 by aurora.animateFloat(0f, 1f, infiniteRepeatable(tween(38000, easing = LinearEasing), RepeatMode.Reverse), label = "g3")
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backdrop)
-                    .drawWithContent {
+            Box(modifier = Modifier.fillMaxSize().background(backdrop)) {
+                // v4.0.0: faint Iranian geometric lattice (two diagonal families) on a
+                // static layer — 4-5% opacity, no per-frame cost.
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .drawWithContent {
+                            val step = 64.dp.toPx()
+                            val line = mehraColors.topBarEnd.copy(alpha = 0.045f)
+                            var x = -size.height
+                            while (x < size.width + size.height) {
+                                drawLine(line, Offset(x, 0f), Offset(x + size.height, size.height), 1f)
+                                drawLine(line.copy(alpha = 0.03f), Offset(x, size.height), Offset(x + size.height, 0f), 1f)
+                                x += step
+                            }
+                        },
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .drawWithContent {
                         drawContent()
                         val w = size.width
                         val h = size.height
@@ -101,21 +117,22 @@ fun MehraTheme(
                         )
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(Color(0xFF4A6BB0).copy(alpha = 0.14f), Color.Transparent),
+                                listOf(Color(0xFF3D6BE0).copy(alpha = 0.13f), Color.Transparent),
                             ),
                             radius = w * 0.8f,
                             center = Offset(w * (0.9f - 0.6f * g2), h * (0.55f + 0.3f * g3)),
                         )
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(mehraColors.accentMid.copy(alpha = 0.20f), Color.Transparent),
+                                listOf(mehraColors.accentMid.copy(alpha = 0.24f), Color.Transparent),
                             ),
                             radius = w * 0.85f,
                             center = Offset(w * (0.5f + 0.4f * g3), h * (0.95f - 0.35f * g1)),
-                        )
-                    },
-            ) {
-                content()
+                            )
+                        },
+                ) {
+                    content()
+                }
             }
         }
     }

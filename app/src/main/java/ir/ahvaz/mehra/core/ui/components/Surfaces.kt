@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
@@ -76,19 +77,30 @@ fun MehraScreen(
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (androidx.compose.foundation.layout.PaddingValues) -> Unit,
 ) {
-    Scaffold(
-        containerColor = Color.Transparent,
-        topBar = {
+    val colors = MehraTheme.colors
+    Box(modifier = Modifier.fillMaxSize()) {
+        // v4.0.0: paint the top-bar gradient behind the status bar as well, so status
+        // icons always sit on the navy bar — never white-on-light.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsTopHeight(WindowInsets.statusBars)
+                .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.16f), colors.topBarEnd))),
+        )
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
             MehraTopBar(title = title, subtitle = subtitle, onBack = onBack, actions = actions)
         },
         floatingActionButton = floatingActionButton,
         contentWindowInsets = WindowInsets.statusBars,
-    ) { padding ->
-        Column(modifier = Modifier.fillMaxSize()) {
-            if (offline || pendingCount > 0) {
-                SyncStatusStrip(offline = offline, pendingCount = pendingCount)
+        ) { padding ->
+            Column(modifier = Modifier.fillMaxSize()) {
+                if (offline || pendingCount > 0) {
+                    SyncStatusStrip(offline = offline, pendingCount = pendingCount)
+                }
+                content(padding)
             }
-            content(padding)
         }
     }
 }
@@ -151,7 +163,7 @@ fun MehraTopBar(
                         icon = MehraIcons.Logo,
                         contentDescription = null,
                         size = 34.dp,
-                        modifier = Modifier.padding(start = 4.dp, end = 2.dp),
+                        modifier = Modifier.padding(start = 4.dp, end = 8.dp),
                     )
                 }
                 Column(modifier = Modifier.weight(1f)) {
@@ -261,7 +273,7 @@ fun MehraCard(
     Surface(
         modifier = base.shadow(8.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.16f), spotColor = Color(0xFF0A1128).copy(alpha = 0.22f)),
         shape = shape,
-        color = MaterialTheme.colorScheme.surface.copy(alpha = if (colors.isDark) 0.82f else 0.90f),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = if (colors.isDark) 0.82f else 0.95f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
             width = 1.dp,

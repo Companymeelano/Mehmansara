@@ -51,7 +51,7 @@ fun StatTile(
     Surface(
         modifier = surfaceModifier,
         shape = shape,
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = if (MehraTheme.colors.isDark) 0.85f else 0.95f),
         border = BorderStroke(1.dp, MehraTheme.colors.cardBorder),
     ) {
         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
@@ -60,9 +60,9 @@ fun StatTile(
                     Icon3D(
                         icon = icon,
                         contentDescription = null,
-                        size = 34.dp,
+                        size = 38.dp,
                         tone = accent,
-                        glyphScale = 0.6f,
+                        glyphScale = 0.58f,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }

@@ -1,6 +1,9 @@
 package ir.ahvaz.mehra.navigation
 
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -413,6 +416,13 @@ private fun MehraBottomBar(
                         it.route == destination.route
                     } == true
                     val icon = ImageVector.vectorResource(destination.iconRes)
+                    // v4.0.0: active tab = glowing 3D gold chip with a soft scale-up;
+                    // inactive = high-contrast glyph on a neutral chip (WCAG AA).
+                    val scale by animateFloatAsState(
+                        targetValue = if (selected) 1.12f else 1f,
+                        animationSpec = tween(260, easing = FastOutSlowInEasing),
+                        label = "navScale",
+                    )
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -420,33 +430,49 @@ private fun MehraBottomBar(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                     ) {
-                        if (selected) {
-                            Icon3D(
-                                icon = icon,
-                                contentDescription = destination.label,
-                                size = 40.dp,
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .background(colors.accentMid.copy(alpha = 0.12f), RoundedCornerShape(12.dp)),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Icon(
-                                    imageVector = icon,
-                                    contentDescription = destination.label,
-                                    tint = colors.accentMid.copy(alpha = 0.9f),
-                                    modifier = Modifier.size(23.dp),
+                        Box(contentAlignment = Alignment.Center) {
+                            if (selected) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(52.dp)
+                                        .background(
+                                            Brush.radialGradient(
+                                                listOf(colors.glow.copy(alpha = 0.45f), Color.Transparent),
+                                            ),
+                                            CircleShape,
+                                        ),
                                 )
+                            }
+                            Box(modifier = Modifier.graphicsLayer { scaleX = scale; scaleY = scale }) {
+                                if (selected) {
+                                    Icon3D(
+                                        icon = icon,
+                                        contentDescription = destination.label,
+                                        size = 42.dp,
+                                    )
+                                } else {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .background(scheme.surfaceVariant, RoundedCornerShape(12.dp)),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Icon(
+                                            imageVector = icon,
+                                            contentDescription = destination.label,
+                                            tint = scheme.onSurfaceVariant,
+                                            modifier = Modifier.size(24.dp),
+                                        )
+                                    }
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.height(3.dp))
                         Text(
                             text = destination.label,
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (selected) colors.accentEnd else colors.accentMid.copy(alpha = 0.8f),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
+                            color = if (selected) colors.accentEnd else scheme.onSurfaceVariant,
                             maxLines = 1,
                         )
                     }
