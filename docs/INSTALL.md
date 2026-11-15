@@ -52,7 +52,7 @@ adb install -r app/build/outputs/apk/release/app-release.apk
 ## 6. تنظیمات مهم نسخه
 
 - `applicationId` = `ir.ahvaz.mehra` (دیباگ: `ir.ahvaz.mehra.debug`)
-- `versionName` = `3.0.0`، `versionCode` = 23 (اندروید) — نسخهٔ ویندوز ۱.۱.۶ بدون تغییر
+- `versionName` = `3.1.0`، `versionCode` = 24 (اندروید) — نسخهٔ ویندوز ۱.۱.۶ بدون تغییر
 - `allowBackup=false` — دادهٔ مهمان در بکاپ ابری قرار نمی‌گیرد.
 
 ## 7. عیب‌یابی
