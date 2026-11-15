@@ -78,12 +78,12 @@ fun MehraTheme(
             typography = typography,
             shapes = MehraShapes,
         ) {
-            // v3.0.0: living aurora backdrop — three huge, very slow radial glows drift
-            // over the base gradient, so the whole app feels alive (pure canvas drawing).
+            // v3.1.0: royal-navy aurora — three huge, very slow radial glows in the screenshot
+            // navy + sapphire + gold drift over the base gradient (pure canvas drawing).
             val aurora = rememberInfiniteTransition(label = "aurora")
-            val g1 by aurora.animateFloat(0f, 1f, infiniteRepeatable(tween(19000, easing = LinearEasing), RepeatMode.Reverse), label = "g1")
-            val g2 by aurora.animateFloat(1f, 0f, infiniteRepeatable(tween(26000, easing = LinearEasing), RepeatMode.Reverse), label = "g2")
-            val g3 by aurora.animateFloat(0f, 1f, infiniteRepeatable(tween(31000, easing = LinearEasing), RepeatMode.Reverse), label = "g3")
+            val g1 by aurora.animateFloat(0f, 1f, infiniteRepeatable(tween(24000, easing = LinearEasing), RepeatMode.Reverse), label = "g1")
+            val g2 by aurora.animateFloat(1f, 0f, infiniteRepeatable(tween(32000, easing = LinearEasing), RepeatMode.Reverse), label = "g2")
+            val g3 by aurora.animateFloat(0f, 1f, infiniteRepeatable(tween(38000, easing = LinearEasing), RepeatMode.Reverse), label = "g3")
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -94,21 +94,21 @@ fun MehraTheme(
                         val h = size.height
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(mehraColors.accentStart.copy(alpha = 0.16f), Color.Transparent),
+                                listOf(mehraColors.topBarEnd.copy(alpha = 0.20f), Color.Transparent),
                             ),
                             radius = w * 0.95f,
                             center = Offset(w * (0.15f + 0.7f * g1), h * (0.10f + 0.25f * g2)),
                         )
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(Color(0xFF3B82F6).copy(alpha = 0.10f), Color.Transparent),
+                                listOf(Color(0xFF4A6BB0).copy(alpha = 0.14f), Color.Transparent),
                             ),
                             radius = w * 0.8f,
                             center = Offset(w * (0.9f - 0.6f * g2), h * (0.55f + 0.3f * g3)),
                         )
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(mehraColors.accentEnd.copy(alpha = 0.14f), Color.Transparent),
+                                listOf(mehraColors.accentMid.copy(alpha = 0.20f), Color.Transparent),
                             ),
                             radius = w * 0.85f,
                             center = Offset(w * (0.5f + 0.4f * g3), h * (0.95f - 0.35f * g1)),

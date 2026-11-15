@@ -71,12 +71,26 @@ fun PrimaryButton(
     Box(
         modifier = modifier
             .height(54.dp)
-            .then(if (active) Modifier.shadow(8.dp, shape) else Modifier)
+            .then(if (active) Modifier.shadow(9.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.25f), spotColor = Color(0xFF0A1128).copy(alpha = 0.30f)) else Modifier)
             .clip(shape)
             .background(brush)
             .alpha(if (active) 1f else 0.45f)
             .drawWithContent {
                 drawContent()
+                drawRect(
+                    Brush.verticalGradient(
+                        listOf(Color.White.copy(alpha = 0.35f), Color.Transparent),
+                        start = Offset(0f, 0f),
+                        end = Offset(0f, size.height * 0.30f),
+                    ),
+                )
+                drawRect(
+                    Brush.verticalGradient(
+                        listOf(Color.Transparent, Color(0xFF0A1128).copy(alpha = 0.28f)),
+                        start = Offset(0f, size.height * 0.72f),
+                        end = Offset(0f, size.height),
+                    ),
+                )
                 val bandW = size.width * 0.35f
                 val x = size.width * sheen
                 drawRect(

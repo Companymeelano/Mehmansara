@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.CircleShape
@@ -91,6 +92,7 @@ import ir.ahvaz.mehra.core.ui.components.StatusPill
 import ir.ahvaz.mehra.core.ui.icons.MehraIcons
 import ir.ahvaz.mehra.core.ui.theme.LocalAccentBrush
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
+import ir.ahvaz.mehra.core.ui.theme.lighten
 import ir.ahvaz.mehra.core.common.Constants
 import ir.ahvaz.mehra.core.ui.theme.tint
 import ir.ahvaz.mehra.domain.model.DashboardSnapshot
@@ -497,9 +499,10 @@ private fun WelcomeContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(12.dp, RoundedCornerShape(24.dp))
+                    .shadow(12.dp, RoundedCornerShape(24.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
+                    .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(24.dp))
                     .background(
-                        Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd)),
+                        Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
                         RoundedCornerShape(24.dp),
                     )
                     .padding(16.dp),
@@ -511,8 +514,8 @@ private fun WelcomeContent(
                         .background(
                             Brush.radialGradient(
                                 colors = listOf(
-                                    Color.White.copy(alpha = 0.14f),
-                                    Color.White.copy(alpha = 0.05f),
+                                    colors.accentMid.copy(alpha = 0.32f),
+                                    Color.White.copy(alpha = 0.10f),
                                     Color.Transparent,
                                 ),
                                 center = androidx.compose.ui.geometry.Offset(0.5f, 0.22f),
@@ -537,6 +540,17 @@ private fun WelcomeContent(
                     Box(
                         modifier = Modifier.graphicsLayer { translationY = floatY.dp.toPx() },
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .size(88.dp)
+                                .align(Alignment.Center)
+                                .background(
+                                    Brush.radialGradient(
+                                        listOf(colors.accentMid.copy(alpha = 0.50f), Color.Transparent),
+                                    ),
+                                    CircleShape,
+                                ),
+                        )
                         Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 56.dp)
                     }
                     Spacer(modifier = Modifier.height(10.dp))
@@ -657,9 +671,10 @@ private fun DashboardHero(snapshot: DashboardSnapshot) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(12.dp, RoundedCornerShape(24.dp))
+            .shadow(12.dp, RoundedCornerShape(24.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
+            .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(24.dp))
             .background(
-                Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd)),
+                Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
                 RoundedCornerShape(24.dp),
             )
             .padding(18.dp),

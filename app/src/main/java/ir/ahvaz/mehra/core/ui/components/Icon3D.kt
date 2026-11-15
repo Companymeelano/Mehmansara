@@ -48,7 +48,7 @@ fun Icon3D(
     Box(
         modifier = modifier
             .size(size)
-            .shadow(7.dp, shape)
+            .shadow(8.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.20f), spotColor = Color(0xFF0A1128).copy(alpha = 0.26f))
             .background(Brush.linearGradient(stops), shape),
     ) {
         // gloss on the upper half + slight shading at the bottom edge -> 3D relief
@@ -59,7 +59,7 @@ fun Icon3D(
                     Brush.verticalGradient(
                         0.0f to Color.White.copy(alpha = 0.42f),
                         0.45f to Color.White.copy(alpha = 0.05f),
-                        1.0f to Color.Black.copy(alpha = 0.14f),
+                        1.0f to Color(0xFF0A1128).copy(alpha = 0.20f),
                     ),
                     shape,
                 ),
@@ -69,7 +69,7 @@ fun Icon3D(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.Black.copy(alpha = 0.30f),
+            tint = Color(0xFF0A1128).copy(alpha = 0.38f),
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(size * glyphScale)

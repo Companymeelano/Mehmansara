@@ -57,6 +57,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ir.ahvaz.mehra.core.ui.icons.MehraIcons
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
+import ir.ahvaz.mehra.core.ui.theme.lighten
 
 /**
  * Standard screen shell: a gradient top bar with the 3D brand chip, an optional status strip
@@ -114,14 +115,14 @@ fun MehraTopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd)))
+            .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.16f), colors.topBarEnd)))
             .drawWithContent {
                 drawContent()
                 val bandW = size.width * 0.22f
                 val x = size.width * sheen
                 drawRect(
                     Brush.linearGradient(
-                        listOf(Color.Transparent, Color.White.copy(alpha = 0.08f), Color.Transparent),
+                        listOf(Color.Transparent, Color.White.copy(alpha = 0.11f), Color.Transparent),
                         start = Offset(x - bandW, 0f),
                         end = Offset(x + bandW, size.height),
                     ),
@@ -184,7 +185,7 @@ fun MehraTopBar(
                         Brush.horizontalGradient(
                             listOf(
                                 colors.accentStart.copy(alpha = 0.95f),
-                                colors.accentMid.copy(alpha = 0.25f),
+                                colors.accentMid.copy(alpha = 0.55f),
                                 colors.accentEnd.copy(alpha = 0.95f),
                             )
                         )
@@ -258,7 +259,7 @@ fun MehraCard(
         },
     ).pressScale(isPressed)
     Surface(
-        modifier = base.shadow(6.dp, shape),
+        modifier = base.shadow(8.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.16f), spotColor = Color(0xFF0A1128).copy(alpha = 0.22f)),
         shape = shape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = if (colors.isDark) 0.82f else 0.90f),
         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -268,6 +269,7 @@ fun MehraCard(
                 listOf(
                     colors.accentStart.copy(alpha = 0.55f),
                     colors.cardBorder,
+                    Color(0xFF1B2740).copy(alpha = 0.10f),
                     colors.accentEnd.copy(alpha = 0.55f),
                 )
             ),
@@ -281,7 +283,7 @@ fun MehraCard(
                     .height(1.dp)
                     .background(
                         Brush.horizontalGradient(
-                            listOf(Color.Transparent, Color.White.copy(alpha = 0.32f), Color.Transparent),
+                            listOf(Color.Transparent, Color.White.copy(alpha = 0.40f), Color.Transparent),
                         ),
                     ),
             )
