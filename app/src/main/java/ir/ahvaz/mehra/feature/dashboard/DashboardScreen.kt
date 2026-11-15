@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.StrokeCap
-import androidx.compose.ui.layout.matchParentSize
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.foundation.layout.matchParentSize
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
@@ -590,8 +590,8 @@ private fun WelcomeContent(
                             drawRect(
                                 Brush.horizontalGradient(
                                     listOf(colors.bgBottom.copy(alpha = 0.95f), Color.Transparent),
-                                    start = Offset(0f, 0f),
-                                    end = Offset(w, 0f),
+                                    startX = 0f,
+                                    endX = w,
                                 ),
                             )
                         },
