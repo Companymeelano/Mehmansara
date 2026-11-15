@@ -35,24 +35,33 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
 > Task :app:javaPreCompileDebug FROM-CACHE
-> Task :app:processDebugManifestForPackage
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:preDebugUnitTestBuild UP-TO-DATE
 > Task :app:javaPreCompileDebugUnitTest FROM-CACHE
+> Task :app:processDebugManifestForPackage
 > Task :app:processDebugResources
 > Task :app:packageDebugUnitTestForUnitTest
 > Task :app:generateDebugUnitTestConfig
+> Task :app:kspDebugKotlin
 
-> Task :app:kspDebugKotlin FAILED
-e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/navigation/MehraNavGraph.kt:456:2 Expecting '}'
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/components/Buttons.kt:64:15 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:14:47 Unresolved reference 'drawCircle'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:83:20 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:84:20 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:85:20 Type 'androidx.compose.runtime.State<kotlin.Float>' has no method 'getValue(Nothing?, KProperty0<*>)', so it cannot serve as a delegate.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:96:85 Unresolved reference 'Color'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:103:40 Unresolved reference 'Color'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:103:79 Unresolved reference 'Color'.
+e: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/ui/theme/Theme.kt:110:83 Unresolved reference 'Color'.
 
 FAILURE: Build failed with an exception.
 
 * What went wrong:
-Execution failed for task ':app:kspDebugKotlin'.
+Execution failed for task ':app:compileDebugKotlin'.
 > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
    > Compilation error. See log for more details
 
@@ -62,7 +71,7 @@ Execution failed for task ':app:kspDebugKotlin'.
 > Get more help at https://help.gradle.org.
 
 * Exception is:
-org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:kspDebugKotlin'.
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileDebugKotlin'.
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
 	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
@@ -256,5 +265,5 @@ Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilat
 	... 2 more
 
 
-BUILD FAILED in 32s
-21 actionable tasks: 13 executed, 8 from cache
+BUILD FAILED in 44s
+22 actionable tasks: 14 executed, 8 from cache
