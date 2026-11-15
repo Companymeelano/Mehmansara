@@ -117,29 +117,10 @@ fun MehraTopBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     val colors = MehraTheme.colors
-    val sheenT = rememberInfiniteTransition(label = "topSheen")
-    val sheen by sheenT.animateFloat(
-        initialValue = -0.3f,
-        targetValue = 1.3f,
-        animationSpec = infiniteRepeatable(tween(durationMillis = 3800, delayMillis = 1200), RepeatMode.Restart),
-        label = "topSheenPos",
-    )
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.16f), colors.topBarEnd)))
-            .drawWithContent {
-                drawContent()
-                val bandW = size.width * 0.22f
-                val x = size.width * sheen
-                drawRect(
-                    Brush.linearGradient(
-                        listOf(Color.Transparent, Color.White.copy(alpha = 0.11f), Color.Transparent),
-                        start = Offset(x - bandW, 0f),
-                        end = Offset(x + bandW, size.height),
-                    ),
-                )
-            },
+            .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.16f), colors.topBarEnd))),
     ) {
         Column {
             Row(

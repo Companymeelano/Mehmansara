@@ -741,15 +741,11 @@ private fun DashboardHero(snapshot: DashboardSnapshot) {
     }
 }
 
-/** v4.0.0: animated champagne-gold progress ring for the hero card's occupancy. */
+/** v4.1.0: static champagne-gold progress ring for the hero card's occupancy (no animation). */
 @Composable
 private fun OccupancyRing(percent: Int, modifier: Modifier = Modifier) {
     val colors = MehraTheme.colors
-    val animated by animateFloatAsState(
-        targetValue = percent.coerceIn(0, 100) / 100f,
-        animationSpec = tween(durationMillis = 900, easing = FastOutSlowInEasing),
-        label = "occupancyRing",
-    )
+    val animated = percent.coerceIn(0, 100) / 100f
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val stroke = 9.dp.toPx()

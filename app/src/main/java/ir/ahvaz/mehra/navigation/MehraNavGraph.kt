@@ -416,13 +416,8 @@ private fun MehraBottomBar(
                         it.route == destination.route
                     } == true
                     val icon = ImageVector.vectorResource(destination.iconRes)
-                    // v4.0.0: active tab = glowing 3D gold chip with a soft scale-up;
+                    // v4.1.0: active tab = static glowing 3D gold chip (no animation);
                     // inactive = high-contrast glyph on a neutral chip (WCAG AA).
-                    val scale by animateFloatAsState(
-                        targetValue = if (selected) 1.12f else 1f,
-                        animationSpec = tween(260, easing = FastOutSlowInEasing),
-                        label = "navScale",
-                    )
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -443,7 +438,7 @@ private fun MehraBottomBar(
                                         ),
                                 )
                             }
-                            Box(modifier = Modifier.graphicsLayer { scaleX = scale; scaleY = scale }) {
+                            Box {
                                 if (selected) {
                                     Icon3D(
                                         icon = icon,

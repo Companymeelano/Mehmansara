@@ -61,13 +61,6 @@ fun PrimaryButton(
     val active = enabled && !loading
     val shape = RoundedCornerShape(16.dp)
     val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd))
-    val sheenT = rememberInfiniteTransition(label = "btnSheen")
-    val sheen by sheenT.animateFloat(
-        initialValue = -0.4f,
-        targetValue = 1.4f,
-        animationSpec = infiniteRepeatable(tween(durationMillis = 2400, delayMillis = 900), RepeatMode.Restart),
-        label = "btnSheenPos",
-    )
     Box(
         modifier = modifier
             .height(54.dp)
@@ -89,15 +82,6 @@ fun PrimaryButton(
                         listOf(Color.Transparent, Color(0xFF0A1128).copy(alpha = 0.28f)),
                         startY = size.height * 0.72f,
                         endY = size.height,
-                    ),
-                )
-                val bandW = size.width * 0.35f
-                val x = size.width * sheen
-                drawRect(
-                    Brush.linearGradient(
-                        listOf(Color.Transparent, Color.White.copy(alpha = 0.30f), Color.Transparent),
-                        start = Offset(x - bandW, 0f),
-                        end = Offset(x + bandW, 0f),
                     ),
                 )
             }
