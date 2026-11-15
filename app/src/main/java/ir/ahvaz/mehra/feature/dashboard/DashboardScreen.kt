@@ -1,5 +1,12 @@
 package ir.ahvaz.mehra.feature.dashboard
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
@@ -517,7 +524,21 @@ private fun WelcomeContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 56.dp)
+                    val floatT = rememberInfiniteTransition(label = "heroFloat")
+                    val floatY by floatT.animateFloat(
+                        initialValue = -3f,
+                        targetValue = 3f,
+                        animationSpec = infiniteRepeatable(
+                            tween(durationMillis = 2600, easing = FastOutSlowInEasing),
+                            RepeatMode.Reverse,
+                        ),
+                        label = "heroFloatY",
+                    )
+                    Box(
+                        modifier = Modifier.graphicsLayer { translationY = floatY.dp.toPx() },
+                    ) {
+                        Icon3D(icon = MehraIcons.Logo, contentDescription = null, size = 56.dp)
+                    }
                     Spacer(modifier = Modifier.height(10.dp))
                     GradientText(
                         text = "مهرآ",

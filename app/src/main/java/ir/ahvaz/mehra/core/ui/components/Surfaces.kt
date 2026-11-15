@@ -32,6 +32,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -96,10 +104,29 @@ fun MehraTopBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     val colors = MehraTheme.colors
+    val sheenT = rememberInfiniteTransition(label = "topSheen")
+    val sheen by sheenT.animateFloat(
+        initialValue = -0.3f,
+        targetValue = 1.3f,
+        animationSpec = infiniteRepeatable(tween(durationMillis = 3800, delayMillis = 1200), RepeatMode.Restart),
+        label = "topSheenPos",
+    )
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd))),
+            .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd)))
+            .drawWithContent {
+                drawContent()
+                val bandW = size.width * 0.22f
+                val x = size.width * sheen
+                drawRect(
+                    Brush.linearGradient(
+                        listOf(Color.Transparent, Color.White.copy(alpha = 0.08f), Color.Transparent),
+                        start = Offset(x - bandW, 0f),
+                        end = Offset(x + bandW, size.height),
+                    ),
+                )
+            },
     ) {
         Column {
             Row(
@@ -246,7 +273,20 @@ fun MehraCard(
             ),
         ),
     ) {
-        Column(modifier = Modifier.padding(contentPadding), content = content)
+        Column {
+            // v3.0.0 glass edge: a hairline of light along the top of every card
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(Color.Transparent, Color.White.copy(alpha = 0.32f), Color.Transparent),
+                        ),
+                    ),
+            )
+            Column(modifier = Modifier.padding(contentPadding), content = content)
+        }
     }
 }
 

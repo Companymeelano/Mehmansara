@@ -30,8 +30,8 @@ android {
         applicationId = "ir.ahvaz.mehra"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 22
-        versionName = "2.3.0"
+        versionCode = 23
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += listOf("fa", "en")

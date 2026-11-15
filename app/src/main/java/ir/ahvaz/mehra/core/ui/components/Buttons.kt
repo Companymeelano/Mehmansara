@@ -19,6 +19,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,6 +60,13 @@ fun PrimaryButton(
     val active = enabled && !loading
     val shape = RoundedCornerShape(16.dp)
     val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd))
+    val sheenT = rememberInfiniteTransition(label = "btnSheen")
+    val sheen by sheenT.animateFloat(
+        initialValue = -0.4f,
+        targetValue = 1.4f,
+        animationSpec = infiniteRepeatable(tween(durationMillis = 2400, delayMillis = 900), RepeatMode.Restart),
+        label = "btnSheenPos",
+    )
     Box(
         modifier = modifier
             .height(54.dp)
@@ -60,6 +74,18 @@ fun PrimaryButton(
             .clip(shape)
             .background(brush)
             .alpha(if (active) 1f else 0.45f)
+            .drawWithContent {
+                drawContent()
+                val bandW = size.width * 0.35f
+                val x = size.width * sheen
+                drawRect(
+                    Brush.linearGradient(
+                        listOf(Color.Transparent, Color.White.copy(alpha = 0.30f), Color.Transparent),
+                        start = Offset(x - bandW, 0f),
+                        end = Offset(x + bandW, 0f),
+                    ),
+                )
+            }
             .clickable(
                 enabled = active,
                 interactionSource = remember { MutableInteractionSource() },

@@ -3,6 +3,7 @@ package ir.ahvaz.mehra.core.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -62,6 +63,17 @@ fun Icon3D(
                     ),
                     shape,
                 ),
+        )
+        // v3.0.0 extrusion: a dark copy of the glyph shifted down-right behind the main
+        // one — cheap but very convincing 3D depth on every chip.
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.Black.copy(alpha = 0.30f),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(size * glyphScale)
+                .offset(x = size * 0.05f, y = size * 0.07f),
         )
         Icon(
             imageVector = icon,
