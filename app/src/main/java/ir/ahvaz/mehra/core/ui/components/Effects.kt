@@ -65,25 +65,18 @@ fun Modifier.pressScale(pressed: Boolean): Modifier = graphicsLayer {
 }
 
 /**
- * Shimmer placeholder block (v1.6.0): a soft pulsing bar used in loading/empty states
- * instead of a dead grey rectangle.
+ * Loading placeholder block (v1.6.0, static since v4.1.0): a soft calm bar used in
+ * loading/empty states instead of a dead grey rectangle — no pulsing animation.
  */
 @Composable
 fun ShimmerBox(
     modifier: Modifier = Modifier,
     height: Dp = 14.dp,
 ) {
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val alpha by transition.animateFloat(
-        initialValue = 0.25f,
-        targetValue = 0.6f,
-        animationSpec = infiniteRepeatable(tween(900, easing = LinearEasing), RepeatMode.Reverse),
-        label = "shimmerAlpha",
-    )
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = alpha), RoundedCornerShape(6.dp)),
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f), RoundedCornerShape(6.dp)),
     )
 }
