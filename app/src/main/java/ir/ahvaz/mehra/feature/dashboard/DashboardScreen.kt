@@ -511,11 +511,11 @@ private fun WelcomeContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(12.dp, RoundedCornerShape(24.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
-                    .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(24.dp))
+                    .shadow(12.dp, RoundedCornerShape(28.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
+                    .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(28.dp))
                     .background(
                         Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
-                        RoundedCornerShape(24.dp),
+                        RoundedCornerShape(28.dp),
                     )
                     .padding(14.dp),
             ) {
@@ -656,7 +656,7 @@ private fun QuickActionTile(
     MehraCard(
         modifier = Modifier.width(112.dp),
         onClick = onClick,
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 14.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon3D(icon = icon, contentDescription = null, size = 44.dp)
@@ -690,11 +690,11 @@ private fun DashboardHero(snapshot: DashboardSnapshot) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(12.dp, RoundedCornerShape(24.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
-            .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(24.dp))
+            .shadow(12.dp, RoundedCornerShape(28.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
+            .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(28.dp))
             .background(
                 Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
-                RoundedCornerShape(24.dp),
+                RoundedCornerShape(28.dp),
             )
             .padding(18.dp),
     ) {

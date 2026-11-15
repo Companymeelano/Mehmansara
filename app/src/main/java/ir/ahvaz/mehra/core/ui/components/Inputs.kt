@@ -104,7 +104,7 @@ fun MehraTextField(
                 }
             })
         } else null,
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.large,
         visualTransformation = if (password && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
             keyboardType = if (numeric) KeyboardType.Number else KeyboardType.Text,
@@ -130,7 +130,7 @@ fun MehraSearchField(
         trailingIcon = if (value.isNotBlank()) {
             ({ IconButton(onClick = { onValueChange("") }) { Icon(Icons.Rounded.Close, contentDescription = "پاک کردن") } })
         } else null,
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.large,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
     )
 }
@@ -154,7 +154,7 @@ fun PickerField(
     }
     Column(modifier = modifier.fillMaxWidth()) {
         Surface(
-            shape = MaterialTheme.shapes.medium,
+            shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.surface,
             border = BorderStroke(1.dp, borderColor),
             modifier = Modifier

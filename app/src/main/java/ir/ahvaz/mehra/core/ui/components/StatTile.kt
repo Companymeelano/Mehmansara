@@ -46,7 +46,7 @@ fun StatTile(
     // No explicit tone -> the brand gold gradient chip (consistent with quick actions);
     // a semantic tone (status colour) is used when the caller passes one.
     val accent = tone
-    val shape = RoundedCornerShape(16.dp)
+    val shape = RoundedCornerShape(20.dp)
     val surfaceModifier = if (onClick != null) modifier.clickable(onClick = onClick) else modifier
     Surface(
         modifier = surfaceModifier,
@@ -54,7 +54,7 @@ fun StatTile(
         color = MaterialTheme.colorScheme.surface.copy(alpha = if (MehraTheme.colors.isDark) 0.85f else 0.95f),
         border = BorderStroke(1.dp, MehraTheme.colors.cardBorder),
     ) {
-        Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (icon != null) {
                     Icon3D(

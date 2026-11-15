@@ -125,7 +125,7 @@ fun EmptyState(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(112.dp)
-                    .shadow(12.dp, CircleShape)
+                    .shadow(14.dp, CircleShape, ambientColor = colors.glow.copy(alpha = 0.35f), spotColor = colors.glow.copy(alpha = 0.45f))
                     .background(
                         Brush.radialGradient(
                             listOf(

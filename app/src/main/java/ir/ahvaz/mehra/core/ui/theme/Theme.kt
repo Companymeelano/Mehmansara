@@ -89,12 +89,12 @@ fun MehraTheme(
                     modifier = Modifier
                         .fillMaxSize()
                         .drawWithContent {
-                            val step = 64.dp.toPx()
-                            val line = mehraColors.topBarEnd.copy(alpha = 0.045f)
+                            val step = 72.dp.toPx()
+                            val line = mehraColors.topBarEnd.copy(alpha = 0.035f)
                             var x = -size.height
                             while (x < size.width + size.height) {
                                 drawLine(line, Offset(x, 0f), Offset(x + size.height, size.height), 1f)
-                                drawLine(line.copy(alpha = 0.03f), Offset(x, size.height), Offset(x + size.height, 0f), 1f)
+                                drawLine(line.copy(alpha = 0.022f), Offset(x, size.height), Offset(x + size.height, 0f), 1f)
                                 x += step
                             }
                         },
@@ -121,6 +121,14 @@ fun MehraTheme(
                             ),
                             radius = w * 0.75f,
                             center = Offset(w * 0.5f, h * 1.08f),
+                        )
+                        // soft navy blend band under the app bar — header melts into the body
+                        drawRect(
+                            Brush.verticalGradient(
+                                listOf(mehraColors.topBarEnd.copy(alpha = 0.10f), Color.Transparent),
+                                startY = 0f,
+                                endY = 160.dp.toPx(),
+                            ),
                         )
                         },
                 ) {

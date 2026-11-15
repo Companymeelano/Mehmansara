@@ -138,7 +138,7 @@ fun MehraTopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.statusBars)
-                    .padding(horizontal = 8.dp, vertical = 10.dp),
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (onBack != null) {
@@ -184,12 +184,12 @@ fun MehraTopBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.5.dp)
+                    .height(2.dp)
                     .background(
                         Brush.horizontalGradient(
                             listOf(
                                 colors.accentStart.copy(alpha = 0.95f),
-                                colors.accentMid.copy(alpha = 0.55f),
+                                colors.accentMid.copy(alpha = 0.95f),
                                 colors.accentEnd.copy(alpha = 0.95f),
                             )
                         )
@@ -241,7 +241,7 @@ fun MehraCard(
     content: @Composable ColumnScopeAlias.() -> Unit,
 ) {
     val colors = MehraTheme.colors
-    val shape = RoundedCornerShape(20.dp)
+    val shape = RoundedCornerShape(22.dp)
     // One shared InteractionSource drives BOTH the click and the press-scale effect.
     // (1.9.1 bugfix: a separate pointerInput in pressScale used to consume the tap and
     // silently killed every card click.)
@@ -263,7 +263,7 @@ fun MehraCard(
         },
     ).pressScale(isPressed)
     Surface(
-        modifier = base.shadow(8.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.16f), spotColor = Color(0xFF0A1128).copy(alpha = 0.22f)),
+        modifier = base.shadow(10.dp, shape, ambientColor = Color(0xFF081020).copy(alpha = 0.13f), spotColor = Color(0xFF081020).copy(alpha = 0.19f)),
         shape = shape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = if (colors.isDark) 0.82f else 0.95f),
         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -271,10 +271,10 @@ fun MehraCard(
             width = 1.dp,
             brush = Brush.linearGradient(
                 listOf(
-                    colors.accentStart.copy(alpha = 0.55f),
+                    colors.accentStart.copy(alpha = 0.75f),
                     colors.cardBorder,
                     Color(0xFF1B2740).copy(alpha = 0.10f),
-                    colors.accentEnd.copy(alpha = 0.55f),
+                    colors.accentEnd.copy(alpha = 0.75f),
                 )
             ),
         ),
@@ -287,7 +287,7 @@ fun MehraCard(
                     .height(1.dp)
                     .background(
                         Brush.horizontalGradient(
-                            listOf(Color.Transparent, Color.White.copy(alpha = 0.40f), Color.Transparent),
+                            listOf(Color.Transparent, Color.White.copy(alpha = 0.50f), Color.Transparent),
                         ),
                     ),
             )
@@ -313,12 +313,25 @@ fun SectionHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val colors = MehraTheme.colors
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(16.dp)
+                    .background(
+                        Brush.verticalGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd)),
+                        RoundedCornerShape(2.dp),
+                    ),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
         if (actionLabel != null && onAction != null) {
             Text(
                 text = actionLabel,

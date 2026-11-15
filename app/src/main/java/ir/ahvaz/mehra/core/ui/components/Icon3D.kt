@@ -44,11 +44,11 @@ fun Icon3D(
         listOf(colors.accentStart, colors.accentMid, colors.accentEnd)
     }
     val glyphTint = if (tone != null) Color.White else colors.onAccent
-    val shape = RoundedCornerShape(size * 0.30f)
+    val shape = RoundedCornerShape(size * 0.32f)
     Box(
         modifier = modifier
             .size(size)
-            .shadow(8.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.20f), spotColor = Color(0xFF0A1128).copy(alpha = 0.26f))
+            .shadow(10.dp, shape, ambientColor = Color(0xFF081020).copy(alpha = 0.16f), spotColor = Color(0xFF081020).copy(alpha = 0.22f))
             .background(Brush.linearGradient(stops), shape),
     ) {
         // gloss on the upper half + slight shading at the bottom edge -> 3D relief
@@ -57,9 +57,9 @@ fun Icon3D(
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        0.0f to Color.White.copy(alpha = 0.42f),
+                        0.0f to Color.White.copy(alpha = 0.50f),
                         0.45f to Color.White.copy(alpha = 0.05f),
-                        1.0f to Color(0xFF0A1128).copy(alpha = 0.20f),
+                        1.0f to Color(0xFF081020).copy(alpha = 0.24f),
                     ),
                     shape,
                 ),
@@ -69,11 +69,11 @@ fun Icon3D(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color(0xFF0A1128).copy(alpha = 0.38f),
+            tint = Color(0xFF081020).copy(alpha = 0.42f),
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(size * glyphScale)
-                .offset(x = size * 0.05f, y = size * 0.07f),
+                .offset(x = size * 0.06f, y = size * 0.08f),
         )
         Icon(
             imageVector = icon,

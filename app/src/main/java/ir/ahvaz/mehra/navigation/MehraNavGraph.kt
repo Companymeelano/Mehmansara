@@ -379,7 +379,7 @@ private fun MehraBottomBar(
 ) {
     val colors = MehraTheme.colors
     val scheme = MaterialTheme.colorScheme
-    val shape = RoundedCornerShape(26.dp)
+    val shape = RoundedCornerShape(28.dp)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -389,16 +389,16 @@ private fun MehraBottomBar(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .shadow(14.dp, shape),
+                .shadow(18.dp, shape, ambientColor = Color(0xFF081020).copy(alpha = 0.18f), spotColor = Color(0xFF081020).copy(alpha = 0.24f)),
             shape = shape,
-            color = scheme.surface.copy(alpha = if (colors.isDark) 0.88f else 0.92f),
+            color = scheme.surface.copy(alpha = if (colors.isDark) 0.90f else 0.96f),
             border = BorderStroke(
                 width = 1.dp,
                 brush = Brush.horizontalGradient(
                     listOf(
-                        colors.accentStart.copy(alpha = 0.5f),
+                        colors.accentStart.copy(alpha = 0.7f),
                         colors.cardBorder,
-                        colors.accentEnd.copy(alpha = 0.5f),
+                        colors.accentEnd.copy(alpha = 0.7f),
                     )
                 ),
             ),

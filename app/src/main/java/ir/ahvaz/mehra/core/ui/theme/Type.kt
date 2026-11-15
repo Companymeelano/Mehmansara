@@ -36,12 +36,12 @@ private fun base(size: Int, lineHeight: Int, weight: FontWeight, letterSpacing: 
 
 fun mehraTypography(): Typography = Typography(
     displayLarge = base(42, 60, FontWeight.Bold),
-    displayMedium = base(36, 52, FontWeight.Bold),
+    displayMedium = base(38, 54, FontWeight.Bold),
     displaySmall = base(30, 44, FontWeight.SemiBold),
     headlineLarge = base(26, 40, FontWeight.Bold),
     headlineMedium = base(23, 36, FontWeight.SemiBold),
-    headlineSmall = base(21, 34, FontWeight.SemiBold),
-    titleLarge = base(19, 32, FontWeight.SemiBold),
+    headlineSmall = base(22, 35, FontWeight.SemiBold),
+    titleLarge = base(20, 33, FontWeight.SemiBold),
     titleMedium = base(17, 28, FontWeight.Medium),
     titleSmall = base(15, 26, FontWeight.Medium),
     bodyLarge = base(16, 30, FontWeight.Normal),

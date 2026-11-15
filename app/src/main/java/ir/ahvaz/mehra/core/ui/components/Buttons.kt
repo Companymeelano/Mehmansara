@@ -59,12 +59,12 @@ fun PrimaryButton(
 ) {
     val colors = MehraTheme.colors
     val active = enabled && !loading
-    val shape = RoundedCornerShape(16.dp)
+    val shape = RoundedCornerShape(18.dp)
     val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd))
     Box(
         modifier = modifier
-            .height(54.dp)
-            .then(if (active) Modifier.shadow(9.dp, shape, ambientColor = Color(0xFF0A1128).copy(alpha = 0.25f), spotColor = Color(0xFF0A1128).copy(alpha = 0.30f)) else Modifier)
+            .height(56.dp)
+            .then(if (active) Modifier.shadow(10.dp, shape, ambientColor = Color(0xFF081020).copy(alpha = 0.22f), spotColor = Color(0xFF081020).copy(alpha = 0.28f)) else Modifier)
             .clip(shape)
             .background(brush)
             .alpha(if (active) 1f else 0.45f)
@@ -72,14 +72,14 @@ fun PrimaryButton(
                 drawContent()
                 drawRect(
                     Brush.verticalGradient(
-                        listOf(Color.White.copy(alpha = 0.35f), Color.Transparent),
+                        listOf(Color.White.copy(alpha = 0.42f), Color.Transparent),
                         startY = 0f,
                         endY = size.height * 0.30f,
                     ),
                 )
                 drawRect(
                     Brush.verticalGradient(
-                        listOf(Color.Transparent, Color(0xFF0A1128).copy(alpha = 0.28f)),
+                        listOf(Color.Transparent, Color(0xFF081020).copy(alpha = 0.32f)),
                         startY = size.height * 0.72f,
                         endY = size.height,
                     ),
@@ -130,11 +130,11 @@ fun SecondaryButton(
     val colors = MehraTheme.colors
     val scheme = MaterialTheme.colorScheme
     val active = enabled && !loading
-    val shape = RoundedCornerShape(16.dp)
+    val shape = RoundedCornerShape(18.dp)
     val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd))
     Box(
         modifier = modifier
-            .height(54.dp)
+            .height(56.dp)
             .clip(shape)
             .border(androidx.compose.foundation.BorderStroke(1.5.dp, brush), shape)
             .background(scheme.surface.copy(alpha = if (colors.isDark) 0.55f else 0.75f))
@@ -182,11 +182,11 @@ fun DangerButton(
 ) {
     val colors = MehraTheme.colors
     val danger = colors.danger
-    val shape = RoundedCornerShape(16.dp)
+    val shape = RoundedCornerShape(18.dp)
     val brush = Brush.linearGradient(listOf(danger.lighten(0.18f), danger, danger.darken(0.22f)))
     Box(
         modifier = modifier
-            .height(54.dp)
+            .height(56.dp)
             .then(if (enabled) Modifier.shadow(8.dp, shape) else Modifier)
             .clip(shape)
             .background(brush)
