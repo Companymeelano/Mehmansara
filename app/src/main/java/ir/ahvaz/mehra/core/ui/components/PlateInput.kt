@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
@@ -64,11 +65,16 @@ fun IranPlateInput(
         Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Surface(
                 modifier = Modifier
-                    .shadow(6.dp, RoundedCornerShape(10.dp))
-                    .clip(RoundedCornerShape(10.dp)),
-                shape = RoundedCornerShape(10.dp),
+                    .shadow(8.dp, RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(12.dp)),
+                shape = RoundedCornerShape(12.dp),
                 color = Color.White,
-                border = BorderStroke(1.5.dp, colors.cardBorder),
+                border = BorderStroke(
+                    2.dp,
+                    Brush.linearGradient(
+                        listOf(colors.accentStart, colors.accentMid, colors.accentEnd, colors.accentMid, colors.accentStart),
+                    ),
+                ),
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 9.dp),
@@ -78,7 +84,7 @@ fun IranPlateInput(
                     // Blue «ایران» band with the province-code cells.
                     Box(
                         modifier = Modifier
-                            .background(Color(0xFF1D4ED8), RoundedCornerShape(6.dp))
+                            .background(Color(0xFF0B3AA0), RoundedCornerShape(6.dp))
                             .padding(horizontal = 6.dp, vertical = 6.dp),
                         contentAlignment = Alignment.Center,
                     ) {
@@ -173,7 +179,7 @@ private fun PlateCell(
         letter -> Color(0xFFEAD9AE)
         else -> Color(0xFFF7F3EA)
     }
-    val fg = if (onBlue) Color(0xFF1D4ED8) else Color(0xFF1F2937)
+    val fg = if (onBlue) Color(0xFF0B3AA0) else Color(0xFF1F2937)
     Box(
         modifier = Modifier
             .size(width = if (letter) 30.dp else 27.dp, height = 42.dp)

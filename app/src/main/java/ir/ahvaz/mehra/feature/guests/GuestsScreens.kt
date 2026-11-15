@@ -40,7 +40,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ir.ahvaz.mehra.core.common.IRAN_PROVINCES
+import ir.ahvaz.mehra.core.common.PROVINCE_NAMES
 import ir.ahvaz.mehra.core.common.VEHICLE_COLORS
+import ir.ahvaz.mehra.core.common.citiesOf
 import ir.ahvaz.mehra.core.common.VEHICLE_TYPES
 import ir.ahvaz.mehra.core.common.formatMoneyFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
@@ -231,6 +234,7 @@ fun GuestDetailScreen(
                         InfoRow("پلاک خودرو", guest.carPlate ?: "—")
                         guest.vehicleType?.let { InfoRow("نوع خودرو", it) }
                         guest.vehicleColor?.let { InfoRow("رنگ خودرو", it) }
+                        guest.province?.let { InfoRow("استان", it) }
                         InfoRow("شهر", guest.city ?: "—")
                         InfoRow("نشانی", guest.address ?: "—")
                         InfoRow("مانده حساب", formatMoneyFa(guest.balanceRial))
@@ -616,10 +620,32 @@ fun GuestFormScreen(
                 optionLabel = { it },
             )
             Spacer(modifier = Modifier.height(10.dp))
-            MehraTextField(
+            DropdownField(
+                label = "استان",
+                options = PROVINCE_NAMES,
+                selected = draft.province.ifBlank { null },
+                onSelect = { province -> viewModel.updateDraft { it.copy(province = province, city = "") } },
+                optionLabel = { it },
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            MehraSearchField(
+                value = state.citySearch,
+                onValueChange = viewModel::onCitySearchChange,
+                placeholder = "جست‌وجوی شهر…",
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            DropdownField(
                 label = "شهر",
-                value = draft.city,
-                onValueChange = { value -> viewModel.updateDraft { it.copy(city = value) } },
+                options = run {
+                    val base =
+                        if (draft.province.isBlank()) IRAN_PROVINCES.values.flatten().distinct()
+                        else citiesOf(draft.province)
+                    base.filter { state.citySearch.isBlank() || it.contains(state.citySearch) }
+                },
+                selected = draft.city.ifBlank { null },
+                onSelect = { city -> viewModel.updateDraft { it.copy(city = city) } },
+                optionLabel = { it },
+                placeholder = "انتخاب یا جست‌وجوی شهر",
             )
             Spacer(modifier = Modifier.height(10.dp))
             MehraTextField(

@@ -121,7 +121,6 @@ fun MehraNavGraph(
 
     val can = { permission: String? -> permission == null || user?.can(permission) == true }
     val destinations = bottomDestinations.filter { can(it.permission) }
-    var showQuickActions by remember { mutableStateOf(false) }
     var showPalette by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -131,7 +130,6 @@ fun MehraNavGraph(
                 MehraBottomBar(
                     destinations = destinations,
                     backStackEntry = backStackEntry,
-                    onCenterAction = { showQuickActions = true },
                     onSelect = { destination ->
                         if (currentRoute != destination.route) {
                             navController.navigate(destination.route) {
@@ -364,92 +362,6 @@ fun MehraNavGraph(
         )
     }
 
-    if (showQuickActions) {
-        QuickActionsSheet(
-            onDismiss = { showQuickActions = false },
-            actions = listOf(
-                QuickAction("جست‌وجوی سراسری", "اتاق، مهمان، رزرو", R.drawable.ic_mehra_search) {
-                    showPalette = true
-                },
-                QuickAction("مهمان جدید", "پروندهٔ مهمان", R.drawable.ic_mehra_guests) {
-                    navController.navigate(Routes.guestForm(null))
-                },
-                QuickAction("رزرو جدید", "ثبت رزرو", R.drawable.ic_mehra_reservations) {
-                    navController.navigate(Routes.reservationNew())
-                },
-                QuickAction("اتاق جدید", "ثبت اتاق", R.drawable.ic_mehra_rooms) {
-                    navController.navigate(Routes.roomForm(null))
-                },
-                QuickAction("پذیرش", "ورود و خروج", R.drawable.ic_mehra_reception) {
-                    navController.navigate(Routes.RECEPTION)
-                },
-                QuickAction("مالی", "ثبت تراکنش", R.drawable.ic_mehra_finance) {
-                    navController.navigate(Routes.FINANCE)
-                },
-                QuickAction("دیتابیس", "اتصال مستقیم ۱۴۳۳", R.drawable.ic_mehra_reports) {
-                    navController.navigate(Routes.DBTOOL)
-                },
-            ),
-        )
-    }
-}
-
-private data class QuickAction(
-    val label: String,
-    val description: String,
-    @androidx.annotation.DrawableRes val iconRes: Int,
-    val action: () -> Unit,
-)
-
-/** Radial-style quick-action sheet opened from the center FAB of the bottom bar. */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun QuickActionsSheet(
-    onDismiss: () -> Unit,
-    actions: List<QuickAction>,
-) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            SectionHeader(title = "اقدام سریع")
-            actions.chunked(3).forEach { row ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    row.forEach { a ->
-                        MehraCard(
-                            modifier = Modifier.weight(1f),
-                            onClick = {
-                                onDismiss()
-                                a.action()
-                            },
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Icon3D(
-                                    icon = ImageVector.vectorResource(a.iconRes),
-                                    contentDescription = null,
-                                    size = 40.dp,
-                                )
-                                Spacer(modifier = Modifier.height(6.dp))
-                                Text(
-                                    text = a.label,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                                )
-                            }
-                        }
-                    }
-                    if (row.size < 3) Spacer(modifier = Modifier.weight(3 - row.size.toFloat()))
-                }
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-    }
-}
-
 /**
  * Floating luxury bottom bar: a rounded glass pill with a gradient border and soft shadow.
  * The selected destination gets a full 3D gradient icon chip ([Icon3D]) in the theme accent;
@@ -459,7 +371,6 @@ private fun QuickActionsSheet(
 private fun MehraBottomBar(
     destinations: List<BottomDestination>,
     backStackEntry: NavBackStackEntry?,
-    onCenterAction: () -> Unit,
     onSelect: (BottomDestination) -> Unit,
 ) {
     val colors = MehraTheme.colors
@@ -496,11 +407,7 @@ private fun MehraBottomBar(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                destinations.forEachIndexed { index, destination ->
-                    // Wide centre gap reserved for the raised FAB. weight(2f) keeps the FAB
-                    // exactly centred; the global search moved into the quick-actions sheet
-                    // (2.1.0: the search glyph in the bar made it look cluttered).
-                    if (index == destinations.size / 2) Spacer(modifier = Modifier.weight(2f))
+                destinations.forEach { destination ->
                     val selected = backStackEntry?.destination?.hierarchy?.any {
                         it.route == destination.route
                     } == true
@@ -519,12 +426,19 @@ private fun MehraBottomBar(
                                 size = 40.dp,
                             )
                         } else {
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = destination.label,
-                                tint = colors.accentMid.copy(alpha = 0.85f),
-                                modifier = Modifier.size(26.dp),
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .background(colors.accentMid.copy(alpha = 0.12f), RoundedCornerShape(12.dp)),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = destination.label,
+                                    tint = colors.accentMid.copy(alpha = 0.9f),
+                                    modifier = Modifier.size(23.dp),
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.height(3.dp))
                         Text(
@@ -537,20 +451,6 @@ private fun MehraBottomBar(
                     }
                 }
             }
-        }
-        // Raised center action — drawn AFTER the pill so it is never clipped by it.
-        FloatingActionButton(
-            onClick = onCenterAction,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .offset(y = (-28).dp)
-                .size(52.dp)
-                .shadow(10.dp, CircleShape),
-            shape = CircleShape,
-            containerColor = colors.accentMid,
-            contentColor = colors.onAccent,
-        ) {
-            Icon(Icons.Rounded.Add, contentDescription = "اقدام سریع")
         }
     }
 }

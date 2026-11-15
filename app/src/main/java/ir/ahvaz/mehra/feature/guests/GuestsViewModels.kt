@@ -141,6 +141,7 @@ data class GuestFormUiState(
     // v2.2.0: smart stay assignment from the guest form
     val rooms: List<Room> = emptyList(),
     val vehicleSearch: String = "",
+    val citySearch: String = "",
 )
 
 @HiltViewModel
@@ -182,6 +183,7 @@ class GuestFormViewModel @Inject constructor(
                                     carPlate = guest.carPlate.orEmpty(),
                                     vehicleType = guest.vehicleType.orEmpty(),
                                     vehicleColor = guest.vehicleColor.orEmpty(),
+                                    province = guest.province.orEmpty(),
                                     city = guest.city.orEmpty(),
                                     address = guest.address.orEmpty(),
                                     notes = guest.notes.orEmpty(),
@@ -292,5 +294,9 @@ class GuestFormViewModel @Inject constructor(
 
     fun onVehicleSearchChange(value: String) {
         _state.update { it.copy(vehicleSearch = value) }
+    }
+
+    fun onCitySearchChange(value: String) {
+        _state.update { it.copy(citySearch = value) }
     }
 }

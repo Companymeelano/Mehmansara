@@ -85,6 +85,7 @@ class DemoGuestRepository @Inject constructor(
             carPlate = draft.carPlate.trim().ifBlank { null },
             vehicleType = draft.vehicleType.trim().ifBlank { null },
             vehicleColor = draft.vehicleColor.trim().ifBlank { null },
+            province = draft.province.trim().ifBlank { null },
             city = draft.city.trim().ifBlank { null },
             address = draft.address.trim().ifBlank { null },
             notes = draft.notes.trim().ifBlank { null },
