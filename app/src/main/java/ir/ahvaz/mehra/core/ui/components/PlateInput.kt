@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
@@ -42,12 +42,12 @@ import ir.ahvaz.mehra.core.common.toPersianDigits
 import ir.ahvaz.mehra.core.ui.theme.MehraTheme
 
 /**
- * Visual Iranian licence plate input (v2.2.0): the plate is drawn as a real plate —
- * a blue «ایران» band on the left holding the 2-digit province code, then the 3-digit
- * serial, the letter and the final 2 digits. Every character has its OWN cell; tapping a
- * cell opens a small picker so digits and the letter always land in their correct section.
- *
- * The stored value is the canonical 8-char string (province + serial + letter + duo).
+ * Visual Iranian licence plate input (v2.2.0, enlarged in 2.2.1): the plate is drawn like a
+ * real plate — a blue «ایران» band on the left holding the 2-digit province code, then the
+ * 3-digit serial, the letter (gold-tinted cell) and the final 2 digits. Every character has
+ * its OWN cell; tapping a cell opens a small picker so digits and the letter always land in
+ * their correct section. The stored value is the canonical 8-char string
+ * (province + serial + letter + duo).
  */
 @Composable
 fun IranPlateInput(
@@ -61,54 +61,58 @@ fun IranPlateInput(
     var editing by remember { mutableStateOf(-1) }
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Surface(
-            modifier = modifier
-                .shadow(6.dp, RoundedCornerShape(10.dp))
-                .clip(RoundedCornerShape(10.dp)),
-            shape = RoundedCornerShape(10.dp),
-            color = Color.White,
-            border = BorderStroke(1.5.dp, colors.cardBorder),
-        ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+        Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Surface(
+                modifier = Modifier
+                    .shadow(6.dp, RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(10.dp)),
+                shape = RoundedCornerShape(10.dp),
+                color = Color.White,
+                border = BorderStroke(1.5.dp, colors.cardBorder),
             ) {
-                // Blue «ایران» band with the province code cells.
-                Box(
-                    modifier = Modifier
-                        .background(Color(0xFF1D4ED8), RoundedCornerShape(6.dp))
-                        .padding(horizontal = 6.dp, vertical = 6.dp),
-                    contentAlignment = Alignment.Center,
+                Row(
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 9.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "ایران",
-                            color = Color.White,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Spacer(modifier = Modifier.height(3.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-                            PlateCell(ch = chars[0], onClick = { if (enabled) editing = 0 }, dark = false, onBlue = true)
-                            PlateCell(ch = chars[1], onClick = { if (enabled) editing = 1 }, dark = false, onBlue = true)
+                    // Blue «ایران» band with the province-code cells.
+                    Box(
+                        modifier = Modifier
+                            .background(Color(0xFF1D4ED8), RoundedCornerShape(6.dp))
+                            .padding(horizontal = 6.dp, vertical = 6.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = "ایران",
+                                color = Color.White,
+                                fontSize = 9.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            Spacer(modifier = Modifier.height(3.dp))
+                            Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+                                PlateCell(ch = chars[0], onClick = { if (enabled) editing = 0 }, onBlue = true)
+                                PlateCell(ch = chars[1], onClick = { if (enabled) editing = 1 }, onBlue = true)
+                            }
                         }
                     }
-                }
-                // Main serial: 3 digits, letter, 2 digits.
-                Row(horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.CenterVertically) {
-                    for (pos in 2..4) {
-                        PlateCell(ch = chars[pos], onClick = { if (enabled) editing = pos }, dark = true, onBlue = false)
-                    }
-                    PlateCell(
-                        ch = chars[5],
-                        onClick = { if (enabled) editing = 5 },
-                        dark = true,
-                        onBlue = false,
-                        letter = true,
-                    )
-                    for (pos in 6..7) {
-                        PlateCell(ch = chars[pos], onClick = { if (enabled) editing = pos }, dark = true, onBlue = false)
+                    // Main serial: 3 digits, letter, 2 digits.
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(3.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        for (pos in 2..4) {
+                            PlateCell(ch = chars[pos], onClick = { if (enabled) editing = pos }, onBlue = false)
+                        }
+                        PlateCell(
+                            ch = chars[5],
+                            onClick = { if (enabled) editing = 5 },
+                            onBlue = false,
+                            letter = true,
+                        )
+                        for (pos in 6..7) {
+                            PlateCell(ch = chars[pos], onClick = { if (enabled) editing = pos }, onBlue = false)
+                        }
                     }
                 }
             }
@@ -161,27 +165,31 @@ fun IranPlateInput(
 private fun PlateCell(
     ch: Char,
     onClick: () -> Unit,
-    dark: Boolean,
     onBlue: Boolean,
     letter: Boolean = false,
 ) {
-    val bg = if (onBlue) Color.White.copy(alpha = 0.92f) else Color(0xFFF7F3EA)
+    val bg = when {
+        onBlue -> Color.White.copy(alpha = 0.92f)
+        letter -> Color(0xFFEAD9AE)
+        else -> Color(0xFFF7F3EA)
+    }
     val fg = if (onBlue) Color(0xFF1D4ED8) else Color(0xFF1F2937)
     Box(
         modifier = Modifier
-            .size(width = if (letter) 24.dp else 22.dp, height = 34.dp)
+            .size(width = if (letter) 30.dp else 27.dp, height = 42.dp)
             .clip(RoundedCornerShape(4.dp))
             .background(bg)
             .clickable(onClick = onClick)
-            .then(if (!onBlue) Modifier.border(BorderStroke(1.dp, Color(0xFF9CA3AF)), RoundedCornerShape(4.dp)) else Modifier),
+            .then(
+                if (!onBlue) Modifier.border(BorderStroke(1.dp, Color(0xFF9CA3AF)), RoundedCornerShape(4.dp)) else Modifier,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = if (ch == ' ') "" else ch.toString().toPersianDigits(),
             color = fg,
-            fontSize = 15.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
         )
     }
 }
-

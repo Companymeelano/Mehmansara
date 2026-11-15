@@ -1,6 +1,8 @@
 package ir.ahvaz.mehra.feature.dashboard
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,7 +53,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import ir.ahvaz.mehra.core.common.DailyTips
 import ir.ahvaz.mehra.core.common.formatMoneyCompactFa
 import ir.ahvaz.mehra.core.common.formatMoneyFa
 import ir.ahvaz.mehra.core.common.toPersianDigits
@@ -96,6 +97,7 @@ fun DashboardScreen(
     onOpenHousekeeping: () -> Unit,
     onOpenGuests: () -> Unit,
     onOpenMore: () -> Unit,
+    onOpenSearch: () -> Unit,
     onCreateRoom: () -> Unit,
     onCreateGuest: () -> Unit,
     onNewReservation: () -> Unit,
@@ -144,6 +146,7 @@ fun DashboardScreen(
                 onOpenGuests = onOpenGuests,
                 onOpenReservations = onOpenReservations,
                 onOpenMore = onOpenMore,
+                onOpenSearch = onOpenSearch,
                 contentPadding = padding,
             )
 
@@ -186,7 +189,7 @@ private fun DashboardContent(
             .fillMaxSize()
             .padding(contentPadding),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp,
+            start = 16.dp, end = 16.dp, top = 8.dp, bottom = 48.dp,
         ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -470,6 +473,7 @@ private fun WelcomeContent(
     onOpenGuests: () -> Unit,
     onOpenReservations: () -> Unit,
     onOpenMore: () -> Unit,
+    onOpenSearch: () -> Unit,
     contentPadding: PaddingValues,
 ) {
     val colors = MehraTheme.colors
@@ -477,7 +481,7 @@ private fun WelcomeContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
@@ -529,13 +533,11 @@ private fun WelcomeContent(
                         color = Color.White.copy(alpha = 0.66f),
                         style = MaterialTheme.typography.labelMedium,
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "نکتهٔ روز: " + DailyTips.tipFor(TehranTime.today()),
-                        color = Color.White.copy(alpha = 0.88f),
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center,
+                    Spacer(modifier = Modifier.height(8.dp))
+                    GradientText(
+                        text = "سامانهٔ هوشمند مدیریت اقامت",
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                        brush = LocalAccentBrush.current,
                     )
                 }
             }
@@ -543,15 +545,17 @@ private fun WelcomeContent(
 
         item { SectionHeader(title = "اقدام سریع") }
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    QuickActionTile("اتاق جدید", "ثبت اتاق در مجموعه", Icons.Rounded.Bed, Modifier.weight(1f), onCreateRoom)
-                    QuickActionTile("مهمان جدید", "پروندهٔ مهمان", Icons.Rounded.PersonAdd, Modifier.weight(1f), onCreateGuest)
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    QuickActionTile("رزرو جدید", "ثبت رزرو", Icons.Rounded.EventAvailable, Modifier.weight(1f), onNewReservation)
-                    QuickActionTile("پذیرش", "ورود و خروج", Icons.Rounded.Login, Modifier.weight(1f), onOpenReception)
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                QuickActionTile("پذیرش", "ورود و خروج", Icons.Rounded.Login, onOpenReception)
+                QuickActionTile("رزرو جدید", "ثبت رزرو", Icons.Rounded.EventAvailable, onNewReservation)
+                QuickActionTile("مهمان جدید", "پروندهٔ مهمان", Icons.Rounded.PersonAdd, onCreateGuest)
+                QuickActionTile("اتاق جدید", "ثبت اتاق", Icons.Rounded.Bed, onCreateRoom)
+                QuickActionTile("جست‌وجو", "همهٔ اطلاعات", Icons.Rounded.Search, onOpenSearch)
             }
         }
 
@@ -589,25 +593,31 @@ private fun QuickActionTile(
     title: String,
     description: String,
     icon: ImageVector,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    MehraCard(modifier = modifier, onClick = onClick) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon3D(icon = icon, contentDescription = null, size = 42.dp)
-            Spacer(modifier = Modifier.width(10.dp))
-            Column {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+    MehraCard(
+        modifier = Modifier.width(104.dp),
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 14.dp),
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon3D(icon = icon, contentDescription = null, size = 40.dp)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+            Text(
+                text = description,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }

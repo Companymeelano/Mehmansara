@@ -164,6 +164,7 @@ fun MehraNavGraph(
         ) {
             composable(Routes.DASHBOARD) {
                 DashboardScreen(
+                    onOpenSearch = { showPalette = true },
                     onOpenRooms = { navController.navigate(Routes.ROOMS) },
                     onOpenReservations = { navController.navigate(Routes.RESERVATIONS) },
                     onOpenReception = { navController.navigate(Routes.RECEPTION) },
@@ -521,7 +522,7 @@ private fun MehraBottomBar(
                             Icon(
                                 imageVector = icon,
                                 contentDescription = destination.label,
-                                tint = scheme.onSurfaceVariant,
+                                tint = colors.accentMid.copy(alpha = 0.85f),
                                 modifier = Modifier.size(26.dp),
                             )
                         }
@@ -530,7 +531,7 @@ private fun MehraBottomBar(
                             text = destination.label,
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                            color = if (selected) colors.accentEnd else scheme.onSurfaceVariant,
+                            color = if (selected) colors.accentEnd else colors.accentMid.copy(alpha = 0.8f),
                             maxLines = 1,
                         )
                     }
