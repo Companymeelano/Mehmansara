@@ -406,7 +406,7 @@ private fun MehraBottomBar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(66.dp)
+                    .height(76.dp)
                     .padding(horizontal = 6.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
@@ -429,7 +429,7 @@ private fun MehraBottomBar(
                             if (selected) {
                                 Box(
                                     modifier = Modifier
-                                        .size(52.dp)
+                                        .size(48.dp)
                                         .background(
                                             Brush.radialGradient(
                                                 listOf(colors.glow.copy(alpha = 0.45f), Color.Transparent),

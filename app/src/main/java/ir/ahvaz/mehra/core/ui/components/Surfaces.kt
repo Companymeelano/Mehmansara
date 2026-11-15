@@ -47,6 +47,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalDensity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -78,13 +81,21 @@ fun MehraScreen(
     content: @Composable (androidx.compose.foundation.layout.PaddingValues) -> Unit,
 ) {
     val colors = MehraTheme.colors
+    // v4.2.0: read the real status-bar height from the root window insets (px -> dp) and
+    // paint the top-bar gradient behind it, so status icons always sit on navy — never
+    // white-on-light (windowInsetsTopHeight proved unreliable inside the NavHost).
+    val view = LocalView.current
+    val density = LocalDensity.current
+    val statusBarHeight = remember(view, density) {
+        val top = ViewCompat.getRootWindowInsets(view)
+            ?.getInsets(WindowInsetsCompat.Type.statusBars())?.top ?: 0
+        with(density) { top.toDp() }
+    }
     Box(modifier = Modifier.fillMaxSize()) {
-        // v4.0.0: paint the top-bar gradient behind the status bar as well, so status
-        // icons always sit on the navy bar — never white-on-light.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .windowInsetsTopHeight(WindowInsets.statusBars)
+                .height(statusBarHeight)
                 .background(Brush.horizontalGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.16f), colors.topBarEnd))),
         )
         Scaffold(

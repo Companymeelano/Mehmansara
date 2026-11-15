@@ -79,8 +79,9 @@ fun MehraTheme(
             typography = typography,
             shapes = MehraShapes,
         ) {
-            // v4.1.0: STATIC royal-navy aurora — three fixed radial glows (navy/sapphire/gold)
-            // painted once; all looping animations removed so the app never redraws per frame.
+            // v4.2.0: STATIC backdrop — two soft, axis-symmetric glows (navy spotlight at the
+            // top, warm gold haze at the bottom) painted once. No off-center circles, so no
+            // diagonal "blob" edge can appear mid-screen; zero per-frame redraws.
             Box(modifier = Modifier.fillMaxSize().background(backdrop)) {
                 // v4.0.0: faint Iranian geometric lattice (two diagonal families) on a
                 // static layer — 4-5% opacity, no per-frame cost.
@@ -105,27 +106,22 @@ fun MehraTheme(
                         drawContent()
                         val w = size.width
                         val h = size.height
+                        // navy spotlight hugging the top edge (behind the app bar)
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(mehraColors.topBarEnd.copy(alpha = 0.22f), Color.Transparent),
+                                listOf(mehraColors.topBarEnd.copy(alpha = 0.16f), Color.Transparent),
                             ),
-                            radius = w * 0.95f,
-                            center = Offset(w * 0.18f, h * 0.16f),
+                            radius = w * 0.62f,
+                            center = Offset(w * 0.5f, -h * 0.12f),
                         )
+                        // warm champagne haze rising from the bottom edge
                         drawCircle(
                             brush = Brush.radialGradient(
-                                listOf(Color(0xFF3D6BE0).copy(alpha = 0.15f), Color.Transparent),
+                                listOf(mehraColors.accentMid.copy(alpha = 0.18f), Color.Transparent),
                             ),
-                            radius = w * 0.8f,
-                            center = Offset(w * 0.85f, h * 0.62f),
+                            radius = w * 0.75f,
+                            center = Offset(w * 0.5f, h * 1.08f),
                         )
-                        drawCircle(
-                            brush = Brush.radialGradient(
-                                listOf(mehraColors.accentMid.copy(alpha = 0.26f), Color.Transparent),
-                            ),
-                            radius = w * 0.85f,
-                            center = Offset(w * 0.55f, h * 0.92f),
-                            )
                         },
                 ) {
                     content()
