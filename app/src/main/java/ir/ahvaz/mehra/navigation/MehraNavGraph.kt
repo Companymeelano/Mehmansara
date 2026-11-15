@@ -361,6 +361,7 @@ fun MehraNavGraph(
             },
         )
     }
+}
 
 /**
  * Floating luxury bottom bar: a rounded glass pill with a gradient border and soft shadow.
