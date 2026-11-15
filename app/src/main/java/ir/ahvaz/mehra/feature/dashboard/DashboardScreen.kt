@@ -512,12 +512,12 @@ private fun WelcomeContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .shadow(12.dp, RoundedCornerShape(28.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
-                    .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(28.dp))
+                    .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.8f), colors.accentEnd.copy(alpha = 0.8f))), RoundedCornerShape(28.dp))
                     .background(
                         Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
                         RoundedCornerShape(28.dp),
                     )
-                    .padding(14.dp),
+                    .padding(18.dp),
             ) {
                 // soft gold spotlight behind the brand block — luxury depth on the hero
                 Box(
@@ -691,7 +691,7 @@ private fun DashboardHero(snapshot: DashboardSnapshot) {
         modifier = Modifier
             .fillMaxWidth()
             .shadow(12.dp, RoundedCornerShape(28.dp), ambientColor = Color(0xFF0A1128).copy(alpha = 0.30f), spotColor = Color(0xFF0A1128).copy(alpha = 0.38f))
-            .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.65f), colors.accentEnd.copy(alpha = 0.65f))), RoundedCornerShape(28.dp))
+            .border(1.dp, Brush.linearGradient(listOf(colors.accentStart.copy(alpha = 0.8f), colors.accentEnd.copy(alpha = 0.8f))), RoundedCornerShape(28.dp))
             .background(
                 Brush.linearGradient(listOf(colors.topBarStart, colors.topBarEnd.lighten(0.10f), colors.topBarEnd)),
                 RoundedCornerShape(28.dp),

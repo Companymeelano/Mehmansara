@@ -396,9 +396,9 @@ private fun MehraBottomBar(
                 width = 1.dp,
                 brush = Brush.horizontalGradient(
                     listOf(
-                        colors.accentStart.copy(alpha = 0.7f),
+                        colors.accentStart.copy(alpha = 0.85f),
                         colors.cardBorder,
-                        colors.accentEnd.copy(alpha = 0.7f),
+                        colors.accentEnd.copy(alpha = 0.85f),
                     )
                 ),
             ),

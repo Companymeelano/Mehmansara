@@ -60,7 +60,7 @@ fun PrimaryButton(
     val colors = MehraTheme.colors
     val active = enabled && !loading
     val shape = RoundedCornerShape(18.dp)
-    val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd))
+    val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid.lighten(0.14f), colors.accentMid, colors.accentEnd))
     Box(
         modifier = modifier
             .height(56.dp)
@@ -131,7 +131,7 @@ fun SecondaryButton(
     val scheme = MaterialTheme.colorScheme
     val active = enabled && !loading
     val shape = RoundedCornerShape(18.dp)
-    val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid, colors.accentEnd))
+    val brush = Brush.linearGradient(listOf(colors.accentStart, colors.accentMid.lighten(0.14f), colors.accentMid, colors.accentEnd))
     Box(
         modifier = modifier
             .height(56.dp)

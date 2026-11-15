@@ -1,6 +1,7 @@
 package ir.ahvaz.mehra.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -41,14 +42,15 @@ fun Icon3D(
     val stops = if (tone != null) {
         listOf(tone.lighten(0.30f), tone, tone.darken(0.32f))
     } else {
-        listOf(colors.accentStart, colors.accentMid, colors.accentEnd)
+        listOf(colors.accentStart, colors.accentMid.lighten(0.18f), colors.accentMid, colors.accentEnd)
     }
     val glyphTint = if (tone != null) Color.White else colors.onAccent
     val shape = RoundedCornerShape(size * 0.32f)
     Box(
         modifier = modifier
             .size(size)
-            .shadow(10.dp, shape, ambientColor = Color(0xFF081020).copy(alpha = 0.16f), spotColor = Color(0xFF081020).copy(alpha = 0.22f))
+            // v4.4.0: no drop shadow on icons — a hairline glossy rim keeps the chip crisp
+            .border(1.dp, Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.40f), Color.White.copy(alpha = 0.06f))), shape)
             .background(Brush.linearGradient(stops), shape),
     ) {
         // gloss on the upper half + slight shading at the bottom edge -> 3D relief

@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,7 +53,7 @@ fun StatTile(
         modifier = surfaceModifier,
         shape = shape,
         color = MaterialTheme.colorScheme.surface.copy(alpha = if (MehraTheme.colors.isDark) 0.85f else 0.95f),
-        border = BorderStroke(1.dp, MehraTheme.colors.cardBorder),
+        border = BorderStroke(1.dp, Brush.linearGradient(listOf(MehraTheme.colors.accentStart.copy(alpha = 0.45f), MehraTheme.colors.cardBorder, MehraTheme.colors.accentEnd.copy(alpha = 0.45f)))),
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
