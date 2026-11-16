@@ -1,6 +1,10 @@
 b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0.0-debug.apk
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
-# Windows v1.2.0 (final, run 43972972466) — LOCAL FILE mode (no SQL Server needed) + built-in LAN HTTP server on :5050 for the Android app; SQL components now optional — branch ci-artifacts
+# Windows v1.2.1 (final, run 43978527280) — WRITE support in local-file mode (add guest/reservation/transaction, check-in/check-out, room status) persisted to mehra-local.json + served to Android over LAN :5050 (Idempotency-Key, 409 on overlap); Settings shows real version — branch ci-artifacts
+e1353aa0a6c9af7d9e7a1c86aa564c0c55bc8fa1f0d50a2d7469a2c92b678142  ci-artifacts:setup/MehraSetup.exe  (89,600,978 bytes)
+e5ce8bb6136feb21c6783e88210ed4167c19801ce5f5b7d4b46c3166f8eff16c  ci-artifacts:exe/Mehra.exe  (94,372,744 bytes)
+f5303237ff62bfd6dd350f63a910a604a23546934dc9ba456bb7a136b5fa0a6f  ci-artifacts:exe/Mehra-win-x64.zip  (41,875,081 bytes)
+# Windows v1.2.0 (superseded, run 43972972466) — LOCAL FILE mode (no SQL Server needed) + built-in LAN HTTP server on :5050 for the Android app; SQL components now optional — branch ci-artifacts
 35bc006b2dc098ea2d44ca13fc3ea1ad17e03832b98c055eef1aa719cc8b66e9  ci-artifacts:setup/MehraSetup.exe  (89,584,984 bytes)
 2b92b5201b8caf82a27b46e15e397ec53cb9bd820249297b9139586334c2f1d8  ci-artifacts:exe/Mehra.exe  (94,294,920 bytes)
 a7333ea4c5dcb0122dddd2e7d378369556fff583e456d2aa7e5dc6bc01dfb4a9  ci-artifacts:exe/Mehra-win-x64.zip  (41,851,303 bytes)
