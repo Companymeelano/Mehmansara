@@ -1,6 +1,10 @@
 b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0.0-debug.apk
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
-# Windows v1.1.7 (final, run 43938463249) — installer UI audit+luxury: Durée/controlada tasks label fixed, welcome/finish text fixed (۱.۱.۷, real newlines, no bidi Latin), SQL page examples on own lines + sa prefill removed, WizardResizable=yes, Vazirmatn bold welcome/finish — branch ci-artifacts
+# Windows v1.2.0 (final, run 43972972466) — LOCAL FILE mode (no SQL Server needed) + built-in LAN HTTP server on :5050 for the Android app; SQL components now optional — branch ci-artifacts
+35bc006b2dc098ea2d44ca13fc3ea1ad17e03832b98c055eef1aa719cc8b66e9  ci-artifacts:setup/MehraSetup.exe  (89,584,984 bytes)
+2b92b5201b8caf82a27b46e15e397ec53cb9bd820249297b9139586334c2f1d8  ci-artifacts:exe/Mehra.exe  (94,294,920 bytes)
+a7333ea4c5dcb0122dddd2e7d378369556fff583e456d2aa7e5dc6bc01dfb4a9  ci-artifacts:exe/Mehra-win-x64.zip  (41,851,303 bytes)
+# Windows v1.1.7 (superseded, run 43938463249) — installer UI audit+luxury: Durée/controlada tasks label fixed, welcome/finish text fixed (۱.۱.۷, real newlines, no bidi Latin), SQL page examples on own lines + sa prefill removed, WizardResizable=yes, Vazirmatn bold welcome/finish — branch ci-artifacts
 5447dc9032603a853cce8c7a7e2d90604574ae868f754eeed64bd567e4a6fe60  ci-artifacts:setup/MehraSetup.exe  (89,551,373 bytes)
 177644c4655492989e71465fb6ff2f3bd152380e23b252654794160f1075feac  ci-artifacts:exe/Mehra.exe  (94,196,616 bytes)
 addc3d6770bfc9ab828bbc732b96a4b33f0f581370c14a86a9661a1c53ecca47  ci-artifacts:exe/Mehra-win-x64.zip  (41,817,721 bytes)

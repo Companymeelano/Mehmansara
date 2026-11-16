@@ -1,8 +1,8 @@
-# نسخهٔ ویندوز ۱.۱.۷ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe (برنامه + SQL Server LocalDB همراه + فونت‌ها)
+# نسخهٔ ویندوز ۱.۲.۰ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe + حالت «فایل محلی» (بدون SQL Server) + سرور شبکهٔ محلی برای اندروید (برنامه + SQL Server LocalDB همراه + فونت‌ها)
 
 > **از نسخهٔ ۱.۱.۵ به بعد، فقط یک فایل `MehraSetup.exe` کافی است** (نسخهٔ فعلی: ۱.۱.۷): نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
 
-## فایل‌های قابل دانلود (نسخهٔ ۱.۱.۷)
+## فایل‌های قابل دانلود (نسخهٔ ۱.۲.۰)
 
 - انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
 - **نصب‌گر کاملِ یک‌فایله (پیشنهادی حدود ۹۰ مگابایت):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
@@ -11,20 +11,22 @@
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - مرور فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش و اندازهٔ باینری‌ها (اجرای CI `43938463249` — نسخهٔ ۱.۱.۷)
+## هش و اندازهٔ باینری‌ها (اجرای CI `43972972466` — نسخهٔ ۱.۲.۰)
 
-- `setup/MehraSetup.exe`: 89,551,373 بایت — sha256 `5447dc9032603a853cce8c7a7e2d90604574ae868f754eeed64bd567e4a6fe60`
-- `exe/Mehra.exe`: 94,196,616 بایت — sha256 `177644c4655492989e71465fb6ff2f3bd152380e23b252654794160f1075feac`
-- `exe/Mehra-win-x64.zip`: 41,817,721 بایت — sha256 `addc3d6770bfc9ab828bbc732b96a4b33f0f581370c14a86a9661a1c53ecca47`
-- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۱.۷؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
+- `setup/MehraSetup.exe`: 89,584,984 بایت — sha256 `35bc006b2dc098ea2d44ca13fc3ea1ad17e03832b98c055eef1aa719cc8b66e9`
+- `exe/Mehra.exe`: 94,294,920 بایت — sha256 `2b92b5201b8caf82a27b46e15e397ec53cb9bd820249297b9139586334c2f1d8`
+- `exe/Mehra-win-x64.zip`: 41,851,303 بایت — sha256 `a7333ea4c5dcb0122dddd2e7d378369556fff583e456d2aa7e5dc6bc01dfb4a9`
+- تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۲.۰؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
 
-## تغییرات نسخهٔ ۱.۱.۷ در نصب‌گر
+## نسخهٔ ۱.۲.۰ — «ترفند ساده»: فایل محلی، بدون SQL Server + اتصال اندروید از شبکه
 
-- برچسب ایتالیایی-اسپانیایی «گزینه‌های Durée controladan» در صفحهٔ «امکانات نصب» به «گزینه‌های اضافی:» اصلاح شد
-- صفحهٔ خوش‌آمد: نسخهٔ ناقص «۱.۱» به «۱.۱.۷» اصلاح شد، خط‌ها واقعاً می‌شکنند، و متن لاتین `(Milad Yaghoobi)` که چیدمان راست‌به‌چپ را به‌هم می‌ریخت حذف شد (همین‌طور در صفحهٔ پایان)
-- صفحهٔ SQL: مثال‌های لاتین سرور (`localhost` / `.\\SQLEXPRESS` / `.\\MSSQLSERVER` / `(localdb)\\MSSQLLocalDB`) روی خط‌های جداگانه؛ پیش‌فرض نام کاربری `sa` حذف شد — نام کاربری و رمز «اختیاری» هستند و خالی یعنی احراز هویت ویندوز
-- پنجرهٔ نصب‌گر قابل تغییر اندازه شد (`WizardResizable=yes`); تایپوگرافی لاکچری صفحهٔ خوش‌آمد و پایان با وزیرمتن بولد (۱۷pt / ۱۶pt)
-- نسخه‌ها: AppVersion 1.1.7، AppVerName «مهرآ ۱.۱.۷ — ویندوز»، VersionInfoVersion 1.1.7.0 و csproj 1.1.7(.0)
+- **حالت پیش‌فرض حالا «فایل محلی — بدون سرور» است:** همهٔ داده‌ها در یک فایل JSON (`%AppData%\\mehra\\mehra-local.json`) ذخیره می‌شوند؛ نیازی به SQL Server، LocalDB یا درایور OLE DB نیست و نصب‌گر روی SQL Server 2022 دیگر خطا نمی‌دهد.
+- ورود پیش‌فرض: `admin` / `Admin@1234` (همان حساب قبلی، با هش SHA-256 در همان فایل).
+- **سرور شبکهٔ محلی (LAN):** وقتی با حالت فایل محلی وارد می‌شوید، خود برنامه یک سرور HTTP کوچک روی `http://<آی‌پی-کامپیوتر>:5050` اجرا می‌کند (نشانی در نوار پایین برنامه نمایش داده می‌شود) و همان داده‌ها را با قرارداد `docs/API.md` (envelope `{success,data,error}`) سرو می‌کند: `auth/login`، `system/health`، `dashboard/summary`، `rooms`، `guests`، `reservations`، `reception/stays`، `notifications`، `housekeeping`، `maintenance`، `users`، `finance`، `reports`.
+- **اتصال اندروید:** گوشی را به همان Wi-Fi وصل کنید؛ در اپ اندروید → تنظیمات → «نشانی سرور» مقدار `http://<آی‌پی-کامپیوتر>:5050` را بنویسید (مثلاً `http://192.168.1.20:5050`) و اتصال را تست کنید؛ ورود با `admin` / `Admin@1234`. داده‌های صفحه‌های اندروید همان دادهٔ فایل محلی PC است.
+- عمليات نوشتن (ثبت رزرو/پرداخت/...) در نسخهٔ فایل محلی فقط‌خوانی است و با پیام فارسی «NOT_SUPPORTED» پاسخ داده می‌شود؛ برای ثبت دادهٔ جدید از خود برنامهٔ ویندوز استفاده کنید.
+- نصب‌گر: مؤلفه‌های SQL (LocalDB/OLE DB/schema) حالا «اختیاری» و پیش‌فرض تیک‌خالی هستند؛ اگر تیک نخورند، `settings.json` با `Mode=local` نوشته می‌شود و اصلاً به SQL دست نمی‌زند.
+- اگر LocalDB/SQL را می‌خواهید، مثل قبلی در صفحهٔ مؤلفه‌ها تیک بزنید — بقیهٔ کار همان است.
 
 ## نصب با MehraSetup.exe (یک فایل — همه‌چیز)
 
