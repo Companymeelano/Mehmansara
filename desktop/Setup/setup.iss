@@ -1,5 +1,5 @@
 ﻿; ============================================================================
-;  MEHRA 1.1.6 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
+;  MEHRA 1.1.7 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
 ;  Luxury Persian (RTL) installer for the MEHRA Windows client.
 ;  Brand: Milad Yaghoobi — www.meelano.ir — 09120219593
 ;  Features: branded welcome/finish, Vazirmatn font, SQL Server config page,
@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.6
-AppVerName=مهرآ ۱.۱.۵ — ویندوز
+AppVersion=1.1.7
+AppVerName=مهرآ ۱.۱.۷ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -27,6 +27,7 @@ OutputDir=..\..\setup-out
 OutputBaseFilename=MehraSetup
 SetupIconFile=..\Mehra.Desktop\Assets\mehra.ico
 WizardStyle=modern
+WizardResizable=yes
 WizardImageFile=art_side.bmp
 WizardSmallImageFile=art_top.bmp
 Compression=lzma2/ultra64
@@ -35,7 +36,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.6.0
+VersionInfoVersion=1.1.7.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -55,7 +56,7 @@ ButtonYes=«بله»
 ButtonNo=«خیر»
 ButtonOK=«تأیید»
 WelcomeLabel1=به نصب‌گر مهرآ خوش آمدید
-WelcomeLabel2=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز ۱.۱\n\nطراح و توسعه‌دهنده: میلاد یعقوبی (Milad Yaghoobi)\nwww.meelano.ir — 09120219593
+WelcomeLabel2=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز ۱.۱.۷\n\nطراح و توسعه‌دهنده: میلاد یعقوبی\nwww.meelano.ir — 09120219593
 WizardSelectDir=انتخاب مقصد نصب
 SelectDirLabel=برنامه در این پوشه نصب می‌شود:
 SelectDirBrowseLabel=انتخاب پوشه…
@@ -70,9 +71,9 @@ StatusExtractFiles=در حال استخراج فایل‌ها…
 StatusCreateDirs=در حال ایجاد پوشه‌ها…
 StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
-FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
+FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱.۵ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۱.۷ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
@@ -82,7 +83,7 @@ Name: "schema"; Description: "فایل کامل اسکریپت پایگاه دا
 Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — نصب دائمی در سیستم"; Types: full
 
 [Tasks]
-Name: "desktopicon"; Description: "ایجاد میان‌بر روی دسکتاپ"; GroupDescription: "گزینه‌های Durata controlada:"
+Name: "desktopicon"; Description: "ایجاد میان‌بر روی دسکتاپ"; GroupDescription: "گزینه‌های اضافی:"
 Name: "startup"; Description: "اجرای خودکار مهرآ هنگام بالا آمدن ویندوز (پوشهٔ Startup)"; GroupDescription: "گزینه‌های اضافی:"
 Name: "runapp"; Description: "اجرای برنامه پس از پایان نصب"; GroupDescription: "گزینه‌های اضافی:"
 Name: "openfolder"; Description: "باز کردن پوشهٔ نصب پس از پایان"; GroupDescription: "گزینه‌های اضافی:"
@@ -702,6 +703,19 @@ begin
     WizardForm.Font.Name := 'Vazirmatn';
   except
   end;
+  try
+    WizardForm.WelcomeLabel1.Font.Name := 'Vazirmatn';
+    WizardForm.WelcomeLabel1.Font.Size := 17;
+    WizardForm.WelcomeLabel1.Font.Style := [fsBold];
+    WizardForm.WelcomeLabel2.Font.Name := 'Vazirmatn';
+    WizardForm.WelcomeLabel2.Font.Size := 10;
+    WizardForm.FinishedHeadingLabel.Font.Name := 'Vazirmatn';
+    WizardForm.FinishedHeadingLabel.Font.Size := 16;
+    WizardForm.FinishedHeadingLabel.Font.Style := [fsBold];
+    WizardForm.FinishedLabel.Font.Name := 'Vazirmatn';
+    WizardForm.FinishedLabel.Font.Size := 10;
+  except
+  end;
   if not IsAdminLoggedOnSafe then
     WizardForm.DirEdit.Text := ExpandConstant('{localappdata}\Mehra');
   OptPage := CreateInputOptionPage(wpSelectTasks,
@@ -712,14 +726,19 @@ begin
   OptPage.Values[1] := True;
 
   DbPage := CreateInputQueryPage(wpSelectTasks,
-    'تنظیمات اتصال SQL Server', 'نام سرور — اگر SQL Server 2022 نصب کرده‌اید: localhost یا .\SQLEXPRESS یا .\MSSQLSERVER؛ اگر LocalDB: (localdb)\MSSQLLocalDB. نام پایگاه داده.', 'این مقادیر بعداً در برنامه‌ٔ برای ورود به پایگاه داده استفاده می‌شود و اگر پایگاه داده وجود ندارد، به‌صورت خودکار ساخته می‌شود.');
+    'تنظیمات اتصال SQL Server',
+    'نام سرور و نام پایگاه داده را وارد کنید:' + #13#10 +
+    '• اگر SQL Server 2022 روی همین کامپیوتر نصب است:  localhost   یا   .\SQLEXPRESS   یا   .\MSSQLSERVER' + #13#10 +
+    '• اگر مؤلفهٔ «SQL Server LocalDB همراه» را انتخاب کرده‌اید:  (localdb)\MSSQLLocalDB' + #13#10 +
+    '• نام پایگاه دادهٔ پیش‌فرض:  Mehra',
+    'این مقادیر بعداً در برنامه برای اتصال به پایگاه داده استفاده می‌شود؛ اگر پایگاه داده وجود نداشته باشد، به‌صورت خودکار ساخته می‌شود. توصیه می‌شود از «احراز هویت ویندوز» استفاده کنید؛ در آن حالت نام کاربری و رمز عبور را خالی بگذارید.');
   DbPage.Add('سرور SQL Server:', False);
   DbPage.Values[0] := '(localdb)\MSSQLLocalDB';
   DbPage.Add('نام پایگاه داده:', False);
   DbPage.Values[1] := 'Mehra';
-  DbPage.Add('نام کاربری SQL (در حالت SQL):', False);
-  DbPage.Values[2] := 'sa';
-  DbPage.Add('رمز عبور SQL:', True);
+  DbPage.Add('نام کاربری SQL (اختیاری — فقط در حالت SQL Authentication):', False);
+  DbPage.Values[2] := '';
+  DbPage.Add('رمز عبور SQL (اختیاری):', True);
   DbPage.Values[3] := '';
 
   PctLabel := TLabel.Create(WizardForm);
