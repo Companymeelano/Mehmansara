@@ -456,7 +456,7 @@ public class SqlServerApi : IHotelApi
 
     // ================= write operations (v1.2.1) =================
 
-    private async Task<Result<T>> ExecAsync<T>(string sql, Func<SqlCommand, Task<T>> body, params (string, object)[] ps)
+    private async Task<Result<T>> ExecAsync<T>(string sql, Func<SqlCommand, Task<Result<T>>> body, params (string, object)[] ps)
     {
         try
         {
@@ -604,7 +604,7 @@ public class SqlServerApi : IHotelApi
         if (!allowed.Contains(status)) return Result<RoomDto>.Fail("وضعیت نامعتبر: " + status);
         var n = await ExecAsync(
             "UPDATE dbo.rooms SET status=@st, currentGuestName = CASE WHEN @st IN ('FREE','CLEANING') THEN NULL ELSE currentGuestName END WHERE id=@id OR roomNumber=@id",
-            async c => { return await c.ExecuteNonQueryAsync(); },
+            async c => { var k = await c.ExecuteNonQueryAsync(); return Result<int>.Good(k); },
             ("@st", status), ("@id", roomId));
         if (!n.Ok) return Result<RoomDto>.Fail(n.Error);
         if (n.Value == 0) return Result<RoomDto>.Fail("اتاق یافت نشد: " + roomId);
