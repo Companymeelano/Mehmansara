@@ -4,9 +4,28 @@ namespace Mehra.Desktop.Views.Pages;
 
 public partial class ReservationsPage : UserControl
 {
+    private readonly ReservationsVm _vm;
+
     public ReservationsPage(Session session)
     {
         InitializeComponent();
-        DataContext = new ReservationsVm(session);
+        _vm = new ReservationsVm(session);
+        DataContext = _vm;
+    }
+
+    private async void OnAdd(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this) is not Window win) return;
+        var today = DateTime.Today.ToString("yyyy-MM-dd");
+        var dlg = new InputDialog("رزرو جدید",
+            ("نام مهمان", ""), ("تلفن", ""), ("شمارهٔ اتاق", ""),
+            ("تاریخ ورود (yyyy-MM-dd)", today), ("تاریخ خروج (yyyy-MM-dd)", DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")),
+            ("تعداد نفرات", "1"), ("مبلغ کل (ریال)", "0"), ("پیش‌پرداخت (ریال)", "0"));
+        dlg.Required = new[] { true, false, true, true, true, true, true, false };
+        if (await dlg.ShowDialog<bool?>(win) == true)
+            await _vm.AddReservationAsync(
+                dlg.Values["نام مهمان"], dlg.Values["تلفن"], dlg.Values["شمارهٔ اتاق"],
+                dlg.Values["تاریخ ورود (yyyy-MM-dd)"], dlg.Values["تاریخ خروج (yyyy-MM-dd)"],
+                dlg.Values["تعداد نفرات"], dlg.Values["مبلغ کل (ریال)"], dlg.Values["پیش‌پرداخت (ریال)"]);
     }
 }

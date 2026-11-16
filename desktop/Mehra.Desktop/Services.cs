@@ -34,6 +34,14 @@ public interface IHotelApi
     Task<Result<List<NotificationDto>>> NotificationsAsync();
     Task<Result<string>> MarkAllNotificationsReadAsync();
     Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso);
+
+    // ---- write operations (v1.2.1) ----
+    Task<Result<GuestDto>> AddGuestAsync(string firstName, string lastName, string? phone, string? city);
+    Task<Result<ReservationDto>> AddReservationAsync(string guestName, string? guestPhone, string roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial);
+    Task<Result<TransactionDto>> AddTransactionAsync(string type, long amountRial, string method, string? description, string? guestName, string? roomNumber);
+    Task<Result<StayDto>> CheckInAsync(string reservationId);
+    Task<Result<StayDto>> CheckOutAsync(string stayId, long finalPaymentRial, string method);
+    Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status);
 }
 
 public static class Json

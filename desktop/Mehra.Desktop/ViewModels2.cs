@@ -121,7 +121,16 @@ public class GuestsVm : VmBase
 
     public GuestsVm(Session session) { _session = session; _ = LoadAsync(); }
 
-    private async Task LoadAsync()
+    public async Task AddGuestAsync(string firstName, string lastName, string phone, string city)
+    {
+        var r = await _session.Api.AddGuestAsync(firstName, lastName,
+            string.IsNullOrWhiteSpace(phone) ? null : phone,
+            string.IsNullOrWhiteSpace(city) ? null : city);
+        Status = r.Ok ? "مهمان ثبت شد: " + r.Value!.LastName : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var r = await _session.Api.GuestsAsync();
         if (!r.Ok) { Status = r.Error; return; }
@@ -157,7 +166,15 @@ public class FinanceVm : VmBase
 
     public FinanceVm(Session session) { _session = session; _ = LoadAsync(); }
 
-    private async Task LoadAsync()
+    public async Task AddTransactionAsync(string type, string amount, string method, string description, string guest)
+    {
+        var r = await _session.Api.AddTransactionAsync(type, long.TryParse(amount, out var a) ? a : 0,
+            method, description, string.IsNullOrWhiteSpace(guest) ? null : guest, null);
+        Status = r.Ok ? "تراکنش ثبت شد: " + (r.Value!.Code ?? "") : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var today = DateTime.Today.ToString("yyyy-MM-dd");
         var weekAgo = DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd");

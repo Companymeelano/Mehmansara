@@ -29,6 +29,7 @@ public class LanServer : IDisposable
     private CancellationTokenSource _cts = new();
     private volatile bool _running;
     private string? _currentToken;
+    private readonly Dictionary<string, string> _idempotency = new();
 
     public int Port { get; private set; }
     public string LanUrl { get; private set; } = "";
@@ -591,12 +592,136 @@ public class LanServer : IDisposable
             return r.Ok ? (200, EnvelopeOk(r.Value)) : (200, EnvelopeErr("SERVER_ERROR", r.Error));
         }
 
+        // ---- writes (v1.2.1): routed to the local store, so Android can write over LAN too ----
+        if (path == "/api/v1/guests" && method == "POST")
+        {
+            var (fn, ln, ph, ci) = BodyFields(body, "firstName", "lastName", "phone", "city");
+            var r = await _api.AddGuestAsync(fn ?? "", ln ?? "", ph, ci);
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
+        }
+        if (path == "/api/v1/reservations" && method == "POST")
+        {
+            var guestName = BodyField(body, "guestName") ?? BodyNested(body, "guest", "lastName") ?? "";
+            var guestPhone = BodyField(body, "guestPhone") ?? BodyNested(body, "guest", "phone");
+            var roomNumber = BodyField(body, "roomNumber") ?? "";
+            var roomId = BodyField(body, "roomId");
+            if (roomNumber.Length == 0 && roomId != null)
+                roomNumber = _api.Store.Rooms.FirstOrDefault(r => r.Id == roomId)?.RoomNumber ?? "";
+            var r = await _api.AddReservationAsync(
+                guestName, guestPhone, roomNumber,
+                BodyField(body, "checkInDate") ?? DateTime.Today.ToString("yyyy-MM-dd"),
+                BodyField(body, "checkOutDate") ?? DateTime.Today.AddDays(1).ToString("yyyy-MM-dd"),
+                int.TryParse(BodyField(body, "guestsCount"), out var gc) ? gc : 1,
+                long.TryParse(BodyField(body, "totalRial"), out var tr) ? tr : 0,
+                long.TryParse(BodyField(body, "prepaidRial") ?? BodyField(body, "paidRial"), out var pr) ? pr : 0);
+            return r.Ok ? (200, EnvelopeOk(r.Value))
+                : (r.Error.Contains("رزرو شده") ? (409, EnvelopeErr("RESERVATION_CONFLICT", r.Error))
+                : (400, EnvelopeErr("VALIDATION_FAILED", r.Error)));
+        }
+        if (path == "/api/v1/finance/transactions" && method == "POST")
+        {
+            var idem = headers.TryGetValue("Idempotency-Key", out var ik) ? ik : "";
+            if (idem.Length > 0 && _idempotency.TryGetValue(idem, out var cached))
+                return (200, JsonSerializer.Deserialize<JsonElement>(cached));
+            var r = await _api.AddTransactionAsync(
+                BodyField(body, "type") ?? "RECEIVE",
+                long.TryParse(BodyField(body, "amountRial"), out var am) ? am : 0,
+                BodyField(body, "method") ?? "CASH",
+                BodyField(body, "description"),
+                BodyField(body, "guestName"),
+                BodyField(body, "roomNumber") ?? BodyField(body, "reference"));
+            var resp = r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
+            if (idem.Length > 0) _idempotency[idem] = JsonSerializer.Serialize(resp.Item2, SerOpts);
+            return resp;
+        }
+        if (seg.Length == 5 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "reception" && seg[4] == "check-in" && method == "POST")
+        {
+            var r = await _api.CheckInAsync(seg[3]);
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (409, EnvelopeErr("INVALID_STATE", r.Error));
+        }
+        if (seg.Length == 6 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "reception" && seg[3] == "stays" && seg[5] == "check-out" && method == "POST")
+        {
+            var r = await _api.CheckOutAsync(seg[4],
+                long.TryParse(BodyField(body, "finalPaymentRial"), out var fp) ? fp : 0,
+                BodyField(body, "paymentMethod") ?? "CASH");
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (409, EnvelopeErr("INVALID_STATE", r.Error));
+        }
+        if (seg.Length == 5 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "rooms" && seg[4] == "status" && method == "PATCH")
+        {
+            var r = await _api.SetRoomStatusAsync(seg[3], BodyField(body, "status") ?? "FREE");
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
+        }
+        if (path == "/api/v1/housekeeping/tasks" && method == "POST")
+        {
+            var roomId = BodyField(body, "roomId");
+            var roomNumber = _api.Store.Rooms.FirstOrDefault(r => r.Id == roomId)?.RoomNumber ?? roomId ?? "";
+            var t = new HousekeepingTaskDto
+            {
+                Id = "h" + Guid.NewGuid().ToString("N")[..8],
+                RoomNumber = roomNumber,
+                Type = (BodyField(body, "type") ?? "DAILY").ToUpperInvariant(),
+                Status = "Pending",
+                Notes = BodyField(body, "notes"),
+                CreatedAtUtc = DateTime.UtcNow.ToString("o")
+            };
+            _api.Store.Housekeeping.Insert(0, t);
+            LocalStore.Save(_api.Store);
+            return (200, EnvelopeOk(t));
+        }
+        if (path == "/api/v1/maintenance/tickets" && method == "POST")
+        {
+            var roomId = BodyField(body, "roomId");
+            var roomNumber = _api.Store.Rooms.FirstOrDefault(r => r.Id == roomId)?.RoomNumber ?? roomId ?? "";
+            var m = new MaintenanceTicketDto
+            {
+                Id = "m" + Guid.NewGuid().ToString("N")[..8],
+                Code = "MT-" + (310 + _api.Store.Maintenance.Count),
+                RoomNumber = roomNumber,
+                Title = BodyField(body, "title") ?? "",
+                Description = BodyField(body, "description"),
+                Priority = (BodyField(body, "priority") ?? "NORMAL").ToUpperInvariant(),
+                Status = "Open",
+                ReporterName = "LAN",
+                CreatedAtUtc = DateTime.UtcNow.ToString("o")
+            };
+            _api.Store.Maintenance.Insert(0, m);
+            LocalStore.Save(_api.Store);
+            return (200, EnvelopeOk(m));
+        }
+
         // ---- everything else (writes / unknown) ----
         if (method is "POST" or "PUT" or "PATCH" or "DELETE")
             return (200, EnvelopeErr("NOT_SUPPORTED",
-                "نسخهٔ «فایل محلی» فقط‌خوانی است — برای ثبت دادهٔ جدید از خود برنامهٔ ویندوز استفاده کنید."));
+                "این مسیر در نسخهٔ «فایل محلی» پیاده‌سازی نشده است."));
         return (404, EnvelopeErr("NOT_FOUND", "مسیر یافت نشد: " + method + " " + path));
     }
+
+    private static string? BodyField(string body, string name)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(body) ? "{}" : body);
+            return doc.RootElement.TryGetProperty(name, out var el) && el.ValueKind == JsonValueKind.String ? el.GetString() : null;
+        }
+        catch { return null; }
+    }
+
+    private static string? BodyNested(string body, string obj, string name) =>
+        BodyField(string.IsNullOrWhiteSpace(body) ? "{}" : body, "__none__") is null ? Nested(body, obj, name) : null;
+
+    private static string? Nested(string body, string obj, string name)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(body) ? "{}" : body);
+            return doc.RootElement.TryGetProperty(obj, out var o) && o.TryGetProperty(name, out var el) && el.ValueKind == JsonValueKind.String
+                ? el.GetString() : null;
+        }
+        catch { return null; }
+    }
+
+    private static (string?, string?, string?, string?) BodyFields(string body, string a, string b, string c, string d) =>
+        (BodyField(body, a), BodyField(body, b), BodyField(body, c), BodyField(body, d));
 
     private object? CurrentUserPayload()
     {

@@ -2,7 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Mehra.Desktop.Views.Pages.ReceptionPage">
   <StackPanel Spacing="12">
-    <TextBlock Text="پذیرش — اقامت‌های فعال" FontSize="22" Classes="bold" />
+    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,4">
+      <TextBlock Text="پذیرش — اقامت‌های فعال" FontSize="22" Classes="bold" />
+      <Button Grid.Column="1" Content="پذیرش رزرو (check-in)" Classes="primary" Click="OnCheckIn" Margin="0,0,8,0" />
+      <Button Grid.Column="2" Content="تسویهٔ اقامت (check-out)" Classes="ghost" Click="OnCheckOut" />
+    </Grid>
     <ItemsControl ItemsSource="{Binding Items}">
       <ItemsControl.ItemTemplate>
         <DataTemplate>

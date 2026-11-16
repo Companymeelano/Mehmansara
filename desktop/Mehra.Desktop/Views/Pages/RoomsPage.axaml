@@ -2,7 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Mehra.Desktop.Views.Pages.RoomsPage">
   <StackPanel Spacing="12">
-    <TextBlock Text="اتاق‌ها" FontSize="22" Classes="bold" />
+    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+      <TextBlock Text="اتاق‌ها" FontSize="22" Classes="bold" />
+      <Button Grid.Column="1" Content="تغییر وضعیت اتاق" Classes="ghost" Click="OnStatus" />
+    </Grid>
     <ItemsControl ItemsSource="{Binding Rooms}">
       <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>

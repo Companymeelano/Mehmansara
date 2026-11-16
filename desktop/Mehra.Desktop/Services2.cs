@@ -157,6 +157,19 @@ public partial class DemoApi
     public Task<Result<string>> MarkAllNotificationsReadAsync() =>
         Task.FromResult(Result<string>.Good("همهٔ اعلان‌ها خوانده شدند (نسخهٔ نمایشی)."));
 
+    public Task<Result<GuestDto>> AddGuestAsync(string firstName, string lastName, string? phone, string? city) =>
+        Task.FromResult(Result<GuestDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است — برای ثبت دادهٔ واقعی از «فایل محلی» استفاده کنید."));
+    public Task<Result<ReservationDto>> AddReservationAsync(string guestName, string? guestPhone, string roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial) =>
+        Task.FromResult(Result<ReservationDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است — برای ثبت دادهٔ واقعی از «فایل محلی» استفاده کنید."));
+    public Task<Result<TransactionDto>> AddTransactionAsync(string type, long amountRial, string method, string? description, string? guestName, string? roomNumber) =>
+        Task.FromResult(Result<TransactionDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است — برای ثبت دادهٔ واقعی از «فایل محلی» استفاده کنید."));
+    public Task<Result<StayDto>> CheckInAsync(string reservationId) =>
+        Task.FromResult(Result<StayDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<StayDto>> CheckOutAsync(string stayId, long finalPaymentRial, string method) =>
+        Task.FromResult(Result<StayDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status) =>
+        Task.FromResult(Result<RoomDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+
     public Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso) => Task.FromResult(Result<ReportDto>.Good(new ReportDto
     {
         Type = key,
@@ -175,3 +188,107 @@ public partial class DemoApi
         GeneratedAtUtc = DateTime.UtcNow.ToString("o")
     }));
 }
+
+    // ---- write operations over the REST API (docs/API.md) ----
+    private async Task<Result<T>> PostAsync<T>(string path, object body, string? idempotencyKey = null)
+    {
+        if (_server.Length == 0) return Result<T>.Fail("ابتدا وارد شوید.");
+        try
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Post, $"{_server}{path}")
+            {
+                Content = JsonContent.Create(body)
+            };
+            if (_token.Length > 0) req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            if (idempotencyKey != null) req.Headers.TryAddWithoutValidation("Idempotency-Key", idempotencyKey);
+            using var resp = await _http.SendAsync(req);
+            var text = await resp.Content.ReadAsStringAsync();
+            var env = JsonSerializer.Deserialize<ApiEnvelope<T>>(text, Json.Opts);
+            if (!resp.IsSuccessStatusCode || env is null || !env.Success)
+                return Result<T>.Fail(env?.Error?.Message ?? $"پاسخ نامعتبر از سرور (کد {(int)resp.StatusCode})");
+            return Result<T>.Good(env.Data!);
+        }
+        catch (Exception ex) { return Result<T>.Fail("اتصال به سرور برقرار نشد. (" + ex.Message + ")"); }
+    }
+
+    private async Task<Result<T>> PatchAsync<T>(string path, object body)
+    {
+        if (_server.Length == 0) return Result<T>.Fail("ابتدا وارد شوید.");
+        try
+        {
+            using var req = new HttpRequestMessage(new HttpMethod("PATCH"), $"{_server}{path}")
+            {
+                Content = JsonContent.Create(body)
+            };
+            if (_token.Length > 0) req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            using var resp = await _http.SendAsync(req);
+            var text = await resp.Content.ReadAsStringAsync();
+            var env = JsonSerializer.Deserialize<ApiEnvelope<T>>(text, Json.Opts);
+            if (!resp.IsSuccessStatusCode || env is null || !env.Success)
+                return Result<T>.Fail(env?.Error?.Message ?? $"پاسخ نامعتبر از سرور (کد {(int)resp.StatusCode})");
+            return Result<T>.Good(env.Data!);
+        }
+        catch (Exception ex) { return Result<T>.Fail("اتصال به سرور برقرار نشد. (" + ex.Message + ")"); }
+    }
+
+    public Task<Result<GuestDto>> AddGuestAsync(string firstName, string lastName, string? phone, string? city) =>
+        PostAsync<GuestDto>("/api/v1/guests", new { firstName, lastName, phone, city, address = (string?)null, notes = (string?)null, companions = Array.Empty<object>() }, Guid.NewGuid().ToString());
+
+    public async Task<Result<ReservationDto>> AddReservationAsync(string guestName, string? guestPhone, string roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial)
+    {
+        var rooms = await GetAsync<Paged<RoomDto>>($"/api/v1/rooms?page=1&pageSize=200");
+        var r0 = rooms.Ok ? rooms.Value?.Items?.FirstOrDefault(r => r.RoomNumber == roomNumber) : null;
+        if (r0 is null) return Result<ReservationDto>.Fail("اتاق «" + roomNumber + "» یافت نشد.");
+        return await PostAsync<ReservationDto>("/api/v1/reservations", new
+        {
+            guest = new { firstName = "", lastName = guestName, phone = guestPhone },
+            roomId = r0.Id,
+            checkInDate = checkInIso,
+            checkOutDate = checkOutIso,
+            guestsCount,
+            prepaidRial = paidRial,
+            notes = (string?)null
+        }, Guid.NewGuid().ToString());
+    }
+
+    public Task<Result<TransactionDto>> AddTransactionAsync(string type, long amountRial, string method, string? description, string? guestName, string? roomNumber) =>
+        PostAsync<TransactionDto>("/api/v1/finance/transactions", new
+        {
+            type,
+            amountRial,
+            method,
+            description = description ?? "",
+            guestId = (string?)null,
+            reservationId = (string?)null,
+            reference = roomNumber
+        }, Guid.NewGuid().ToString());
+
+    public async Task<Result<StayDto>> CheckInAsync(string reservationId)
+    {
+        var res = await GetAsync<ReservationDto>($"/api/v1/reservations/{Uri.EscapeDataString(reservationId)}");
+        if (!res.Ok) return Result<StayDto>.Fail(res.Error);
+        var rooms = await GetAsync<Paged<RoomDto>>($"/api/v1/rooms?page=1&pageSize=200");
+        var roomId = rooms.Ok ? rooms.Value?.Items?.FirstOrDefault(r => r.RoomNumber == res.Value?.RoomNumber)?.Id : null;
+        return await PostAsync<StayDto>($"/api/v1/reception/{Uri.EscapeDataString(reservationId)}/check-in", new
+        {
+            roomId,
+            companions = Array.Empty<object>(),
+            documentTypes = Array.Empty<string>(),
+            initialPaymentRial = (long?)null,
+            paymentMethod = (string?)null,
+            note = (string?)null
+        }, Guid.NewGuid().ToString());
+    }
+
+    public Task<Result<StayDto>> CheckOutAsync(string stayId, long finalPaymentRial, string method) =>
+        PostAsync<StayDto>($"/api/v1/reception/stays/{Uri.EscapeDataString(stayId)}/check-out", new
+        {
+            finalPaymentRial = finalPaymentRial > 0 ? finalPaymentRial : (long?)null,
+            paymentMethod = finalPaymentRial > 0 ? method : (string?)null,
+            discountRial = (long?)null,
+            note = (string?)null,
+            moveRoomToCleaning = true
+        }, Guid.NewGuid().ToString());
+
+    public Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status) =>
+        PatchAsync<RoomDto>($"/api/v1/rooms/{Uri.EscapeDataString(roomId)}", new { status, note = (string?)null });

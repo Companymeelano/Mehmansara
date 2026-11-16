@@ -84,7 +84,14 @@ public class RoomsVm : VmBase
         _ = LoadAsync();
     }
 
-    private async Task LoadAsync()
+    public async Task SetRoomStatusAsync(string room, string status)
+    {
+        var r = await _session.Api.SetRoomStatusAsync(room.Trim(), status.Trim().ToUpperInvariant());
+        Status = r.Ok ? "وضعیت اتاق به‌روز شد: " + StatusText.RoomFa(r.Value!.Status) : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var r = await _session.Api.RoomsAsync();
         if (!r.Ok) { Status = r.Error; return; }
@@ -117,7 +124,18 @@ public class ReservationsVm : VmBase
         _ = LoadAsync();
     }
 
-    private async Task LoadAsync()
+    public async Task AddReservationAsync(string guestName, string? phone, string room, string ci, string co, string guestsCount, string total, string paid)
+    {
+        var r = await _session.Api.AddReservationAsync(
+            guestName, phone, room, ci, co,
+            int.TryParse(guestsCount, out var gc) ? gc : 1,
+            long.TryParse(total, out var t) ? t : 0,
+            long.TryParse(paid, out var p) ? p : 0);
+        Status = r.Ok ? "رزرو ثبت شد: " + (r.Value!.Code ?? "") : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var r = await _session.Api.ReservationsAsync();
         if (!r.Ok) { Status = r.Error; return; }
@@ -153,7 +171,22 @@ public class ReceptionVm : VmBase
         _ = LoadAsync();
     }
 
-    private async Task LoadAsync()
+    public async Task CheckInAsync(string code)
+    {
+        var r = await _session.Api.CheckInAsync(code.Trim());
+        Status = r.Ok ? "پذیرش انجام شد — اقامت فعال: " + (r.Value!.RoomNumber ?? "") : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task CheckOutAsync(string code, string amount, string method)
+    {
+        var r = await _session.Api.CheckOutAsync(code.Trim(),
+            long.TryParse(amount, out var a) ? a : 0, method);
+        Status = r.Ok ? "تسویه انجام شد — اتاق به نظافت می‌رود" : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var r = await _session.Api.StaysAsync();
         if (!r.Ok) { Status = r.Error; return; }
@@ -197,6 +230,7 @@ public class SettingsVm : VmBase
         Mode = session.Api.IsDemo
             ? "حالت: نسخهٔ نمایشی (دادهٔ نمونه — بدون اتصال به سرور)"
             : IsSql ? "حالت: اتصال مستقیم به SQL Server (جدول‌ها از فایل db\\schema.sql ساخته می‌شوند)"
+            : session.Api is LocalFileApi ? "حالت: فایل محلی (بدون سرور) — سرور شبکهٔ محلی (LAN) روی پورت ۵۰۵۰ برای اندروید فعال است"
             : "حالت: اتصال به سرور وب (API)";
     }
 

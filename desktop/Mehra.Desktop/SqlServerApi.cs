@@ -453,4 +453,163 @@ public class SqlServerApi : IHotelApi
         var v = await c.ExecuteScalarAsync();
         return v is null or DBNull ? 0 : Convert.ToInt64(v);
     }
+
+    // ================= write operations (v1.2.1) =================
+
+    private async Task<Result<T>> ExecAsync<T>(string sql, Func<SqlCommand, Task<T>> body, params (string, object)[] ps)
+    {
+        try
+        {
+            await using var con = await OpenAsync();
+            await using var cmd = new SqlCommand(sql, con);
+            foreach (var (n, v) in ps) cmd.Parameters.AddWithValue(n, v);
+            return await body(cmd);
+        }
+        catch (Exception ex) { return Result<T>.Fail("خطای پایگاه داده: " + ex.Message); }
+    }
+
+    public async Task<Result<GuestDto>> AddGuestAsync(string firstName, string lastName, string? phone, string? city)
+    {
+        if (string.IsNullOrWhiteSpace(lastName) && string.IsNullOrWhiteSpace(firstName))
+            return Result<GuestDto>.Fail("نام یا نام خانوادگی را وارد کنید.");
+        return await ExecAsync(
+            "INSERT INTO dbo.guests (firstName, lastName, phone, city) OUTPUT INSERTED.id, INSERTED.firstName, INSERTED.lastName, INSERTED.phone, INSERTED.city, INSERTED.balanceRial, INSERTED.totalStays, INSERTED.lastStayAtUtc VALUES (@f, @l, @p, @c)",
+            async cmd =>
+            {
+                await using var r = await cmd.ExecuteReaderAsync();
+                if (!await r.ReadAsync()) return Result<GuestDto>.Fail("ثبت مهمان ناموفق بود.");
+                return Result<GuestDto>.Good(new GuestDto
+                {
+                    Id = r.GetGuid(0).ToString(), FirstName = S(r, 1), LastName = S(r, 2),
+                    Phone = r.IsDBNull(3) ? null : S(r, 3), City = r.IsDBNull(4) ? null : S(r, 4),
+                    BalanceRial = L(r, 5), TotalStays = I(r, 6), LastStayAtUtc = D(r, 7)
+                });
+            },
+            ("@f", firstName.Trim()), ("@l", lastName.Trim()),
+            ("@p", (object?)phone ?? DBNull.Value), ("@c", (object?)city ?? DBNull.Value));
+    }
+
+    public async Task<Result<ReservationDto>> AddReservationAsync(string guestName, string? guestPhone, string roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial)
+    {
+        if (string.IsNullOrWhiteSpace(guestName)) return Result<ReservationDto>.Fail("نام مهمان را وارد کنید.");
+        if (!DateTime.TryParse(checkInIso, out var ci) || !DateTime.TryParse(checkOutIso, out var co) || co <= ci)
+            return Result<ReservationDto>.Fail("بازهٔ تاریخ نامعتبر است (ورود باید قبل از خروج باشد).");
+        var room = await QueryAsync(ConnectionString, "SELECT id FROM dbo.rooms WHERE roomNumber=@rn", r => r.GetGuid(0), ("@rn", roomNumber.Trim()));
+        if (!room.Ok || room.Value!.Count == 0) return Result<ReservationDto>.Fail("اتاق «" + roomNumber + "» یافت نشد.");
+        var overlap = await ScalarStatic(ConnectionString,
+            "SELECT COUNT(*) FROM dbo.reservations WHERE roomNumber=@rn AND status IN ('CONFIRMED','CHECKED_IN','PENDING') AND checkInDate < @co AND checkOutDate > @ci",
+            ("@rn", roomNumber.Trim()), ("@ci", ci.ToString("yyyy-MM-dd")), ("@co", co.ToString("yyyy-MM-dd")));
+        if (overlap > 0) return Result<ReservationDto>.Fail("اتاق " + roomNumber + " در این بازه رزرو شده است.");
+        var code = "R-" + (1000 + (int)await ScalarStatic(ConnectionString, "SELECT COUNT(*) FROM dbo.reservations"));
+        var status = paidRial > 0 ? "CONFIRMED" : "PENDING";
+        return await ExecAsync(
+            "INSERT INTO dbo.reservations (code, guestName, guestPhone, roomNumber, checkInDate, checkOutDate, guestsCount, totalRial, paidRial, status) OUTPUT INSERTED.id, INSERTED.code, INSERTED.guestName, INSERTED.guestPhone, INSERTED.roomNumber, INSERTED.checkInDate, INSERTED.checkOutDate, INSERTED.guestsCount, INSERTED.totalRial, INSERTED.paidRial, INSERTED.status VALUES (@c, @g, @p, @rn, @ci, @co, @gc, @t, @pd, @st)",
+            async cmd =>
+            {
+                await using var r = await cmd.ExecuteReaderAsync();
+                if (!await r.ReadAsync()) return Result<ReservationDto>.Fail("ثبت رزرو ناموفق بود.");
+                return Result<ReservationDto>.Good(new ReservationDto
+                {
+                    Id = r.GetGuid(0).ToString(), Code = S(r, 1), GuestName = S(r, 2),
+                    GuestPhone = r.IsDBNull(3) ? null : S(r, 3), RoomNumber = r.IsDBNull(4) ? null : S(r, 4),
+                    CheckInDate = r.GetDateTime(5).ToString("yyyy-MM-dd"), CheckOutDate = r.GetDateTime(6).ToString("yyyy-MM-dd"),
+                    GuestsCount = I(r, 7), TotalRial = L(r, 8), PaidRial = L(r, 9), Status = S(r, 10)
+                });
+            },
+            ("@c", code), ("@g", guestName.Trim()), ("@p", (object?)guestPhone ?? DBNull.Value),
+            ("@rn", roomNumber.Trim()), ("@ci", ci), ("@co", co), ("@gc", guestsCount < 1 ? 1 : guestsCount),
+            ("@t", totalRial), ("@pd", paidRial), ("@st", status));
+    }
+
+    public async Task<Result<TransactionDto>> AddTransactionAsync(string type, long amountRial, string method, string? description, string? guestName, string? roomNumber)
+    {
+        if (amountRial <= 0) return Result<TransactionDto>.Fail("مبلغ باید بزرگ‌تر از صفر باشد.");
+        var t = string.IsNullOrWhiteSpace(type) ? "RECEIVE" : type.Trim().ToUpperInvariant();
+        if (t is not ("RECEIVE" or "PAY" or "DISCOUNT" or "REFUND")) t = "RECEIVE";
+        var code = "TX-" + (9000 + (int)await ScalarStatic(ConnectionString, "SELECT COUNT(*) FROM dbo.transactions"));
+        return await ExecAsync(
+            "INSERT INTO dbo.transactions (code, type, amountRial, method, description, guestName, roomNumber, operatorName, isReversed) OUTPUT INSERTED.id, INSERTED.code, INSERTED.type, INSERTED.amountRial, INSERTED.method, INSERTED.description, INSERTED.guestName, INSERTED.roomNumber, INSERTED.operatorName, INSERTED.createdAtUtc, INSERTED.isReversed VALUES (@c, @t, @a, @m, @d, @g, @rn, @o, 0)",
+            async cmd =>
+            {
+                await using var r = await cmd.ExecuteReaderAsync();
+                if (!await r.ReadAsync()) return Result<TransactionDto>.Fail("ثبت تراکنش ناموفق بود.");
+                return Result<TransactionDto>.Good(new TransactionDto
+                {
+                    Id = r.GetGuid(0).ToString(), Code = S(r, 1), Type = S(r, 2), AmountRial = L(r, 3), Method = S(r, 4),
+                    Description = r.IsDBNull(5) ? null : S(r, 5), GuestName = r.IsDBNull(6) ? null : S(r, 6),
+                    RoomNumber = r.IsDBNull(7) ? null : S(r, 7), OperatorName = r.IsDBNull(8) ? null : S(r, 8),
+                    CreatedAtUtc = D(r, 9), IsReversed = B(r, 10)
+                });
+            },
+            ("@c", code), ("@t", t), ("@a", amountRial), ("@m", string.IsNullOrWhiteSpace(method) ? "CASH" : method.Trim().ToUpperInvariant()),
+            ("@d", (object?)description ?? DBNull.Value), ("@g", (object?)guestName ?? DBNull.Value),
+            ("@rn", (object?)roomNumber ?? DBNull.Value), ("@o", _tokenUser ?? "admin"));
+    }
+
+    public async Task<Result<StayDto>> CheckInAsync(string reservationId)
+    {
+        var res = await QueryAsync(ConnectionString,
+            "SELECT id, code, guestName, roomNumber, checkOutDate, guestsCount, status FROM dbo.reservations WHERE id=@id OR code=@id",
+            r => (id: r.GetGuid(0), code: S(r, 1), guest: S(r, 2), room: r.IsDBNull(3) ? null : S(r, 3), outd: r.GetDateTime(4), gc: I(r, 5), st: S(r, 6)),
+            ("@id", reservationId));
+        if (!res.Ok || res.Value!.Count == 0) return Result<StayDto>.Fail("رزرو یافت نشد: " + reservationId);
+        var v = res.Value[0];
+        if (v.st == "CHECKED_IN") return Result<StayDto>.Fail("این رزرو قبلاً پذیرش شده است.");
+        if (v.st is "CANCELLED" or "CHECKED_OUT") return Result<StayDto>.Fail("رزرو در وضعیت «" + v.st + "» قابل پذیرش نیست.");
+        var staySql = "INSERT INTO dbo.stays (reservationCode, guestName, roomNumber, plannedCheckOut, guestsCount, status) OUTPUT INSERTED.id, INSERTED.reservationCode, INSERTED.guestName, INSERTED.roomNumber, INSERTED.checkInAtUtc, INSERTED.plannedCheckOut, INSERTED.guestsCount, INSERTED.status VALUES (@c, @g, @rn, @po, @gc, 'IN_HOUSE')";
+        var stayId = await ExecAsync(staySql,
+            async cmd =>
+            {
+                await using var r = await cmd.ExecuteReaderAsync();
+                if (!await r.ReadAsync()) return Result<StayDto>.Fail("ثبت اقامت ناموفق بود.");
+                return Result<StayDto>.Good(new StayDto
+                {
+                    Id = r.GetGuid(0).ToString(), ReservationCode = S(r, 1), GuestName = S(r, 2),
+                    RoomNumber = r.IsDBNull(3) ? null : S(r, 3), CheckInAtUtc = D(r, 4),
+                    PlannedCheckOut = r.IsDBNull(5) ? null : r.GetDateTime(5).ToString("yyyy-MM-dd"),
+                    GuestsCount = I(r, 6), Status = S(r, 7)
+                });
+            },
+            ("@c", v.code), ("@g", v.guest), ("@rn", (object?)v.room ?? DBNull.Value), ("@po", v.outd), ("@gc", v.gc));
+        if (!stayId.Ok) return stayId;
+        await ExecAsync("UPDATE dbo.reservations SET status='CHECKED_IN' WHERE id=@id", async c => { await c.ExecuteNonQueryAsync(); return Result<string>.Good("ok"); }, ("@id", v.id));
+        if (v.room != null)
+            await ExecAsync("UPDATE dbo.rooms SET status='OCCUPIED', currentGuestName=@g WHERE roomNumber=@rn", async c => { await c.ExecuteNonQueryAsync(); return Result<string>.Good("ok"); }, ("@g", v.guest), ("@rn", v.room));
+        return stayId;
+    }
+
+    public async Task<Result<StayDto>> CheckOutAsync(string stayId, long finalPaymentRial, string method)
+    {
+        var stays = await QueryAsync(ConnectionString,
+            "SELECT id, reservationCode, guestName, roomNumber, status FROM dbo.stays WHERE id=@id OR reservationCode=@id",
+            r => (id: r.GetGuid(0), code: S(r, 1), guest: S(r, 2), room: r.IsDBNull(3) ? null : S(r, 3), st: S(r, 4)),
+            ("@id", stayId));
+        if (!stays.Ok || stays.Value!.Count == 0) return Result<StayDto>.Fail("اقامت فعال یافت نشد: " + stayId);
+        var v = stays.Value[0];
+        if (v.st != "IN_HOUSE") return Result<StayDto>.Fail("این اقامت قبلاً تسویه شده است.");
+        await ExecAsync("UPDATE dbo.stays SET status='CHECKED_OUT' WHERE id=@id", async c => { await c.ExecuteNonQueryAsync(); return Result<string>.Good("ok"); }, ("@id", v.id));
+        if (v.room != null)
+            await ExecAsync("UPDATE dbo.rooms SET status='CLEANING', currentGuestName=NULL WHERE roomNumber=@rn", async c => { await c.ExecuteNonQueryAsync(); return Result<string>.Good("ok"); }, ("@rn", v.room));
+        await ExecAsync("UPDATE dbo.reservations SET status='CHECKED_OUT', paidRial = paidRial + @p WHERE code=@c", async c => { await c.ExecuteNonQueryAsync(); return Result<string>.Good("ok"); }, ("@c", v.code), ("@p", finalPaymentRial));
+        if (finalPaymentRial > 0)
+            await AddTransactionAsync("RECEIVE", finalPaymentRial, method, "تسویهٔ نهایی اقامت " + v.code, v.guest, v.room);
+        var all = await StaysAsync();
+        var s2 = all.Ok ? all.Value?.FirstOrDefault(x => x.Id == v.id.ToString()) : null;
+        return s2 is null ? Result<StayDto>.Fail("اقامت یافت نشد") : Result<StayDto>.Good(s2);
+    }
+
+    public async Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status)
+    {
+        var allowed = new[] { "FREE", "RESERVED", "OCCUPIED", "CLEANING", "MAINTENANCE", "OUT_OF_SERVICE" };
+        if (!allowed.Contains(status)) return Result<RoomDto>.Fail("وضعیت نامعتبر: " + status);
+        var n = await ExecAsync(
+            "UPDATE dbo.rooms SET status=@st, currentGuestName = CASE WHEN @st IN ('FREE','CLEANING') THEN NULL ELSE currentGuestName END WHERE id=@id OR roomNumber=@id",
+            async c => { return await c.ExecuteNonQueryAsync(); },
+            ("@st", status), ("@id", roomId));
+        if (!n.Ok) return Result<RoomDto>.Fail(n.Error);
+        if (n.Value == 0) return Result<RoomDto>.Fail("اتاق یافت نشد: " + roomId);
+        var rooms = await RoomsAsync();
+        var room = rooms.Value?.FirstOrDefault(r => r.Id == roomId || r.RoomNumber == roomId);
+        return room is null ? Result<RoomDto>.Fail("اتاق یافت نشد: " + roomId) : Result<RoomDto>.Good(room);
+    }
 }

@@ -2,7 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Mehra.Desktop.Views.Pages.GuestsPage">
   <StackPanel Spacing="12">
-    <TextBlock Text="مهمانان" FontSize="22" Classes="bold" />
+    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+      <TextBlock Text="مهمانان" FontSize="22" Classes="bold" />
+      <Button Grid.Column="1" Content="+ مهمان جدید" Classes="primary" Click="OnAdd" />
+    </Grid>
     <ItemsControl ItemsSource="{Binding Items}">
       <ItemsControl.ItemTemplate>
         <DataTemplate>

@@ -2,7 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Mehra.Desktop.Views.Pages.FinancePage">
   <StackPanel Spacing="12">
-    <TextBlock Text="مالی — صندوق امروز" FontSize="22" Classes="bold" />
+    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+      <TextBlock Text="مالی — صندوق امروز" FontSize="22" Classes="bold" />
+      <Button Grid.Column="1" Content="+ تراکنش جدید" Classes="primary" Click="OnAdd" />
+    </Grid>
     <ItemsControl ItemsSource="{Binding Cards}">
       <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>

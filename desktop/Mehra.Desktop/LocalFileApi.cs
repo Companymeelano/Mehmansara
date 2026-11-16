@@ -167,6 +167,7 @@ public class LocalStore
 public class LocalFileApi : IHotelApi
 {
     private readonly LocalStore _store;
+    private string _operator = "مدیر";
 
     public LocalFileApi() { _store = LocalStore.Load(); }
 
@@ -183,6 +184,7 @@ public class LocalFileApi : IHotelApi
         if (LocalStore.Hash(u.Salt, password) != u.PasswordHash)
             return Task.FromResult(Result<SessionUser>.Fail("نام کاربری یا رمز عبور نادرست است."));
         u.LastLoginAtUtc = DateTime.UtcNow.ToString("o");
+        _operator = u.FullName;
         LocalStore.Save(_store);
         return Task.FromResult(Result<SessionUser>.Good(new SessionUser
         {
@@ -387,4 +389,174 @@ public class LocalFileApi : IHotelApi
 
     private static bool InRange(string? createdAtUtc, string fromIso, string toIso) =>
         createdAtUtc is { Length: >= 10 } c && string.CompareOrdinal(c[..10], fromIso) >= 0 && string.CompareOrdinal(c[..10], toIso) <= 0;
+
+    // ================= write operations (v1.2.1) =================
+
+    private string NewCode(string prefix, List<string?> codes)
+    {
+        var max = 1000;
+        foreach (var c in codes)
+            if (c != null && c.StartsWith(prefix) && int.TryParse(c[prefix.Length..], out var n) && n > max)
+                max = n;
+        return prefix + (max + 1);
+    }
+
+    public Task<Result<GuestDto>> AddGuestAsync(string firstName, string lastName, string? phone, string? city)
+    {
+        if (string.IsNullOrWhiteSpace(lastName) && string.IsNullOrWhiteSpace(firstName))
+            return Task.FromResult(Result<GuestDto>.Fail("نام یا نام خانوادگی را وارد کنید."));
+        var g = new GuestDto
+        {
+            Id = "g" + Guid.NewGuid().ToString("N")[..8],
+            FirstName = firstName.Trim(),
+            LastName = lastName.Trim(),
+            Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim(),
+            City = string.IsNullOrWhiteSpace(city) ? null : city.Trim(),
+            BalanceRial = 0,
+            TotalStays = 0,
+            LastStayAtUtc = null
+        };
+        _store.Guests.Add(g);
+        LocalStore.Save(_store);
+        return Task.FromResult(Result<GuestDto>.Good(g));
+    }
+
+    public Task<Result<ReservationDto>> AddReservationAsync(string guestName, string? guestPhone, string roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial)
+    {
+        if (string.IsNullOrWhiteSpace(guestName))
+            return Task.FromResult(Result<ReservationDto>.Fail("نام مهمان را وارد کنید."));
+        if (!DateTime.TryParse(checkInIso, out var ci) || !DateTime.TryParse(checkOutIso, out var co) || co <= ci)
+            return Task.FromResult(Result<ReservationDto>.Fail("بازهٔ تاریخ نامعتبر است (ورود باید قبل از خروج باشد)."));
+        var room = _store.Rooms.FirstOrDefault(r => r.RoomNumber == roomNumber.Trim());
+        if (room is null)
+            return Task.FromResult(Result<ReservationDto>.Fail("اتاق «" + roomNumber + "» یافت نشد."));
+        var ciIso = ci.ToString("yyyy-MM-dd");
+        var coIso = co.ToString("yyyy-MM-dd");
+        var overlap = _store.Reservations.Any(x =>
+            x.RoomNumber == room.RoomNumber &&
+            (x.Status == "CONFIRMED" || x.Status == "CHECKED_IN" || x.Status == "PENDING") &&
+            string.CompareOrdinal(x.CheckInDate, coIso) < 0 && string.CompareOrdinal(x.CheckOutDate, ciIso) > 0);
+        if (overlap)
+            return Task.FromResult(Result<ReservationDto>.Fail("اتاق " + roomNumber + " در این بازه رزرو شده است."));
+        var r = new ReservationDto
+        {
+            Id = "v" + Guid.NewGuid().ToString("N")[..8],
+            Code = NewCode("R-", _store.Reservations.Select(x => x.Code).ToList()),
+            GuestName = guestName.Trim(),
+            GuestPhone = string.IsNullOrWhiteSpace(guestPhone) ? null : guestPhone.Trim(),
+            RoomNumber = room.RoomNumber,
+            CheckInDate = ciIso,
+            CheckOutDate = coIso,
+            GuestsCount = guestsCount < 1 ? 1 : guestsCount,
+            TotalRial = totalRial,
+            PaidRial = paidRial,
+            Status = paidRial > 0 ? "CONFIRMED" : "PENDING"
+        };
+        _store.Reservations.Add(r);
+        if (r.Status == "CONFIRMED" && room.Status == "FREE") room.Status = "RESERVED";
+        LocalStore.Save(_store);
+        return Task.FromResult(Result<ReservationDto>.Good(r));
+    }
+
+    public Task<Result<TransactionDto>> AddTransactionAsync(string type, long amountRial, string method, string? description, string? guestName, string? roomNumber)
+    {
+        if (amountRial <= 0)
+            return Task.FromResult(Result<TransactionDto>.Fail("مبلغ باید بزرگ‌تر از صفر باشد."));
+        var t = new TransactionDto
+        {
+            Id = "t" + Guid.NewGuid().ToString("N")[..8],
+            Code = NewCode("TX-", _store.Transactions.Select(x => x.Code).ToList()),
+            Type = string.IsNullOrWhiteSpace(type) ? "Receive" : type.Trim().ToUpperInvariant() is "PAY" or "DISCOUNT" or "REFUND" ? type.Trim().ToUpperInvariant() : "Receive",
+            AmountRial = amountRial,
+            Method = string.IsNullOrWhiteSpace(method) ? "Cash" : method.Trim(),
+            Description = description,
+            GuestName = guestName,
+            RoomNumber = roomNumber,
+            OperatorName = _operator,
+            CreatedAtUtc = DateTime.UtcNow.ToString("o"),
+            IsReversed = false
+        };
+        _store.Transactions.Add(t);
+        var gname = ((guestName ?? "").Trim());
+        if (gname.Length > 0)
+        {
+            var g = _store.Guests.FirstOrDefault(x => ((x.FirstName ?? "") + " " + (x.LastName ?? "")).Trim().Contains(gname) || (x.LastName ?? "") == gname);
+            if (g != null)
+            {
+                if (t.Type == "RECEIVE" || t.Type == "DISCOUNT") g.BalanceRial = Math.Max(0, (g.BalanceRial ?? 0) - amountRial);
+                else if (t.Type == "PAY") g.BalanceRial = (g.BalanceRial ?? 0) + amountRial;
+            }
+        }
+        LocalStore.Save(_store);
+        return Task.FromResult(Result<TransactionDto>.Good(t));
+    }
+
+    public Task<Result<StayDto>> CheckInAsync(string reservationId)
+    {
+        var res = _store.Reservations.FirstOrDefault(r => r.Id == reservationId || r.Code == reservationId);
+        if (res is null) return Task.FromResult(Result<StayDto>.Fail("رزرو یافت نشد: " + reservationId));
+        if (res.Status == "CHECKED_IN") return Task.FromResult(Result<StayDto>.Fail("این رزرو قبلاً پذیرش شده است."));
+        if (res.Status == "CANCELLED" || res.Status == "CHECKED_OUT") return Task.FromResult(Result<StayDto>.Fail("رزرو در وضعیت «" + res.Status + "» قابل پذیرش نیست."));
+        var stay = new StayDto
+        {
+            Id = "s" + Guid.NewGuid().ToString("N")[..8],
+            ReservationCode = res.Code,
+            GuestName = res.GuestName,
+            RoomNumber = res.RoomNumber,
+            CheckInAtUtc = DateTime.UtcNow.ToString("o"),
+            PlannedCheckOut = res.CheckOutDate,
+            GuestsCount = res.GuestsCount,
+            Status = "IN_HOUSE"
+        };
+        _store.Stays.Add(stay);
+        res.Status = "CHECKED_IN";
+        var room = _store.Rooms.FirstOrDefault(r => r.RoomNumber == res.RoomNumber);
+        if (room != null) { room.Status = "OCCUPIED"; room.CurrentGuestName = res.GuestName; }
+        LocalStore.Save(_store);
+        return Task.FromResult(Result<StayDto>.Good(stay));
+    }
+
+    public Task<Result<StayDto>> CheckOutAsync(string stayId, long finalPaymentRial, string method)
+    {
+        var stay = _store.Stays.FirstOrDefault(s => s.Id == stayId || s.ReservationCode == stayId);
+        if (stay is null) return Task.FromResult(Result<StayDto>.Fail("اقامت فعال یافت نشد: " + stayId));
+        if (stay.Status != "IN_HOUSE") return Task.FromResult(Result<StayDto>.Fail("این اقامت قبلاً تسویه شده است."));
+        stay.Status = "CHECKED_OUT";
+        var room = _store.Rooms.FirstOrDefault(r => r.RoomNumber == stay.RoomNumber);
+        if (room != null) { room.Status = "CLEANING"; room.CurrentGuestName = null; }
+        var res = _store.Reservations.FirstOrDefault(r => r.Code == stay.ReservationCode);
+        if (res != null) res.Status = "CHECKED_OUT";
+        if (finalPaymentRial > 0)
+        {
+            _store.Transactions.Add(new TransactionDto
+            {
+                Id = "t" + Guid.NewGuid().ToString("N")[..8],
+                Code = NewCode("TX-", _store.Transactions.Select(x => x.Code).ToList()),
+                Type = "Receive",
+                AmountRial = finalPaymentRial,
+                Method = string.IsNullOrWhiteSpace(method) ? "Cash" : method.Trim(),
+                Description = "تسویهٔ نهایی اقامت " + (stay.ReservationCode ?? ""),
+                GuestName = stay.GuestName,
+                RoomNumber = stay.RoomNumber,
+                OperatorName = " administrator",
+                CreatedAtUtc = DateTime.UtcNow.ToString("o"),
+                IsReversed = false
+            });
+            if (res != null) res.PaidRial = (res.PaidRial ?? 0) + finalPaymentRial;
+        }
+        LocalStore.Save(_store);
+        return Task.FromResult(Result<StayDto>.Good(stay));
+    }
+
+    public Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status)
+    {
+        var room = _store.Rooms.FirstOrDefault(r => r.Id == roomId || r.RoomNumber == roomId);
+        if (room is null) return Task.FromResult(Result<RoomDto>.Fail("اتاق یافت نشد: " + roomId));
+        var allowed = new[] { "FREE", "RESERVED", "OCCUPIED", "CLEANING", "MAINTENANCE", "OUT_OF_SERVICE" };
+        if (!allowed.Contains(status)) return Task.FromResult(Result<RoomDto>.Fail("وضعیت نامعتبر: " + status));
+        if (status == "FREE" || status == "CLEANING") room.CurrentGuestName = null;
+        room.Status = status;
+        LocalStore.Save(_store);
+        return Task.FromResult(Result<RoomDto>.Good(room));
+    }
 }
