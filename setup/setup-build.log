@@ -41,6 +41,7 @@ Parsing [Setup] section, line 39
 Parsing [Setup] section, line 40
 Parsing [Setup] section, line 41
 Parsing [Setup] section, line 42
+Parsing [Setup] section, line 43
 Creating output directory: D:\a\Mehmansara\Mehmansara\setup-out
 Reading file (WizardImageFile)
    Reading file: D:\a\Mehmansara\Mehmansara\desktop\Setup\art_side.bmp
@@ -51,31 +52,30 @@ Preparing Setup program executable
    Updating icons (Setup.e32)
    Updating version info (Setup.e32)
 Determining language code pages
-Parsing [Languages] section, line 45
+Parsing [Languages] section, line 46
    Reading file: D:\a\Mehmansara\Mehmansara\desktop\Setup\Farsi.isl
    Messages in script file
 Reading default messages from Default.isl
-Parsing [Languages] section, line 45
+Parsing [Languages] section, line 46
    Reading file: D:\a\Mehmansara\Mehmansara\desktop\Setup\Farsi.isl
 Parsing [LangOptions], [Messages], and [CustomMessages] sections
    Messages in script file
 Reading [Code] section
-Parsing [Components] section, line 78
 Parsing [Components] section, line 79
 Parsing [Components] section, line 80
 Parsing [Components] section, line 81
 Parsing [Components] section, line 82
-Parsing [Tasks] section, line 85
+Parsing [Components] section, line 83
 Parsing [Tasks] section, line 86
 Parsing [Tasks] section, line 87
 Parsing [Tasks] section, line 88
-Parsing [Icons] section, line 115
+Parsing [Tasks] section, line 89
 Parsing [Icons] section, line 116
 Parsing [Icons] section, line 117
 Parsing [Icons] section, line 118
-Parsing [Run] section, line 121
+Parsing [Icons] section, line 119
 Parsing [Run] section, line 122
-Parsing [Files] section, line 91
+Parsing [Run] section, line 123
 Parsing [Files] section, line 92
 Parsing [Files] section, line 93
 Parsing [Files] section, line 94
@@ -97,6 +97,7 @@ Parsing [Files] section, line 109
 Parsing [Files] section, line 110
 Parsing [Files] section, line 111
 Parsing [Files] section, line 112
+Parsing [Files] section, line 113
 Compiling [Code] section
 Creating setup files
    Verification successful
@@ -115,13 +116,14 @@ Creating setup files
    Updating version info (Setup.exe)
    Updating manifest (Setup.exe)
 
+Warning: The [Setup] section directive "WizardResizable" is obsolete and ignored in this version of Inno Setup.
 Warning: Message name "SelectDirLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "TasksLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "ReadyLabel" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Message name "StatusInstalling" is not recognized by this version of Inno Setup. Ignoring.
 Warning: Constant "fonts" has been renamed. Use "commonfonts" instead or consider using its "auto" form.
 Warning: The [Setup] section directive "PrivilegesRequired" is set to "admin" but per-user areas (userdesktop,userfonts,userstartup) are used by the script. Regardless of the version of Windows, if the installation is running in administrative install mode then you should be careful about making any per-user area changes: such changes may not achieve what you are intending. See the "UsedUserAreasWarning" topic in help file for more information.
-Warning: Line 531, Column 10: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
+Warning: Line 532, Column 10: [Hint] Support function "IsComponentSelected" has been renamed. Use "WizardIsComponentSelected" instead.
 
-Successful compile (34.484 sec). Resulting Setup program filename is:
+Successful compile (37.750 sec). Resulting Setup program filename is:
 D:\a\Mehmansara\Mehmansara\setup-out\MehraSetup.exe
