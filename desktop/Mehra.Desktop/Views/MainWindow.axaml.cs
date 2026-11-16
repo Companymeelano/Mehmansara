@@ -15,6 +15,13 @@ public partial class MainWindow : Window
         this.FindControl<TextBlock>("RoleText")!.Text =
             (session.User.RoleTitle.Length > 0 ? session.User.RoleTitle + " — " : "") + session.Api.ServerLabel;
         this.FindControl<TextBlock>("StatusText")!.Text = "";
+        if (session.Api is LocalFileApi localApi)
+        {
+            var lan = LanServer.Start(localApi);
+            if (lan != null)
+                this.FindControl<TextBlock>("StatusText")!.Text =
+                    "سرور شبکهٔ محلی (برای اپ اندروید): " + lan.LanUrl + "   —   داده‌ها: " + localApi.DataFile;
+        }
         var nav = this.FindControl<ListBox>("NavList")!;
         nav.SelectedIndex = 0;
     }

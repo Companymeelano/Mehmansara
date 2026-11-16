@@ -8,7 +8,7 @@ public partial class LoginWindow : Window
     {
         InitializeComponent();
         var s = SettingsStore.Load();
-        this.FindControl<ComboBox>("ModeCombo")!.SelectedIndex = s.Mode switch { "api" => 1, "sql" => 2, _ => 0 };
+        this.FindControl<ComboBox>("ModeCombo")!.SelectedIndex = s.Mode switch { "demo" => 1, "api" => 2, "sql" => 3, _ => 0 };
         this.FindControl<TextBox>("ServerBox")!.Text = s.ServerUrl;
         this.FindControl<TextBox>("SqlServerBox")!.Text = s.SqlServer;
         this.FindControl<TextBox>("SqlDbBox")!.Text = s.SqlDb;
@@ -41,7 +41,7 @@ public partial class LoginWindow : Window
         error.IsVisible = false;
         var mode = Mode;
 
-        if (mode is "api" or "sql" && (user.Trim().Length == 0 || pass.Length == 0))
+        if (mode is "local" or "api" or "sql" && (user.Trim().Length == 0 || pass.Length == 0))
         {
             error.Text = "نام کاربری و رمز عبور را وارد کنید.";
             error.IsVisible = true;
@@ -50,7 +50,15 @@ public partial class LoginWindow : Window
 
         IHotelApi api;
         Result<SessionUser> result;
-        if (mode == "demo")
+        if (mode == "local")
+        {
+            // فایل محلی: هیچ سروری لازم نیست — داده‌ها در یک فایل JSON کنار برنامه ذخیره می‌شود
+            // و همان فایل روی شبکهٔ محلی (LAN) سرو می‌شود تا اپ اندروید متصل شود.
+            api = new LocalFileApi();
+            result = await api.LoginAsync("", user.Trim(), pass);
+            if (result.Ok) SettingsStore.Save(new AppSettings { Mode = "local" });
+        }
+        else if (mode == "demo")
         {
             api = new DemoApi();
             result = await api.LoginAsync("", "demo", "");
@@ -100,7 +108,7 @@ public partial class LoginWindow : Window
 
 public class AppSettings
 {
-    public string Mode { get; set; } = "demo";
+    public string Mode { get; set; } = "local";
     public string ServerUrl { get; set; } = "";
     public string SqlServer { get; set; } = "(localdb)\\MSSQLLocalDB";
     public string SqlDb { get; set; } = "Mehra";

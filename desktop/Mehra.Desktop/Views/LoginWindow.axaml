@@ -16,6 +16,7 @@
         <StackPanel Spacing="8">
           <TextBlock Text="منبع داده" Classes="bold" />
           <ComboBox x:Name="ModeCombo" HorizontalAlignment="Stretch" SelectionChanged="OnModeChanged">
+            <ComboBoxItem Content="فایل محلی — بدون سرور (پیش‌فرض)" Tag="local" />
             <ComboBoxItem Content="نسخهٔ نمایشی (آفلاین — دادهٔ نمونه)" Tag="demo" />
             <ComboBoxItem Content="سرور وب (API)" Tag="api" />
             <ComboBoxItem Content="SQL Server (پایگاه دادهٔ مستقیم)" Tag="sql" />

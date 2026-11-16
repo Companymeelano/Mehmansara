@@ -1,5 +1,5 @@
 ﻿; ============================================================================
-;  MEHRA 1.1.7 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
+;  MEHRA 1.2.0 — MehraSetup.iss  (Inno Setup 6, Unicode/UTF-8)
 ;  Luxury Persian (RTL) installer for the MEHRA Windows client.
 ;  Brand: Milad Yaghoobi — www.meelano.ir — 09120219593
 ;  Features: branded welcome/finish, Vazirmatn font, SQL Server config page,
@@ -10,8 +10,8 @@
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
 AppName=مهرآ
-AppVersion=1.1.7
-AppVerName=مهرآ ۱.۱.۷ — ویندوز
+AppVersion=1.2.0
+AppVerName=مهرآ ۱.۲.۰ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
@@ -36,7 +36,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
 UninstallDisplayName=مهرآ
-VersionInfoVersion=1.1.7.0
+VersionInfoVersion=1.2.0.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -56,7 +56,7 @@ ButtonYes=«بله»
 ButtonNo=«خیر»
 ButtonOK=«تأیید»
 WelcomeLabel1=به نصب‌گر مهرآ خوش آمدید
-WelcomeLabel2=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز ۱.۱.۷\n\nطراح و توسعه‌دهنده: میلاد یعقوبی\nwww.meelano.ir — 09120219593
+WelcomeLabel2=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز ۱.۲.۰\n\nطراح و توسعه‌دهنده: میلاد یعقوبی\nwww.meelano.ir — 09120219593
 WizardSelectDir=انتخاب مقصد نصب
 SelectDirLabel=برنامه در این پوشه نصب می‌شود:
 SelectDirBrowseLabel=انتخاب پوشه…
@@ -73,13 +73,13 @@ StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
 FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۱.۷ — نصب‌گر
+SetupWindowTitle=مهرآ ۱.۲.۰ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
-Name: "localdb"; Description: "SQL Server LocalDB 2016 همراه (حدود ۴۵ مگابایت) — موتور پایگاه دادهٔ سبک؛ ثبت واقعی داده روی همین PC بدون نصب جداگانه"; Types: full custom
-Name: "oledb"; Description: "درایور OLE DB مایکروسافت برای SQL Server (MSOLEDBSQL 19، حدود ۱۵ مگابایت) —تضمین ساخت جداول روی هر ویندوز ۶۴ بیتی بدون خطای provider"; Types: full custom
-Name: "schema"; Description: "فایل کامل اسکریپت پایگاه داده (db\schema.sql) — داخل همین فایل نصب؛ هیچ دانلودی لازم نیست"; Types: full compact custom
+Name: "localdb"; Description: "اختیاری — SQL Server LocalDB 2016 همراه (حدود ۴۵ مگابایت) — موتور پایگاه دادهٔ سبک؛ ثبت واقعی داده روی همین PC بدون نصب جداگانه"; Types: custom
+Name: "oledb"; Description: "اختیاری — درایور OLE DB مایکروسافت برای SQL Server (MSOLEDBSQL 19، حدود ۱۵ مگابایت) —تضمین ساخت جداول روی هر ویندوز ۶۴ بیتی بدون خطای provider"; Types: custom
+Name: "schema"; Description: "فایل کامل اسکریپت پایگاه داده (db\schema.sql) — داخل همین فایل نصب؛ هیچ دانلودی لازم نیست"; Types: custom
 Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — نصب دائمی در سیستم"; Types: full
 
 [Tasks]
@@ -515,6 +515,19 @@ begin
   SaveStringsToUTF8FileWithoutBOM(Path, Arr, False);
 end;
 
+procedure WriteAppSettingsLocal;
+var
+  Path, Json: string;
+  Arr: TArrayOfString;
+begin
+  Path := ExpandConstant('{userappdata}\\mehra\\settings.json');
+  ForceDirectories(ExtractFileDir(Path));
+  Json := '{\"Mode\":\"local\",\"ServerUrl\":\"\",\"SqlServer\":\"(localdb)\\MSSQLLocalDB\",\"SqlDb\":\"Mehra\",\"SqlAuth\":\"win\",\"SqlUser\":\"\"}';
+  SetLength(Arr, 1);
+  Arr[0] := Json;
+  SaveStringsToUTF8FileWithoutBOM(Path, Arr, False);
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   Err: string;
@@ -571,7 +584,7 @@ begin
     winAuth := OptPage.Values[0];
     // If the bundled LocalDB is being installed by THIS setup, it does not exist
     // yet at page time — skip the live test and let ssPostInstall create everything.
-    if OptPage.Values[1] and not (IsComponentSelected('localdb') and
+    if (OptPage.Values[1] or IsComponentSelected('localdb')) and not (IsComponentSelected('localdb') and
        ((Trim(DbPage.Values[0]) = '') or (Trim(DbPage.Values[0]) = '(localdb)\MSSQLLocalDB'))) then
     begin
       // SQL Server 2022 may run as default/named instance (localhost, .\SQLEXPRESS) instead
@@ -639,7 +652,7 @@ begin
       else
         Log('MEHRA: OLE DB driver install skipped/failed (SQLOLEDB fallback): ' + Err);
     end;
-    if OptPage.Values[1] and (Trim(DbPage.Values[0]) <> '') then
+    if (OptPage.Values[1] or IsComponentSelected('localdb')) and (Trim(DbPage.Values[0]) <> '') then
     begin
       winAuth := OptPage.Values[0];
       SchemaPath := ExpandConstant('{app}\db\schema.sql');
@@ -659,13 +672,20 @@ begin
       begin
         MsgBox('اجرای اسکریپت ساخت جداول ناموفق بود:' + #13#10#13#10 + Err + #13#10#13#10 + 'برنامه بعداً می‌تواند از بخش تنظیمات دوباره تلاش کند («راه‌اندازی جداول پایگاه داده»).', mbError, MB_OK);
         if LocalDbOk then
-          WriteAppSettings(DbPage.Values[0], DbPage.Values[1], not OptPage.Values[0], DbPage.Values[2]);
+          WriteAppSettings(DbPage.Values[0], DbPage.Values[1], not OptPage.Values[0], DbPage.Values[2])
+        else
+          WriteAppSettingsLocal;
       end;
     end
     else if LocalDbOk then
     begin
       // LocalDB is installed: pre-fill the app settings so first launch connects out of the box.
       WriteAppSettings(DbPage.Values[0], DbPage.Values[1], False, '');
+    end
+    else
+    begin
+      // Default (no SQL components): local file mode — the app needs NO SQL Server at all.
+      WriteAppSettingsLocal;
     end;
   end;
   if CurStep = ssDone then
@@ -723,10 +743,10 @@ begin
   OptPage.Add('احراز هویت ویندوز (Windows Authentication)');
   OptPage.Values[0] := True;
   OptPage.Add('ایجاد/به‌روزانی جداول پایگاه داده در SQL Server هنگام نصب');
-  OptPage.Values[1] := True;
+  OptPage.Values[1] := False;
 
   DbPage := CreateInputQueryPage(wpSelectTasks,
-    'تنظیمات اتصال SQL Server',
+    'تنظیمات اتصال SQL Server (اختیاری — فقط در حالت SQL)',
     'نام سرور و نام پایگاه داده را وارد کنید:' + #13#10 +
     '• اگر SQL Server 2022 روی همین کامپیوتر نصب است:  localhost   یا   .\SQLEXPRESS   یا   .\MSSQLSERVER' + #13#10 +
     '• اگر مؤلفهٔ «SQL Server LocalDB همراه» را انتخاب کرده‌اید:  (localdb)\MSSQLLocalDB' + #13#10 +
