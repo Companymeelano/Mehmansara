@@ -33,12 +33,15 @@ public class LanServer : IDisposable
     private static string AppVersion()
     {
         var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-        return v is null ? "1.2.2" : v.ToString(3);
+        return v is null ? "1.2.3" : v.ToString(3);
     }
     private readonly Dictionary<string, string> _idempotency = new();
 
     public int Port { get; private set; }
     public string LanUrl { get; private set; } = "";
+
+    /// <summary>URL of the running server (set in <see cref="Start"/>), used by the Settings QR button.</summary>
+    public static string CurrentLanUrl { get; private set; } = "";
     public string LocalUrl => $"http://localhost:{Port}";
 
     private LanServer(LocalFileApi api) { _api = api; }
@@ -55,6 +58,7 @@ public class LanServer : IDisposable
                 s._running = true;
                 var ip = FirstLanIPv4();
                 s.LanUrl = $"http://{ip}:{port}";
+                CurrentLanUrl = s.LanUrl;
                 _ = Task.Run(s.AcceptLoop);
                 return s;
             }
@@ -234,7 +238,7 @@ public class LanServer : IDisposable
         if (method == "OPTIONS") return (204, EnvelopeOk(null));
 
         // ---- auth: every /api/v1 route except login & health needs a valid Bearer token ----
-        var isPublic = (path == "/api/v1/auth/login" && method == "POST") || (path == "/api/v1/system/health" && method == "GET");
+        var isPublic = (path == "/api/v1/auth/login" && method == "POST") || (path == "/api/v1/system/health" && method == "GET") || (path == "/api/v1/public/register" && method == "POST");
         if (!isPublic && path.StartsWith("/api/v1/", StringComparison.Ordinal))
         {
             var auth = headers.TryGetValue("Authorization", out var av) ? av : "";
@@ -254,6 +258,24 @@ public class LanServer : IDisposable
                        "<p style='color:#9AA6B8'>نسخهٔ ویندوز " + Fa.Digits(AppVersion()) + " — داده‌ها در فایل محلی این PC ذخیره می‌شوند (بدون SQL Server).</p>" +
                        "</body></html>";
             return (200, new RawHtml(html));
+        }
+
+        // ---- public guest QR pages (no login) ----
+        if (method == "GET" && path == "/register")
+            return (200, new RawHtml(QrSheet.BuildRegisterPage(LanUrl + "/api/v1/public/register", Fa.Digits(AppVersion()))));
+        if (method == "GET" && path == "/qr")
+        {
+            var admin = _api.Store.Users.FirstOrDefault(u => u.Username == "admin") ?? _api.Store.Users.FirstOrDefault();
+            return (200, new RawHtml(QrSheet.BuildSheet(LanUrl + "/register", Fa.Digits(AppVersion()),
+                admin?.FullName ?? "مدیر مجموعه", admin?.Phone ?? "09120219593")));
+        }
+        if (path == "/api/v1/public/register" && method == "POST")
+        {
+            var r = await _api.PublicRegisterAsync(
+                BodyField(body, "firstName") ?? "", BodyField(body, "lastName") ?? "", BodyField(body, "phone") ?? "",
+                BodyField(body, "city"), BodyField(body, "checkIn"), BodyField(body, "checkOut"),
+                int.TryParse(BodyField(body, "guestsCount"), out var gc) ? gc : 1, BodyField(body, "notes"));
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
         }
 
         // ---- auth ----

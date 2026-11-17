@@ -13,7 +13,7 @@ public partial class SettingsPage : UserControl
         DataContext = _vm;
         var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         this.FindControl<TextBlock>("VersionText")!.Text =
-            "مهرآ — نسخهٔ ویندوز " + Fa.Digits(ver is null ? "1.2.2" : ver.ToString(3));
+            "مهرآ — نسخهٔ ویندوز " + Fa.Digits(ver is null ? "1.2.3" : ver.ToString(3));
     }
 
     private async void OnHealth(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>

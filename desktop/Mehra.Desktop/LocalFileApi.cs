@@ -657,4 +657,68 @@ public class LocalFileApi : IHotelApi
             return Task.FromResult(Result<RoomDto>.Good(room));
         }
     }
+
+    /// <summary>Public self-service registration from the guest QR sheet (no login): creates/finds the guest, files a PENDING reservation and notifies staff.</summary>
+    public Task<Result<object>> PublicRegisterAsync(string firstName, string lastName, string phone, string? city, string? checkInIso, string? checkOutIso, int guestsCount, string? notes)
+    {
+        lock (Gate)
+        {
+            if (string.IsNullOrWhiteSpace(lastName) && string.IsNullOrWhiteSpace(firstName))
+                return Task.FromResult(Result<object>.Fail("نام یا نام خانوادگی را وارد کنید."));
+            if (string.IsNullOrWhiteSpace(phone))
+                return Task.FromResult(Result<object>.Fail("شمارهٔ موبایل را وارد کنید."));
+            var phoneN = phone.Trim();
+            var guest = _store.Guests.FirstOrDefault(g => g.Phone == phoneN);
+            if (guest is null)
+            {
+                guest = new GuestDto
+                {
+                    Id = "g" + Guid.NewGuid().ToString("N")[..8],
+                    FirstName = firstName.Trim(),
+                    LastName = lastName.Trim(),
+                    Phone = phoneN,
+                    City = string.IsNullOrWhiteSpace(city) ? null : city.Trim(),
+                    BalanceRial = 0,
+                    TotalStays = 0,
+                    LastStayAtUtc = null
+                };
+                _store.Guests.Add(guest);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(firstName)) guest.FirstName = firstName.Trim();
+                if (!string.IsNullOrWhiteSpace(lastName)) guest.LastName = lastName.Trim();
+                if (!string.IsNullOrWhiteSpace(city)) guest.City = city.Trim();
+            }
+            string ciIso = DateTime.TryParse(checkInIso, out var ci) ? ci.ToString("yyyy-MM-dd") : DateTime.Today.ToString("yyyy-MM-dd");
+            string coIso = DateTime.TryParse(checkOutIso, out var co) && co > ci ? co.ToString("yyyy-MM-dd") : DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
+            var res = new ReservationDto
+            {
+                Id = "v" + Guid.NewGuid().ToString("N")[..8],
+                Code = NewCode("R-", _store.Reservations.Select(x => x.Code).ToList()),
+                GuestName = ((guest.FirstName ?? "") + " " + (guest.LastName ?? "")).Trim(),
+                GuestPhone = phoneN,
+                RoomNumber = null, // staff assigns the room on arrival
+                CheckInDate = ciIso,
+                CheckOutDate = coIso,
+                GuestsCount = guestsCount < 1 ? 1 : guestsCount,
+                TotalRial = 0,
+                PaidRial = 0,
+                Status = "PENDING"
+            };
+            _store.Reservations.Add(res);
+            _store.Notifications.Insert(0, new NotificationDto
+            {
+                Id = "n" + Guid.NewGuid().ToString("N")[..8],
+                Title = "درخواست اقامت جدید از QR",
+                Body = res.GuestName + " — " + phoneN + " — " + ciIso + " تا " + coIso + " — " + res.GuestsCount + " نفر" + (string.IsNullOrWhiteSpace(notes) ? "" : " — " + notes),
+                Severity = "INFO",
+                Kind = "RESERVATION",
+                CreatedAtUtc = DateTime.UtcNow.ToString("o"),
+                IsRead = false
+            });
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<object>.Good(new { code = res.Code, guestId = guest.Id, status = res.Status }));
+        }
+    }
 }
