@@ -1,8 +1,8 @@
-# نسخهٔ ویندوز ۱.۲.۱ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe + حالت «فایل محلی» (بدون SQL Server) + سرور شبکهٔ محلی برای اندروید + ثبت دادهٔ جدید (برنامه + SQL Server LocalDB همراه + فونت‌ها)
+# نسخهٔ ویندوز ۱.۲.۲ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe + حالت «فایل محلی» + سرور LAN امن‌شده برای اندروید + ثبت دادهٔ جدید (برنامه + SQL Server LocalDB همراه + فونت‌ها)
 
-> **از نسخهٔ ۱.۱.۵ به بعد، فقط یک فایل `MehraSetup.exe` کافی است** (نسخهٔ فعلی: ۱.۲.۱): نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
+> **از نسخهٔ ۱.۱.۵ به بعد، فقط یک فایل `MehraSetup.exe` کافی است** (نسخهٔ فعلی: ۱.۲.۲): نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
 
-## فایل‌های قابل دانلود (نسخهٔ ۱.۲.۱)
+## فایل‌های قابل دانلود (نسخهٔ ۱.۲.۲)
 
 - انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
 - **نصب‌گر کاملِ یک‌فایله (پیشنهادی حدود ۹۰ مگابایت):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
@@ -11,7 +11,14 @@
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - مرور فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
 
-## هش و اندازهٔ باینری‌ها (اجرای CI `43978527280` — نسخهٔ ۱.۲.۱)
+## هش و اندازهٔ باینری‌ها (اجرای CI `44057902019` — نسخهٔ ۱.۲.۲)
+
+- `setup/MehraSetup.exe`: 89,602,424 بایت — sha256 `5a9b55f88563aa3b650d0df55605535c9650f6964ce1995eb9e6b77cbfd922aa`
+- `exe/Mehra.exe`: 94,372,744 بایت — sha256 `7cb7a2c1705f0ff420a73182dd4582582644b5770a028f4f127249e3d86f334e`
+- `exe/Mehra-win-x64.zip`: 41,878,558 بایت — sha256 `9b68cdd3a44fbcd9601870e4bc5d4dc42bdfb2ae2cffbff4e1cfdffa1005b998`
+- تأیید بایت‌به‌بایت: MZ/PE و PK معتبر؛ رشتهٔ نسخهٔ `1.2.2.0` به‌صورت UTF-16 داخل exe و نصب‌گر موجود است و `1.2.1.0` حذف شده؛ کلاس‌های `LocalFileApi`/`LanServer`/`InputDialog` در exe هستند.
+
+## هش و اندازهٔ باینری‌ها (اجرای CI `43978527280` — نسخهٔ ۱.۲.۱، منسوخ)
 
 - `setup/MehraSetup.exe`: 89,600,978 بایت — sha256 `e1353aa0a6c9af7d9e7a1c86aa564c0c55bc8fa1f0d50a2d7469a2c92b678142`
 - `exe/Mehra.exe`: 94,372,744 بایت — sha256 `e5ce8bb6136feb21c6783e88210ed4167c19801ce5f5b7d4b46c3166f8eff16c`
@@ -24,6 +31,14 @@
 - `exe/Mehra.exe`: 94,294,920 بایت — sha256 `2b92b5201b8caf82a27b46e15e397ec53cb9bd820249297b9139586334c2f1d8`
 - `exe/Mehra-win-x64.zip`: 41,851,303 بایت — sha256 `a7333ea4c5dcb0122dddd2e7d378369556fff583e456d2aa7e5dc6bc01dfb4a9`
 - تأیید بایت‌به‌بایت: MZ/PE معتبر؛ رشته‌های برند به‌صورت UTF-16/UTF-8 داخل نصب‌گر موجود است: `www.meelano.ir`، `09120219593`، `Milad Yaghoobi`، «میلاد یعقوبی»، «مهرآ»، نسخهٔ ۱.۲.۰؛ لاگ ISCC وجود `SqlLocalDB.msi` را در فایل نصب تأیید می‌کند («Compressing: ...\redist\SqlLocalDB.msi»).
+
+## نسخهٔ ۱.۲.۲ — ممیزی کامل «کد به کد» + رفع باگ‌های واقعی (CI `44057902019` + Android `44056909625`)
+
+- **امنیت سرور LAN:** همهٔ مسیرهای `/api/v1` (به‌جز `auth/login` و `system/health`) حالا توکن Bearer را چک می‌کنند وگرنه `401 UNAUTHORIZED` می‌گیرند؛ قبلاً فقط `auth/me` چک می‌شد و هر کلاینت شبکه می‌توانست داده بنویسد.
+- **رفع race condition:** خواندن/نوشتن فایل محلی زیر `lock (Gate)` است و درخواست‌های LAN با SemaphoreSlim سری شده‌اند؛ race بین کلاینت‌های LAN و UI دیگر ممکن نیست.
+- **نسخهٔ پویا:** `serverVersion` در `system/health` و صفحهٔ وضعیت روت (`/`) دیگر hardcode نیست؛ reason phraseهای 201/409/500/501 اضافه شد؛ مسیرهای unsupported حالا `501 NOT_SUPPORTED` می‌دهند؛ کش Idempotency-Key محدود (۱۰۰۰) شد.
+- **اصلاح داده:** Casing نوع تراکنش یکدست شد (`Receive`/`Pay`/`Discount`) — قبلاً تراکنش‌های ثبت‌شده از LAN در گزارش‌های مالی دیده نمی‌شدند؛ رشتهٔ لاتینِ « administrator» در تسویهٔ اقامت حذف شد.
+- **اندروید (نسخهٔ release):** اتصال به `http://<آی‌پی-PC>:5050` حالا در APK ریلیز هم کار می‌کند — `network-security-config` cleartext را (فقط با CA سیستمی) آزاد کرده و اپ فقط برای IPهای LAN (خصوصی/لوپ‌بک/لینک-لوکال) و نام‌های `.local/.lan/.internal` اجازهٔ http می‌دهد؛ سرور عمومی همچنان فقط HTTPS. تست واحد `ServerUrlProviderTest` اضافه شد.
 
 ## نسخهٔ ۱.۲.۱ — ثبت دادهٔ جدید در همهٔ حالت‌ها (شامل فایل محلی و LAN)
 
