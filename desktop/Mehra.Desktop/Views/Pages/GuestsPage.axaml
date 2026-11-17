@@ -16,10 +16,14 @@
                 <TextBlock Text="{Binding PhoneFa}" Foreground="#5A6474" FontSize="12" />
                 <TextBlock Text="{Binding City}" Foreground="#8A93A3" FontSize="11" />
               </StackPanel>
-              <StackPanel Grid.Column="1" Spacing="3" HorizontalAlignment="Right">
-                <TextBlock Text="{Binding BalanceFa}" FontSize="13" Classes="bold" Foreground="{Binding BalanceBrush}" />
-                <TextBlock Text="{Binding StaysFa}" FontSize="11" Foreground="#8A93A3" />
-                <TextBlock Text="{Binding LastFa}" FontSize="11" Foreground="#8A93A3" />
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Spacing="3" HorizontalAlignment="Right">
+                  <TextBlock Text="{Binding BalanceFa}" FontSize="13" Classes="bold" Foreground="{Binding BalanceBrush}" />
+                  <TextBlock Text="{Binding StaysFa}" FontSize="11" Foreground="#8A93A3" />
+                  <TextBlock Text="{Binding LastFa}" FontSize="11" Foreground="#8A93A3" />
+                </StackPanel>
+                <Button Classes="icon" Content="✎" ToolTip.Tip="ویرایش مهمان" Tag="{Binding}" Click="OnEdit" />
+                <Button Classes="iconDanger" Content="🗑" ToolTip.Tip="حذف مهمان" Tag="{Binding}" Click="OnDelete" />
               </StackPanel>
             </Grid>
           </Border>

@@ -2,48 +2,57 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Mehra.Desktop.Views.MainWindow"
         Icon="avares://Mehra/Assets/mehra.ico"
-        Title="مهرآ — نسخهٔ ویندوز"
-        Width="1180" Height="760"
-        MinWidth="900" MinHeight="560"
+        Title="زرین‌سرا — نسخهٔ ویندوز"
+        WindowState="Maximized"
+        MinWidth="960" MinHeight="600"
         WindowStartupLocation="CenterScreen">
-  <Grid RowDefinitions="*,30">
-    <Grid Grid.Row="0" ColumnDefinitions="230,*">
-      <Border Grid.Column="0" Background="#16233D">
-        <Grid RowDefinitions="Auto,*,Auto">
-          <StackPanel Grid.Row="0" Margin="16,20,16,10" Spacing="2">
-            <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="52" Height="52" HorizontalAlignment="Right" />
-            <TextBlock Text="مهرآ" FontSize="30" Classes="bold" Foreground="#E8D6AE" />
-            <TextBlock Text="مهمان‌پذیر فرهنگیان اهواز" FontSize="11" Foreground="#9AA6B8" />
+  <Grid RowDefinitions="*,32">
+    <Grid Grid.Row="0" ColumnDefinitions="250,*">
+      <Border Grid.Column="0">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Color="#16233D" Offset="0" />
+            <GradientStop Color="#1E2F52" Offset="0.6" />
+            <GradientStop Color="#101A2E" Offset="1" />
+          </LinearGradientBrush>
+        </Border.Background>
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+          <StackPanel Grid.Row="0" Margin="18,22,18,12" Spacing="3">
+            <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="56" Height="56" HorizontalAlignment="Right" />
+            <TextBlock Text="زرین‌سرا" FontSize="28" Classes="bold" Foreground="#E8D6AE" />
+            <TextBlock Text="مهمان‌پذیر فرهنگیان اهواز" FontSize="11.5" Foreground="#A9B4C6" />
           </StackPanel>
-          <ListBox x:Name="NavList" Grid.Row="1" Classes="nav" SelectionChanged="OnNavChanged">
-            <ListBoxItem Content="خانه" Tag="home" />
-            <ListBoxItem Content="اتاق‌ها" Tag="rooms" />
-            <ListBoxItem Content="رزروها" Tag="reservations" />
-            <ListBoxItem Content="پذیرش" Tag="reception" />
-            <ListBoxItem Content="مهمانان" Tag="guests" />
-            <ListBoxItem Content="مالی" Tag="finance" />
-            <ListBoxItem Content="نظافت" Tag="housekeeping" />
-            <ListBoxItem Content="تعمیرات" Tag="maintenance" />
-            <ListBoxItem Content="گزارش‌ها" Tag="reports" />
-            <ListBoxItem Content="کاربران" Tag="users" />
-            <ListBoxItem Content="اعلان‌ها" Tag="notifications" />
-            <ListBoxItem Content="تنظیمات" Tag="settings" />
+          <Border Grid.Row="1" Height="1" Margin="16,0,16,6" Background="#2E4166" />
+          <ListBox x:Name="NavList" Grid.Row="2" Classes="nav" SelectionChanged="OnNavChanged">
+            <ListBoxItem Content="🏠  خانه" Tag="home" />
+            <ListBoxItem Content="🛏  اتاق‌ها" Tag="rooms" />
+            <ListBoxItem Content="📅  رزروها" Tag="reservations" />
+            <ListBoxItem Content="🔑  پذیرش" Tag="reception" />
+            <ListBoxItem Content="👥  مهمانان" Tag="guests" />
+            <ListBoxItem Content="💳  مالی" Tag="finance" />
+            <ListBoxItem Content="🧹  نظافت" Tag="housekeeping" />
+            <ListBoxItem Content="🔧  تعمیرات" Tag="maintenance" />
+            <ListBoxItem Content="📊  گزارش‌ها" Tag="reports" />
+            <ListBoxItem Content="👤  کاربران" Tag="users" />
+            <ListBoxItem Content="🔔  اعلان‌ها" Tag="notifications" />
+            <ListBoxItem Content="⚙  تنظیمات" Tag="settings" />
           </ListBox>
-          <StackPanel Grid.Row="2" Margin="16,10" Spacing="6">
-            <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" />
+          <StackPanel Grid.Row="3" Margin="16,12" Spacing="6">
+            <Border Height="1" Background="#2E4166" Margin="0,0,0,4" />
+            <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" FontSize="13.5" />
             <TextBlock x:Name="RoleText" Foreground="#9AA6B8" FontSize="11" />
             <Button Classes="ghost" Content="خروج از حساب" Click="OnLogout" HorizontalAlignment="Stretch" />
           </StackPanel>
         </Grid>
       </Border>
-      <Border Grid.Column="1" Background="#F6EFE0">
+      <Border Grid.Column="1" Background="#F7F3E9">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-          <ContentControl x:Name="ContentArea" Margin="18" />
+          <ContentControl x:Name="ContentArea" Margin="24" />
         </ScrollViewer>
       </Border>
     </Grid>
-    <Border Grid.Row="1" Background="#101A2E">
-      <TextBlock x:Name="StatusText" Foreground="#C9CFD8" FontSize="11" Margin="12,5" />
+    <Border Grid.Row="1" Background="#101A2E" BorderBrush="#24365C" BorderThickness="0,1,0,0">
+      <TextBlock x:Name="StatusText" Foreground="#C9CFD8" FontSize="11.5" Margin="14,6" />
     </Border>
   </Grid>
 </Window>

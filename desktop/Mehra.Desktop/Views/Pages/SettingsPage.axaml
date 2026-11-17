@@ -12,12 +12,14 @@
         <TextBlock Text="{Binding Health}" Foreground="#2E7D5B" TextWrapping="Wrap" />
         <Button Classes="primary" Content="راه‌اندازی/به‌روزرسانی جداول پایگاه داده (SQL Server)" Click="OnEnsureSchema" HorizontalAlignment="Right" IsVisible="{Binding IsSql}" />
         <TextBlock Text="{Binding SchemaStatus}" Foreground="#5A6474" TextWrapping="Wrap" />
+        <Button Classes="danger" Content="پاک‌سازی کامل داده‌های فعلی (مهمانان، رزروها، مالی)" Click="OnResetData" HorizontalAlignment="Right" IsVisible="{Binding IsLocal}" />
+        <TextBlock Text="{Binding ResetStatus}" Foreground="#2E7D5B" TextWrapping="Wrap" />
       </StackPanel>
     </Border>
     <Border Classes="card">
       <StackPanel Spacing="6">
         <TextBlock Text="دربارهٔ برنامه" Classes="bold" />
-        <TextBlock x:Name="VersionText" Text="مهرآ — نسخهٔ ویندوز" />
+        <TextBlock x:Name="VersionText" Text="زرین‌سرا — نسخهٔ ویندوز" />
         <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — داده‌ها در فایل محلی ذخیره می‌شوند و با سرور شبکهٔ محلی (پورت ۵۰۵۰) به اندروید هم می‌رسند." TextWrapping="Wrap" Foreground="#5A6474" />
         <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی" Classes="bold" />
       </StackPanel>

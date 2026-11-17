@@ -23,10 +23,14 @@
                 <TextBlock Text="{Binding DatesFa}" Foreground="#5A6474" FontSize="12" />
                 <TextBlock Text="{Binding RoomNumber}" Foreground="#5A6474" FontSize="12" />
               </StackPanel>
-              <StackPanel Grid.Column="2" Spacing="3" HorizontalAlignment="Right">
-                <TextBlock Text="{Binding GuestsFa}" FontSize="12" Foreground="#5A6474" />
-                <TextBlock Text="{Binding AmountFa}" FontSize="13" Classes="bold" />
-                <TextBlock Text="{Binding PaidFa}" FontSize="11" Foreground="#8A93A3" />
+              <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <StackPanel Spacing="3" HorizontalAlignment="Right">
+                  <TextBlock Text="{Binding GuestsFa}" FontSize="12" Foreground="#5A6474" />
+                  <TextBlock Text="{Binding AmountFa}" FontSize="13" Classes="bold" />
+                  <TextBlock Text="{Binding PaidFa}" FontSize="11" Foreground="#8A93A3" />
+                </StackPanel>
+                <Button Classes="icon" Content="✎" ToolTip.Tip="ویرایش رزرو" Tag="{Binding}" Click="OnEdit" />
+                <Button Classes="iconDanger" Content="🗑" ToolTip.Tip="حذف رزرو" Tag="{Binding}" Click="OnDelete" />
               </StackPanel>
             </Grid>
           </Border>

@@ -4,7 +4,7 @@
   <Style Selector="Window, UserControl">
     <Setter Property="FontFamily" Value="avares://Mehra/Assets/Fonts/vazirmatn_regular.ttf#Vazirmatn" />
     <Setter Property="FlowDirection" Value="RightToLeft" />
-    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontSize" Value="13.5" />
   </Style>
 
   <Style Selector="TextBlock">
@@ -19,6 +19,7 @@
     <Setter Property="Padding" Value="16,9" />
     <Setter Property="CornerRadius" Value="10" />
     <Setter Property="FontSize" Value="14" />
+    <Setter Property="Cursor" Value="Hand" />
   </Style>
 
   <Style Selector="Button.primary">
@@ -26,10 +27,44 @@
     <Setter Property="Foreground" Value="White" />
   </Style>
   <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
-    <Setter Property="Background" Value="#C6A452" />
+    <Setter Property="Background" Value="#C9A24B" />
   </Style>
   <Style Selector="Button.primary:pressed /template/ ContentPresenter">
     <Setter Property="Background" Value="#8F7030" />
+  </Style>
+
+  <Style Selector="Button.danger">
+    <Setter Property="Background" Value="#B3261E" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.danger:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#CC362E" />
+  </Style>
+
+  <Style Selector="Button.icon">
+    <Setter Property="Background" Value="#F3EDE0" />
+    <Setter Property="Foreground" Value="#16233D" />
+    <Setter Property="BorderBrush" Value="#DFD3B6" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="9,5" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="Button.icon:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#E8D6AE" />
+  </Style>
+
+  <Style Selector="Button.iconDanger">
+    <Setter Property="Background" Value="#FDF1F0" />
+    <Setter Property="Foreground" Value="#B3261E" />
+    <Setter Property="BorderBrush" Value="#EFCAC7" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="9,5" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="Button.iconDanger:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#F9DEDC" />
   </Style>
 
   <Style Selector="Button.ghost">
@@ -43,11 +78,12 @@
   </Style>
 
   <Style Selector="Border.card">
-    <Setter Property="Background" Value="#FFFFFFFB" />
+    <Setter Property="Background" Value="#FFFFFFFC" />
     <Setter Property="CornerRadius" Value="14" />
-    <Setter Property="Padding" Value="14" />
+    <Setter Property="Padding" Value="16" />
     <Setter Property="BorderBrush" Value="#E4D9BE" />
     <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BoxShadow" Value="0 4 14 0 #1216233D" />
   </Style>
 
   <Style Selector="TextBox">
@@ -56,6 +92,10 @@
     <Setter Property="BorderBrush" Value="#D8CBA6" />
     <Setter Property="Background" Value="#FFFDF8" />
   </Style>
+  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="#B08D3E" />
+    <Setter Property="BorderThickness" Value="1.5" />
+  </Style>
 
   <Style Selector="ListBox.nav">
     <Setter Property="Background" Value="Transparent" />
@@ -63,18 +103,19 @@
     <Setter Property="Margin" Value="10,6" />
   </Style>
   <Style Selector="ListBox.nav ListBoxItem">
-    <Setter Property="Foreground" Value="#C9CFD8" />
+    <Setter Property="Foreground" Value="#D2D8E2" />
     <Setter Property="Padding" Value="14,10" />
     <Setter Property="Margin" Value="0,2" />
     <Setter Property="CornerRadius" Value="10" />
     <Setter Property="FontSize" Value="14" />
   </Style>
   <Style Selector="ListBox.nav ListBoxItem:pointerover /template/ ContentPresenter">
-    <Setter Property="Background" Value="#22304C" />
+    <Setter Property="Background" Value="#24365C" />
+    <Setter Property="Foreground" Value="#F7F4EC" />
   </Style>
   <Style Selector="ListBox.nav ListBoxItem:selected /template/ ContentPresenter">
-    <Setter Property="Background" Value="#B08D3E" />
-    <Setter Property="Foreground" Value="White" />
+    <Setter Property="Background" Value="#C9A24B" />
+    <Setter Property="Foreground" Value="#101A2E" />
   </Style>
 
 </Styles>

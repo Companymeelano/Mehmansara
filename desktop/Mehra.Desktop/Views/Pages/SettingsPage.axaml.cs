@@ -13,7 +13,7 @@ public partial class SettingsPage : UserControl
         DataContext = _vm;
         var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         this.FindControl<TextBlock>("VersionText")!.Text =
-            "مهرآ — نسخهٔ ویندوز " + Fa.Digits(ver is null ? "1.2.3" : ver.ToString(3));
+            "زرین‌سرا — نسخهٔ ویندوز " + Fa.Digits(ver is null ? "1.2.4" : ver.ToString(3));
     }
 
     private async void OnHealth(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
@@ -21,4 +21,14 @@ public partial class SettingsPage : UserControl
 
     private async void OnEnsureSchema(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
         await _vm.EnsureSchemaAsync();
+
+    private async void OnResetData(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this) is not Window win) return;
+        var c = new ConfirmDialog("پاک‌سازی کامل داده‌ها",
+            "تمام مهمانان، رزروها، اقامت‌ها، تراکنش‌های مالی، نظافت، تعمیرات و اعلان‌ها پاک می‌شوند و اتاق‌ها آزاد می‌شوند. ادامه می‌دهید؟",
+            "پاک‌سازی کامل");
+        if (await c.ShowDialog<bool?>(win) == true)
+            await _vm.ResetDataAsync();
+    }
 }

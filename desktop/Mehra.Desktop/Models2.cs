@@ -132,6 +132,11 @@ public class ReportDto
 
 public class GuestRow
 {
+    public string Id { get; set; } = "";
+    public string FirstName { get; set; } = "";
+    public string LastName { get; set; } = "";
+    public string RawPhone { get; set; } = "";
+    public string RawCity { get; set; } = "";
     public string Name { get; set; } = "";
     public string PhoneFa { get; set; } = "";
     public string City { get; set; } = "";
@@ -143,6 +148,8 @@ public class GuestRow
 
 public class TxnRow
 {
+    public string Id { get; set; } = "";
+    public bool IsReversed { get; set; }
     public string Code { get; set; } = "";
     public string TypeFa { get; set; } = "";
     public IBrush TypeBrush { get; set; } = Brushes.Gray;

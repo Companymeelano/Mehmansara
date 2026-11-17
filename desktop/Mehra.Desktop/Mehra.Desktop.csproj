@@ -11,12 +11,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <InvariantGlobalization>false</InvariantGlobalization>
-    <Version>1.2.3</Version>
-    <AssemblyVersion>1.2.3.0</AssemblyVersion>
-    <FileVersion>1.2.3.0</FileVersion>
-    <AssemblyTitle>MEHRA — Hospitality Management (Windows)</AssemblyTitle>
-    <Description>سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — نسخهٔ ویندوز 1.2.3 (کارکنان — اتصال مستقیم به SQL Server) — www.meelano.ir — 09120219593</Description>
-    <Product>MEHRA</Product>
+    <Version>1.2.4</Version>
+    <AssemblyVersion>1.2.4.0</AssemblyVersion>
+    <FileVersion>1.2.4.0</FileVersion>
+    <AssemblyTitle>زرین‌سرا (Zarrinsara) — Hospitality Management (Windows)</AssemblyTitle>
+    <Description>سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — نسخهٔ ویندوز 1.2.4 (کارکنان — اتصال مستقیم به SQL Server) — www.meelano.ir — 09120219593</Description>
+    <Product>Zarrinsara</Product>
     <Company>Culturalists of Ahvaz — فرهنگیان اهواز</Company>
     <Copyright>Copyright © 2026 — طراح و توسعه‌دهنده: میلاد یعقوبی</Copyright>
     <ApplicationIcon>Assets\mehra.ico</ApplicationIcon>

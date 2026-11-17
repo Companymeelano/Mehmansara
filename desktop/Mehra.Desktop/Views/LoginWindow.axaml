@@ -2,14 +2,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Mehra.Desktop.Views.LoginWindow"
         Icon="avares://Mehra/Assets/mehra.ico"
-        Title="مهرآ — ورود"
+        Title="زرین‌سرا — ورود"
         Width="500" Height="720"
         WindowStartupLocation="CenterScreen"
         CanResize="False">
   <Border Background="#16233D">
     <StackPanel VerticalAlignment="Center" Margin="36" Spacing="10">
       <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="76" Height="76" HorizontalAlignment="Center" />
-      <TextBlock Text="مهرآ" FontSize="42" Classes="bold" Foreground="#E8D6AE" HorizontalAlignment="Center" />
+      <TextBlock Text="زرین‌سرا" FontSize="42" Classes="bold" Foreground="#E8D6AE" HorizontalAlignment="Center" />
       <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز" Foreground="#C9CFD8" HorizontalAlignment="Center" TextAlignment="Center" />
       <TextBlock Text="www.meelano.ir — ۰۹۱۲۰۲۱۹۵۹۳" Foreground="#E8D6AE" FontSize="11" HorizontalAlignment="Center" />
       <Border Classes="card" Margin="0,10,0,0">

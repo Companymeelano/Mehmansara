@@ -100,6 +100,26 @@ public partial class ApiClient
         catch (Exception ex) { return Result<T>.Fail("اتصال به سرور برقرار نشد. (" + ex.Message + ")"); }
     }
 
+    private async Task<Result<T>> PutAsync<T>(string path, object body)
+    {
+        if (_server.Length == 0) return Result<T>.Fail("ابتدا وارد شوید.");
+        try
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Put, $"{_server}{path}")
+            {
+                Content = JsonContent.Create(body)
+            };
+            if (_token.Length > 0) req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            using var resp = await _http.SendAsync(req);
+            var text = await resp.Content.ReadAsStringAsync();
+            var env = JsonSerializer.Deserialize<ApiEnvelope<T>>(text, Json.Opts);
+            if (!resp.IsSuccessStatusCode || env is null || !env.Success)
+                return Result<T>.Fail(env?.Error?.Message ?? $"پاسخ نامعتبر از سرور (کد {(int)resp.StatusCode})");
+            return Result<T>.Good(env.Data!);
+        }
+        catch (Exception ex) { return Result<T>.Fail("اتصال به سرور برقرار نشد. (" + ex.Message + ")"); }
+    }
+
     private async Task<Result<T>> PatchAsync<T>(string path, object body)
     {
         if (_server.Length == 0) return Result<T>.Fail("ابتدا وارد شوید.");
@@ -181,6 +201,41 @@ public partial class ApiClient
 
     public Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status) =>
         PatchAsync<RoomDto>($"/api/v1/rooms/{Uri.EscapeDataString(roomId)}", new { status, note = (string?)null });
+
+    // ---- edit / delete (v1.2.4) ----
+    private async Task<Result<T>> DeleteAsync<T>(string path)
+    {
+        if (_server.Length == 0) return Result<T>.Fail("ابتدا وارد شوید.");
+        try
+        {
+            using var req = new HttpRequestMessage(HttpMethod.Delete, $"{_server}{path}");
+            if (_token.Length > 0) req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            using var resp = await _http.SendAsync(req);
+            var text = await resp.Content.ReadAsStringAsync();
+            var env = JsonSerializer.Deserialize<ApiEnvelope<T>>(text, Json.Opts);
+            if (!resp.IsSuccessStatusCode || env is null || !env.Success)
+                return Result<T>.Fail(env?.Error?.Message ?? $"پاسخ نامعتبر از سرور (کد {(int)resp.StatusCode})");
+            return Result<T>.Good(env.Data!);
+        }
+        catch (Exception ex) { return Result<T>.Fail("اتصال به سرور برقرار نشد. (" + ex.Message + ")"); }
+    }
+
+    public Task<Result<GuestDto>> UpdateGuestAsync(string id, string firstName, string lastName, string? phone, string? city) =>
+        PutAsync<GuestDto>($"/api/v1/guests/{Uri.EscapeDataString(id)}", new { firstName, lastName, phone, city });
+
+    public Task<Result<bool>> DeleteGuestAsync(string id) =>
+        DeleteAsync<bool>($"/api/v1/guests/{Uri.EscapeDataString(id)}");
+
+    public Task<Result<ReservationDto>> UpdateReservationAsync(string id, string guestName, string? guestPhone, string? roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial) =>
+        PutAsync<ReservationDto>($"/api/v1/reservations/{Uri.EscapeDataString(id)}", new { guestName, guestPhone, roomNumber, checkInDate = checkInIso, checkOutDate = checkOutIso, guestsCount, totalRial, paidRial });
+
+    public Task<Result<bool>> DeleteReservationAsync(string id) =>
+        DeleteAsync<bool>($"/api/v1/reservations/{Uri.EscapeDataString(id)}");
+
+    public Task<Result<TransactionDto>> ReverseTransactionAsync(string id) =>
+        PostAsync<TransactionDto>($"/api/v1/finance/transactions/{Uri.EscapeDataString(id)}/reverse", new { }, Guid.NewGuid().ToString());
+    public Task<Result<bool>> ResetDataAsync() =>
+        Task.FromResult(Result<bool>.Fail("پاک‌سازی فقط در حالت فایل محلی پشتیبانی می‌شود."));
 }
 
 
@@ -275,6 +330,19 @@ public partial class DemoApi
         Task.FromResult(Result<StayDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
     public Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status) =>
         Task.FromResult(Result<RoomDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+
+    public Task<Result<GuestDto>> UpdateGuestAsync(string id, string firstName, string lastName, string? phone, string? city) =>
+        Task.FromResult(Result<GuestDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<bool>> DeleteGuestAsync(string id) =>
+        Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<ReservationDto>> UpdateReservationAsync(string id, string guestName, string? guestPhone, string? roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial) =>
+        Task.FromResult(Result<ReservationDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<bool>> DeleteReservationAsync(string id) =>
+        Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<TransactionDto>> ReverseTransactionAsync(string id) =>
+        Task.FromResult(Result<TransactionDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
+    public Task<Result<bool>> ResetDataAsync() =>
+        Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
 
     public Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso) => Task.FromResult(Result<ReportDto>.Good(new ReportDto
     {

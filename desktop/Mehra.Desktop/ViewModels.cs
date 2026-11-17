@@ -135,6 +135,24 @@ public class ReservationsVm : VmBase
         await LoadAsync();
     }
 
+    public async Task UpdateReservationAsync(string id, string guestName, string? phone, string room, string ci, string co, string guestsCount, string total, string paid)
+    {
+        var r = await _session.Api.UpdateReservationAsync(
+            id, guestName, phone, room, ci, co,
+            int.TryParse(guestsCount, out var gc) ? gc : 1,
+            long.TryParse(total, out var t) ? t : 0,
+            long.TryParse(paid, out var p) ? p : 0);
+        Status = r.Ok ? "رزرو ویرایش شد: " + (r.Value!.Code ?? "") : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task DeleteReservationAsync(string id)
+    {
+        var r = await _session.Api.DeleteReservationAsync(id);
+        Status = r.Ok ? "رزرو حذف شد." : r.Error;
+        await LoadAsync();
+    }
+
     public async Task LoadAsync()
     {
         var r = await _session.Api.ReservationsAsync();
@@ -143,6 +161,15 @@ public class ReservationsVm : VmBase
         foreach (var v in r.Value!)
             Items.Add(new ReservationRow
             {
+                Id = v.Id ?? v.Code ?? "",
+                RawGuestName = v.GuestName ?? "",
+                RawPhone = v.GuestPhone ?? "",
+                RawRoomNumber = v.RoomNumber ?? "",
+                CheckInIso = v.CheckInDate ?? "",
+                CheckOutIso = v.CheckOutDate ?? "",
+                GuestsCount = v.GuestsCount,
+                TotalRial = v.TotalRial ?? 0,
+                PaidRial = v.PaidRial ?? 0,
                 Code = Fa.Digits(v.Code ?? "—"),
                 GuestName = v.GuestName ?? "",
                 PhoneFa = Fa.Digits(v.GuestPhone ?? ""),
@@ -219,6 +246,10 @@ public class SettingsVm : VmBase
 
     private bool _isSql;
     public bool IsSql { get => _isSql; set => Set(ref _isSql, value); }
+    private bool _isLocal;
+    public bool IsLocal { get => _isLocal; set => Set(ref _isLocal, value); }
+    private string _resetStatus = "";
+    public string ResetStatus { get => _resetStatus; set => Set(ref _resetStatus, value); }
     private string _schemaStatus = "";
     public string SchemaStatus { get => _schemaStatus; set => Set(ref _schemaStatus, value); }
 
@@ -227,6 +258,7 @@ public class SettingsVm : VmBase
         _session = session;
         _serverLabel = session.Api.ServerLabel;
         IsSql = session.Api is SqlServerApi;
+        IsLocal = session.Api is LocalFileApi;
         Mode = session.Api.IsDemo
             ? "حالت: نسخهٔ نمایشی (دادهٔ نمونه — بدون اتصال به سرور)"
             : IsSql ? "حالت: اتصال مستقیم به SQL Server (جدول‌ها از فایل db\\schema.sql ساخته می‌شوند)"
@@ -252,6 +284,12 @@ public class SettingsVm : VmBase
         }
         var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path, sql.Database);
         SchemaStatus = r.Ok ? r.Value! : r.Error;
+    }
+
+    public async Task ResetDataAsync()
+    {
+        var r = await _session.Api.ResetDataAsync();
+        ResetStatus = r.Ok ? "تمام داده‌های مهمانان، رزروها، اقامت‌ها و تراکنش‌ها پاک شد." : r.Error;
     }
 
     public async Task CheckHealthAsync()

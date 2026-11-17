@@ -735,6 +735,42 @@ public class LanServer : IDisposable
             return (200, EnvelopeOk(m));
         }
 
+        // ---- edit / delete (v1.2.4) ----
+        if (seg.Length == 4 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "guests" && method == "PUT")
+        {
+            var r = await _api.UpdateGuestAsync(seg[3],
+                BodyField(body, "firstName") ?? "", BodyField(body, "lastName") ?? "",
+                BodyField(body, "phone"), BodyField(body, "city"));
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
+        }
+        if (seg.Length == 4 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "guests" && method == "DELETE")
+        {
+            var r = await _api.DeleteGuestAsync(seg[3]);
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
+        }
+        if (seg.Length == 4 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "reservations" && method == "PUT")
+        {
+            var r = await _api.UpdateReservationAsync(seg[3],
+                BodyField(body, "guestName") ?? "", BodyField(body, "guestPhone"),
+                BodyField(body, "roomNumber") ?? BodyField(body, "room"),
+                BodyField(body, "checkInDate") ?? BodyField(body, "checkIn") ?? "",
+                BodyField(body, "checkOutDate") ?? BodyField(body, "checkOut") ?? "",
+                int.TryParse(BodyField(body, "guestsCount"), out var gc2) ? gc2 : 1,
+                long.TryParse(BodyField(body, "totalRial"), out var tr2) ? tr2 : 0,
+                long.TryParse(BodyField(body, "paidRial") ?? BodyField(body, "prepaidRial"), out var pr2) ? pr2 : 0);
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (409, EnvelopeErr("RESERVATION_CONFLICT", r.Error));
+        }
+        if (seg.Length == 4 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "reservations" && method == "DELETE")
+        {
+            var r = await _api.DeleteReservationAsync(seg[3]);
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (409, EnvelopeErr("INVALID_STATE", r.Error));
+        }
+        if (seg.Length == 5 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "finance" && seg[3] == "transactions" && method == "DELETE")
+        {
+            var r = await _api.ReverseTransactionAsync(seg[4]);
+            return r.Ok ? (200, EnvelopeOk(r.Value)) : (400, EnvelopeErr("VALIDATION_FAILED", r.Error));
+        }
+
         // ---- everything else (writes / unknown) ----
         if (method is "POST" or "PUT" or "PATCH" or "DELETE")
             return (501, EnvelopeErr("NOT_SUPPORTED",

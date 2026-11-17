@@ -9,16 +9,16 @@
 
 [Setup]
 AppId={{7C4E9A21-3B6D-4F58-9A01-5E2D8B7C6F40}}
-AppName=مهرآ
-AppVersion=1.2.3
-AppVerName=مهرآ ۱.۲.۳ — ویندوز
+AppName=زرین‌سرا
+AppVersion=1.2.4
+AppVerName=زرین‌سرا ۱.۲.۴ — ویندوز
 AppPublisher=Milad Yaghoobi — میلاد یعقوبی
 AppPublisherURL=http://www.meelano.ir
 AppSupportURL=http://www.meelano.ir
 AppUpdatesURL=http://www.meelano.ir
 AppCopyright=© 2026 Milad Yaghoobi (میلاد یعقوبی) — www.meelano.ir — 09120219593
 DefaultDirName={autopf}\Mehra
-DefaultGroupName=مهرآ
+DefaultGroupName=زرین‌سرا
 DisableProgramGroupPage=yes
 PrivilegesRequired=admin
 CloseApplications=yes
@@ -35,8 +35,8 @@ SolidCompression=yes
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\Mehra.exe
-UninstallDisplayName=مهرآ
-VersionInfoVersion=1.2.3.0
+UninstallDisplayName=زرین‌سرا
+VersionInfoVersion=1.2.4.0
 VersionInfoCompany=Milad Yaghoobi — میلاد یعقوبی — http://www.meelano.ir — 09120219593
 VersionInfoDescription=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز
 VersionInfoCopyright=© 2026 میلاد یعقوبی (Milad Yaghoobi) — www.meelano.ir — 09120219593
@@ -55,8 +55,8 @@ ButtonInstall=«نصب»
 ButtonYes=«بله»
 ButtonNo=«خیر»
 ButtonOK=«تأیید»
-WelcomeLabel1=به نصب‌گر مهرآ خوش آمدید
-WelcomeLabel2=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز ۱.۲.۳\n\nطراح و توسعه‌دهنده: میلاد یعقوبی\nwww.meelano.ir — 09120219593
+WelcomeLabel1=به نصب‌گر زرین‌سرا خوش آمدید
+WelcomeLabel2=سامانهٔ مدیریت مهمان‌پذیر فرهنگان اهواز — نسخهٔ ویندوز ۱.۲.۴\n\nطراح و توسعه‌دهنده: میلاد یعقوبی\nwww.meelano.ir — 09120219593
 WizardSelectDir=انتخاب مقصد نصب
 SelectDirLabel=برنامه در این پوشه نصب می‌شود:
 SelectDirBrowseLabel=انتخاب پوشه…
@@ -66,14 +66,14 @@ WizardSelectTasks=امکانات نصب
 TasksLabel=لطفاً گزینهایی که می‌خواهی در هنگام نصب انجام شود:
 WizardReady=آمادهٔ نصب
 ReadyLabel=برای شروع نصب روی «نصب» کلیک کنید.
-WizardInstalling=در حال نصب مهرآ…
+WizardInstalling=در حال نصب زرین‌سرا…
 StatusExtractFiles=در حال استخراج فایل‌ها…
 StatusCreateDirs=در حال ایجاد پوشه‌ها…
 StatusInstalling=در حال استخراج فایل‌ها…
 FinishedHeadingLabel=نصب با موفقیت انجام شد!
-FinishedLabel=مهرآ اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی — www.meelano.ir — 09120219593
+FinishedLabel=زرین‌سرا اکنون آمادهٔ استفاده است.\n\nمیلاد یعقوبی — www.meelano.ir — 09120219593
 ClickFinish=برای خروج از نصب‌گر روی «پایان» کلیک کنید.
-SetupWindowTitle=مهرآ ۱.۲.۳ — نصب‌گر
+SetupWindowTitle=زرین‌سرا ۱.۲.۴ — نصب‌گر
 
 [Components]
 Name: "app"; Description: "فایل‌های برنامه (Mehra.exe)"; Types: full compact custom; Flags: fixed
@@ -84,7 +84,7 @@ Name: "fonts"; Description: "فونت‌های وزیرمتن (6 وزن) — ن�
 
 [Tasks]
 Name: "desktopicon"; Description: "ایجاد میان‌بر روی دسکتاپ"; GroupDescription: "گزینه‌های اضافی:"
-Name: "startup"; Description: "اجرای خودکار مهرآ هنگام بالا آمدن ویندوز (پوشهٔ Startup)"; GroupDescription: "گزینه‌های اضافی:"
+Name: "startup"; Description: "اجرای خودکار زرین‌سرا هنگام بالا آمدن ویندوز (پوشهٔ Startup)"; GroupDescription: "گزینه‌های اضافی:"
 Name: "runapp"; Description: "اجرای برنامه پس از پایان نصب"; GroupDescription: "گزینه‌های اضافی:"
 Name: "openfolder"; Description: "باز کردن پوشهٔ نصب پس از پایان"; GroupDescription: "گزینه‌های اضافی:"
 
@@ -113,13 +113,13 @@ Source: "vazirmatn_black.ttf"; DestDir: "{fonts}"; Flags: ignoreversion restartr
 Source: "vazirmatn_black.ttf"; DestDir: "{userfonts}"; Flags: ignoreversion restartreplace; Check: not IsAdminLoggedOnSafe; Components: fonts
 
 [Icons]
-Name: "{group}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"
+Name: "{group}\زرین‌سرا"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"
 Name: "{group}\حذف برنامه"; Filename: "{uninstallexe}"
-Name: "{userdesktop}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"; Tasks: desktopicon
-Name: "{userstartup}\مهرآ"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"; Tasks: startup
+Name: "{userdesktop}\زرین‌سرا"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"; Tasks: desktopicon
+Name: "{userstartup}\زرین‌سرا"; Filename: "{app}\Mehra.exe"; IconFilename: "{app}\Mehra.exe"; Tasks: startup
 
 [Run]
-Filename: "{app}\Mehra.exe"; Description: "اجرای مهرآ"; Flags: nowait postinstall skipifsilent; Tasks: runapp
+Filename: "{app}\Mehra.exe"; Description: "اجرای زرین‌سرا"; Flags: nowait postinstall skipifsilent; Tasks: runapp
 Filename: "explorer.exe"; Parameters: """{app}"""; Description: "باز کردن پوشهٔ نصب"; Flags: nowait postinstall skipifsilent; Tasks: openfolder
 
 [Code]

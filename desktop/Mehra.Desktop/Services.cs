@@ -42,6 +42,14 @@ public interface IHotelApi
     Task<Result<StayDto>> CheckInAsync(string reservationId);
     Task<Result<StayDto>> CheckOutAsync(string stayId, long finalPaymentRial, string method);
     Task<Result<RoomDto>> SetRoomStatusAsync(string roomId, string status);
+
+    // ---- edit / delete (v1.2.4) ----
+    Task<Result<GuestDto>> UpdateGuestAsync(string id, string firstName, string lastName, string? phone, string? city);
+    Task<Result<bool>> DeleteGuestAsync(string id);
+    Task<Result<ReservationDto>> UpdateReservationAsync(string id, string guestName, string? guestPhone, string? roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial);
+    Task<Result<bool>> DeleteReservationAsync(string id);
+    Task<Result<TransactionDto>> ReverseTransactionAsync(string id);
+    Task<Result<bool>> ResetDataAsync();
 }
 
 public static class Json

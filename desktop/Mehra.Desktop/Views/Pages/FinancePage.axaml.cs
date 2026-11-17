@@ -25,4 +25,14 @@ public partial class FinancePage : UserControl
                 dlg.Values["نوع (Receive/Pay/Discount)"], dlg.Values["مبلغ (ریال)"], dlg.Values["روش (Cash/Pos/Transfer)"],
                 dlg.Values["توضیحات"], dlg.Values["نام مهمان (اختیاری)"]);
     }
+
+    private async void OnReverse(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is not Button { Tag: TxnRow row }) return;
+        if (row.IsReversed) return;
+        if (TopLevel.GetTopLevel(this) is not Window win) return;
+        var c = new ConfirmDialog("برگشت تراکنش", $"آیا از برگشت دادن تراکنش «{row.Code}» به مبلغ {row.AmountFa} مطمئن هستید؟", "برگشت تراکنش");
+        if (await c.ShowDialog<bool?>(win) == true)
+            await _vm.ReverseTransactionAsync(row.Id);
+    }
 }

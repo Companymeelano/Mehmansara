@@ -104,58 +104,14 @@ public class LocalStore
         });
         s.Rooms.AddRange(new[]
         {
-            new RoomDto { Id = "r1", RoomNumber = "101", Floor = 1, Capacity = 2, RoomTypeName = "دوتخته", RatePerNightRial = 2_500_000, Status = "OCCUPIED", CurrentGuestName = "رضایی" },
-            new RoomDto { Id = "r2", RoomNumber = "102", Floor = 1, Capacity = 2, RoomTypeName = "دوتخته", RatePerNightRial = 2_500_000, Status = "OCCUPIED", CurrentGuestName = "مریم احمدی" },
-            new RoomDto { Id = "r3", RoomNumber = "103", Floor = 1, Capacity = 4, RoomTypeName = "چهارتخته", RatePerNightRial = 4_200_000, Status = "RESERVED" },
-            new RoomDto { Id = "r4", RoomNumber = "104", Floor = 1, Capacity = 2, RoomTypeName = "دوتخته", RatePerNightRial = 2_500_000, Status = "CLEANING" },
+            new RoomDto { Id = "r1", RoomNumber = "101", Floor = 1, Capacity = 2, RoomTypeName = "دوتخته", RatePerNightRial = 2_500_000, Status = "FREE" },
+            new RoomDto { Id = "r2", RoomNumber = "102", Floor = 1, Capacity = 2, RoomTypeName = "دوتخته", RatePerNightRial = 2_500_000, Status = "FREE" },
+            new RoomDto { Id = "r3", RoomNumber = "103", Floor = 1, Capacity = 4, RoomTypeName = "چهارتخته", RatePerNightRial = 4_200_000, Status = "FREE" },
+            new RoomDto { Id = "r4", RoomNumber = "104", Floor = 1, Capacity = 2, RoomTypeName = "دوتخته", RatePerNightRial = 2_500_000, Status = "FREE" },
             new RoomDto { Id = "r5", RoomNumber = "201", Floor = 2, Capacity = 2, RoomTypeName = "یک‌تخته", RatePerNightRial = 1_800_000, Status = "FREE" },
             new RoomDto { Id = "r6", RoomNumber = "202", Floor = 2, Capacity = 2, RoomTypeName = "یک‌تخته", RatePerNightRial = 1_800_000, Status = "FREE" },
-            new RoomDto { Id = "r7", RoomNumber = "203", Floor = 2, Capacity = 3, RoomTypeName = "سه‌تخته", RatePerNightRial = 3_300_000, Status = "OCCUPIED", CurrentGuestName = "علی رضایی" },
+            new RoomDto { Id = "r7", RoomNumber = "203", Floor = 2, Capacity = 3, RoomTypeName = "سه‌تخته", RatePerNightRial = 3_300_000, Status = "FREE" },
             new RoomDto { Id = "r8", RoomNumber = "301", Floor = 3, Capacity = 4, RoomTypeName = "سوئیت", RatePerNightRial = 6_800_000, Status = "FREE" },
-        });
-        s.Guests.AddRange(new[]
-        {
-            new GuestDto { Id = "g1", LastName = "رضایی", Phone = "09120000001", City = "اهواز", BalanceRial = 0, TotalStays = 5, LastStayAtUtc = DateTime.UtcNow.AddDays(-2).ToString("o") },
-            new GuestDto { Id = "g2", LastName = "مریم احمدی", Phone = "09120000002", City = "تهران", BalanceRial = 2_500_000, TotalStays = 3, LastStayAtUtc = DateTime.UtcNow.AddDays(-1).ToString("o") },
-            new GuestDto { Id = "g3", LastName = "علی رضایی", Phone = "09120000005", City = "اهواز", BalanceRial = 0, TotalStays = 8, LastStayAtUtc = DateTime.UtcNow.AddDays(-6).ToString("o") },
-            new GuestDto { Id = "g4", LastName = "سارا محمدی", Phone = "09120000003", City = "تهران", BalanceRial = 1_200_000, TotalStays = 1, LastStayAtUtc = iso },
-        });
-        s.Reservations.AddRange(new[]
-        {
-            new ReservationDto { Id = "v1", Code = "R-1421", GuestName = "رضایی", GuestPhone = "09120000001", RoomNumber = "101", CheckInDate = today.ToString("yyyy-MM-dd"), CheckOutDate = today.AddDays(2).ToString("yyyy-MM-dd"), GuestsCount = 2, TotalRial = 5_000_000, PaidRial = 5_000_000, Status = "CHECKED_IN" },
-            new ReservationDto { Id = "v2", Code = "R-1422", GuestName = "مریم احمدی", GuestPhone = "09120000002", RoomNumber = "102", CheckInDate = today.ToString("yyyy-MM-dd"), CheckOutDate = today.AddDays(1).ToString("yyyy-MM-dd"), GuestsCount = 1, TotalRial = 2_500_000, PaidRial = 0, Status = "CHECKED_IN" },
-            new ReservationDto { Id = "v3", Code = "R-1423", GuestName = "سارا محمدی", GuestPhone = "09120000003", RoomNumber = "103", CheckInDate = today.AddDays(1).ToString("yyyy-MM-dd"), CheckOutDate = today.AddDays(3).ToString("yyyy-MM-dd"), GuestsCount = 3, TotalRial = 8_400_000, PaidRial = 4_000_000, Status = "CONFIRMED" },
-            new ReservationDto { Id = "v4", Code = "R-1424", GuestName = "حسن کریمی", GuestPhone = "09120000004", RoomNumber = "301", CheckInDate = today.AddDays(5).ToString("yyyy-MM-dd"), CheckOutDate = today.AddDays(7).ToString("yyyy-MM-dd"), GuestsCount = 2, TotalRial = 13_600_000, PaidRial = 0, Status = "PENDING" },
-        });
-        s.Stays.AddRange(new[]
-        {
-            new StayDto { Id = "s1", ReservationCode = "R-1421", GuestName = "رضایی", RoomNumber = "101", CheckInAtUtc = DateTime.UtcNow.AddDays(-1).AddHours(3).ToString("o"), PlannedCheckOut = today.AddDays(2).ToString("yyyy-MM-dd"), GuestsCount = 2, Status = "IN_HOUSE" },
-            new StayDto { Id = "s2", ReservationCode = "R-1422", GuestName = "مریم احمدی", RoomNumber = "102", CheckInAtUtc = DateTime.UtcNow.AddHours(-4).ToString("o"), PlannedCheckOut = today.AddDays(1).ToString("yyyy-MM-dd"), GuestsCount = 1, Status = "IN_HOUSE" },
-            new StayDto { Id = "s3", ReservationCode = "R-1418", GuestName = "علی رضایی", RoomNumber = "203", CheckInAtUtc = DateTime.UtcNow.AddDays(-3).AddHours(2).ToString("o"), PlannedCheckOut = today.ToString("yyyy-MM-dd"), GuestsCount = 3, Status = "IN_HOUSE" },
-        });
-        s.Transactions.AddRange(new[]
-        {
-            new TransactionDto { Id = "t1", Code = "TX-9021", Type = "Receive", AmountRial = 5_000_000, Method = "Cash", Description = "پیش‌پرداخت رزرو", GuestName = "رضایی", RoomNumber = "101", OperatorName = "مامور رضائی", CreatedAtUtc = DateTime.UtcNow.AddHours(-1).ToString("o"), IsReversed = false },
-            new TransactionDto { Id = "t2", Code = "TX-9020", Type = "Receive", AmountRial = 2_500_000, Method = "Pos", Description = "تسویهٔ اقامت", GuestName = "مریم احمدی", RoomNumber = "102", OperatorName = "مامور رضائی", CreatedAtUtc = DateTime.UtcNow.AddHours(-3).ToString("o"), IsReversed = false },
-            new TransactionDto { Id = "t3", Code = "TX-9019", Type = "Pay", AmountRial = 800_000, Method = "Cash", Description = "خرید ملزومات", OperatorName = "سید مرتضی موسوی", CreatedAtUtc = DateTime.UtcNow.AddHours(-6).ToString("o"), IsReversed = false },
-            new TransactionDto { Id = "t4", Code = "TX-9018", Type = "Discount", AmountRial = 500_000, Method = "Cash", Description = "تخفیف", GuestName = "سارا محمدی", RoomNumber = "103", OperatorName = "سید مرتضی موسوی", CreatedAtUtc = DateTime.UtcNow.AddDays(-1).AddHours(-2).ToString("o"), IsReversed = false },
-        });
-        s.Housekeeping.AddRange(new[]
-        {
-            new HousekeepingTaskDto { Id = "h1", RoomNumber = "104", Type = "Checkout", Status = "Pending", Notes = "پس از تخلیهٔ مهمان قبلی", CreatedAtUtc = DateTime.UtcNow.AddHours(-2).ToString("o") },
-            new HousekeepingTaskDto { Id = "h2", RoomNumber = "203", Type = "Daily", Status = "InProgress", AssignedToName = "زهرا محمدی", CreatedAtUtc = DateTime.UtcNow.AddHours(-5).ToString("o") },
-            new HousekeepingTaskDto { Id = "h3", RoomNumber = "101", Type = "Deep", Status = "Done", AssignedToName = "زهرا محمدی", CreatedAtUtc = DateTime.UtcNow.AddDays(-1).ToString("o"), FinishedAtUtc = DateTime.UtcNow.AddDays(-1).AddHours(-3).ToString("o") },
-        });
-        s.Maintenance.AddRange(new[]
-        {
-            new MaintenanceTicketDto { Id = "m1", Code = "MT-310", RoomNumber = "203", Title = "تعمیر سیفون دوش", Description = "نشتی آب", Priority = "High", Status = "InProgress", AssigneeName = "مامور رضائی", CostRial = 1_500_000, ReporterName = "زهرا محمدی", CreatedAtUtc = DateTime.UtcNow.AddDays(-1).ToString("o") },
-            new MaintenanceTicketDto { Id = "m2", Code = "MT-311", RoomNumber = "104", Title = "تعویض لامپ", Description = "لامپ سوخته", Priority = "Urgent", Status = "Open", ReporterName = "مامور رضائی", CreatedAtUtc = DateTime.UtcNow.AddHours(-3).ToString("o") },
-        });
-        s.Notifications.AddRange(new[]
-        {
-            new NotificationDto { Id = "n1", Title = "رزرو فردا ثبت نشده", Body = "اتاق ۱۰۱", Severity = "HIGH", Kind = "RESERVATION", CreatedAtUtc = DateTime.UtcNow.AddHours(-2).ToString("o"), IsRead = false },
-            new NotificationDto { Id = "n2", Title = "اتاق ۱۰۴ نیاز به نظافت دارد", Body = "اتاق ۱۰۴", Severity = "MEDIUM", Kind = "HOUSEKEEPING", CreatedAtUtc = DateTime.UtcNow.AddHours(-5).ToString("o"), IsRead = false },
-            new NotificationDto { Id = "n3", Title = "بدهی مهمان مریم احمدی", Body = "اهواز", Severity = "LOW", Kind = "GUEST", CreatedAtUtc = DateTime.UtcNow.AddDays(-1).ToString("o"), IsRead = true },
         });
         return s;
     }
@@ -719,6 +675,124 @@ public class LocalFileApi : IHotelApi
             });
             LocalStore.Save(_store);
             return Task.FromResult(Result<object>.Good(new { code = res.Code, guestId = guest.Id, status = res.Status }));
+        }
+    }
+
+    // ================= edit / delete (v1.2.4) =================
+
+    public Task<Result<GuestDto>> UpdateGuestAsync(string id, string firstName, string lastName, string? phone, string? city)
+    {
+        lock (Gate)
+        {
+            var g = _store.Guests.FirstOrDefault(x => x.Id == id);
+            if (g is null) return Task.FromResult(Result<GuestDto>.Fail("مهمان یافت نشد: " + id));
+            if (string.IsNullOrWhiteSpace(lastName) && string.IsNullOrWhiteSpace(firstName))
+                return Task.FromResult(Result<GuestDto>.Fail("نام یا نام خانوادگی را وارد کنید."));
+            if (!string.IsNullOrWhiteSpace(firstName)) g.FirstName = firstName.Trim();
+            if (!string.IsNullOrWhiteSpace(lastName)) g.LastName = lastName.Trim();
+            g.Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim();
+            g.City = string.IsNullOrWhiteSpace(city) ? null : city.Trim();
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<GuestDto>.Good(g));
+        }
+    }
+
+    public Task<Result<bool>> DeleteGuestAsync(string id)
+    {
+        lock (Gate)
+        {
+            var g = _store.Guests.FirstOrDefault(x => x.Id == id);
+            if (g is null) return Task.FromResult(Result<bool>.Fail("مهمان یافت نشد: " + id));
+            var active = _store.Stays.Any(s => s.GuestName == ((g.FirstName ?? "") + " " + (g.LastName ?? "")).Trim() && s.Status == "IN_HOUSE");
+            if (active) return Task.FromResult(Result<bool>.Fail("این مهمان اقامت فعال دارد؛ابتدا تسویه کنید."));
+            _store.Guests.Remove(g);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<bool>.Good(true));
+        }
+    }
+
+    public Task<Result<ReservationDto>> UpdateReservationAsync(string id, string guestName, string? guestPhone, string? roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial)
+    {
+        lock (Gate)
+        {
+            var r = _store.Reservations.FirstOrDefault(x => x.Id == id || x.Code == id);
+            if (r is null) return Task.FromResult(Result<ReservationDto>.Fail("رزرو یافت نشد: " + id));
+            if (r.Status == "CHECKED_IN") return Task.FromResult(Result<ReservationDto>.Fail("رزروِ در حال اقامت را نمی‌توان ویرایش کرد؛ابتدا تسویه کنید."));
+            if (string.IsNullOrWhiteSpace(guestName))
+                return Task.FromResult(Result<ReservationDto>.Fail("نام مهمان را وارد کنید."));
+            if (!DateTime.TryParse(checkInIso, out var ci) || !DateTime.TryParse(checkOutIso, out var co) || co <= ci)
+                return Task.FromResult(Result<ReservationDto>.Fail("بازهٔ تاریخ نامعتبر است."));
+            string? newRoom = string.IsNullOrWhiteSpace(roomNumber) ? null : roomNumber.Trim();
+            if (newRoom != null && !_store.Rooms.Any(x => x.RoomNumber == newRoom))
+                return Task.FromResult(Result<ReservationDto>.Fail("اتاق «" + newRoom + "» یافت نشد."));
+            var ciIso = ci.ToString("yyyy-MM-dd");
+            var coIso = co.ToString("yyyy-MM-dd");
+            var overlap = _store.Reservations.Any(x => x.Id != r.Id && x.RoomNumber == newRoom &&
+                (x.Status == "CONFIRMED" || x.Status == "CHECKED_IN" || x.Status == "PENDING") &&
+                string.CompareOrdinal(x.CheckInDate, coIso) < 0 && string.CompareOrdinal(x.CheckOutDate, ciIso) > 0);
+            if (overlap) return Task.FromResult(Result<ReservationDto>.Fail("اتاق در این بازه رزرو شده است."));
+            r.GuestName = guestName.Trim();
+            r.GuestPhone = string.IsNullOrWhiteSpace(guestPhone) ? null : guestPhone.Trim();
+            r.RoomNumber = newRoom;
+            r.CheckInDate = ciIso;
+            r.CheckOutDate = coIso;
+            r.GuestsCount = guestsCount < 1 ? 1 : guestsCount;
+            r.TotalRial = totalRial;
+            r.PaidRial = paidRial;
+            if (r.Status == "PENDING" && paidRial > 0) r.Status = "CONFIRMED";
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<ReservationDto>.Good(r));
+        }
+    }
+
+    public Task<Result<bool>> DeleteReservationAsync(string id)
+    {
+        lock (Gate)
+        {
+            var r = _store.Reservations.FirstOrDefault(x => x.Id == id || x.Code == id);
+            if (r is null) return Task.FromResult(Result<bool>.Fail("رزرو یافت نشد: " + id));
+            if (r.Status == "CHECKED_IN")
+                return Task.FromResult(Result<bool>.Fail("رزروِ در حال اقامت قابل حذف نیست؛ابتدا تسویه کنید."));
+            if (_store.Stays.Any(s => s.ReservationCode == r.Code))
+                return Task.FromResult(Result<bool>.Fail("برای این رزرو اقامت ثبت شده؛ابتدا آن را تسویه کنید."));
+            _store.Reservations.Remove(r);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<bool>.Good(true));
+        }
+    }
+
+    public Task<Result<TransactionDto>> ReverseTransactionAsync(string id)
+    {
+        lock (Gate)
+        {
+            var t = _store.Transactions.FirstOrDefault(x => x.Id == id || x.Code == id);
+            if (t is null) return Task.FromResult(Result<TransactionDto>.Fail("تراکنش یافت نشد: " + id));
+            if (t.IsReversed == true) return Task.FromResult(Result<TransactionDto>.Fail("این تراکنش قبلاً برگشت خورده است."));
+            t.IsReversed = true;
+            t.Description = (t.Description ?? "") + " [برگشت‌خورده]";
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<TransactionDto>.Good(t));
+        }
+    }
+
+    public Task<Result<bool>> ResetDataAsync()
+    {
+        lock (Gate)
+        {
+            _store.Guests.Clear();
+            _store.Reservations.Clear();
+            _store.Stays.Clear();
+            _store.Transactions.Clear();
+            _store.Housekeeping.Clear();
+            _store.Maintenance.Clear();
+            _store.Notifications.Clear();
+            foreach (var r in _store.Rooms)
+            {
+                r.Status = "FREE";
+                r.CurrentGuestName = null;
+            }
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<bool>.Good(true));
         }
     }
 }

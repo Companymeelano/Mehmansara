@@ -172,6 +172,15 @@ public class RoomCard
 
 public class ReservationRow
 {
+    public string Id { get; set; } = "";
+    public string RawGuestName { get; set; } = "";
+    public string RawPhone { get; set; } = "";
+    public string RawRoomNumber { get; set; } = "";
+    public string CheckInIso { get; set; } = "";
+    public string CheckOutIso { get; set; } = "";
+    public int GuestsCount { get; set; } = 1;
+    public long TotalRial { get; set; }
+    public long PaidRial { get; set; }
     public string Code { get; set; } = "";
     public string GuestName { get; set; } = "";
     public string PhoneFa { get; set; } = "";

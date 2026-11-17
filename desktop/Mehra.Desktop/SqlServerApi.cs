@@ -612,4 +612,74 @@ public class SqlServerApi : IHotelApi
         var room = rooms.Value?.FirstOrDefault(r => r.Id == roomId || r.RoomNumber == roomId);
         return room is null ? Result<RoomDto>.Fail("اتاق یافت نشد: " + roomId) : Result<RoomDto>.Good(room);
     }
+
+    // ================= edit / delete (v1.2.4) =================
+
+    public async Task<Result<GuestDto>> UpdateGuestAsync(string id, string firstName, string lastName, string? phone, string? city)
+    {
+        if (string.IsNullOrWhiteSpace(lastName) && string.IsNullOrWhiteSpace(firstName))
+            return Result<GuestDto>.Fail("نام یا نام خانوادگی را وارد کنید.");
+        var n = await ExecAsync(
+            "UPDATE dbo.guests SET firstName=@f, lastName=@l, phone=@p, city=@c WHERE id=@id",
+            async c => { var k = await c.ExecuteNonQueryAsync(); return Result<int>.Good(k); },
+            ("@f", firstName.Trim()), ("@l", lastName.Trim()), ("@p", (object?)phone ?? DBNull.Value), ("@c", (object?)city ?? DBNull.Value), ("@id", id));
+        if (!n.Ok) return Result<GuestDto>.Fail(n.Error);
+        if (n.Value == 0) return Result<GuestDto>.Fail("مهمان یافت نشد: " + id);
+        var all = await GuestsAsync();
+        var g = all.Value?.FirstOrDefault(x => x.Id == id);
+        return g is null ? Result<GuestDto>.Fail("مهمان یافت نشد") : Result<GuestDto>.Good(g);
+    }
+
+    public async Task<Result<bool>> DeleteGuestAsync(string id)
+    {
+        var n = await ExecAsync(
+            "DELETE FROM dbo.guests WHERE id=@id",
+            async c => { var k = await c.ExecuteNonQueryAsync(); return Result<int>.Good(k); },
+            ("@id", id));
+        if (!n.Ok) return Result<bool>.Fail(n.Error);
+        return n.Value == 0 ? Result<bool>.Fail("مهمان یافت نشد: " + id) : Result<bool>.Good(true);
+    }
+
+    public async Task<Result<ReservationDto>> UpdateReservationAsync(string id, string guestName, string? guestPhone, string? roomNumber, string checkInIso, string checkOutIso, int guestsCount, long totalRial, long paidRial)
+    {
+        if (!DateTime.TryParse(checkInIso, out var ci) || !DateTime.TryParse(checkOutIso, out var co) || co <= ci)
+            return Result<ReservationDto>.Fail("بازهٔ تاریخ نامعتبر است.");
+        var n = await ExecAsync(
+            "UPDATE dbo.reservations SET guestName=@g, guestPhone=@p, roomNumber=@rn, checkInDate=@ci, checkOutDate=@co, guestsCount=@gc, totalRial=@t, paidRial=@pd WHERE id=@id OR code=@id",
+            async c => { var k = await c.ExecuteNonQueryAsync(); return Result<int>.Good(k); },
+            ("@g", guestName.Trim()), ("@p", (object?)guestPhone ?? DBNull.Value), ("@rn", (object?)roomNumber ?? DBNull.Value),
+            ("@ci", ci.ToString("yyyy-MM-dd")), ("@co", co.ToString("yyyy-MM-dd")), ("@gc", guestsCount < 1 ? 1 : guestsCount),
+            ("@t", totalRial), ("@pd", paidRial), ("@id", id));
+        if (!n.Ok) return Result<ReservationDto>.Fail(n.Error);
+        if (n.Value == 0) return Result<ReservationDto>.Fail("رزرو یافت نشد: " + id);
+        var all = await ReservationsAsync();
+        var r = all.Value?.FirstOrDefault(x => x.Id == id || x.Code == id);
+        return r is null ? Result<ReservationDto>.Fail("رزرو یافت نشد") : Result<ReservationDto>.Good(r);
+    }
+
+    public async Task<Result<bool>> DeleteReservationAsync(string id)
+    {
+        var n = await ExecAsync(
+            "DELETE FROM dbo.reservations WHERE (id=@id OR code=@id) AND status <> 'CHECKED_IN'",
+            async c => { var k = await c.ExecuteNonQueryAsync(); return Result<int>.Good(k); },
+            ("@id", id));
+        if (!n.Ok) return Result<bool>.Fail(n.Error);
+        return n.Value == 0 ? Result<bool>.Fail("رزرو یافت نشد یا در حال اقامت است: " + id) : Result<bool>.Good(true);
+    }
+
+    public async Task<Result<TransactionDto>> ReverseTransactionAsync(string id)
+    {
+        var n = await ExecAsync(
+            "UPDATE dbo.transactions SET isReversed=1 WHERE (id=@id OR code=@id) AND isReversed=0",
+            async c => { var k = await c.ExecuteNonQueryAsync(); return Result<int>.Good(k); },
+            ("@id", id));
+        if (!n.Ok) return Result<TransactionDto>.Fail(n.Error);
+        if (n.Value == 0) return Result<TransactionDto>.Fail("تراکنش یافت نشد یا قبلاً برگشت خورده: " + id);
+        var all = await TransactionsAsync(DateTime.Today.AddDays(-365).ToString("yyyy-MM-dd"), DateTime.Today.AddDays(1).ToString("yyyy-MM-dd"));
+        var t = all.Value?.FirstOrDefault(x => x.Id == id || x.Code == id);
+        return t is null ? Result<TransactionDto>.Fail("تراکنش یافت نشد") : Result<TransactionDto>.Good(t);
+    }
+
+    public Task<Result<bool>> ResetDataAsync() =>
+        Task.FromResult(Result<bool>.Fail("پاک‌سازی فقط در حالت فایل محلی پشتیبانی می‌شود."));
 }

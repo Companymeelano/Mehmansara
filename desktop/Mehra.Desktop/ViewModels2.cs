@@ -130,6 +130,22 @@ public class GuestsVm : VmBase
         await LoadAsync();
     }
 
+    public async Task UpdateGuestAsync(string id, string firstName, string lastName, string phone, string city)
+    {
+        var r = await _session.Api.UpdateGuestAsync(id, firstName, lastName,
+            string.IsNullOrWhiteSpace(phone) ? null : phone,
+            string.IsNullOrWhiteSpace(city) ? null : city);
+        Status = r.Ok ? "اطلاعات مهمان ویرایش شد: " + r.Value!.LastName : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task DeleteGuestAsync(string id)
+    {
+        var r = await _session.Api.DeleteGuestAsync(id);
+        Status = r.Ok ? "مهمان حذف شد." : r.Error;
+        await LoadAsync();
+    }
+
     public async Task LoadAsync()
     {
         var r = await _session.Api.GuestsAsync();
@@ -140,6 +156,11 @@ public class GuestsVm : VmBase
             var bal = g.BalanceRial ?? 0;
             Items.Add(new GuestRow
             {
+                Id = g.Id ?? "",
+                FirstName = g.FirstName ?? "",
+                LastName = g.LastName ?? "",
+                RawPhone = g.Phone ?? "",
+                RawCity = g.City ?? "",
                 Name = ((g.FirstName ?? "") + " " + (g.LastName ?? "")).Trim(),
                 PhoneFa = Fa.Digits(g.Phone ?? ""),
                 City = g.City ?? "",
@@ -174,6 +195,13 @@ public class FinanceVm : VmBase
         await LoadAsync();
     }
 
+    public async Task ReverseTransactionAsync(string id)
+    {
+        var r = await _session.Api.ReverseTransactionAsync(id);
+        Status = r.Ok ? "تراکنش برگشت خورد: " + (r.Value!.Code ?? "") : r.Error;
+        await LoadAsync();
+    }
+
     public async Task LoadAsync()
     {
         var today = DateTime.Today.ToString("yyyy-MM-dd");
@@ -195,6 +223,8 @@ public class FinanceVm : VmBase
             foreach (var t in txns.Value!)
                 Transactions.Add(new TxnRow
                 {
+                    Id = t.Id ?? t.Code ?? "",
+                    IsReversed = t.IsReversed == true,
                     Code = Fa.Digits(t.Code ?? "—"),
                     TypeFa = OpsText.TxnTypeFa(t.Type),
                     TypeBrush = OpsText.TxnTypeBrush(t.Type),
