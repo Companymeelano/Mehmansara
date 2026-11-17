@@ -5,9 +5,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -53,7 +59,13 @@ class MainActivity : ComponentActivity() {
             }
 
             MehraTheme(preset = preset) {
-                RootScreen(state = state, viewModel = viewModel)
+                var showIntro by rememberSaveable { mutableStateOf(true) }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    RootScreen(state = state, viewModel = viewModel)
+                    if (showIntro) {
+                        ir.ahvaz.mehra.feature.root.LuxuryIntroOverlay(onFinished = { showIntro = false })
+                    }
+                }
             }
 
             LaunchedEffect(Unit) { keepSplashVisible = false }

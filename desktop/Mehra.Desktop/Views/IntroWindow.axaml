@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Mehra.Desktop.Views.IntroWindow"
+        Icon="avares://Mehra/Assets/mehra.ico"
+        Title="زرین‌سرا"
+        WindowState="Maximized"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen">
+  <Grid>
+    <Grid.Background>
+      <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+        <GradientStop Color="#0A1120" Offset="0" />
+        <GradientStop Color="#16233D" Offset="0.5" />
+        <GradientStop Color="#0D1526" Offset="1" />
+      </LinearGradientBrush>
+    </Grid.Background>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16" MaxWidth="620">
+      <Border x:Name="LogoRing" Width="116" Height="116" CornerRadius="58"
+              BorderBrush="#C9A24B" BorderThickness="2" Background="#142038"
+              HorizontalAlignment="Center" Opacity="0">
+        <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="76" Height="76" />
+      </Border>
+
+      <TextBlock x:Name="BrandText" Text="زرین‌سرا" FontSize="40" Classes="bold"
+                 Foreground="#E8D6AE" HorizontalAlignment="Center" Opacity="0" />
+
+      <Border x:Name="Divider" Height="2" Width="180" CornerRadius="1"
+              HorizontalAlignment="Center" Opacity="0">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Color="#00C9A24B" Offset="0" />
+            <GradientStop Color="#C9A24B" Offset="0.5" />
+            <GradientStop Color="#00C9A24B" Offset="1" />
+          </LinearGradientBrush>
+        </Border.Background>
+      </Border>
+
+      <StackPanel x:Name="CreatorPanel" Spacing="8" HorizontalAlignment="Center" Opacity="0">
+        <TextBlock Text="طراحی و توسعه" FontSize="12" Foreground="#9AA6B8" HorizontalAlignment="Center" />
+        <TextBlock Text="Milad Yaghoobi" FontSize="26" Classes="bold" Foreground="#FFFFFF" HorizontalAlignment="Center" />
+        <TextBlock Text="میلاد یعقوبی" FontSize="15" Foreground="#E8D6AE" HorizontalAlignment="Center" />
+      </StackPanel>
+
+      <Border x:Name="ContactCard" CornerRadius="14" Padding="24,14"
+              Background="#1A2845" BorderBrush="#3A4E73" BorderThickness="1"
+              HorizontalAlignment="Center" Opacity="0">
+        <StackPanel Spacing="6" HorizontalAlignment="Center">
+          <TextBlock Text="www.Meelano.ir" FontSize="16" Classes="bold"
+                     Foreground="#C9A24B" HorizontalAlignment="Center" />
+          <TextBlock Text="09120219593" FontSize="15"
+                     Foreground="#E2E8F0" HorizontalAlignment="Center" />
+        </StackPanel>
+      </Border>
+
+      <Border Width="240" Height="4" CornerRadius="2" Background="#1E2D4A"
+              HorizontalAlignment="Center" Margin="0,12,0,0">
+        <Border x:Name="ProgressFill" Height="4" CornerRadius="2" Width="0"
+                HorizontalAlignment="Left" Background="#C9A24B" />
+      </Border>
+    </StackPanel>
+
+    <Button Content="رد کردن" Classes="ghost" Click="OnSkip"
+            HorizontalAlignment="Left" VerticalAlignment="Bottom"
+            Margin="28" Foreground="#9AA6B8" BorderBrush="#2E4166" />
+  </Grid>
+</Window>
