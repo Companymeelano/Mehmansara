@@ -213,7 +213,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<string>.Good("فایل محلی در دسترس است — بدون سرور (" + DataFile + ")"))
+                return Task.FromResult(Result<string>.Good("فایل محلی در دسترس است — بدون سرور (" + DataFile + ")"));
             }
         }
 
@@ -221,7 +221,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<RoomDto>>.Good(_store.Rooms.OrderBy(r => r.RoomNumber).ToList()))
+                return Task.FromResult(Result<List<RoomDto>>.Good(_store.Rooms.OrderBy(r => r.RoomNumber).ToList()));
             }
         }
 
@@ -229,7 +229,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<ReservationDto>>.Good(_store.Reservations.OrderByDescending(r => r.CheckInDate).Take(200).ToList()))
+                return Task.FromResult(Result<List<ReservationDto>>.Good(_store.Reservations.OrderByDescending(r => r.CheckInDate).Take(200).ToList()));
             }
         }
 
@@ -237,7 +237,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<StayDto>>.Good(_store.Stays.OrderByDescending(s => s.CheckInAtUtc).ToList()))
+                return Task.FromResult(Result<List<StayDto>>.Good(_store.Stays.OrderByDescending(s => s.CheckInAtUtc).ToList()));
             }
         }
 
@@ -245,7 +245,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<GuestDto>>.Good(_store.Guests.OrderBy(g => g.LastName).ThenBy(g => g.FirstName).ToList()))
+                return Task.FromResult(Result<List<GuestDto>>.Good(_store.Guests.OrderBy(g => g.LastName).ThenBy(g => g.FirstName).ToList()));
             }
         }
 
@@ -253,7 +253,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<HousekeepingTaskDto>>.Good(_store.Housekeeping.OrderByDescending(h => h.CreatedAtUtc).ToList()))
+                return Task.FromResult(Result<List<HousekeepingTaskDto>>.Good(_store.Housekeeping.OrderByDescending(h => h.CreatedAtUtc).ToList()));
             }
         }
 
@@ -261,7 +261,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<MaintenanceTicketDto>>.Good(_store.Maintenance.OrderByDescending(m => m.CreatedAtUtc).ToList()))
+                return Task.FromResult(Result<List<MaintenanceTicketDto>>.Good(_store.Maintenance.OrderByDescending(m => m.CreatedAtUtc).ToList()));
             }
         }
 
@@ -273,7 +273,7 @@ public class LocalFileApi : IHotelApi
                 {
                 Id = u.Id, FullName = u.FullName, Username = u.Username, RoleCode = u.RoleCode,
                 RoleTitle = u.RoleTitle, Phone = u.Phone, IsActive = u.IsActive, LastLoginAtUtc = u.LastLoginAtUtc
-                }).ToList()))
+                }).ToList()));
             }
         }
 
@@ -281,7 +281,7 @@ public class LocalFileApi : IHotelApi
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<NotificationDto>>.Good(_store.Notifications.OrderByDescending(n => n.CreatedAtUtc).ToList()))
+                return Task.FromResult(Result<List<NotificationDto>>.Good(_store.Notifications.OrderByDescending(n => n.CreatedAtUtc).ToList()));
             }
         }
 
@@ -310,7 +310,7 @@ public class LocalFileApi : IHotelApi
                 RoomNumber = _store.Stays.FirstOrDefault(s => s.Status == "IN_HOUSE" && s.GuestName == ((g.FirstName ?? "") + " " + (g.LastName ?? "")).Trim())?.RoomNumber,
                 BalanceRial = g.BalanceRial,
                 LastActivityAtUtc = g.LastStayAtUtc
-                }).ToList()))
+                }).ToList()));
             }
         }
 
