@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Production network policy for MEHRA.
-  * HTTPS is mandatory: cleartext traffic is refused for every domain.
-  * Only the platform trust store is honoured. If the hotel uses a private/internal
-    CA, install that CA certificate on the device trust store (see docs/SERVER_SETUP.md)
-    instead of relaxing this policy.
-  The debug variant overrides this file (app/src/debug/res/xml) to allow plain HTTP
-  against a LAN address while developing.
+  Network policy for MEHRA.
+
+  The Windows desktop app (Mehra.exe) serves the API over plain HTTP on the
+  hotel LAN (http://<PC-IP>:5050), so cleartext must be permitted for local
+  network addresses — Android's network-security-config cannot express IP
+  ranges, so the base config allows it and the APP enforces the policy:
+  ServerUrlProvider only accepts http:// for loopback/private/link-local hosts
+  (and .local/.lan/.internal names); every PUBLIC host must use HTTPS.
+
+  TLS: only the platform trust store is honoured. If the hotel runs HTTPS with
+  a private CA, install that CA on the device (see docs/SERVER_SETUP.md).
+
+  The debug variant (app/src/debug/res/xml) additionally trusts user CAs for
+  staging certificates.
 -->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="false">
+    <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>

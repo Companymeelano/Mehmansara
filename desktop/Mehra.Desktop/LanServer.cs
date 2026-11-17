@@ -29,6 +29,12 @@ public class LanServer : IDisposable
     private CancellationTokenSource _cts = new();
     private volatile bool _running;
     private string? _currentToken;
+
+    private static string AppVersion()
+    {
+        var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        return v is null ? "1.2.2" : v.ToString(3);
+    }
     private readonly Dictionary<string, string> _idempotency = new();
 
     public int Port { get; private set; }
@@ -87,12 +93,17 @@ public class LanServer : IDisposable
         }
     }
 
+    private readonly SemaphoreSlim _routeGate = new(1, 1);
+
     private async Task HandleClient(TcpClient client)
     {
         try
         {
             using (client)
             {
+                await _routeGate.WaitAsync();
+                try
+                {
                 client.ReceiveTimeout = 15000;
                 client.SendTimeout = 15000;
                 var stream = client.GetStream();
@@ -105,6 +116,8 @@ public class LanServer : IDisposable
                 var body = await ReadBody(stream, head.Value.ContentLength);
                 var (status, payload) = await Route(method, rawPath, head.Value.Headers, body);
                 await WriteResponse(stream, status, payload);
+                }
+                finally { _routeGate.Release(); }
             }
         }
         catch { /* client went away */ }
@@ -165,7 +178,7 @@ public class LanServer : IDisposable
             contentType = "application/json; charset=utf-8";
             bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(payload, SerOpts));
         }
-        var reason = status switch { 200 => "OK", 204 => "No Content", 400 => "Bad Request", 401 => "Unauthorized", 404 => "Not Found", _ => "OK" };
+        var reason = status switch { 200 => "OK", 201 => "Created", 204 => "No Content", 400 => "Bad Request", 401 => "Unauthorized", 404 => "Not Found", 409 => "Conflict", 500 => "Internal Server Error", 501 => "Not Implemented", _ => "OK" };
         var head = $"HTTP/1.1 {status} {reason}\r\nContent-Type: {contentType}\r\nAccess-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: *\r\nAccess-Control-Allow-Methods: *\r\nContent-Length: {bytes.Length}\r\nConnection: close\r\n\r\n";
         var headBytes = Encoding.UTF8.GetBytes(head);
         await s.WriteAsync(headBytes, 0, headBytes.Length);
@@ -220,6 +233,15 @@ public class LanServer : IDisposable
         // CORS preflight
         if (method == "OPTIONS") return (204, EnvelopeOk(null));
 
+        // ---- auth: every /api/v1 route except login & health needs a valid Bearer token ----
+        var isPublic = (path == "/api/v1/auth/login" && method == "POST") || (path == "/api/v1/system/health" && method == "GET");
+        if (!isPublic && path.StartsWith("/api/v1/", StringComparison.Ordinal))
+        {
+            var auth = headers.TryGetValue("Authorization", out var av) ? av : "";
+            if (_currentToken is null || auth != "Bearer " + _currentToken)
+                return (401, EnvelopeErr("UNAUTHORIZED", "توکن معتبر نیست؛ ابتدا از مسیر auth/login وارد شوید."));
+        }
+
         // Browser-friendly status page
         if (method == "GET" && path == "/")
         {
@@ -229,7 +251,7 @@ public class LanServer : IDisposable
                        $"<p>نشانی شبکهٔ این کامپیوتر: <b dir='ltr'>{LanUrl}</b></p>" +
                        "<p>در اپ اندروید، در تنظیمات «نشانی سرور» همین مقدار را وارد کنید و اتصال را تست کنید.</p>" +
                        "<p>ورود: <b dir='ltr'>admin / Admin@1234</b></p>" +
-                       "<p style='color:#9AA6B8'>نسخهٔ ویندوز ۱.۲.۰ — داده‌ها در فایل محلی این PC ذخیره می‌شوند (بدون SQL Server).</p>" +
+                       "<p style='color:#9AA6B8'>نسخهٔ ویندوز " + Fa.Digits(AppVersion()) + " — داده‌ها در فایل محلی این PC ذخیره می‌شوند (بدون SQL Server).</p>" +
                        "</body></html>";
             return (200, new RawHtml(html));
         }
@@ -263,6 +285,8 @@ public class LanServer : IDisposable
             }));
         }
         if (path == "/api/v1/auth/refresh" && method == "POST")
+        {
+            if (_currentToken is null) return (401, EnvelopeErr("UNAUTHORIZED", "ابتدا وارد شوید."));
             return (200, EnvelopeOk(new
             {
                 accessToken = _currentToken ?? "mehra-lan-local",
@@ -271,6 +295,7 @@ public class LanServer : IDisposable
                 refreshExpiresAtUtc = DateTime.UtcNow.AddYears(1).ToString("o"),
                 user = CurrentUserPayload()
             }));
+        }
         if (path == "/api/v1/auth/logout" && method == "POST") return (200, EnvelopeOk(null));
         if (path == "/api/v1/auth/me" && method == "GET")
         {
@@ -282,7 +307,7 @@ public class LanServer : IDisposable
         if (path == "/api/v1/system/health" && method == "GET")
             return (200, EnvelopeOk(new
             {
-                serverVersion = "1.2.0",
+                serverVersion = AppVersion(),
                 apiVersion = "v1",
                 serverTimeUtc = DateTime.UtcNow.ToString("o"),
                 databaseConnected = true
@@ -623,10 +648,11 @@ public class LanServer : IDisposable
             var idem = headers.TryGetValue("Idempotency-Key", out var ik) ? ik : "";
             if (idem.Length > 0 && _idempotency.TryGetValue(idem, out var cached))
                 return (200, JsonSerializer.Deserialize<JsonElement>(cached));
+            if (_idempotency.Count > 1000) _idempotency.Clear(); // simple cap; keys are single-use in practice
             var r = await _api.AddTransactionAsync(
-                BodyField(body, "type") ?? "RECEIVE",
+                BodyField(body, "type") ?? "Receive",
                 long.TryParse(BodyField(body, "amountRial"), out var am) ? am : 0,
-                BodyField(body, "method") ?? "CASH",
+                BodyField(body, "method") ?? "Cash",
                 BodyField(body, "description"),
                 BodyField(body, "guestName"),
                 BodyField(body, "roomNumber") ?? BodyField(body, "reference"));
@@ -643,7 +669,7 @@ public class LanServer : IDisposable
         {
             var r = await _api.CheckOutAsync(seg[4],
                 long.TryParse(BodyField(body, "finalPaymentRial"), out var fp) ? fp : 0,
-                BodyField(body, "paymentMethod") ?? "CASH");
+                BodyField(body, "paymentMethod") ?? "Cash");
             return r.Ok ? (200, EnvelopeOk(r.Value)) : (409, EnvelopeErr("INVALID_STATE", r.Error));
         }
         if (seg.Length == 5 && seg[0] == "api" && seg[1] == "v1" && seg[2] == "rooms" && seg[4] == "status" && method == "PATCH")
@@ -664,8 +690,7 @@ public class LanServer : IDisposable
                 Notes = BodyField(body, "notes"),
                 CreatedAtUtc = DateTime.UtcNow.ToString("o")
             };
-            _api.Store.Housekeeping.Insert(0, t);
-            LocalStore.Save(_api.Store);
+            lock (LocalFileApi.Gate) { _api.Store.Housekeeping.Insert(0, t); LocalStore.Save(_api.Store); }
             return (200, EnvelopeOk(t));
         }
         if (path == "/api/v1/maintenance/tickets" && method == "POST")
@@ -684,14 +709,13 @@ public class LanServer : IDisposable
                 ReporterName = "LAN",
                 CreatedAtUtc = DateTime.UtcNow.ToString("o")
             };
-            _api.Store.Maintenance.Insert(0, m);
-            LocalStore.Save(_api.Store);
+            lock (LocalFileApi.Gate) { _api.Store.Maintenance.Insert(0, m); LocalStore.Save(_api.Store); }
             return (200, EnvelopeOk(m));
         }
 
         // ---- everything else (writes / unknown) ----
         if (method is "POST" or "PUT" or "PATCH" or "DELETE")
-            return (200, EnvelopeErr("NOT_SUPPORTED",
+            return (501, EnvelopeErr("NOT_SUPPORTED",
                 "این مسیر در نسخهٔ «فایل محلی» پیاده‌سازی نشده است."));
         return (404, EnvelopeErr("NOT_FOUND", "مسیر یافت نشد: " + method + " " + path));
     }
