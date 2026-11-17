@@ -1,6 +1,10 @@
 b392c419f8412fc665b65d9a44478cc1caef6567de4df409e80f96810578dfb2  mehra-demo-1.0.0-debug.apk
 3743f241f3bcdcea1b3a3a2cde637b3a71450bd517d5e636cc7b868afe324699  mehra-1.0.0-debug.apk
-# Windows v1.2.2 (final, run 44057902019) — audit pass: Bearer auth enforced on ALL /api/v1 LAN routes, store access locked (LAN+UI race fixed), dynamic version in health/status page (was hardcoded 1.2.0), HTTP 409/500/501 reasons, tx Type casing fixed, smuggled Latin operator name removed — branch ci-artifacts
+# Windows v1.2.3 (final, run 44129981625) — printable luxury guest-QR sheet (A4/A5): inline-SVG QR (own dependency-free encoder, verified vs OpenCV), scan guide for Android/iPhone, manager contact card; public /register self-service form + POST /api/v1/public/register -> PENDING reservation + staff notification; Settings «برگهٔ QR» button — branch ci-artifacts
+6c867a3b0dbd498965fb7631281934595e6ed241a9eb7d2ddd46865e4c71915  ci-artifacts:setup/MehraSetup.exe  (89,608,285 bytes)
+3ff7cb539818aa417c53197ade3a117609d766b98c2734e64d136253d66b1639  ci-artifacts:exe/Mehra.exe  (94,405,512 bytes)
+1ebee774a4ff8d4dc7e012cdd37ee6f0ce3697dcfa10d62a9f65877ae8c9a55b  ci-artifacts:exe/Mehra-win-x64.zip  (41,901,219 bytes)
+# Windows v1.2.2 (superseded, run 44057902019) — audit pass: Bearer auth enforced on ALL /api/v1 LAN routes, store access locked (LAN+UI race fixed), dynamic version in health/status page (was hardcoded 1.2.0), HTTP 409/500/501 reasons, tx Type casing fixed, smuggled Latin operator name removed — branch ci-artifacts
 5a9b55f88563aa3b650d0df55605535c9650f6964ce1995eb9e6b77cbfd922aa  ci-artifacts:setup/MehraSetup.exe  (89,602,424 bytes)
 7cb7a2c1705f0ff420a73182dd4582582644b5770a028f4f127249e3d86f334e  ci-artifacts:exe/Mehra.exe  (94,372,744 bytes)
 9b68cdd3a44fbcd9601870e4bc5d4dc42bdfb2ae2cffbff4e1cfdffa1005b998  ci-artifacts:exe/Mehra-win-x64.zip  (41,878,558 bytes)

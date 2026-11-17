@@ -1,8 +1,8 @@
-# نسخهٔ ویندوز ۱.۲.۲ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe + حالت «فایل محلی» + سرور LAN امن‌شده برای اندروید + ثبت دادهٔ جدید (برنامه + SQL Server LocalDB همراه + فونت‌ها)
+# نسخهٔ ویندوز ۱.۲.۳ — نصب‌گر یک‌فایلهٔ مهرآSetup.exe + حالت «فایل محلی» + سرور LAN امن‌شده برای اندروید + ثبت دادهٔ جدید (برنامه + SQL Server LocalDB همراه + فونت‌ها)
 
-> **از نسخهٔ ۱.۱.۵ به بعد، فقط یک فایل `MehraSetup.exe` کافی است** (نسخهٔ فعلی: ۱.۲.۲): نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
+> **از نسخهٔ ۱.۱.۵ به بعد، فقط یک فایل `MehraSetup.exe` کافی است** (نسخهٔ فعلی: ۱.۲.۳): نصب‌گر همچنین برنامه، **SQL Server 2016 LocalDB** (موتور واقعی SQL Server، نسخهٔ سبک حدود ۴۵ مگابایت) را هم به‌صورت silent داخل همان فایل نصب می‌کند، instance `(localdb)\MSSQLLocalDB` را می‌سازد، پایگاه دادهٔ `Mehra` و ۹ جدول را از `db\schema.sql` ایجاد می‌کند و تنظیمات اتصال را در `%AppData%\mehra\settings.json` می‌نویسد — یعنی از «صفر تا ثبت واقعی داده» فقط با اجرای یک فایل.
 
-## فایل‌های قابل دانلود (نسخهٔ ۱.۲.۲)
+## فایل‌های قابل دانلود (نسخهٔ ۱.۲.۳)
 
 - انتشار رسمی: https://github.com/Companymeelano/Mehmansara/releases/tag/v1.1.0-windows
 - **نصب‌گر کاملِ یک‌فایله (پیشنهادی حدود ۹۰ مگابایت):** https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/setup/MehraSetup.exe
@@ -10,6 +10,20 @@
 - exe خام (بدون نصب‌گر): https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra.exe
 - zip: https://github.com/Companymeelano/Mehmansara/raw/ci-artifacts/exe/Mehra-win-x64.zip
 - مرور فایل‌ها: https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/setup و https://github.com/Companymeelano/Mehmansara/tree/ci-artifacts/exe
+
+## هش و اندازهٔ باینری‌ها (اجرای CI `44129981625` — نسخهٔ ۱.۲.۳)
+
+- `setup/MehraSetup.exe`: 89,608,285 بایت — sha256 `6c867a3b0dbd498965fb7631281934595e6ed241a9eb7d2ddd46865e4c71915`
+- `exe/Mehra.exe`: 94,405,512 بایت — sha256 `3ff7cb539818aa417c53197ade3a117609d766b98c2734e64d136253d66b1639`
+- `exe/Mehra-win-x64.zip`: 41,901,219 بایت — sha256 `1ebee774a4ff8d4dc7e012cdd37ee6f0ce3697dcfa10d62a9f65877ae8c9a55b`
+- تأیید بایت‌به‌بایت: MZ/PE و PK معتبر؛ `1.2.3.0` به‌صورت UTF-16 در exe و نصب‌گر، `1.2.2.0` حذف شده؛ کلاس‌های `QrCode`/`QrSheet`/`PublicRegisterAsync` در exe هستند.
+
+## نسخهٔ ۱.۲.۳ — برگهٔ QR لاکچری ثبت‌نام مهمان (A4/A5) + ثبت‌نام سلف‌سرویس
+
+- **برگهٔ قابل چاپ:** در تنظیمات (حالت فایل محلی) دکمهٔ «ساخت و باز کردن برگهٔ QR (A4)» فایل `mehra-qr-sheet.html` را کنار داده‌ها می‌سازد و در مرورگر باز می‌کند — با Ctrl+P چاپ یا به PDF ذخیره کنید (A4 یا A5). همان برگه روی `http://<آی‌پی-PC>:5050/qr` هم سرو می‌شود.
+- **محتوای برگه:** کد QR بزرگ در قاب طلایی (SVG vetor — بدون وابستگی)، آدرس سرور، فهرست اطلاعات فرم ثبت‌نام (نام، موبایل، شهر، تاریخ ورود/خروج، تعداد نفرات، توضیحات)، راهنمای اسکن برای **اندروید** (Camera / Google Lens / Chrome → Lens) و **آیفون** (اپ Camera → Scan QR Code)، و کارت تماس مدیر مجموعه با شمارهٔ تماس.
+- **ثبت‌نام مهمان با اسکن:** مهمان `http://<آی‌پی-PC>:5050/register` را باز می‌کند، فرم فارسی را پر می‌کند و می‌فرستد (`POST /api/v1/public/register` — عمومی، بدون ورود)؛ درخواست به‌صورت رزرو `PENDING` با کد R- در فایل محلی ثبت می‌شود و یک **اعلان** برای پرسنل می‌آید تا اتاق را تخصیص دهند.
+- QR با encoder داخلی (`QrCode.cs` — byte mode، ECC M، انتخاب خودکار mask) ساخته می‌شود؛ الگوریتم قبل از Ship با OpenCV QRCodeDetector روی چند payload تست و decode شد.
 
 ## هش و اندازهٔ باینری‌ها (اجرای CI `44057902019` — نسخهٔ ۱.۲.۲)
 
