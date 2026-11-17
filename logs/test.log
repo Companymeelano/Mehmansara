@@ -22,29 +22,29 @@ or from Android Studio, click: `Refactor` > `Migrate BuildConfig to Gradle Build
 > Task :app:preBuild UP-TO-DATE
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugBuildConfig FROM-CACHE
 > Task :app:generateDebugResValues FROM-CACHE
 > Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
-> Task :app:generateDebugResources FROM-CACHE
-> Task :app:mergeDebugResources FROM-CACHE
-> Task :app:packageDebugResources FROM-CACHE
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
 > Task :app:parseDebugLocalResources FROM-CACHE
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug FROM-CACHE
-> Task :app:processDebugMainManifest
-> Task :app:processDebugManifest
+> Task :app:processDebugMainManifest FROM-CACHE
+> Task :app:processDebugManifest FROM-CACHE
+> Task :app:processDebugManifestForPackage FROM-CACHE
 > Task :app:javaPreCompileDebug FROM-CACHE
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugResources
 > Task :app:mergeDebugAssets
+> Task :app:processDebugResources FROM-CACHE
 > Task :app:preDebugUnitTestBuild UP-TO-DATE
-> Task :app:javaPreCompileDebugUnitTest FROM-CACHE
-> Task :app:processDebugManifestForPackage
-> Task :app:processDebugResources
 > Task :app:packageDebugUnitTestForUnitTest
 > Task :app:generateDebugUnitTestConfig
+> Task :app:javaPreCompileDebugUnitTest FROM-CACHE
 > Task :app:kspDebugKotlin
 > Task :app:compileDebugKotlin
 w: file:///home/runner/work/Mehmansara/Mehmansara/app/src/main/java/ir/ahvaz/mehra/core/network/ApiExecutor.kt:100:70 Unchecked cast of 'ir.ahvaz.mehra.core.network.ApiEnvelope<*>!' to 'ir.ahvaz.mehra.core.network.ApiEnvelope<kotlin.Any>'.
@@ -81,7 +81,7 @@ AppResourcesSmokeTest > app name resource is persian brand FAILED
 PlateFormatTest > split and join round-trip FAILED
     com.google.common.truth.ComparisonFailureWithFacts at PlateFormatTest.kt:19
 
-25 tests completed, 2 failed
+29 tests completed, 2 failed
 
 > Task :app:testDebugUnitTest FAILED
 
@@ -260,5 +260,5 @@ Caused by: org.gradle.api.internal.exceptions.MarkedVerificationException: There
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
 
 
-BUILD FAILED in 1m 49s
-35 actionable tasks: 25 executed, 10 from cache
+BUILD FAILED in 1m 13s
+35 actionable tasks: 23 executed, 12 from cache
