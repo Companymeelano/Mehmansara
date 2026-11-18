@@ -222,11 +222,11 @@ public class LocalFileApi : IHotelApi
             }
         }
 
-    public Task<Result<List<AppUserDto>>> UsersAsync()
+    public Task<Result<List<AppUserAccountDto>>> UsersAsync()
         {
             lock (Gate)
             {
-                return Task.FromResult(Result<List<AppUserDto>>.Good(_store.Users.OrderBy(u => u.FullName).Select(u => new AppUserDto
+                return Task.FromResult(Result<List<AppUserAccountDto>>.Good(_store.Users.OrderBy(u => u.FullName).Select(u => new AppUserAccountDto
                 {
                 Id = u.Id, FullName = u.FullName, Username = u.Username, RoleCode = u.RoleCode,
                 RoleTitle = u.RoleTitle, Phone = u.Phone, IsActive = u.IsActive, LastLoginAtUtc = u.LastLoginAtUtc
@@ -915,15 +915,15 @@ public class LocalFileApi : IHotelApi
         }
     }
 
-    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone)
+    public Task<Result<UserAccountDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone)
     {
         lock (Gate)
         {
             if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-                return Task.FromResult(Result<UserDto>.Fail("نام، نام کاربری و رمز عبور الزامی است."));
+                return Task.FromResult(Result<UserAccountDto>.Fail("نام، نام کاربری و رمز عبور الزامی است."));
             var un = username.Trim().ToLowerInvariant();
             if (_store.Users.Any(u => u.Username.Equals(un, StringComparison.OrdinalIgnoreCase)))
-                return Task.FromResult(Result<UserDto>.Fail("این نام کاربری قبلاً ثبت شده است."));
+                return Task.FromResult(Result<UserAccountDto>.Fail("این نام کاربری قبلاً ثبت شده است."));
             var u = new LocalUser
             {
                 Id = "u-" + Guid.NewGuid().ToString("N")[..6],
@@ -938,7 +938,7 @@ public class LocalFileApi : IHotelApi
             };
             _store.Users.Add(u);
             LocalStore.Save(_store);
-            return Task.FromResult(Result<UserDto>.Good(new UserDto
+            return Task.FromResult(Result<UserAccountDto>.Good(new UserAccountDto
             {
                 Id = u.Id, FullName = u.FullName, Username = u.Username,
                 RoleCode = u.RoleCode, RoleTitle = u.RoleTitle, Phone = u.Phone, IsActive = true

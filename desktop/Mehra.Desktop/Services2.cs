@@ -39,10 +39,10 @@ public partial class ApiClient
         return r.Ok ? Result<List<MaintenanceTicketDto>>.Good(r.Value ?? new List<MaintenanceTicketDto>()) : Result<List<MaintenanceTicketDto>>.Fail(r.Error);
     }
 
-    public async Task<Result<List<AppUserDto>>> UsersAsync()
+    public async Task<Result<List<AppUserAccountDto>>> UsersAsync()
     {
-        var r = await GetAsync<Paged<AppUserDto>>("/api/v1/users?page=1&pageSize=100");
-        return r.Ok ? Result<List<AppUserDto>>.Good(r.Value?.Items ?? new List<AppUserDto>()) : Result<List<AppUserDto>>.Fail(r.Error);
+        var r = await GetAsync<Paged<AppUserAccountDto>>("/api/v1/users?page=1&pageSize=100");
+        return r.Ok ? Result<List<AppUserAccountDto>>.Good(r.Value?.Items ?? new List<AppUserAccountDto>()) : Result<List<AppUserAccountDto>>.Fail(r.Error);
     }
 
     public async Task<Result<List<NotificationDto>>> NotificationsAsync()
@@ -250,8 +250,8 @@ public partial class ApiClient
         PostAsync<HousekeepingTaskDto>("/api/v1/housekeeping/tasks", new { roomNumber, type, assigneeName, notes });
     public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status) =>
         PatchAsync<bool>($"/api/v1/housekeeping/tasks/{Uri.EscapeDataString(id)}", new { status });
-    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
-        PostAsync<UserDto>("/api/v1/users", new { fullName, username, password, roleTitle, phone });
+    public Task<Result<UserAccountDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
+        PostAsync<UserAccountDto>("/api/v1/users", new { fullName, username, password, roleTitle, phone });
     public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
         PostAsync<NotificationDto>("/api/v1/notifications", new { title, body, severity });
 }
@@ -318,7 +318,7 @@ public partial class DemoApi
         new() { Id = "m2", Code = "MT-311", RoomNumber = "104", Title = "تعویض لامپ اتاق ۲۰۳", Description = "لامپ سوخته شده و تعویض شد", Priority = "Urgent", Status = "Open", AssigneeName = null, CostRial = null, ReporterName = "مامور رضائی", CreatedAtUtc = DateTime.UtcNow.AddHours(-3).ToString("o") }
     }));
 
-    public Task<Result<List<AppUserDto>>> UsersAsync() => Task.FromResult(Result<List<AppUserDto>>.Good(new List<AppUserDto>
+    public Task<Result<List<AppUserAccountDto>>> UsersAsync() => Task.FromResult(Result<List<AppUserAccountDto>>.Good(new List<AppUserAccountDto>
     {
         new() { Id = "u1", FullName = "سید مرتضی موسوی", Username = "admin", RoleCode = "ADMIN", RoleTitle = "مدیر کل", Phone = "09120000010", IsActive = true, LastLoginAtUtc = DateTime.UtcNow.AddHours(-1).ToString("o") },
         new() { Id = "u2", FullName = "مامور رضائی", Username = "reception", RoleCode = "RECEPTION", RoleTitle = "پذیرش", Phone = "09120000011", IsActive = true, LastLoginAtUtc = DateTime.UtcNow.AddHours(-3).ToString("o") },
@@ -375,8 +375,8 @@ public partial class DemoApi
         Task.FromResult(Result<HousekeepingTaskDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
     public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status) =>
         Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
-    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
-        Task.FromResult(Result<UserDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<UserAccountDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
+        Task.FromResult(Result<UserAccountDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
     public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
         Task.FromResult(Result<NotificationDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
 

@@ -271,9 +271,9 @@ public class SqlServerApi : IHotelApi
         "SELECT id, code, roomNumber, title, description, priority, status, assigneeName, costRial, reporterName, createdAtUtc, resolvedAtUtc FROM dbo.maintenance_tickets ORDER BY createdAtUtc DESC",
         r => new MaintenanceTicketDto { Id = S(r,0), Code = S(r,1), RoomNumber = r.IsDBNull(2)?null:S(r,2), Title = S(r,3), Description = r.IsDBNull(4)?null:S(r,4), Priority = S(r,5), Status = S(r,6), AssigneeName = r.IsDBNull(7)?null:S(r,7), CostRial = r.IsDBNull(8)?(long?)null:L(r,8), ReporterName = r.IsDBNull(9)?null:S(r,9), CreatedAtUtc = D(r,10), ResolvedAtUtc = D(r,11) });
 
-    public Task<Result<List<AppUserDto>>> UsersAsync() => QueryAsync(ConnectionString,
+    public Task<Result<List<AppUserAccountDto>>> UsersAsync() => QueryAsync(ConnectionString,
         "SELECT id, fullName, username, roleCode, roleTitle, phone, isActive, lastLoginAtUtc FROM dbo.users ORDER BY fullName",
-        r => new AppUserDto { Id = S(r,0), FullName = S(r,1), Username = S(r,2), RoleCode = S(r,3), RoleTitle = r.IsDBNull(4)?null:S(r,4), Phone = r.IsDBNull(5)?null:S(r,5), IsActive = B(r,6), LastLoginAtUtc = D(r,7) });
+        r => new AppUserAccountDto { Id = S(r,0), FullName = S(r,1), Username = S(r,2), RoleCode = S(r,3), RoleTitle = r.IsDBNull(4)?null:S(r,4), Phone = r.IsDBNull(5)?null:S(r,5), IsActive = B(r,6), LastLoginAtUtc = D(r,7) });
 
     public Task<Result<List<NotificationDto>>> NotificationsAsync() => QueryAsync(ConnectionString,
         "SELECT id, title, body, severity, kind, createdAtUtc, isRead FROM dbo.notifications ORDER BY createdAtUtc DESC",
@@ -697,8 +697,8 @@ public class SqlServerApi : IHotelApi
         Task.FromResult(Result<HousekeepingTaskDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
     public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status) =>
         Task.FromResult(Result<bool>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
-    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
-        Task.FromResult(Result<UserDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<UserAccountDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
+        Task.FromResult(Result<UserAccountDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
     public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
         Task.FromResult(Result<NotificationDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
 }
