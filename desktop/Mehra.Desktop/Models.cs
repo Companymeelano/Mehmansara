@@ -52,6 +52,7 @@ public class RoomDto
     [JsonPropertyName("ratePerNightRial")] public long? RatePerNightRial { get; set; }
     [JsonPropertyName("status")] public string? Status { get; set; }
     [JsonPropertyName("currentGuestName")] public string? CurrentGuestName { get; set; }
+    [JsonPropertyName("amenities")] public string? Amenities { get; set; }
 }
 
 public class ReservationDto
@@ -67,6 +68,7 @@ public class ReservationDto
     [JsonPropertyName("totalRial")] public long? TotalRial { get; set; }
     [JsonPropertyName("paidRial")] public long? PaidRial { get; set; }
     [JsonPropertyName("status")] public string? Status { get; set; }
+    [JsonPropertyName("vehiclePlate")] public string? VehiclePlate { get; set; }
 }
 
 public class StayDto
@@ -161,6 +163,11 @@ public class ActivityItem
 
 public class RoomCard
 {
+    public string Id { get; set; } = "";
+    public int Floor { get; set; } = 1;
+    public int Capacity { get; set; } = 2;
+    public long RateRial { get; set; }
+    public string Amenities { get; set; } = "";
     public string Number { get; set; } = "";
     public string TypeName { get; set; } = "";
     public string Details { get; set; } = "";
@@ -176,6 +183,7 @@ public class ReservationRow
     public string RawGuestName { get; set; } = "";
     public string RawPhone { get; set; } = "";
     public string RawRoomNumber { get; set; } = "";
+    public string VehiclePlate { get; set; } = "";
     public string CheckInIso { get; set; } = "";
     public string CheckOutIso { get; set; } = "";
     public int GuestsCount { get; set; } = 1;

@@ -182,6 +182,7 @@ public class FinanceVm : VmBase
     public ObservableCollection<StatCard> Cards { get; } = new();
     public ObservableCollection<TxnRow> Transactions { get; } = new();
     public ObservableCollection<DebtorRow> Debtors { get; } = new();
+    public ObservableCollection<BankAccountDto> BankAccounts { get; } = new();
     private string _status = "در حال بارگذاری…";
     public string Status { get => _status; set => Set(ref _status, value); }
 
@@ -202,6 +203,20 @@ public class FinanceVm : VmBase
         await LoadAsync();
     }
 
+    public async Task AddBankAccountAsync(string accountNumber, string accountType, string bankName, string ownerName)
+    {
+        var r = await _session.Api.AddBankAccountAsync(accountNumber, accountType, bankName, ownerName);
+        Status = r.Ok ? "حساب بانکی ثبت شد." : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task DeleteBankAccountAsync(string id)
+    {
+        var r = await _session.Api.DeleteBankAccountAsync(id);
+        Status = r.Ok ? "حساب بانکی حذف شد." : r.Error;
+        await LoadAsync();
+    }
+
     public async Task LoadAsync()
     {
         var today = DateTime.Today.ToString("yyyy-MM-dd");
@@ -209,6 +224,7 @@ public class FinanceVm : VmBase
         var box = await _session.Api.CashboxAsync(today);
         var txns = await _session.Api.TransactionsAsync(weekAgo, today);
         var debtors = await _session.Api.DebtorsAsync();
+        var accts = await _session.Api.BankAccountsAsync();
         if (!box.Ok) { Status = box.Error; return; }
         var b = box.Value!;
         Cards.Clear();
@@ -247,6 +263,9 @@ public class FinanceVm : VmBase
                     BalanceFa = Fa.Money(d.BalanceRial),
                     LastFa = Fa.Date(d.LastActivityAtUtc)
                 });
+        BankAccounts.Clear();
+        if (accts.Ok && accts.Value != null)
+            foreach (var a in accts.Value) BankAccounts.Add(a);
         Status = "به‌روز شد — بازهٔ تراکنش‌ها: " + Fa.Range(weekAgo, today);
     }
 }
@@ -260,7 +279,21 @@ public class HousekeepingVm : VmBase
 
     public HousekeepingVm(Session session) { _session = session; _ = LoadAsync(); }
 
-    private async Task LoadAsync()
+    public async Task AddTaskAsync(string roomNumber, string type, string assignee, string notes)
+    {
+        var r = await _session.Api.AddHousekeepingTaskAsync(roomNumber, type, assignee, notes);
+        Status = r.Ok ? "کار نظافت ثبت شد." : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task SetStatusAsync(string id, string status)
+    {
+        var r = await _session.Api.SetHousekeepingStatusAsync(id, status);
+        Status = r.Ok ? "وضعیت نظافت به‌روز شد." : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var r = await _session.Api.HousekeepingAsync();
         if (!r.Ok) { Status = r.Error; return; }
@@ -321,7 +354,14 @@ public class UsersVm : VmBase
 
     public UsersVm(Session session) { _session = session; _ = LoadAsync(); }
 
-    private async Task LoadAsync()
+    public async Task AddUserAsync(string fullName, string username, string password, string roleTitle, string phone)
+    {
+        var r = await _session.Api.AddUserAsync(fullName, username, password, roleTitle, phone);
+        Status = r.Ok ? "کاربر جدید ثبت شد: " + (r.Value!.FullName ?? "") : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task LoadAsync()
     {
         var r = await _session.Api.UsersAsync();
         if (!r.Ok) { Status = r.Error; return; }
@@ -372,6 +412,13 @@ public class NotificationsVm : VmBase
             });
         var unread = Items.Count(i => i.ReadFa == "خوانده‌نشده");
         Status = Fa.Num(Items.Count) + " اعلان — " + Fa.Num(unread) + " خوانده‌نشده";
+    }
+
+    public async Task AddNotificationAsync(string title, string body, string severity)
+    {
+        var r = await _session.Api.AddNotificationAsync(title, body, severity);
+        Status = r.Ok ? "اعلان ثبت شد." : r.Error;
+        await LoadAsync();
     }
 
     public async Task MarkAllReadAsync()

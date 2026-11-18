@@ -50,6 +50,15 @@ public interface IHotelApi
     Task<Result<bool>> DeleteReservationAsync(string id);
     Task<Result<TransactionDto>> ReverseTransactionAsync(string id);
     Task<Result<bool>> ResetDataAsync();
+    Task<Result<RoomDto>> AddRoomAsync(string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities);
+    Task<Result<RoomDto>> UpdateRoomAsync(string id, string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities);
+    Task<Result<List<BankAccountDto>>> BankAccountsAsync();
+    Task<Result<BankAccountDto>> AddBankAccountAsync(string accountNumber, string accountType, string bankName, string ownerName);
+    Task<Result<bool>> DeleteBankAccountAsync(string id);
+    Task<Result<HousekeepingTaskDto>> AddHousekeepingTaskAsync(string roomNumber, string type, string? assigneeName, string? notes);
+    Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status);
+    Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone);
+    Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity);
 }
 
 public static class Json

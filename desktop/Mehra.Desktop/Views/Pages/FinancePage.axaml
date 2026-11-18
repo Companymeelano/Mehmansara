@@ -4,7 +4,10 @@
   <StackPanel Spacing="12">
     <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
       <TextBlock Text="مالی — صندوق امروز" FontSize="22" Classes="bold" />
-      <Button Grid.Column="1" Content="+ تراکنش جدید" Classes="primary" Click="OnAdd" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+        <Button Content="+ حساب بانکی" Classes="ghost" Foreground="#16233D" BorderBrush="#D8CBA6" Click="OnAddBank" />
+        <Button Content="+ تراکنش جدید" Classes="primary" Click="OnAdd" />
+      </StackPanel>
     </Grid>
     <ItemsControl ItemsSource="{Binding Cards}">
       <ItemsControl.ItemsPanel>
@@ -20,6 +23,26 @@
               <TextBlock Text="{Binding Value}" FontSize="18" Classes="bold" Foreground="{Binding Accent}" />
               <TextBlock Text="{Binding Caption}" FontSize="11" Foreground="#8A93A3" />
             </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="حساب‌های بانکی مدیر" FontSize="15" Classes="bold" />
+    <ItemsControl ItemsSource="{Binding BankAccounts}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Classes="card" Margin="6,3">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding BankName}" Classes="bold" />
+                <TextBlock Text="{Binding AccountNumber}" Foreground="#5A6474" FontSize="12" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <TextBlock Text="{Binding AccountType}" FontSize="12" Foreground="#8A93A3" />
+                <TextBlock Text="{Binding OwnerName}" FontSize="12" Foreground="#16233D" />
+                <Button Classes="iconDanger" Content="🗑" ToolTip.Tip="حذف حساب" Tag="{Binding}" Click="OnDeleteBank" />
+              </StackPanel>
+            </Grid>
           </Border>
         </DataTemplate>
       </ItemsControl.ItemTemplate>

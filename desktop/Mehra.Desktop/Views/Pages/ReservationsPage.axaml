@@ -29,6 +29,7 @@
                   <TextBlock Text="{Binding AmountFa}" FontSize="13" Classes="bold" />
                   <TextBlock Text="{Binding PaidFa}" FontSize="11" Foreground="#8A93A3" />
                 </StackPanel>
+                <Button Classes="icon" Content="🖨" ToolTip.Tip="چاپ فاکتور" Tag="{Binding}" Click="OnPrint" />
                 <Button Classes="icon" Content="✎" ToolTip.Tip="ویرایش رزرو" Tag="{Binding}" Click="OnEdit" />
                 <Button Classes="iconDanger" Content="🗑" ToolTip.Tip="حذف رزرو" Tag="{Binding}" Click="OnDelete" />
               </StackPanel>

@@ -44,8 +44,10 @@ public class HomeVm : VmBase
     private async Task LoadAsync()
     {
         var r = await _session.Api.DashboardAsync();
+        var gr = await _session.Api.GuestsAsync();
         if (!r.Ok) { Status = r.Error; return; }
         var d = r.Value!;
+        var guestCount = gr.Ok && gr.Value != null ? gr.Value.Count : 0;
         Cards.Clear();
         void Add(string label, string value, string caption, Avalonia.Media.IBrush accent) =>
             Cards.Add(new StatCard { Label = label, Value = value, Caption = caption, Accent = accent });
@@ -59,6 +61,7 @@ public class HomeVm : VmBase
         Add("ورودی امروز", Fa.Num(d.TodayCheckIns), "خروجی: " + Fa.Num(d.TodayCheckOuts), blue);
         Add("درآمد امروز", Fa.Money(d.RevenueTodayRial), "به ریال", gold);
         Add("نظافت / تعمیر", Fa.Num(d.CleaningRooms + d.MaintenanceRooms), Fa.Num(d.CleaningRooms) + " نظافت، " + Fa.Num(d.MaintenanceRooms) + " تعمیر", red);
+        Add("تعداد مهمان‌ها", Fa.Num(guestCount), "کل مهمانان ثبت‌شده", green);
         Alerts.Clear();
         foreach (var a in d.Alerts ?? new List<DashboardAlertDto>())
             Alerts.Add(new AlertItem { Title = a.Title ?? "", Message = a.Message ?? "", Accent = StatusText.SeverityBrush(a.Severity) });
@@ -91,6 +94,30 @@ public class RoomsVm : VmBase
         await LoadAsync();
     }
 
+    public async Task AddRoomAsync(string roomNumber, string floor, string capacity, string roomType, string rate, string amenities)
+    {
+        var r = await _session.Api.AddRoomAsync(roomNumber,
+            int.TryParse(floor, out var f) ? f : 1,
+            int.TryParse(capacity, out var c) ? c : 2,
+            roomType,
+            long.TryParse(rate, out var rt) ? rt : 0,
+            amenities);
+        Status = r.Ok ? "اتاق جدید ثبت شد: " + Fa.Digits(r.Value!.RoomNumber ?? "") : r.Error;
+        await LoadAsync();
+    }
+
+    public async Task UpdateRoomAsync(string id, string roomNumber, string floor, string capacity, string roomType, string rate, string amenities)
+    {
+        var r = await _session.Api.UpdateRoomAsync(id, roomNumber,
+            int.TryParse(floor, out var f) ? f : 1,
+            int.TryParse(capacity, out var c) ? c : 2,
+            roomType,
+            long.TryParse(rate, out var rt) ? rt : 0,
+            amenities);
+        Status = r.Ok ? "اتاق ویرایش شد: " + Fa.Digits(r.Value!.RoomNumber ?? "") : r.Error;
+        await LoadAsync();
+    }
+
     public async Task LoadAsync()
     {
         var r = await _session.Api.RoomsAsync();
@@ -99,6 +126,11 @@ public class RoomsVm : VmBase
         foreach (var room in r.Value!)
             Rooms.Add(new RoomCard
             {
+                Id = room.Id ?? room.RoomNumber ?? "",
+                Floor = room.Floor,
+                Capacity = room.Capacity,
+                RateRial = room.RatePerNightRial ?? 0,
+                Amenities = room.Amenities ?? "",
                 Number = "اتاق " + Fa.Digits(room.RoomNumber ?? "—"),
                 TypeName = room.RoomTypeName ?? "",
                 Details = "طبقهٔ " + Fa.Num(room.Floor) + " — " + Fa.Num(room.Capacity) + " نفر",
@@ -165,6 +197,7 @@ public class ReservationsVm : VmBase
                 RawGuestName = v.GuestName ?? "",
                 RawPhone = v.GuestPhone ?? "",
                 RawRoomNumber = v.RoomNumber ?? "",
+                VehiclePlate = v.VehiclePlate ?? "",
                 CheckInIso = v.CheckInDate ?? "",
                 CheckOutIso = v.CheckOutDate ?? "",
                 GuestsCount = v.GuestsCount,

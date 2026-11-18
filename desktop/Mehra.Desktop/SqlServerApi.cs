@@ -682,4 +682,23 @@ public class SqlServerApi : IHotelApi
 
     public Task<Result<bool>> ResetDataAsync() =>
         Task.FromResult(Result<bool>.Fail("پاک‌سازی فقط در حالت فایل محلی پشتیبانی می‌شود."));
+
+    public Task<Result<RoomDto>> AddRoomAsync(string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities) =>
+        Task.FromResult(Result<RoomDto>.Fail("افزودن اتاق در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<RoomDto>> UpdateRoomAsync(string id, string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities) =>
+        Task.FromResult(Result<RoomDto>.Fail("ویرایش اتاق در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<List<BankAccountDto>>> BankAccountsAsync() =>
+        Task.FromResult(Result<List<BankAccountDto>>.Good(new List<BankAccountDto>()));
+    public Task<Result<BankAccountDto>> AddBankAccountAsync(string accountNumber, string accountType, string bankName, string ownerName) =>
+        Task.FromResult(Result<BankAccountDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<bool>> DeleteBankAccountAsync(string id) =>
+        Task.FromResult(Result<bool>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<HousekeepingTaskDto>> AddHousekeepingTaskAsync(string roomNumber, string type, string? assigneeName, string? notes) =>
+        Task.FromResult(Result<HousekeepingTaskDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status) =>
+        Task.FromResult(Result<bool>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
+        Task.FromResult(Result<UserDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
+        Task.FromResult(Result<NotificationDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
 }

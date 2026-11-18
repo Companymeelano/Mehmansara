@@ -15,6 +15,25 @@ public class GuestDto
     [JsonPropertyName("balanceRial")] public long? BalanceRial { get; set; }
     [JsonPropertyName("totalStays")] public int? TotalStays { get; set; }
     [JsonPropertyName("lastStayAtUtc")] public string? LastStayAtUtc { get; set; }
+    [JsonPropertyName("idNumber")] public string? IdNumber { get; set; }
+    [JsonPropertyName("fatherName")] public string? FatherName { get; set; }
+    [JsonPropertyName("nationalCode")] public string? NationalCode { get; set; }
+    [JsonPropertyName("birthDate")] public string? BirthDate { get; set; }
+    [JsonPropertyName("vehicleType")] public string? VehicleType { get; set; }
+    [JsonPropertyName("vehiclePlate")] public string? VehiclePlate { get; set; }
+    [JsonPropertyName("guestsCount")] public int? GuestsCount { get; set; }
+    [JsonPropertyName("guestCategory")] public string? GuestCategory { get; set; }
+    [JsonPropertyName("relationToCultural")] public string? RelationToCultural { get; set; }
+    [JsonPropertyName("notes")] public string? Notes { get; set; }
+}
+
+public class BankAccountDto
+{
+    [JsonPropertyName("id")] public string? Id { get; set; }
+    [JsonPropertyName("accountNumber")] public string? AccountNumber { get; set; }
+    [JsonPropertyName("accountType")] public string? AccountType { get; set; }
+    [JsonPropertyName("bankName")] public string? BankName { get; set; }
+    [JsonPropertyName("ownerName")] public string? OwnerName { get; set; }
 }
 
 public class TransactionDto
@@ -30,6 +49,8 @@ public class TransactionDto
     [JsonPropertyName("operatorName")] public string? OperatorName { get; set; }
     [JsonPropertyName("createdAtUtc")] public string? CreatedAtUtc { get; set; }
     [JsonPropertyName("isReversed")] public bool? IsReversed { get; set; }
+    [JsonPropertyName("bankAccountLabel")] public string? BankAccountLabel { get; set; }
+    [JsonPropertyName("referenceNumber")] public string? ReferenceNumber { get; set; }
 }
 
 public class MethodTotalDto
@@ -137,6 +158,16 @@ public class GuestRow
     public string LastName { get; set; } = "";
     public string RawPhone { get; set; } = "";
     public string RawCity { get; set; } = "";
+    public string IdNumber { get; set; } = "";
+    public string FatherName { get; set; } = "";
+    public string NationalCode { get; set; } = "";
+    public string BirthDate { get; set; } = "";
+    public string VehicleType { get; set; } = "";
+    public string VehiclePlate { get; set; } = "";
+    public int GuestsCount { get; set; } = 1;
+    public string GuestCategory { get; set; } = "فرهنگی";
+    public string RelationToCultural { get; set; } = "";
+    public string Notes { get; set; } = "";
     public string Name { get; set; } = "";
     public string PhoneFa { get; set; } = "";
     public string City { get; set; } = "";

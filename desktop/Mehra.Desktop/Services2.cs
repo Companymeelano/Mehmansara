@@ -236,6 +236,24 @@ public partial class ApiClient
         PostAsync<TransactionDto>($"/api/v1/finance/transactions/{Uri.EscapeDataString(id)}/reverse", new { }, Guid.NewGuid().ToString());
     public Task<Result<bool>> ResetDataAsync() =>
         Task.FromResult(Result<bool>.Fail("پاک‌سازی فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<RoomDto>> AddRoomAsync(string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities) =>
+        PostAsync<RoomDto>("/api/v1/rooms", new { roomNumber, floor, capacity, roomTypeName, ratePerNightRial, amenities });
+    public Task<Result<RoomDto>> UpdateRoomAsync(string id, string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities) =>
+        PutAsync<RoomDto>($"/api/v1/rooms/{Uri.EscapeDataString(id)}", new { roomNumber, floor, capacity, roomTypeName, ratePerNightRial, amenities });
+    public Task<Result<List<BankAccountDto>>> BankAccountsAsync() =>
+        Task.FromResult(Result<List<BankAccountDto>>.Good(new List<BankAccountDto>()));
+    public Task<Result<BankAccountDto>> AddBankAccountAsync(string accountNumber, string accountType, string bankName, string ownerName) =>
+        Task.FromResult(Result<BankAccountDto>.Fail("فقط در حالت محلی پشتیبانی می‌شود."));
+    public Task<Result<bool>> DeleteBankAccountAsync(string id) =>
+        Task.FromResult(Result<bool>.Fail("فقط در حالت محلی پشتیبانی می‌شود."));
+    public Task<Result<HousekeepingTaskDto>> AddHousekeepingTaskAsync(string roomNumber, string type, string? assigneeName, string? notes) =>
+        PostAsync<HousekeepingTaskDto>("/api/v1/housekeeping/tasks", new { roomNumber, type, assigneeName, notes });
+    public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status) =>
+        PatchAsync<bool>($"/api/v1/housekeeping/tasks/{Uri.EscapeDataString(id)}", new { status });
+    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
+        PostAsync<UserDto>("/api/v1/users", new { fullName, username, password, roleTitle, phone });
+    public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
+        PostAsync<NotificationDto>("/api/v1/notifications", new { title, body, severity });
 }
 
 
@@ -343,6 +361,24 @@ public partial class DemoApi
         Task.FromResult(Result<TransactionDto>.Fail("نسخهٔ نمایشی فقط‌خوانی است."));
     public Task<Result<bool>> ResetDataAsync() =>
         Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<RoomDto>> AddRoomAsync(string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities) =>
+        Task.FromResult(Result<RoomDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<RoomDto>> UpdateRoomAsync(string id, string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities) =>
+        Task.FromResult(Result<RoomDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<List<BankAccountDto>>> BankAccountsAsync() =>
+        Task.FromResult(Result<List<BankAccountDto>>.Good(new List<BankAccountDto>()));
+    public Task<Result<BankAccountDto>> AddBankAccountAsync(string accountNumber, string accountType, string bankName, string ownerName) =>
+        Task.FromResult(Result<BankAccountDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<bool>> DeleteBankAccountAsync(string id) =>
+        Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<HousekeepingTaskDto>> AddHousekeepingTaskAsync(string roomNumber, string type, string? assigneeName, string? notes) =>
+        Task.FromResult(Result<HousekeepingTaskDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status) =>
+        Task.FromResult(Result<bool>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone) =>
+        Task.FromResult(Result<UserDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
+        Task.FromResult(Result<NotificationDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
 
     public Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso) => Task.FromResult(Result<ReportDto>.Good(new ReportDto
     {

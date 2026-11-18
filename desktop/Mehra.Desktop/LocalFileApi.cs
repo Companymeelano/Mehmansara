@@ -37,6 +37,7 @@ public class LocalStore
     [JsonPropertyName("housekeeping")] public List<HousekeepingTaskDto> Housekeeping { get; set; } = new();
     [JsonPropertyName("maintenance")] public List<MaintenanceTicketDto> Maintenance { get; set; } = new();
     [JsonPropertyName("notifications")] public List<NotificationDto> Notifications { get; set; } = new();
+    [JsonPropertyName("bankAccounts")] public List<BankAccountDto> BankAccounts { get; set; } = new();
 
     private static readonly object IoLock = new();
 
@@ -92,7 +93,7 @@ public class LocalStore
         var s = new LocalStore();
         s.Users.Add(new LocalUser
         {
-            Id = "u1", FullName = "سید مرتضی موسوی", Username = "admin",
+            Id = "u1", FullName = "مدیر", Username = "admin",
             Salt = "mehra-local", PasswordHash = Hash("mehra-local", "Admin@1234"),
             RoleCode = "ADMIN", RoleTitle = "مدیر کل", Phone = "09120000010", IsActive = true
         });
@@ -793,6 +794,177 @@ public class LocalFileApi : IHotelApi
             }
             LocalStore.Save(_store);
             return Task.FromResult(Result<bool>.Good(true));
+        }
+    }
+
+    public Task<Result<RoomDto>> AddRoomAsync(string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities)
+    {
+        lock (Gate)
+        {
+            if (string.IsNullOrWhiteSpace(roomNumber))
+                return Task.FromResult(Result<RoomDto>.Fail("شمارهٔ اتاق را وارد کنید."));
+            var rn = roomNumber.Trim();
+            if (_store.Rooms.Any(x => x.RoomNumber == rn))
+                return Task.FromResult(Result<RoomDto>.Fail("اتاق «" + rn + "» قبلاً ثبت شده است."));
+            var r = new RoomDto
+            {
+                Id = "r" + (_store.Rooms.Count + 1) + "-" + Guid.NewGuid().ToString("N")[..4],
+                RoomNumber = rn,
+                Floor = floor < 0 ? 1 : floor,
+                Capacity = capacity < 1 ? 1 : capacity,
+                RoomTypeName = string.IsNullOrWhiteSpace(roomTypeName) ? "دوتخته" : roomTypeName.Trim(),
+                RatePerNightRial = ratePerNightRial,
+                Status = "FREE",
+                Amenities = string.IsNullOrWhiteSpace(amenities) ? null : amenities.Trim()
+            };
+            _store.Rooms.Add(r);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<RoomDto>.Good(r));
+        }
+    }
+
+    public Task<Result<RoomDto>> UpdateRoomAsync(string id, string roomNumber, int floor, int capacity, string roomTypeName, long ratePerNightRial, string? amenities)
+    {
+        lock (Gate)
+        {
+            var r = _store.Rooms.FirstOrDefault(x => x.Id == id || x.RoomNumber == id);
+            if (r is null) return Task.FromResult(Result<RoomDto>.Fail("اتاق یافت نشد."));
+            if (!string.IsNullOrWhiteSpace(roomNumber)) r.RoomNumber = roomNumber.Trim();
+            r.Floor = floor < 0 ? 1 : floor;
+            r.Capacity = capacity < 1 ? 1 : capacity;
+            if (!string.IsNullOrWhiteSpace(roomTypeName)) r.RoomTypeName = roomTypeName.Trim();
+            r.RatePerNightRial = ratePerNightRial;
+            r.Amenities = string.IsNullOrWhiteSpace(amenities) ? null : amenities.Trim();
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<RoomDto>.Good(r));
+        }
+    }
+
+    public Task<Result<List<BankAccountDto>>> BankAccountsAsync()
+    {
+        lock (Gate)
+        {
+            return Task.FromResult(Result<List<BankAccountDto>>.Good(_store.BankAccounts.ToList()));
+        }
+    }
+
+    public Task<Result<BankAccountDto>> AddBankAccountAsync(string accountNumber, string accountType, string bankName, string ownerName)
+    {
+        lock (Gate)
+        {
+            if (string.IsNullOrWhiteSpace(accountNumber))
+                return Task.FromResult(Result<BankAccountDto>.Fail("شماره حساب را وارد کنید."));
+            var b = new BankAccountDto
+            {
+                Id = "b-" + Guid.NewGuid().ToString("N")[..6],
+                AccountNumber = accountNumber.Trim(),
+                AccountType = string.IsNullOrWhiteSpace(accountType) ? "جاری" : accountType.Trim(),
+                BankName = string.IsNullOrWhiteSpace(bankName) ? "بانک ملی" : bankName.Trim(),
+                OwnerName = string.IsNullOrWhiteSpace(ownerName) ? "مدیر" : ownerName.Trim()
+            };
+            _store.BankAccounts.Add(b);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<BankAccountDto>.Good(b));
+        }
+    }
+
+    public Task<Result<bool>> DeleteBankAccountAsync(string id)
+    {
+        lock (Gate)
+        {
+            var b = _store.BankAccounts.FirstOrDefault(x => x.Id == id);
+            if (b is null) return Task.FromResult(Result<bool>.Fail("حساب یافت نشد."));
+            _store.BankAccounts.Remove(b);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<bool>.Good(true));
+        }
+    }
+
+    public Task<Result<HousekeepingTaskDto>> AddHousekeepingTaskAsync(string roomNumber, string type, string? assigneeName, string? notes)
+    {
+        lock (Gate)
+        {
+            if (string.IsNullOrWhiteSpace(roomNumber))
+                return Task.FromResult(Result<HousekeepingTaskDto>.Fail("شمارهٔ اتاق را وارد کنید."));
+            var t = new HousekeepingTaskDto
+            {
+                Id = "hk-" + Guid.NewGuid().ToString("N")[..6],
+                RoomNumber = roomNumber.Trim(),
+                Type = string.IsNullOrWhiteSpace(type) ? "Daily" : type.Trim(),
+                Status = "Pending",
+                AssignedToName = string.IsNullOrWhiteSpace(assigneeName) ? "—" : assigneeName.Trim(),
+                Notes = string.IsNullOrWhiteSpace(notes) ? "" : notes.Trim(),
+                CreatedAtUtc = DateTime.UtcNow.ToString("o")
+            };
+            _store.Housekeeping.Insert(0, t);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<HousekeepingTaskDto>.Good(t));
+        }
+    }
+
+    public Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status)
+    {
+        lock (Gate)
+        {
+            var t = _store.Housekeeping.FirstOrDefault(x => x.Id == id);
+            if (t is null) return Task.FromResult(Result<bool>.Fail("کار نظافت یافت نشد."));
+            t.Status = status;
+            if (status == "Done") t.FinishedAtUtc = DateTime.UtcNow.ToString("o");
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<bool>.Good(true));
+        }
+    }
+
+    public Task<Result<UserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone)
+    {
+        lock (Gate)
+        {
+            if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                return Task.FromResult(Result<UserDto>.Fail("نام، نام کاربری و رمز عبور الزامی است."));
+            var un = username.Trim().ToLowerInvariant();
+            if (_store.Users.Any(u => u.Username.Equals(un, StringComparison.OrdinalIgnoreCase)))
+                return Task.FromResult(Result<UserDto>.Fail("این نام کاربری قبلاً ثبت شده است."));
+            var u = new LocalUser
+            {
+                Id = "u-" + Guid.NewGuid().ToString("N")[..6],
+                FullName = fullName.Trim(),
+                Username = un,
+                Salt = "mehra-local",
+                PasswordHash = LocalStore.Hash("mehra-local", password),
+                RoleCode = "RECEPTION",
+                RoleTitle = string.IsNullOrWhiteSpace(roleTitle) ? "پذیرش" : roleTitle.Trim(),
+                Phone = string.IsNullOrWhiteSpace(phone) ? null : phone.Trim(),
+                IsActive = true
+            };
+            _store.Users.Add(u);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<UserDto>.Good(new UserDto
+            {
+                Id = u.Id, FullName = u.FullName, Username = u.Username,
+                RoleCode = u.RoleCode, RoleTitle = u.RoleTitle, Phone = u.Phone, IsActive = true
+            }));
+        }
+    }
+
+    public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity)
+    {
+        lock (Gate)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                return Task.FromResult(Result<NotificationDto>.Fail("عنوان اعلان را وارد کنید."));
+            var n = new NotificationDto
+            {
+                Id = "n-" + Guid.NewGuid().ToString("N")[..6],
+                Title = title.Trim(),
+                Body = string.IsNullOrWhiteSpace(body) ? "" : body.Trim(),
+                Severity = string.IsNullOrWhiteSpace(severity) ? "MEDIUM" : severity.Trim().ToUpperInvariant(),
+                Kind = "MANUAL",
+                CreatedAtUtc = DateTime.UtcNow.ToString("o"),
+                IsRead = false
+            };
+            _store.Notifications.Insert(0, n);
+            LocalStore.Save(_store);
+            return Task.FromResult(Result<NotificationDto>.Good(n));
         }
     }
 }
