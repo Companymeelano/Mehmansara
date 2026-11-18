@@ -30,7 +30,7 @@ public interface IHotelApi
     Task<Result<List<TransactionDto>>> TransactionsAsync(string fromIso, string toIso);
     Task<Result<List<HousekeepingTaskDto>>> HousekeepingAsync();
     Task<Result<List<MaintenanceTicketDto>>> MaintenanceAsync();
-    Task<Result<List<AppUserAccountDto>>> UsersAsync();
+    Task<Result<List<AppUserDto>>> UsersAsync();
     Task<Result<List<NotificationDto>>> NotificationsAsync();
     Task<Result<string>> MarkAllNotificationsReadAsync();
     Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso);
@@ -57,7 +57,7 @@ public interface IHotelApi
     Task<Result<bool>> DeleteBankAccountAsync(string id);
     Task<Result<HousekeepingTaskDto>> AddHousekeepingTaskAsync(string roomNumber, string type, string? assigneeName, string? notes);
     Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status);
-    Task<Result<UserAccountDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone);
+    Task<Result<AppUserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone);
     Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity);
 }
 
