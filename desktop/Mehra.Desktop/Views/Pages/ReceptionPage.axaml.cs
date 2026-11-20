@@ -148,7 +148,7 @@ public partial class ReceptionPage : UserControl
         {
             var method = PayMethodCombo.SelectedIndex == 1 ? "Pos" : (PayMethodCombo.SelectedIndex == 2 ? "Transfer" : "Cash");
             var desc = $"پذیرش {rawRoom} — حساب: {ManagerAcctBox.Text} — {PayNoteBox.Text}".Trim(' ', '—');
-            await _session.Api.AddTransactionAsync("Receive", paid, method, desc, _selectedGuest.Name);
+            await _session.Api.AddTransactionAsync("Receive", paid, method, desc, _selectedGuest.Name, rawRoom);
         }
 
         ReceiptPrinter.PrintInvoice(
