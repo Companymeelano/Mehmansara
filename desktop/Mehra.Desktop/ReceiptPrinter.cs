@@ -27,7 +27,7 @@ public static class ReceiptPrinter
 <html lang=""fa"" dir=""rtl"">
 <head>
 <meta charset=""utf-8"" />
-<title>فاکتور اقامت — زرین‌سرا ({WebUtility.HtmlEncode(code)})</title>
+<title>فاکتور اقامت — فراسا ({WebUtility.HtmlEncode(code)})</title>
 <style>
   body {{ font-family: Vazirmatn, Tahoma, sans-serif; background: #F7F3E9; color: #16233D; margin: 0; padding: 24px; }}
   .sheet {{ max-width: 720px; margin: 0 auto; background: #fff; border: 2px solid #C9A24B; border-radius: 14px; padding: 28px; }}
@@ -46,7 +46,7 @@ public static class ReceiptPrinter
 <div class=""sheet"">
   <div class=""head"">
     <div>
-      <div class=""brand"">زرین‌سرا</div>
+      <div class=""brand"">فراسا</div>
       <div class=""sub"">مهمان‌پذیر فرهنگیان اهواز — قبض و فاکتور رسمی اقامت</div>
     </div>
     <div>

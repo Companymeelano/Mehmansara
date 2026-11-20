@@ -23,7 +23,7 @@ public static class QrSheet
         var qr = QrCode.ToSvg(QrCode.Encode(registerUrl), border: 4, color: Navy);
         var sb = new StringBuilder();
         sb.Append("<!DOCTYPE html><html dir=\"rtl\" lang=\"fa\"><head><meta charset=\"utf-8\"><title>")
-          .Append("زرین‌سرا — برگهٔ QR ثبت‌نام مهمان")
+          .Append("فراسا — برگهٔ QR ثبت‌نام مهمان")
           .Append("</title><style>@page { size: A4 portrait; margin: 12mm; } * { box-sizing: border-box; } body { margin:0; font-family: Vazirmatn, Tahoma, sans-serif; background:#F7F4EC; color:")
           .Append(Ink).Append("; } .sheet { width: 186mm; min-height: 273mm; margin: 0 auto; background: #fff; border: 2px solid ").Append(Gold)
           .Append("; border-radius: 6mm; overflow: hidden; display: flex; flex-direction: column; } .head { background: linear-gradient(135deg, ").Append(Navy)
@@ -36,7 +36,7 @@ public static class QrSheet
           .Append("; border-radius: 4mm; padding: 5mm 7mm; display: flex; justify-content: space-between; align-items: center; } .contact .name { font-size: 13pt; font-weight: bold; } .contact .phone { direction: ltr; font-size: 15pt; font-weight: bold; color: #fff; letter-spacing: 1px; } .foot { margin-top: auto; padding: 4mm 10mm 6mm; text-align: center; font-size: 8.5pt; color: #8A93A3; } .foot b { color: ")
           .Append(Navy).Append("; } @media print { body { background: #fff; } .sheet { border: none; box-shadow: none; width: auto; min-height: auto; } }</style></head><body><div class=\"sheet\">");
 
-        sb.Append("<div class=\"head\"><h1>زرین‌سرا</h1><div class=\"sub\">").Append(Venue)
+        sb.Append("<div class=\"head\"><h1>فراسا</h1><div class=\"sub\">").Append(Venue)
           .Append("</div><div class=\"sub\">«ثبت درخواست اقامت — کد را اسکن کنید»</div></div>");
 
         sb.Append("<div class=\"qr-card\">").Append(qr)
@@ -53,7 +53,7 @@ public static class QrSheet
         sb.Append("<div class=\"contact\"><div><div class=\"name\">").Append(Esc(managerName))
           .Append("</div><div>مدیر مجموعه — پاسخ‌گوی درخواست‌ها</div></div><div class=\"phone\">").Append(Esc(managerPhone)).Append("</div></div>");
 
-        sb.Append("<div class=\"foot\">سامانهٔ مدیریت مهمان‌پذیر <b>زرین‌سرا</b> — نسخهٔ ویندوز ").Append(Esc(appVersionFa))
+        sb.Append("<div class=\"foot\">سامانهٔ مدیریت مهمان‌پذیر <b>فراسا</b> — نسخهٔ ویندوز ").Append(Esc(appVersionFa))
           .Append(" — این کد را برای ثبت درخواست اقامت در این مجموعه اسکن کنید. طراح و توسعه‌دهنده: میلاد یعقوبی — www.meelano.ir — 09120219593</div>");
 
         sb.Append("</div></body></html>");
@@ -65,7 +65,7 @@ public static class QrSheet
     {
         var sb = new StringBuilder();
         sb.Append("<!DOCTYPE html><html dir=\"rtl\" lang=\"fa\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>")
-          .Append("زرین‌سرا — ثبت درخواست اقامت")
+          .Append("فراسا — ثبت درخواست اقامت")
           .Append("</title><style>body { margin:0; font-family: Vazirmatn, Tahoma, sans-serif; background: linear-gradient(160deg, #16233D 0%, #24365C 60%, #16233D 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; } .card { background: #fff; border-radius: 18px; border: 3px solid #C9A24B; box-shadow: 0 12px 40px rgba(0,0,0,.35); max-width: 460px; width: 100%; padding: 24px; } h1 { margin: 0 0 4px; color: #16233D; font-size: 24px; text-align: center; } .sub { text-align: center; color: #5A6474; font-size: 13px; margin-bottom: 16px; } label { display: block; font-size: 13px; font-weight: bold; color: #16233D; margin: 10px 0 4px; } input, textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1.5px solid #D8CBA6; border-radius: 10px; font-family: inherit; font-size: 14px; background: #FBF8F0; } input:focus, textarea:focus { outline: 2px solid #C9A24B; } .row { display: flex; gap: 10px; } .row > div { flex: 1; } button { width: 100%; margin-top: 16px; padding: 13px; border: none; border-radius: 12px; background: linear-gradient(135deg, #C9A24B, #E8D6AE); color: #16233D; font-family: inherit; font-size: 16px; font-weight: bold; cursor: pointer; } button:disabled { opacity: .6; } .msg { margin-top: 12px; padding: 10px 12px; border-radius: 10px; font-size: 13.5px; display: none; } .ok { display: block; background: #E7F4EC; color: #2E7D5B; border: 1px solid #2E7D5B; } .err { display: block; background: #FBEAEA; color: #B3261E; border: 1px solid #B3261E; } .code { direction: ltr; font-weight: bold; } .foot { text-align: center; color: #9AA6B8; font-size: 11px; margin-top: 14px; }</style></head><body><div class=\"card\">");
         sb.Append("<h1>ثبت درخواست اقامت</h1><div class=\"sub\">").Append(Venue).Append("</div><form id=\"f\">")
           .Append("<label>نام *</label><input id=\"firstName\" required>")
@@ -77,7 +77,7 @@ public static class QrSheet
           .Append("<label>توضیحات</label><textarea id=\"notes\" rows=\"2\"></textarea>")
           .Append("<button id=\"go\" type=\"submit\">ثبت درخواست</button>")
           .Append("<div id=\"msg\" class=\"msg\"></div></form>")
-          .Append("<div class=\"foot\">زرین‌سرا — نسخهٔ ویندوز ").Append(Esc(appVersionFa)).Append(" — درخواست شما برای مدیر مجموعه ثبت می‌شود.</div></div>");
+          .Append("<div class=\"foot\">فراسا — نسخهٔ ویندوز ").Append(Esc(appVersionFa)).Append(" — درخواست شما برای مدیر مجموعه ثبت می‌شود.</div></div>");
         sb.Append("<script>const api='").Append(Esc(apiUrl)).Append("';")
           .Append("document.getElementById('f').addEventListener('submit', async e => { e.preventDefault(); const go = document.getElementById('go'); go.disabled = true; const msg = document.getElementById('msg'); msg.className = 'msg'; try { const r = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ firstName: f.firstName.value.trim(), lastName: f.lastName.value.trim(), phone: f.phone.value.trim(), city: f.city.value.trim(), checkIn: f.checkIn.value, checkOut: f.checkOut.value, guestsCount: parseInt(f.guestsCount.value || '1'), notes: f.notes.value.trim() }) }); const j = await r.json(); if (j.success) { msg.className = 'msg ok'; msg.innerHTML = 'درخواست شما با کد <span class=\"code\">' + (j.data.code || '') + '</span> ثبت شد؛ به‌زودی با شما تماس گرفته می‌شود.'; e.target.reset(); } else { msg.className = 'msg err'; msg.textContent = (j.error && j.error.message) || 'خطا در ثبت درخواست'; } } catch (err) { msg.className = 'msg err'; msg.textContent = 'اتصال به سرور برقرار نشد — هر دو دستگاه را به یک Wi-Fi وصل کنید و دوباره تلاش کنید.'; } go.disabled = false; });</script>");
         sb.Append("</body></html>");

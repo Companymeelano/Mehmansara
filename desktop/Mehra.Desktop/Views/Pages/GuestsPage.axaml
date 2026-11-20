@@ -6,6 +6,7 @@
       <TextBlock Text="مهمانان" FontSize="22" Classes="bold" />
       <Button Grid.Column="1" Content="+ مهمان جدید" Classes="primary" Click="OnAdd" />
     </Grid>
+    <TextBox x:Name="SearchBox" Watermark="جست‌وجوی مهمان (نام، تلفن، کد ملی، شهر، نوع خودرو، پلاک…)" TextChanged="OnSearchChanged" />
     <ItemsControl ItemsSource="{Binding Items}">
       <ItemsControl.ItemTemplate>
         <DataTemplate>

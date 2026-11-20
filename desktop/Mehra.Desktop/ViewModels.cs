@@ -145,7 +145,7 @@ public class RoomsVm : VmBase
                 Amenities = room.Amenities ?? "",
                 Number = "اتاق " + Fa.Digits(room.RoomNumber ?? "—"),
                 TypeName = room.RoomTypeName ?? "",
-                Details = "طبقهٔ " + Fa.Num(room.Floor) + " — " + Fa.Num(room.Capacity) + " نفر",
+                Details = (room.Floor == 0 ? "همکف" : "طبقهٔ " + Fa.Num(room.Floor)) + " — " + Fa.Num(room.Capacity) + " نفر",
                 RateFa = Fa.Money(room.RatePerNightRial) + " / شب",
                 StatusFa = StatusText.RoomFa(room.Status),
                 StatusBrush = StatusText.RoomBrush(room.Status),

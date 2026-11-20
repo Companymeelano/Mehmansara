@@ -15,6 +15,12 @@ public partial class GuestsPage : UserControl
         DataContext = _vm;
     }
 
+    private void OnSearchChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
+    {
+        if (sender is TextBox tb)
+            _vm.ApplyFilter(tb.Text ?? "");
+    }
+
     private async void OnAdd(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (TopLevel.GetTopLevel(this) is not Window win) return;

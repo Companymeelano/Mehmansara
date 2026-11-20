@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Mehra.Desktop.Views.IntroWindow"
         Icon="avares://Mehra/Assets/mehra.ico"
-        Title="زرین‌سرا"
+        Title="فراسا"
         WindowState="Maximized"
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen">
@@ -22,7 +22,7 @@
         <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="76" Height="76" />
       </Border>
 
-      <TextBlock x:Name="BrandText" Text="زرین‌سرا" FontSize="40" Classes="bold"
+      <TextBlock x:Name="BrandText" Text="فراسا" FontSize="40" Classes="bold"
                  Foreground="#E8D6AE" HorizontalAlignment="Center" Opacity="0" />
 
       <Border x:Name="Divider" Height="2" Width="180" CornerRadius="1"
