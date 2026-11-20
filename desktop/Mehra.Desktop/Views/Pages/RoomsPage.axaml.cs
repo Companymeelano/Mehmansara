@@ -16,7 +16,7 @@ public partial class RoomsPage : UserControl
     private async void OnStatus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (TopLevel.GetTopLevel(this) is not Window win) return;
-        var dlg = new RoomStatusDialog();
+        var dlg = new RoomStatusDialog(_vm.Rooms.ToList());
         if (await dlg.ShowDialog<bool?>(win) == true)
             await _vm.SetRoomStatusAsync(dlg.RoomNumber, dlg.NewStatus);
     }

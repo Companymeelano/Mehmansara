@@ -3,10 +3,10 @@
              x:Class="Mehra.Desktop.Views.Pages.RoomsPage">
   <StackPanel Spacing="12">
     <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
-      <TextBlock Text="اتاق‌ها" FontSize="22" Classes="bold" />
+      <TextBlock Text="🛏  اتاق‌ها" FontSize="22" Classes="bold" />
       <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
         <Button Content="+ افزودن اتاق" Classes="primary" Click="OnAddRoom" />
-        <Button Content="تغییر وضعیت اتاق" Classes="ghost" Foreground="#16233D" BorderBrush="#D8CBA6" Click="OnStatus" />
+        <Button Content="🔄 تغییر وضعیت اتاق" Classes="ghost" Foreground="#16233D" BorderBrush="#D8CBA6" Click="OnStatus" />
       </StackPanel>
     </Grid>
     <ItemsControl ItemsSource="{Binding Rooms}">
@@ -17,20 +17,23 @@
       </ItemsControl.ItemsPanel>
       <ItemsControl.ItemTemplate>
         <DataTemplate>
-          <Border Classes="card" Width="250" Margin="6">
-            <StackPanel Spacing="5">
+          <Border Width="210" Margin="5" Padding="12" CornerRadius="14"
+                  Background="#FFFFFFFC" BorderBrush="#E4D9BE" BorderThickness="1"
+                  BoxShadow="0 6 16 0 #1A16233D">
+            <StackPanel Spacing="4">
               <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Grid.Column="0" Text="{Binding Number}" FontSize="19" Classes="bold" />
-                <Border Grid.Column="1" Background="{Binding StatusBrush}" CornerRadius="999" Padding="8,3">
-                  <TextBlock Text="{Binding StatusFa}" FontSize="10" Foreground="White" />
+                <TextBlock Grid.Column="0" Text="{Binding Number}" FontSize="17" Classes="bold" Foreground="#16233D" />
+                <Border Grid.Column="1" Background="{Binding StatusBrush}" CornerRadius="999" Padding="8,3"
+                        BoxShadow="0 2 6 0 #26000000">
+                  <TextBlock Text="{Binding StatusFa}" FontSize="10" Classes="bold" Foreground="White" />
                 </Border>
               </Grid>
-              <TextBlock Text="{Binding TypeName}" Foreground="#5A6474" FontSize="12" />
-              <TextBlock Text="{Binding Details}" FontSize="11" Foreground="#8A93A3" />
-              <TextBlock Text="{Binding Amenities}" FontSize="11" Foreground="#5A6474" TextWrapping="Wrap" />
-              <TextBlock Text="{Binding RateFa}" FontSize="12" Classes="bold" />
-              <TextBlock Text="{Binding GuestName}" FontSize="11" Foreground="#8A93A3" />
-              <Button Classes="icon" Content="✎ ویرایش اتاق" HorizontalAlignment="Left" Tag="{Binding}" Click="OnEditRoom" />
+              <TextBlock Text="{Binding TypeName}" Foreground="#B08D3E" FontSize="11.5" Classes="bold" />
+              <TextBlock Text="{Binding Details}" FontSize="11" Foreground="#5A6474" />
+              <TextBlock Text="{Binding Amenities}" FontSize="10" Foreground="#8A93A3" TextWrapping="Wrap" MaxLines="2" />
+              <TextBlock Text="{Binding RateFa}" FontSize="11.5" Classes="bold" Foreground="#16233D" />
+              <TextBlock Text="{Binding GuestName}" FontSize="11" Classes="bold" Foreground="#2E7D5B" />
+              <Button Classes="icon" Content="✎ ویرایش" HorizontalAlignment="Left" FontSize="11" Padding="8,4" Tag="{Binding}" Click="OnEditRoom" />
             </StackPanel>
           </Border>
         </DataTemplate>

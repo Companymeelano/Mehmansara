@@ -3,19 +3,20 @@
              x:Class="Mehra.Desktop.Views.Pages.ReceptionPage">
   <StackPanel Spacing="14">
     <Grid ColumnDefinitions="*,Auto">
-      <TextBlock Text="پذیرش — ثبت اقامت مهمان" FontSize="22" Classes="bold" />
+      <TextBlock Text="🔑  پذیرش — ثبت اقامت مهمان" FontSize="22" Classes="bold" />
       <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
         <Button x:Name="BackBtn" Content="↩ برگشت" Classes="ghost" Foreground="#16233D" BorderBrush="#D8CBA6" Click="OnBack" IsVisible="False" />
         <Button Content="+ افزودن مهمان جدید" Classes="primary" Click="OnAddNewGuest" />
       </StackPanel>
     </Grid>
 
-    <!-- Step 1: Select or Search Existing Guest -->
+    <!-- Step 1: Search-only Guest Selection -->
     <Border x:Name="Step1Panel" Classes="card">
       <StackPanel Spacing="10">
-        <TextBlock Text="مرحلهٔ ۱ از ۳ — انتخاب مهمان (یا افزودن مهمان جدید)" FontSize="15" Classes="bold" />
-        <TextBox x:Name="GuestSearchBox" Watermark="جست‌وجوی مهمان (نام، تلفن، کد ملی، شهر، خودرو، پلاک…)" TextChanged="OnGuestSearch" />
-        <ItemsControl x:Name="GuestList">
+        <TextBlock Text="مرحلهٔ ۱ از ۳ — جست‌وجوی مهمان (یا افزودن مهمان جدید)" FontSize="15" Classes="bold" />
+        <TextBox x:Name="GuestSearchBox" Watermark="نام، تلفن، کد ملی، شهر، خودرو یا پلاک مهمان را تایپ کنید…" TextChanged="OnGuestSearch" />
+        <TextBlock x:Name="SearchHint" Text="برای نمایش نتایج، بخشی از مشخصات مهمان را تایپ کنید." Foreground="#8A93A3" FontSize="12" />
+        <ItemsControl x:Name="GuestList" IsVisible="False">
           <ItemsControl.ItemTemplate>
             <DataTemplate>
               <Border Classes="card" Margin="0,4">
@@ -34,34 +35,77 @@
       </StackPanel>
     </Border>
 
-    <!-- Step 2: Select Room -->
+    <!-- Step 2: Smart Room Selection -->
     <Border x:Name="Step2Panel" Classes="card" IsVisible="False">
-      <StackPanel Spacing="10">
+      <StackPanel Spacing="12">
         <TextBlock x:Name="SelectedGuestBanner" FontSize="15" Classes="bold" Foreground="#B08D3E" />
-        <TextBlock Text="مرحلهٔ ۲ از ۳ — انتخاب اتاق از اتاق‌های آزاد" FontSize="15" Classes="bold" />
-        <Grid ColumnDefinitions="*,12,*">
+        <TextBlock Text="مرحلهٔ ۲ از ۳ — انتخاب هوشمند اتاق" FontSize="15" Classes="bold" />
+
+        <Grid ColumnDefinitions="*,12,*,12,*">
           <StackPanel Grid.Column="0" Spacing="4">
-            <TextBlock Text="تعداد شب اقامت" FontSize="12" Classes="bold" />
-            <TextBox x:Name="NightsBox" Text="1" />
+            <TextBlock Text="جست‌وجوی اتاق" FontSize="12" Classes="bold" />
+            <TextBox x:Name="RoomSearchBox" Watermark="شماره اتاق یا امکانات…" TextChanged="OnRoomFilterChanged" />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="4">
-            <TextBlock Text="تعداد نفرات" FontSize="12" Classes="bold" />
-            <TextBox x:Name="GuestsCountBox" Text="1" />
+            <TextBlock Text="نوع اتاق" FontSize="12" Classes="bold" />
+            <ComboBox x:Name="RoomTypeFilter" HorizontalAlignment="Stretch" SelectedIndex="0" SelectionChanged="OnRoomFilterChanged">
+              <ComboBoxItem Content="همهٔ اتاق‌ها" />
+              <ComboBoxItem Content="سوئیت" />
+              <ComboBoxItem Content="عمومی" />
+            </ComboBox>
+          </StackPanel>
+          <StackPanel Grid.Column="4" Spacing="4">
+            <TextBlock Text="طبقه" FontSize="12" Classes="bold" />
+            <ComboBox x:Name="RoomFloorFilter" HorizontalAlignment="Stretch" SelectedIndex="0" SelectionChanged="OnRoomFilterChanged">
+              <ComboBoxItem Content="همهٔ طبقات" />
+              <ComboBoxItem Content="همکف" />
+              <ComboBoxItem Content="طبقه ۱" />
+              <ComboBoxItem Content="طبقه ۲" />
+              <ComboBoxItem Content="طبقه ۳" />
+              <ComboBoxItem Content="طبقه ۴" />
+              <ComboBoxItem Content="طبقه ۵" />
+            </ComboBox>
           </StackPanel>
         </Grid>
+
+        <Grid ColumnDefinitions="*,12,*">
+          <Border Grid.Column="0" Background="#FAF7F0" BorderBrush="#E4D9BE" BorderThickness="1" CornerRadius="10" Padding="10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="🌙 تعداد شب اقامت" FontSize="12" Classes="bold" Foreground="#16233D" />
+              <TextBox x:Name="NightsBox" Text="1" />
+            </StackPanel>
+          </Border>
+          <Border Grid.Column="2" Background="#FAF7F0" BorderBrush="#E4D9BE" BorderThickness="1" CornerRadius="10" Padding="10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="👥 تعداد نفرات" FontSize="12" Classes="bold" Foreground="#16233D" />
+              <TextBox x:Name="GuestsCountBox" Text="1" />
+            </StackPanel>
+          </Border>
+        </Grid>
+
         <ItemsControl x:Name="FreeRoomList">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
             <DataTemplate>
-              <Border Classes="card" Margin="0,4">
-                <Grid ColumnDefinitions="*,Auto">
-                  <StackPanel Grid.Column="0" Spacing="2">
-                    <TextBlock Text="{Binding Number}" Classes="bold" FontSize="15" />
-                    <TextBlock Text="{Binding TypeName}" Foreground="#5A6474" FontSize="12" />
-                    <TextBlock Text="{Binding Details}" Foreground="#8A93A3" FontSize="11" />
-                    <TextBlock Text="{Binding RateFa}" Classes="bold" FontSize="12" />
-                  </StackPanel>
-                  <Button Grid.Column="1" Content="انتخاب اتاق و پرداخت ←" Classes="primary" Tag="{Binding}" Click="OnSelectRoom" />
-                </Grid>
+              <Border Width="220" Margin="5" Padding="12" CornerRadius="14"
+                      Background="#FFFFFFFC" BorderBrush="#E4D9BE" BorderThickness="1"
+                      BoxShadow="0 6 16 0 #1A16233D">
+                <StackPanel Spacing="4">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Grid.Column="0" Text="{Binding Number}" FontSize="16" Classes="bold" Foreground="#16233D" />
+                    <Border Grid.Column="1" Background="{Binding StatusBrush}" CornerRadius="999" Padding="7,2">
+                      <TextBlock Text="{Binding StatusFa}" FontSize="10" Classes="bold" Foreground="White" />
+                    </Border>
+                  </Grid>
+                  <TextBlock Text="{Binding TypeName}" Foreground="#B08D3E" FontSize="11.5" Classes="bold" />
+                  <TextBlock Text="{Binding Details}" Foreground="#5A6474" FontSize="11" />
+                  <TextBlock Text="{Binding RateFa}" Classes="bold" FontSize="12" Foreground="#16233D" />
+                  <Button Content="انتخاب اتاق ←" Classes="primary" HorizontalAlignment="Stretch" FontSize="12" Padding="8,6" Tag="{Binding}" Click="OnSelectRoom" />
+                </StackPanel>
               </Border>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
@@ -69,35 +113,70 @@
       </StackPanel>
     </Border>
 
-    <!-- Step 3: Payment & Print Invoice -->
+    <!-- Step 3: Payment, Discount & Combined Split -->
     <Border x:Name="Step3Panel" Classes="card" IsVisible="False">
-      <StackPanel Spacing="10">
-        <TextBlock x:Name="SummaryBanner" FontSize="15" Classes="bold" Foreground="#B08D3E" TextWrapping="Wrap" />
-        <TextBlock Text="مرحلهٔ ۳ از ۳ — دریافت هزینه و صدور رسید" FontSize="15" Classes="bold" />
+      <StackPanel Spacing="12">
+        <TextBlock x:Name="SummaryBanner" FontSize="14" Classes="bold" Foreground="#5A6474" TextWrapping="Wrap" />
+        <TextBlock Text="مرحلهٔ ۳ از ۳ — دریافت هزینه، تخفیف و صدور رسید" FontSize="15" Classes="bold" />
+
+        <!-- Initial Room Amount (Read-Only Special Highlight) -->
+        <Border Background="#16233D" CornerRadius="12" Padding="14" BoxShadow="0 4 12 0 #2616233D">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="💎 مبلغ اولیهٔ اتاق (غیرقابل تغییر)" Foreground="#E8D6AE" Classes="bold" FontSize="13.5" VerticalAlignment="Center" />
+            <TextBlock x:Name="BaseAmountText" Grid.Column="1" Foreground="#C9A24B" Classes="bold" FontSize="18" />
+          </Grid>
+        </Border>
+
+        <!-- Discount -->
+        <Border Background="#FAF7F0" BorderBrush="#E4D9BE" BorderThickness="1" CornerRadius="12" Padding="12">
+          <StackPanel Spacing="6">
+            <TextBlock Text="🎁 تخفیف (ریال)" Classes="bold" FontSize="13" Foreground="#16233D" />
+            <TextBox x:Name="DiscountBox" Text="0" TextChanged="OnDiscountChanged" />
+          </StackPanel>
+        </Border>
+
+        <!-- Final Total (3D Card) -->
+        <Border Background="#2E7D5B" CornerRadius="12" Padding="14" BoxShadow="0 4 14 0 #262E7D5B">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="💰 مبلغ کل قابل پرداخت" Foreground="White" Classes="bold" FontSize="14" VerticalAlignment="Center" />
+            <TextBlock x:Name="FinalTotalText" Grid.Column="1" Foreground="#FFF8E7" Classes="bold" FontSize="20" />
+          </Grid>
+        </Border>
+
+        <!-- Payment Method (Default: POS) -->
         <Grid ColumnDefinitions="*,12,*">
           <StackPanel Grid.Column="0" Spacing="4">
-            <TextBlock Text="مبلغ دریافتی (ریال)" FontSize="12" Classes="bold" />
-            <TextBox x:Name="PayAmountBox" Text="0" />
-          </StackPanel>
-          <StackPanel Grid.Column="2" Spacing="4">
             <TextBlock Text="روش پرداخت" FontSize="12" Classes="bold" />
-            <ComboBox x:Name="PayMethodCombo" HorizontalAlignment="Stretch" SelectedIndex="0">
-              <ComboBoxItem Content="نقدی" />
-              <ComboBoxItem Content="دستگاه پوز" />
-              <ComboBoxItem Content="کارت به کارت / انتقال" />
+            <ComboBox x:Name="PayMethodCombo" HorizontalAlignment="Stretch" SelectedIndex="0" SelectionChanged="OnPayMethodChanged">
+              <ComboBoxItem Content="💳 دستگاه پوز" />
+              <ComboBoxItem Content="🔁 کارت به کارت / انتقال" />
+              <ComboBoxItem Content="💵 نقدی" />
+              <ComboBoxItem Content="⚡ ترکیبی (نقد + پوز/کارت)" />
             </ComboBox>
           </StackPanel>
-        </Grid>
-        <Grid ColumnDefinitions="*,12,*">
-          <StackPanel Grid.Column="0" Spacing="4">
+          <StackPanel Grid.Column="2" Spacing="4">
             <TextBlock Text="حساب مدیر" FontSize="12" Classes="bold" />
             <TextBox x:Name="ManagerAcctBox" Text="صندوق نقدی مدیر" />
           </StackPanel>
+        </Grid>
+
+        <!-- Combined Split Panel -->
+        <Grid x:Name="CombinedPanel" ColumnDefinitions="*,12,*" IsVisible="False">
+          <StackPanel Grid.Column="0" Spacing="4">
+            <TextBlock Text="💵 مبلغ نقدی (ریال)" FontSize="12" Classes="bold" />
+            <TextBox x:Name="CashSplitBox" Text="0" TextChanged="OnCashSplitChanged" />
+          </StackPanel>
           <StackPanel Grid.Column="2" Spacing="4">
-            <TextBlock Text="شماره پیگیری / توضیحات" FontSize="12" Classes="bold" />
-            <TextBox x:Name="PayNoteBox" Watermark="اختیاری" />
+            <TextBlock Text="💳 مبلغ پوز / کارت (ریال)" FontSize="12" Classes="bold" />
+            <TextBox x:Name="PosSplitBox" Text="0" TextChanged="OnPosSplitChanged" />
           </StackPanel>
         </Grid>
+
+        <StackPanel Spacing="4">
+          <TextBlock Text="شماره پیگیری / توضیحات" FontSize="12" Classes="bold" />
+          <TextBox x:Name="PayNoteBox" Watermark="اختیاری" />
+        </StackPanel>
+
         <Button Content="✓ ثبت نهایی اقامت، دریافت وجه و چاپ فاکتور" Classes="primary" HorizontalAlignment="Left" Click="OnCompleteStay" />
       </StackPanel>
     </Border>

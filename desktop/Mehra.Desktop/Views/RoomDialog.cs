@@ -203,28 +203,48 @@ public class RoomStatusDialog : Window
 
     private static readonly (string Code, string Label)[] Statuses =
     {
-        ("FREE", "آزاد / آماده پذیرش"),
-        ("CLEANING", "در حال نظافت"),
-        ("MAINTENANCE", "در حال تعمیر"),
-        ("OUT_OF_SERVICE", "خارج از سرویس"),
-        ("OCCUPIED", "اشغال (دارای مهمان)"),
-        ("RESERVED", "رزروشده")
+        ("FREE", "🟢 آزاد / آماده پذیرش"),
+        ("CLEANING", "🧹 در حال نظافت"),
+        ("MAINTENANCE", "🔧 در حال تعمیر"),
+        ("OUT_OF_SERVICE", "⛔ خارج از سرویس"),
+        ("OCCUPIED", "🔴 اشغال (دارای مهمان)"),
+        ("RESERVED", "🟣 رزروشده")
     };
 
-    public RoomStatusDialog(string? defaultRoom = null)
+    public RoomStatusDialog(List<RoomCard> rooms)
     {
         Title = "تغییر وضعیت اتاق";
-        Width = 420;
+        Width = 440;
         SizeToContent = SizeToContent.Height;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
         CanResize = false;
 
         var root = new StackPanel { Margin = new Thickness(20), Spacing = 12 };
-        root.Children.Add(new TextBlock { Text = "شمارهٔ اتاق *", FontWeight = FontWeight.Bold });
-        var numBox = new TextBox { Text = defaultRoom ?? "" };
-        root.Children.Add(numBox);
+        root.Children.Add(new TextBlock { Text = "انتخاب اتاق از فهرست *", FontWeight = FontWeight.Bold });
+        var roomItems = rooms.Select(r => $"{r.Number} — ({r.StatusFa})").ToArray();
+        var roomCombo = new ComboBox
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            ItemsSource = roomItems,
+            SelectedIndex = roomItems.Length > 0 ? 0 : -1
+        };
+        root.Children.Add(roomCombo);
 
-        root.Children.Add(new TextBlock { Text = "وضعیت جدید", FontWeight = FontWeight.Bold });
+        var currentLabel = new TextBlock
+        {
+            Text = rooms.Count > 0 ? "وضعیت فعلی: " + rooms[0].StatusFa : "اتاقی ثبت نشده است.",
+            Foreground = new SolidColorBrush(Color.Parse("#B08D3E")),
+            FontWeight = FontWeight.Bold
+        };
+        root.Children.Add(currentLabel);
+
+        roomCombo.SelectionChanged += (_, _) =>
+        {
+            if (roomCombo.SelectedIndex >= 0 && roomCombo.SelectedIndex < rooms.Count)
+                currentLabel.Text = "وضعیت فعلی: " + rooms[roomCombo.SelectedIndex].StatusFa;
+        };
+
+        root.Children.Add(new TextBlock { Text = "وضعیت جدید *", FontWeight = FontWeight.Bold });
         var combo = new ComboBox
         {
             HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -234,12 +254,12 @@ public class RoomStatusDialog : Window
         root.Children.Add(combo);
 
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, HorizontalAlignment = HorizontalAlignment.Left };
-        var ok = new Button { Content = "تأیید", Classes = { "primary" } };
+        var ok = new Button { Content = "تأیید و تغییر وضعیت", Classes = { "primary" } };
         var cancel = new Button { Content = "انصراف", Classes = { "ghost" }, Foreground = new SolidColorBrush(Color.Parse("#16233D")), BorderBrush = new SolidColorBrush(Color.Parse("#D8CBA6")) };
         ok.Click += (_, _) =>
         {
-            if (string.IsNullOrWhiteSpace(numBox.Text)) return;
-            RoomNumber = numBox.Text.Trim();
+            if (roomCombo.SelectedIndex < 0 || roomCombo.SelectedIndex >= rooms.Count) return;
+            RoomNumber = rooms[roomCombo.SelectedIndex].Number.Replace("اتاق ", "").Trim();
             NewStatus = Statuses[Math.Max(0, combo.SelectedIndex)].Code;
             Close(true);
         };
