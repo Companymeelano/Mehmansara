@@ -254,6 +254,8 @@ public partial class ApiClient
         PostAsync<AppUserDto>("/api/v1/users", new { fullName, username, password, roleTitle, phone });
     public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
         PostAsync<NotificationDto>("/api/v1/notifications", new { title, body, severity });
+    public Task<Result<string>> CreateBackupAsync() => Task.FromResult(Result<string>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<string>> RestoreLatestBackupAsync() => Task.FromResult(Result<string>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
 }
 
 
@@ -379,6 +381,8 @@ public partial class DemoApi
         Task.FromResult(Result<AppUserDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
     public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
         Task.FromResult(Result<NotificationDto>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<string>> CreateBackupAsync() => Task.FromResult(Result<string>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
+    public Task<Result<string>> RestoreLatestBackupAsync() => Task.FromResult(Result<string>.Fail("نسخهٔ نمایشی فقط‌خواندنی است."));
 
     public Task<Result<ReportDto>> ReportAsync(string key, string fromIso, string toIso) => Task.FromResult(Result<ReportDto>.Good(new ReportDto
     {

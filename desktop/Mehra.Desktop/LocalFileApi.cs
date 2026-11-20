@@ -967,4 +967,43 @@ public class LocalFileApi : IHotelApi
             return Task.FromResult(Result<NotificationDto>.Good(n));
         }
     }
+
+    public Task<Result<string>> CreateBackupAsync()
+    {
+        lock (Gate)
+        {
+            var dir = Path.Combine(Path.GetDirectoryName(LocalStore.FilePath())!, "Backups");
+            Directory.CreateDirectory(dir);
+            var file = Path.Combine(dir, $"zarrinsara-backup-{DateTime.Now:yyyyMMdd-HHmmss}.json");
+            File.Copy(LocalStore.FilePath(), file, true);
+            return Task.FromResult(Result<string>.Good("پشتیبان ذخیره شد: " + Path.GetFileName(file)));
+        }
+    }
+
+    public Task<Result<string>> RestoreLatestBackupAsync()
+    {
+        lock (Gate)
+        {
+            var dir = Path.Combine(Path.GetDirectoryName(LocalStore.FilePath())!, "Backups");
+            if (!Directory.Exists(dir))
+                return Task.FromResult(Result<string>.Fail("هیچ فایل پشتیبانی یافت نشد."));
+            var latest = new DirectoryInfo(dir).GetFiles("zarrinsara-backup-*.json")
+                .OrderByDescending(f => f.LastWriteTimeUtc).FirstOrDefault();
+            if (latest is null)
+                return Task.FromResult(Result<string>.Fail("هیچ فایل پشتیبانی یافت نشد."));
+            File.Copy(latest.FullName, LocalStore.FilePath(), true);
+            var loaded = LocalStore.Load();
+            _store.Users = loaded.Users;
+            _store.Rooms = loaded.Rooms;
+            _store.Guests = loaded.Guests;
+            _store.Reservations = loaded.Reservations;
+            _store.Stays = loaded.Stays;
+            _store.Transactions = loaded.Transactions;
+            _store.Housekeeping = loaded.Housekeeping;
+            _store.Maintenance = loaded.Maintenance;
+            _store.Notifications = loaded.Notifications;
+            _store.BankAccounts = loaded.BankAccounts;
+            return Task.FromResult(Result<string>.Good("بازیابی انجام شد: " + latest.Name));
+        }
+    }
 }

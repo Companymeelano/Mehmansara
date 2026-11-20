@@ -12,7 +12,11 @@
         <TextBlock Text="{Binding Health}" Foreground="#2E7D5B" TextWrapping="Wrap" />
         <Button Classes="primary" Content="راه‌اندازی/به‌روزرسانی جداول پایگاه داده (SQL Server)" Click="OnEnsureSchema" HorizontalAlignment="Right" IsVisible="{Binding IsSql}" />
         <TextBlock Text="{Binding SchemaStatus}" Foreground="#5A6474" TextWrapping="Wrap" />
-        <Button Classes="danger" Content="پاک‌سازی کامل داده‌های فعلی (مهمانان، رزروها، مالی)" Click="OnResetData" HorizontalAlignment="Right" IsVisible="{Binding IsLocal}" />
+        <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsLocal}">
+          <Button Classes="primary" Content="💾 ذخیرهٔ پشتیبان" Click="OnBackup" />
+          <Button Classes="ghost" Foreground="#16233D" BorderBrush="#D8CBA6" Content="♻ بازیابی آخرین پشتیبان" Click="OnRestore" />
+          <Button Classes="danger" Content="پاک‌سازی کامل داده‌ها" Click="OnResetData" />
+        </StackPanel>
         <TextBlock Text="{Binding ResetStatus}" Foreground="#2E7D5B" TextWrapping="Wrap" />
       </StackPanel>
     </Border>

@@ -20,7 +20,7 @@ public partial class MainWindow : Window
             var lan = LanServer.Start(localApi);
             if (lan != null)
                 this.FindControl<TextBlock>("StatusText")!.Text =
-                    "سرور شبکهٔ محلی (برای اپ اندروید): " + lan.LanUrl + "   —   داده‌ها: " + localApi.DataFile;
+                    "● سرور شبکهٔ محلی فعال (اندروید): " + lan.LanUrl + "   —   داده‌ها: " + localApi.DataFile;
         }
         var nav = this.FindControl<ListBox>("NavList")!;
         nav.SelectedIndex = 0;

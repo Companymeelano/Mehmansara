@@ -59,6 +59,8 @@ public interface IHotelApi
     Task<Result<bool>> SetHousekeepingStatusAsync(string id, string status);
     Task<Result<AppUserDto>> AddUserAsync(string fullName, string username, string password, string roleTitle, string? phone);
     Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity);
+    Task<Result<string>> CreateBackupAsync();
+    Task<Result<string>> RestoreLatestBackupAsync();
 }
 
 public static class Json

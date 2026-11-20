@@ -22,6 +22,17 @@ public partial class SettingsPage : UserControl
     private async void OnEnsureSchema(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
         await _vm.EnsureSchemaAsync();
 
+    private async void OnBackup(object? sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+        await _vm.CreateBackupAsync();
+
+    private async void OnRestore(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this) is not Window win) return;
+        var c = new ConfirmDialog("بازیابی پشتیبان", "داده‌های فعلی با آخرین نسخهٔ پشتیبان جایگزین می‌شوند. ادامه می‌دهید؟", "بازیابی");
+        if (await c.ShowDialog<bool?>(win) == true)
+            await _vm.RestoreBackupAsync();
+    }
+
     private async void OnResetData(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (TopLevel.GetTopLevel(this) is not Window win) return;

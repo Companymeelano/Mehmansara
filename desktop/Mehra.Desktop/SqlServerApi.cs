@@ -701,4 +701,6 @@ public class SqlServerApi : IHotelApi
         Task.FromResult(Result<AppUserDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
     public Task<Result<NotificationDto>> AddNotificationAsync(string title, string body, string severity) =>
         Task.FromResult(Result<NotificationDto>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<string>> CreateBackupAsync() => Task.FromResult(Result<string>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
+    public Task<Result<string>> RestoreLatestBackupAsync() => Task.FromResult(Result<string>.Fail("فقط در حالت فایل محلی پشتیبانی می‌شود."));
 }

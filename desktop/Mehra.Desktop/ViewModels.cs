@@ -63,6 +63,18 @@ public class HomeVm : VmBase
         Add("نظافت / تعمیر", Fa.Num(d.CleaningRooms + d.MaintenanceRooms), Fa.Num(d.CleaningRooms) + " نظافت، " + Fa.Num(d.MaintenanceRooms) + " تعمیر", red);
         Add("تعداد مهمان‌ها", Fa.Num(guestCount), "کل مهمانان ثبت‌شده", green);
         Alerts.Clear();
+        var staysRes = await _session.Api.StaysAsync();
+        var todayIso = DateTime.Today.ToString("yyyy-MM-dd");
+        if (staysRes.Ok && staysRes.Value != null)
+        {
+            foreach (var st in staysRes.Value.Where(x => x.Status == "IN_HOUSE" && x.PlannedCheckOut == todayIso))
+                Alerts.Add(new AlertItem
+                {
+                    Title = "یادآور خروج امروز — اتاق " + Fa.Digits(st.RoomNumber ?? ""),
+                    Message = "مهمان: " + (st.GuestName ?? "") + " (ساعت تخلیه ۱۲:۰۰)",
+                    Accent = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#B08D3E"))
+                });
+        }
         foreach (var a in d.Alerts ?? new List<DashboardAlertDto>())
             Alerts.Add(new AlertItem { Title = a.Title ?? "", Message = a.Message ?? "", Accent = StatusText.SeverityBrush(a.Severity) });
         Activities.Clear();
@@ -317,6 +329,18 @@ public class SettingsVm : VmBase
         }
         var r = await SqlServerApi.EnsureSchemaAsync(sql.MasterConnectionString, path, sql.Database);
         SchemaStatus = r.Ok ? r.Value! : r.Error;
+    }
+
+    public async Task CreateBackupAsync()
+    {
+        var r = await _session.Api.CreateBackupAsync();
+        ResetStatus = r.Ok ? r.Value! : r.Error;
+    }
+
+    public async Task RestoreBackupAsync()
+    {
+        var r = await _session.Api.RestoreLatestBackupAsync();
+        ResetStatus = r.Ok ? r.Value! : r.Error;
     }
 
     public async Task ResetDataAsync()
