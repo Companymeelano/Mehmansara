@@ -172,9 +172,9 @@ public class GuestsVm : VmBase
 
     public async Task LoadAsync()
     {
+        _allItems.Clear();
         var r = await _session.Api.GuestsAsync();
         if (!r.Ok) { Status = r.Error; return; }
-        _allItems.Clear();
         Items.Clear();
         foreach (var g in r.Value!)
         {
@@ -242,29 +242,6 @@ public class FinanceVm : VmBase
         var r = await _session.Api.DeleteBankAccountAsync(id);
         Status = r.Ok ? "حساب بانکی حذف شد." : r.Error;
         await LoadAsync();
-    }
-
-    public void ApplyFilter(string query)
-    {
-        var q = (query ?? "").Trim();
-        Items.Clear();
-        foreach (var g in _allItems)
-        {
-            if (string.IsNullOrEmpty(q) ||
-                g.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawPhone.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawCity.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.NationalCode.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.IdNumber.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.FatherName.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehicleType.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehiclePlate.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.GuestCategory.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.Notes.Contains(q, StringComparison.OrdinalIgnoreCase))
-            {
-                Items.Add(g);
-            }
-        }
     }
 
     public async Task LoadAsync()
@@ -343,29 +320,6 @@ public class HousekeepingVm : VmBase
         await LoadAsync();
     }
 
-    public void ApplyFilter(string query)
-    {
-        var q = (query ?? "").Trim();
-        Items.Clear();
-        foreach (var g in _allItems)
-        {
-            if (string.IsNullOrEmpty(q) ||
-                g.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawPhone.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawCity.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.NationalCode.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.IdNumber.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.FatherName.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehicleType.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehiclePlate.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.GuestCategory.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.Notes.Contains(q, StringComparison.OrdinalIgnoreCase))
-            {
-                Items.Add(g);
-            }
-        }
-    }
-
     public async Task LoadAsync()
     {
         var r = await _session.Api.HousekeepingAsync();
@@ -434,29 +388,6 @@ public class UsersVm : VmBase
         await LoadAsync();
     }
 
-    public void ApplyFilter(string query)
-    {
-        var q = (query ?? "").Trim();
-        Items.Clear();
-        foreach (var g in _allItems)
-        {
-            if (string.IsNullOrEmpty(q) ||
-                g.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawPhone.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawCity.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.NationalCode.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.IdNumber.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.FatherName.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehicleType.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehiclePlate.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.GuestCategory.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.Notes.Contains(q, StringComparison.OrdinalIgnoreCase))
-            {
-                Items.Add(g);
-            }
-        }
-    }
-
     public async Task LoadAsync()
     {
         var r = await _session.Api.UsersAsync();
@@ -490,29 +421,6 @@ public class NotificationsVm : VmBase
     public string Status { get => _status; set => Set(ref _status, value); }
 
     public NotificationsVm(Session session) { _session = session; _ = LoadAsync(); }
-
-    public void ApplyFilter(string query)
-    {
-        var q = (query ?? "").Trim();
-        Items.Clear();
-        foreach (var g in _allItems)
-        {
-            if (string.IsNullOrEmpty(q) ||
-                g.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawPhone.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.RawCity.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.NationalCode.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.IdNumber.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.FatherName.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehicleType.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.VehiclePlate.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.GuestCategory.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                g.Notes.Contains(q, StringComparison.OrdinalIgnoreCase))
-            {
-                Items.Add(g);
-            }
-        }
-    }
 
     public async Task LoadAsync()
     {
