@@ -4,7 +4,10 @@
   <StackPanel Spacing="12">
     <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
       <TextBlock Text="اتاق‌ها" FontSize="22" Classes="bold" />
-      <Button Grid.Column="1" Content="تغییر وضعیت اتاق" Classes="ghost" Click="OnStatus" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+        <Button Content="+ افزودن اتاق" Classes="primary" Click="OnAddRoom" />
+        <Button Content="تغییر وضعیت اتاق" Classes="ghost" Foreground="#16233D" BorderBrush="#D8CBA6" Click="OnStatus" />
+      </StackPanel>
     </Grid>
     <ItemsControl ItemsSource="{Binding Rooms}">
       <ItemsControl.ItemsPanel>
@@ -14,7 +17,7 @@
       </ItemsControl.ItemsPanel>
       <ItemsControl.ItemTemplate>
         <DataTemplate>
-          <Border Classes="card" Width="225" Margin="6">
+          <Border Classes="card" Width="250" Margin="6">
             <StackPanel Spacing="5">
               <Grid ColumnDefinitions="*,Auto">
                 <TextBlock Grid.Column="0" Text="{Binding Number}" FontSize="19" Classes="bold" />
@@ -24,8 +27,10 @@
               </Grid>
               <TextBlock Text="{Binding TypeName}" Foreground="#5A6474" FontSize="12" />
               <TextBlock Text="{Binding Details}" FontSize="11" Foreground="#8A93A3" />
-              <TextBlock Text="{Binding RateFa}" FontSize="12" />
+              <TextBlock Text="{Binding Amenities}" FontSize="11" Foreground="#5A6474" TextWrapping="Wrap" />
+              <TextBlock Text="{Binding RateFa}" FontSize="12" Classes="bold" />
               <TextBlock Text="{Binding GuestName}" FontSize="11" Foreground="#8A93A3" />
+              <Button Classes="icon" Content="✎ ویرایش اتاق" HorizontalAlignment="Left" Tag="{Binding}" Click="OnEditRoom" />
             </StackPanel>
           </Border>
         </DataTemplate>

@@ -1,12 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
+using Avalonia.Media;
 
 namespace Mehra.Desktop.Views;
 
 /// <summary>
-/// Simple code-built input dialog (v1.2.1 write forms): title + a list of labeled text fields
-/// + OK/انصراف. Returns the entered values via <see cref="Values"/> when the dialog closes with OK.
+/// Responsive code-built input dialog (v1.2.4): 1-column for <= 6 fields, 2-column grid for > 6 fields,
+/// wrapped in a ScrollViewer with MaxHeight=520 and OK/Cancel pinned at the bottom so large forms
+/// (like full guest registration) never overflow the screen.
 /// </summary>
 public class InputDialog : Window
 {
@@ -15,25 +18,67 @@ public class InputDialog : Window
     public InputDialog(string title, params (string Label, string Default)[] fields)
     {
         Title = title;
-        Width = 420;
+        Width = fields.Length > 6 ? 740 : 440;
         SizeToContent = SizeToContent.Height;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
         CanResize = false;
 
-        var panel = new StackPanel { Margin = new Thickness(20), Spacing = 10 };
-        var boxes = new List<TextBox>();
-        foreach (var (label, def) in fields)
+        var root = new StackPanel { Margin = new Thickness(20), Spacing = 14 };
+        root.Children.Add(new TextBlock
         {
-            panel.Children.Add(new TextBlock { Text = label, FontWeight = Avalonia.Media.FontWeight.Bold });
-            var tb = new TextBox { Text = def ?? "", HorizontalAlignment = HorizontalAlignment.Stretch };
-            boxes.Add(tb);
-            panel.Children.Add(tb);
+            Text = title,
+            FontSize = 16,
+            Classes = { "bold" },
+            Foreground = new SolidColorBrush(Color.Parse("#16233D"))
+        });
+
+        var boxes = new List<TextBox>();
+        Control fieldsContainer;
+        if (fields.Length > 6)
+        {
+            var grid = new UniformGrid { Columns = 2 };
+            foreach (var (label, def) in fields)
+            {
+                var cell = new StackPanel { Margin = new Thickness(6, 4), Spacing = 4 };
+                cell.Children.Add(new TextBlock { Text = label, FontWeight = FontWeight.Bold, FontSize = 12 });
+                var tb = new TextBox { Text = def ?? "", HorizontalAlignment = HorizontalAlignment.Stretch };
+                boxes.Add(tb);
+                cell.Children.Add(tb);
+                grid.Children.Add(cell);
+            }
+            fieldsContainer = grid;
         }
-        var err = new TextBlock { Foreground = Avalonia.Media.Brushes.Red, IsVisible = false, TextWrapping = Avalonia.Media.TextWrapping.Wrap };
-        panel.Children.Add(err);
+        else
+        {
+            var stack = new StackPanel { Spacing = 8 };
+            foreach (var (label, def) in fields)
+            {
+                stack.Children.Add(new TextBlock { Text = label, FontWeight = FontWeight.Bold, FontSize = 12.5 });
+                var tb = new TextBox { Text = def ?? "", HorizontalAlignment = HorizontalAlignment.Stretch };
+                boxes.Add(tb);
+                stack.Children.Add(tb);
+            }
+            fieldsContainer = stack;
+        }
+
+        root.Children.Add(new ScrollViewer
+        {
+            MaxHeight = 520,
+            Content = fieldsContainer
+        });
+
+        var err = new TextBlock { Foreground = Brushes.Red, IsVisible = false, TextWrapping = TextWrapping.Wrap };
+        root.Children.Add(err);
+
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, HorizontalAlignment = HorizontalAlignment.Left };
         var ok = new Button { Content = "تأیید", Classes = { "primary" } };
-        var cancel = new Button { Content = "انصراف", Classes = { "ghost" } };
+        var cancel = new Button
+        {
+            Content = "انصراف",
+            Classes = { "ghost" },
+            Foreground = new SolidColorBrush(Color.Parse("#16233D")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#D8CBA6"))
+        };
         ok.Click += (_, _) =>
         {
             if (Required != null && boxes.Zip(Required).Any(p => string.IsNullOrWhiteSpace(p.First.Text) && p.Second))
@@ -49,12 +94,14 @@ public class InputDialog : Window
         cancel.Click += (_, _) => Close(false);
         buttons.Children.Add(ok);
         buttons.Children.Add(cancel);
-        panel.Children.Add(buttons);
+        root.Children.Add(buttons);
 
         Content = new Border
         {
-            Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#F6EFE0")),
-            Child = panel
+            Background = new SolidColorBrush(Color.Parse("#F7F3E9")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#C9A24B")),
+            BorderThickness = new Thickness(1),
+            Child = root
         };
     }
 
