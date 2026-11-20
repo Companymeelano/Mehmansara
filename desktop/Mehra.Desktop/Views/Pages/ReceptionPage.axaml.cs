@@ -117,7 +117,8 @@ public partial class ReceptionPage : UserControl
         BackBtn.IsVisible = true;
     }
 
-    private void OnRoomFilterChanged(object? sender, EventArgs e) => ApplyRoomFilters();
+    private void OnRoomSearchChanged(object? sender, TextChangedEventArgs e) => ApplyRoomFilters();
+    private void OnRoomComboChanged(object? sender, SelectionChangedEventArgs e) => ApplyRoomFilters();
 
     private void ApplyRoomFilters()
     {
