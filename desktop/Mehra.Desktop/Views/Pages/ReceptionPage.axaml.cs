@@ -288,7 +288,7 @@ public partial class ReceptionPage : UserControl
             res.Value.Code ?? "—", _selectedGuest.Name, _selectedGuest.PhoneFa, _selectedRoom.Number,
             Fa.Date(today), Fa.Date(checkOut), _guestsCount, _nights,
             Fa.Money(_finalTotalRial), Fa.Money(_finalTotalRial), Fa.Money(0), note,
-            _baseTotalRial, _discountRial);
+            _baseTotalRial, Math.Max(0, _baseTotalRial - _finalTotalRial));
 
         WizardStatus.Text = $"✓ اقامت {_selectedGuest.Name} در {_selectedRoom.Number} ثبت و فاکتور صادر شد.";
         Step1Panel.IsVisible = true;

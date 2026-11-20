@@ -23,7 +23,7 @@ public partial class MainWindow : Window
                     "● سرور شبکهٔ محلی فعال (اندروید): " + lan.LanUrl + "   —   داده‌ها: " + localApi.DataFile;
         }
         var nav = this.FindControl<ListBox>("NavList")!;
-        var allowed = UserPermissionsStore.GetAllowedPages(session.User.Username, session.User.RoleCode);
+        var allowed = UserPermissionsStore.GetAllowedPages(session.User.Username, session.User.RoleTitle);
         foreach (var obj in nav.Items)
         {
             if (obj is ListBoxItem li && li.Tag is string tag)
