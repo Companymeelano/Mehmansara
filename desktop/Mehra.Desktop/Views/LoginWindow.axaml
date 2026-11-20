@@ -14,29 +14,31 @@
       <TextBlock Text="www.meelano.ir — ۰۹۱۲۰۲۱۹۵۹۳" Foreground="#E8D6AE" FontSize="11" HorizontalAlignment="Center" />
       <Border Classes="card" Margin="0,10,0,0">
         <StackPanel Spacing="8">
-          <TextBlock Text="منبع داده" Classes="bold" />
-          <ComboBox x:Name="ModeCombo" HorizontalAlignment="Stretch" SelectionChanged="OnModeChanged">
-            <ComboBoxItem Content="فایل محلی — بدون سرور (پیش‌فرض)" Tag="local" />
-            <ComboBoxItem Content="نسخهٔ نمایشی (آفلاین — دادهٔ نمونه)" Tag="demo" />
-            <ComboBoxItem Content="سرور وب (API)" Tag="api" />
-            <ComboBoxItem Content="SQL Server (پایگاه دادهٔ مستقیم)" Tag="sql" />
-          </ComboBox>
-          <StackPanel x:Name="ApiPanel" Spacing="8" IsVisible="False">
-            <TextBlock Text="نشانی سرور" Classes="bold" />
-            <TextBox x:Name="ServerBox" Watermark="مثال: https://mehra.example.ir" />
-          </StackPanel>
-          <StackPanel x:Name="SqlPanel" Spacing="8" IsVisible="False">
-            <TextBlock Text="سرور SQL Server" Classes="bold" />
-            <TextBox x:Name="SqlServerBox" Watermark="مثال: .\SQLEXPRESS یا (localdb)\MSSQLLocalDB" />
-            <TextBlock Text="نام پایگاه داده" Classes="bold" />
-            <TextBox x:Name="SqlDbBox" />
-            <ComboBox x:Name="SqlAuthCombo" HorizontalAlignment="Stretch" SelectionChanged="OnSqlAuthChanged">
-              <ComboBoxItem Content="احراز هویت ویندوز (Windows Authentication)" Tag="win" />
-              <ComboBoxItem Content="نام کاربری و رمز SQL Server" Tag="sql" />
+          <StackPanel x:Name="ConnectionSettingsPanel" Spacing="8" IsVisible="False">
+            <TextBlock Text="منبع داده" Classes="bold" />
+            <ComboBox x:Name="ModeCombo" HorizontalAlignment="Stretch" SelectionChanged="OnModeChanged">
+              <ComboBoxItem Content="فایل محلی — بدون سرور (پیش‌فرض)" Tag="local" />
+              <ComboBoxItem Content="نسخهٔ نمایشی (آفلاین — دادهٔ نمونه)" Tag="demo" />
+              <ComboBoxItem Content="سرور وب (API)" Tag="api" />
+              <ComboBoxItem Content="SQL Server (پایگاه دادهٔ مستقیم)" Tag="sql" />
             </ComboBox>
-            <StackPanel x:Name="SqlCredPanel" Spacing="8" IsVisible="False">
-              <TextBox x:Name="SqlUserBox" Watermark="نام کاربری SQL (مثلاً sa)" />
-              <TextBox x:Name="SqlPassBox" PasswordChar="•" Watermark="رمز عبور SQL" />
+            <StackPanel x:Name="ApiPanel" Spacing="8" IsVisible="False">
+              <TextBlock Text="نشانی سرور" Classes="bold" />
+              <TextBox x:Name="ServerBox" Watermark="مثال: https://mehra.example.ir" />
+            </StackPanel>
+            <StackPanel x:Name="SqlPanel" Spacing="8" IsVisible="False">
+              <TextBlock Text="سرور SQL Server" Classes="bold" />
+              <TextBox x:Name="SqlServerBox" Watermark="مثال: .\SQLEXPRESS یا (localdb)\MSSQLLocalDB" />
+              <TextBlock Text="نام پایگاه داده" Classes="bold" />
+              <TextBox x:Name="SqlDbBox" />
+              <ComboBox x:Name="SqlAuthCombo" HorizontalAlignment="Stretch" SelectionChanged="OnSqlAuthChanged">
+                <ComboBoxItem Content="احراز هویت ویندوز (Windows Authentication)" Tag="win" />
+                <ComboBoxItem Content="نام کاربری و رمز SQL Server" Tag="sql" />
+              </ComboBox>
+              <StackPanel x:Name="SqlCredPanel" Spacing="8" IsVisible="False">
+                <TextBox x:Name="SqlUserBox" Watermark="نام کاربری SQL (مثلاً sa)" />
+                <TextBox x:Name="SqlPassBox" PasswordChar="•" Watermark="رمز عبور SQL" />
+              </StackPanel>
             </StackPanel>
           </StackPanel>
           <TextBlock Text="نام کاربری" Classes="bold" />

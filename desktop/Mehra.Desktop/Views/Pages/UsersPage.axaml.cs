@@ -15,10 +15,11 @@ public partial class UsersPage : UserControl
     private async void OnAdd(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (TopLevel.GetTopLevel(this) is not Window win) return;
-        var dlg = new InputDialog("افزودن کاربر جدید",
-            ("نام و نام خانوادگی", ""), ("نام کاربری (انگلیسی)", ""), ("رمز عبور", ""), ("سمت (مثلاً پذیرش)", "پذیرش"), ("تلفن", ""));
-        dlg.Required = new[] { true, true, true, false, false };
+        var dlg = new UserDialog();
         if (await dlg.ShowDialog<bool?>(win) == true)
-            await _vm.AddUserAsync(dlg.Values["نام و نام خانوادگی"], dlg.Values["نام کاربری (انگلیسی)"], dlg.Values["رمز عبور"], dlg.Values["سمت (مثلاً پذیرش)"], dlg.Values["تلفن"]);
+        {
+            UserPermissionsStore.SaveUserPermissions(dlg.Username, dlg.AllowedPages);
+            await _vm.AddUserAsync(dlg.FullName, dlg.Username, dlg.Password, dlg.RoleTitle, dlg.Phone);
+        }
     }
 }

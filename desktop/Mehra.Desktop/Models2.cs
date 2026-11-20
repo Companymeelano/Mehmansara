@@ -120,6 +120,7 @@ public class AppUserDto
     [JsonPropertyName("phone")] public string? Phone { get; set; }
     [JsonPropertyName("isActive")] public bool? IsActive { get; set; }
     [JsonPropertyName("lastLoginAtUtc")] public string? LastLoginAtUtc { get; set; }
+    [JsonPropertyName("allowedPages")] public List<string>? AllowedPages { get; set; }
 }
 
 public class NotificationDto

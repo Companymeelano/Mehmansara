@@ -287,7 +287,8 @@ public partial class ReceptionPage : UserControl
         ReceiptPrinter.PrintInvoice(
             res.Value.Code ?? "—", _selectedGuest.Name, _selectedGuest.PhoneFa, _selectedRoom.Number,
             Fa.Date(today), Fa.Date(checkOut), _guestsCount, _nights,
-            Fa.Money(_finalTotalRial), Fa.Money(_finalTotalRial), Fa.Money(0), note);
+            Fa.Money(_finalTotalRial), Fa.Money(_finalTotalRial), Fa.Money(0), note,
+            _baseTotalRial, _discountRial);
 
         WizardStatus.Text = $"✓ اقامت {_selectedGuest.Name} در {_selectedRoom.Number} ثبت و فاکتور صادر شد.";
         Step1Panel.IsVisible = true;
