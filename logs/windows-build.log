@@ -1,5 +1,5 @@
   Determining projects to restore...
-  Restored D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj (in 13.59 sec).
+  Restored D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj (in 16.51 sec).
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(221,24): warning CS0618: 'SqlConnection' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(228,104): warning CS0618: 'SqlDataReader' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(244,29): warning CS0618: 'SqlDataReader' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
@@ -21,8 +21,8 @@ D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(204,16): warnin
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(223,23): warning CS0618: 'SqlConnection' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(232,39): warning CS0618: 'SqlConnection' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(234,39): warning CS0618: 'SqlCommand' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
-D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(287,39): warning CS0618: 'SqlCommand' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\QrCode.cs(293,28): warning CS8600: Converting null literal or possible null value to non-nullable type. [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
+D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(287,39): warning CS0618: 'SqlCommand' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(308,39): warning CS0618: 'SqlCommand' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(323,40): warning CS0618: 'SqlCommand' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
 D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\SqlServerApi.cs(325,40): warning CS0618: 'SqlCommand' is obsolete: 'Use the Microsoft.Data.SqlClient package instead.' [D:\a\Mehmansara\Mehmansara\desktop\Mehra.Desktop\Mehra.Desktop.csproj]
