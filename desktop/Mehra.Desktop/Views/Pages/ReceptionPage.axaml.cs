@@ -290,6 +290,8 @@ public partial class ReceptionPage : UserControl
             Fa.Money(_finalTotalRial), Fa.Money(_finalTotalRial), Fa.Money(0), note,
             _baseTotalRial, Math.Max(0, _baseTotalRial - _finalTotalRial));
 
+        _ = SmsService.SendWelcomeSmsAsync(_selectedGuest.PhoneFa, _selectedGuest.Name, _selectedRoom.Number, res.Value.Code ?? "—", Fa.Date(checkOut));
+
         WizardStatus.Text = $"✓ اقامت {_selectedGuest.Name} در {_selectedRoom.Number} ثبت و فاکتور صادر شد.";
         Step1Panel.IsVisible = true;
         Step2Panel.IsVisible = false;

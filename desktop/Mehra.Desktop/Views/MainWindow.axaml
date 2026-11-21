@@ -41,6 +41,7 @@
             <Border Height="1" Background="#2E4166" Margin="0,0,0,4" />
             <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" FontSize="13.5" />
             <TextBlock x:Name="RoleText" Foreground="#9AA6B8" FontSize="11" />
+            <Button Classes="ghost" Content="🔒 قفل صفحه" Click="OnLockScreen" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="خروج از حساب" Click="OnLogout" HorizontalAlignment="Stretch" />
           </StackPanel>
         </Grid>

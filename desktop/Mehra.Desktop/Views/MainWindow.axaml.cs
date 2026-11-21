@@ -64,6 +64,12 @@ public partial class MainWindow : Window
         }
     }
 
+    private async void OnLockScreen(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var lockWin = new LockScreenWindow(_session);
+        await lockWin.ShowDialog(this);
+    }
+
     private void OnLogout(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         new LoginWindow().Show();
