@@ -24,12 +24,20 @@ public partial class MainWindow : Window
         }
         var nav = this.FindControl<ListBox>("NavList")!;
         var allowed = UserPermissionsStore.GetAllowedPages(session.User.Username, session.User.RoleTitle);
+        ListBoxItem? firstVisible = null;
         foreach (var obj in nav.Items)
         {
             if (obj is ListBoxItem li && li.Tag is string tag)
+            {
                 li.IsVisible = allowed.Contains(tag);
+                if (li.IsVisible && firstVisible == null) firstVisible = li;
+            }
         }
-        nav.SelectedIndex = 0;
+        if (firstVisible != null) nav.SelectedItem = firstVisible;
+        Closing += async (_, _) =>
+        {
+            try { await _session.Api.CreateBackupAsync(); } catch { }
+        };
     }
 
     private void OnNavChanged(object? sender, SelectionChangedEventArgs e)

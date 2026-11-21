@@ -33,6 +33,18 @@ public partial class LoginWindow : Window
         this.FindControl<StackPanel>("SqlPanel")!.IsVisible = m == "sql";
     }
 
+    private void OnToggleConnection(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var panel = this.FindControl<StackPanel>("ConnectionSettingsPanel");
+        if (panel != null) panel.IsVisible = !panel.IsVisible;
+    }
+
+    private void OnInputKeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+    {
+        if (e.Key == Avalonia.Input.Key.Enter)
+            OnLogin(sender, new Avalonia.Interactivity.RoutedEventArgs());
+    }
+
     private async void OnLogin(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var user = this.FindControl<TextBox>("UserBox")!.Text ?? "";

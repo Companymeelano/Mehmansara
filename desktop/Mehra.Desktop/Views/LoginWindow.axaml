@@ -42,11 +42,12 @@
             </StackPanel>
           </StackPanel>
           <TextBlock Text="نام کاربری" Classes="bold" />
-          <TextBox x:Name="UserBox" Watermark="نام کاربری" />
+          <TextBox x:Name="UserBox" Watermark="نام کاربری" KeyDown="OnInputKeyDown" />
           <TextBlock Text="رمز عبور" Classes="bold" />
-          <TextBox x:Name="PassBox" PasswordChar="•" />
+          <TextBox x:Name="PassBox" PasswordChar="•" KeyDown="OnInputKeyDown" />
           <TextBlock x:Name="ErrorText" Foreground="#B3261E" TextWrapping="Wrap" IsVisible="False" />
           <Button Classes="primary" Content="ورود" Click="OnLogin" HorizontalAlignment="Stretch" Margin="0,4,0,0" />
+          <Button Classes="ghost" Content="⚙ تنظیمات اتصال (پیشرفته)" Click="OnToggleConnection" HorizontalAlignment="Center" FontSize="11" Foreground="#7A8494" Margin="0,2,0,0" />
         </StackPanel>
       </Border>
       <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی — www.meelano.ir — ۰۹۱۲۰۲۱۹۵۹۳" Foreground="#9AA6B8" FontSize="11" HorizontalAlignment="Center" Margin="0,6,0,0" TextWrapping="Wrap" TextAlignment="Center" />
