@@ -21,7 +21,26 @@ public partial class ReceptionPage : UserControl
     {
         InitializeComponent();
         _session = session;
+        var banks = BankAccountsStore.Load();
+        foreach (var b in banks)
+            BankAccountCombo.Items.Add(new ComboBoxItem { Content = b.ToString(), Tag = b.CardNumber });
+        if (BankAccountCombo.Items.Count > 0) BankAccountCombo.SelectedIndex = 0;
         _ = LoadGuestsAsync();
+    }
+
+    private void OnBankAccountChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (BankAccountCombo.SelectedItem is ComboBoxItem item && item.Tag is string card && !string.IsNullOrWhiteSpace(card))
+            ManagerAcctBox.Text = card;
+    }
+
+    private void OnPayModeChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DepositPanel == null || PayModeCombo == null) return;
+        var tag = (PayModeCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "Full";
+        DepositPanel.IsVisible = tag == "Deposit";
+        if (tag == "Deposit")
+            DepositBox.Text = (_finalTotalRial / 2).ToString("N0");
     }
 
     private async Task LoadGuestsAsync()
@@ -284,11 +303,25 @@ public partial class ReceptionPage : UserControl
         }
 
         var note = string.Join(" | ", new[] { _selectedBedsNote, PayNoteBox.Text }.Where(x => !string.IsNullOrWhiteSpace(x)));
+        var payModeTag = (PayModeCombo?.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "Full";
+        long depositRial = 0;
+        long paidRial = _finalTotalRial;
+        if (payModeTag == "Deposit")
+        {
+            long.TryParse((DepositBox?.Text ?? "0").Replace(",", "").Trim(), out depositRial);
+            paidRial = depositRial;
+        }
+        else if (payModeTag == "Debt")
+        {
+            paidRial = 0;
+        }
+        long remainingRial = Math.Max(0, _finalTotalRial - paidRial);
+
         ReceiptPrinter.PrintInvoice(
             res.Value.Code ?? "—", _selectedGuest.Name, _selectedGuest.PhoneFa, _selectedRoom.Number,
             Fa.Date(today), Fa.Date(checkOut), _guestsCount, _nights,
-            Fa.Money(_finalTotalRial), Fa.Money(_finalTotalRial), Fa.Money(0), note,
-            _baseTotalRial, Math.Max(0, _baseTotalRial - _finalTotalRial));
+            Fa.Money(_finalTotalRial), Fa.Money(paidRial), Fa.Money(remainingRial), note,
+            _baseTotalRial, Math.Max(0, _baseTotalRial - _finalTotalRial), depositRial);
 
         _ = SmsService.SendWelcomeSmsAsync(_selectedGuest.PhoneFa, _selectedGuest.Name, _selectedRoom.Number, res.Value.Code ?? "—", Fa.Date(checkOut));
 

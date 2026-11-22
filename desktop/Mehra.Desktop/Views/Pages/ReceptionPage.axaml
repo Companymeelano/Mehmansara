@@ -153,6 +153,18 @@
               <ComboBoxItem Content="💵 نقدی" />
               <ComboBoxItem Content="⚡ ترکیبی (نقد + پوز/کارت)" />
             </ComboBox>
+            <TextBlock Text="حالت تسویه" FontSize="12" Classes="bold" Margin="0,4,0,0" />
+            <ComboBox x:Name="PayModeCombo" HorizontalAlignment="Stretch" SelectedIndex="0" SelectionChanged="OnPayModeChanged">
+              <ComboBoxItem Content="✓ پرداخت کامل" Tag="Full" />
+              <ComboBoxItem Content="💰 بیعانه (۵۰٪ قابل ویرایش)" Tag="Deposit" />
+              <ComboBoxItem Content="⚠ مانده (بدهکار)" Tag="Debt" />
+            </ComboBox>
+            <StackPanel x:Name="DepositPanel" Spacing="4" IsVisible="False">
+              <TextBlock Text="مبلغ بیعانه (ریال)" FontSize="12" Classes="bold" />
+              <TextBox x:Name="DepositBox" Watermark="مبلغ بیعانه" />
+            </StackPanel>
+            <TextBlock Text="حساب بانکی پیش‌فرض" FontSize="12" Classes="bold" Margin="0,4,0,0" />
+            <ComboBox x:Name="BankAccountCombo" HorizontalAlignment="Stretch" SelectionChanged="OnBankAccountChanged" />
           </StackPanel>
           <StackPanel Grid.Column="2" Spacing="4">
             <TextBlock Text="حساب مدیر" FontSize="12" Classes="bold" />
