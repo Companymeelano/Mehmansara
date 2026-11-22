@@ -35,14 +35,6 @@ public partial class ReportsPage : UserControl
         var rangeTag = (RangeCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "all";
         var reportTag = (ReportCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "finance";
 
-        var txRes = await _session.Api.TransactionsAsync();
-        var resRes = await _session.Api.ReservationsAsync();
-        var roomRes = await _session.Api.RoomsAsync();
-
-        var txs = txRes.Value ?? new();
-        var stays = resRes.Value ?? new();
-        var rooms = roomRes.Value ?? new();
-
         var minDate = rangeTag switch
         {
             "today" => DateTime.Today,
@@ -51,11 +43,22 @@ public partial class ReportsPage : UserControl
             _ => DateTime.MinValue
         };
 
+        var fromIso = minDate == DateTime.MinValue ? "2020-01-01" : minDate.ToString("yyyy-MM-dd");
+        var toIso = DateTime.Today.AddDays(1).ToString("yyyy-MM-dd");
+
+        var txRes = await _session.Api.TransactionsAsync(fromIso, toIso);
+        var resRes = await _session.Api.ReservationsAsync();
+        var roomRes = await _session.Api.RoomsAsync();
+
+        var txs = txRes.Value ?? new();
+        var stays = resRes.Value ?? new();
+        var rooms = roomRes.Value ?? new();
+
         var filteredTxs = txs.Where(t =>
             DateTime.TryParse(t.OccurredAtUtc, out var dt) ? dt.Date >= minDate : true).ToList();
 
         long income = filteredTxs.Where(t => t.Type == "Receive").Sum(t => t.AmountRial);
-        long debt = stays.Where(s => (s.RemainingRial ?? 0) > 0).Sum(s => s.RemainingRial ?? 0);
+        long debt = stays.Sum(s => Math.Max(0, (s.TotalRial ?? 0) - (s.PaidRial ?? 0)));
         int occ = rooms.Count(r => string.Equals(r.Status, "Occupied", StringComparison.OrdinalIgnoreCase));
 
         TotalIncomeText.Text = Fa.Money(income);
@@ -65,11 +68,11 @@ public partial class ReportsPage : UserControl
 
         _currentRows = reportTag switch
         {
-            "debt" => stays.Where(s => (s.RemainingRial ?? 0) > 0).Select(s => new ReportRowItem
+            "debt" => stays.Where(s => ((s.TotalRial ?? 0) - (s.PaidRial ?? 0)) > 0).Select(s => new ReportRowItem
             {
                 Title = $"{s.GuestName} — اتاق {Fa.Digits(s.RoomNumber)}",
                 Subtitle = $"کد: {Fa.Digits(s.Code)} | ورود: {Fa.Date(s.CheckInDate)} | خروج: {Fa.Date(s.CheckOutDate)}",
-                Amount = $"بدهی: {Fa.Money(s.RemainingRial ?? 0)}"
+                Amount = $"بدهی: {Fa.Money(Math.Max(0, (s.TotalRial ?? 0) - (s.PaidRial ?? 0)))}"
             }).ToList(),
             "stays" => stays.Select(s => new ReportRowItem
             {
