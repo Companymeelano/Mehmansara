@@ -52,24 +52,23 @@ public static class ReceiptPrinter
 <meta charset=""utf-8"" />
 <title>فاکتور اقامت — فراسا ({WebUtility.HtmlEncode(codeFa)})</title>
 <style>
-  @page {{ size: A5 portrait; margin: 7mm; }}
-  * {{ box-sizing: border-box; }}
-  body {{ font-family: Vazirmatn, Tahoma, sans-serif; background: #fff; color: #111; margin: 0; padding: 10px; font-size: 11px; }}
-  .sheet {{ max-width: 148mm; margin: 0 auto; background: #fff; border: 2px solid #111; border-radius: 8px; padding: 14px; box-shadow: 4px 4px 0 #111; }}
-  .head {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 10px; }}
-  .brand-wrap {{ display: flex; align-items: center; gap: 8px; }}
-  .emblem {{ width: 34px; height: 34px; border: 2px solid #111; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; box-shadow: 2px 2px 0 #111; background: #f2f2f2; }}
-  .brand {{ font-size: 18px; font-weight: 900; color: #111; line-height: 1.2; }}
-  .sub {{ font-size: 10px; color: #333; font-weight: 600; }}
-  .meta {{ text-align: left; font-size: 10px; line-height: 1.7; }}
-  table {{ width: 100%; border-collapse: collapse; margin: 8px 0; }}
-  th, td {{ border: 1px solid #222; padding: 6px 8px; text-align: right; font-size: 11px; }}
-  th {{ background: #EFEFEF; color: #111; font-weight: 700; width: 24%; }}
-  .ltr {{ direction: ltr; unicode-bidi: embed; display: inline-block; font-weight: 700; }}
-  .rules {{ background: #F7F7F7; border: 1px solid #222; border-radius: 6px; padding: 8px 10px; font-size: 10px; line-height: 1.7; margin-top: 8px; }}
-  .foot {{ margin-top: 10px; padding-top: 8px; border-top: 1.5px dashed #111; font-size: 10px; color: #111; line-height: 1.7; }}
-  .company {{ text-align: center; margin-top: 6px; font-size: 9.5px; font-weight: 700; border-top: 1px solid #ccc; padding-top: 4px; }}
   @media print {{ body {{ padding: 0; }} .sheet {{ box-shadow: none; border-width: 1.5px; }} .no-print {{ display: none; }} }}
+  body {{ font-family: Vazirmatn, Tahoma, sans-serif; background: #F7F3E9; color: #111; margin: 0; padding: 24px; font-size: 13px; }}
+  .sheet {{ max-width: 720px; margin: 0 auto; background: #fff; border: 2px solid #111; border-radius: 12px; padding: 24px; box-shadow: 4px 4px 0 #111; }}
+  .head {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #111; padding-bottom: 12px; margin-bottom: 16px; }}
+  .brand-wrap {{ display: flex; align-items: center; gap: 10px; }}
+  .emblem {{ width: 40px; height: 40px; border: 2px solid #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; box-shadow: 2px 2px 0 #111; background: #f2f2f2; }}
+  .brand {{ font-size: 24px; font-weight: 900; color: #111; line-height: 1.2; }}
+  .sub {{ font-size: 11px; color: #333; font-weight: 600; }}
+  .meta {{ text-align: left; font-size: 12px; line-height: 1.8; }}
+  table {{ width: 100%; border-collapse: collapse; margin: 12px 0; }}
+  th, td {{ border: 1px solid #222; padding: 8px 10px; text-align: right; font-size: 12.5px; }}
+  th {{ background: #EFEFEF; color: #111; font-weight: 700; width: 22%; }}
+  .ltr {{ direction: ltr; unicode-bidi: bidi-override; display: inline-block; font-weight: 700; }}
+  .rules {{ background: #F7F7F7; border: 1px solid #222; border-radius: 8px; padding: 10px 14px; font-size: 11.5px; line-height: 1.8; margin-top: 12px; }}
+  .foot {{ margin-top: 14px; padding-top: 10px; border-top: 1.5px dashed #111; font-size: 11.5px; color: #111; line-height: 1.8; }}
+  .company {{ text-align: center; margin-top: 8px; font-size: 10.5px; font-weight: 700; border-top: 1px solid #ccc; padding-top: 6px; }}
+  .dev {{ text-align: center; margin-top: 4px; font-size: 9.5px; color: #555; letter-spacing: 0.2px; }}
 </style>
 </head>
 <body>
@@ -78,7 +77,7 @@ public static class ReceiptPrinter
     <div class=""brand-wrap"">
       <div class=""emblem"">◆</div>
       <div>
-        <div class=""brand"">فراسا</div>
+        <div class=""brand"">میلانو</div>
         <div class=""sub"">مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز — قبض رسمی اقامت</div>
       </div>
     </div>
@@ -104,10 +103,11 @@ public static class ReceiptPrinter
   <div class=""foot"">
     <div><strong>نشانی:</strong> اهواز ، فاز ۵ پادادشهر ، بلوار هاتف ، خیابان بشارت ۲ ( مرکز آموزش وفرهنگیان ناحیه ۳ )</div>
     <div><strong>تلفن تماس:</strong> <span class=""ltr"">۰۶۱۳۵۵۹۰۷۲۰</span></div>
-    <div class=""company"">مجری و پشتیبانی سامانه: شرکت نگین الماس برتر صیدون</div>
+    <div class=""company"">بهره‌بردار: شرکت نگین الماس برتر صیدون</div>
+    <div class=""dev"">طراحی و توسعه نرم‌افزار: مهندس میلاد یعقوبی‌نژاد  |  www.meelano.ir  |  <span class=""ltr"">۰۹۱۲۰۲۱۹۵۹۳</span></div>
   </div>
-  <div class=""no-print"" style=""margin-top:10px;text-align:left"">
-    <button onclick=""window.print()"" style=""background:#111;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-family:inherit"">چاپ فاکتور (A5)</button>
+  <div class=""no-print"" style=""margin-top:12px;text-align:left"">
+    <button onclick=""window.print()"" style=""background:#111;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-family:inherit"">چاپ فاکتور</button>
   </div>
 </div>
 </body>
