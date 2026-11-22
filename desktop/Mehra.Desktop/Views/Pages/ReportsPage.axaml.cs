@@ -54,8 +54,7 @@ public partial class ReportsPage : UserControl
         var stays = resRes.Value ?? new();
         var rooms = roomRes.Value ?? new();
 
-        var filteredTxs = txs.Where(t =>
-            DateTime.TryParse(t.OccurredAtUtc, out var dt) ? dt.Date >= minDate : true).ToList();
+        var filteredTxs = txs;
 
         long income = filteredTxs.Where(t => t.Type == "Receive").Sum(t => t.AmountRial);
         long debt = stays.Sum(s => Math.Max(0, (s.TotalRial ?? 0) - (s.PaidRial ?? 0)));
