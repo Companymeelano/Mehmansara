@@ -64,6 +64,36 @@ public partial class MainWindow : Window
         }
     }
 
+    private async void OnParking(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var list = ParkingService.Load();
+        var dlg = new InputDialog("ثبت خودرو در پارکینگ",
+            ("شماره پلاک", ""), ("نام مهمان", ""), ("شماره اتاق", ""));
+        if (await dlg.ShowDialog<bool?>(this) == true)
+        {
+            list.Insert(0, new ParkingRecord
+            {
+                Plate = dlg.Values["شماره پلاک"],
+                GuestName = dlg.Values["نام مهمان"],
+                RoomNumber = dlg.Values["شماره اتاق"]
+            });
+            ParkingService.Save(list);
+            this.FindControl<TextBlock>("StatusText")!.Text = $"✓ خودرو با پلاک {dlg.Values["شماره پلاک"]} در پارکینگ ثبت شد (تعداد کل: {Fa.Num(list.Count)}).";
+        }
+    }
+
+    private async void OnShiftHandover(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var dlg = new InputDialog("گزارش تحویل شیفت پذیرش",
+            ("موجودی صندوق نقدی (ریال)", "0"), ("جمع دستگاه پوز (ریال)", "0"), ("توضیحات شیفت", ""));
+        if (await dlg.ShowDialog<bool?>(this) == true)
+        {
+            long.TryParse(dlg.Values["موجودی صندوق نقدی (ریال)"].Replace(",", ""), out var cash);
+            long.TryParse(dlg.Values["جمع دستگاه پوز (ریال)"].Replace(",", ""), out var pos);
+            ShiftHandoverPrinter.PrintHandover(_session.User.FullName, cash, pos, dlg.Values["توضیحات شیفت"]);
+        }
+    }
+
     private async void OnLockScreen(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var lockWin = new LockScreenWindow(_session);

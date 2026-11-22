@@ -85,3 +85,50 @@ public static class ExportService
         return $"\"{s}\"";
     }
 }
+
+public class ParkingRecord
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString("N")[..8];
+    public string Plate { get; set; } = "";
+    public string GuestName { get; set; } = "";
+    public string RoomNumber { get; set; } = "";
+    public string EnteredAt { get; set; } = Fa.DateLong(DateTime.Today) + " " + DateTime.Now.ToString("HH:mm");
+}
+
+public static class ParkingService
+{
+    private static readonly string PathFile = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Mehra", "parking.json");
+
+    public static List<ParkingRecord> Load()
+    {
+        try { if (File.Exists(PathFile)) return JsonSerializer.Deserialize<List<ParkingRecord>>(File.ReadAllText(PathFile)) ?? new(); } catch { }
+        return new();
+    }
+
+    public static void Save(List<ParkingRecord> list)
+    {
+        try { Directory.CreateDirectory(Path.GetDirectoryName(PathFile)!); File.WriteAllText(PathFile, JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true })); } catch { }
+    }
+}
+
+public static class ShiftHandoverPrinter
+{
+    public static void PrintHandover(string operatorName, long cashRial, long posRial, string notes)
+    {
+        var html = $@"<!DOCTYPE html><html lang=""fa"" dir=""rtl""><head><meta charset=""utf-8"" /><title>گزارش تحویل شیفت — فراسا</title>
+<style>body{{font-family:Vazirmatn,Tahoma,sans-serif;background:#F7F3E9;color:#16233D;padding:24px}}.sheet{{max-width:640px;margin:0 auto;background:#fff;border:2px solid #C9A24B;border-radius:14px;padding:24px}}table{{width:100%;border-collapse:collapse;margin:14px 0}}th,td{{border:1px solid #E4D9BE;padding:10px;text-align:right}}th{{background:#F7F3E9}}</style></head>
+<body><div class=""sheet""><h2>گزارش تحویل شیفت پذیرش — فراسا</h2>
+<p><strong>تحویل‌دهنده:</strong> {System.Net.WebUtility.HtmlEncode(operatorName)} | <strong>تاریخ:</strong> {Fa.DateLong(DateTime.Today)} - {Fa.Digits(DateTime.Now.ToString("HH:mm"))}</p>
+<table><tr><th>موجودی صندوق نقدی</th><td>{Fa.Money(cashRial)}</td></tr>
+<tr><th>جمع تراکنش‌های دستگاه پوز</th><td>{Fa.Money(posRial)}</td></tr>
+<tr><th>جمع کل تحویلی</th><td><strong>{Fa.Money(cashRial + posRial)}</strong></td></tr></table>
+<p><strong>توضیحات شیفت:</strong> {System.Net.WebUtility.HtmlEncode(string.IsNullOrWhiteSpace(notes) ? "—" : notes)}</p>
+<button onclick=""window.print()"" style=""background:#B08D3E;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer"">چاپ گزارش شیفت</button>
+</div></body></html>";
+        var file = Path.Combine(Path.GetTempPath(), $"farasa-shift-{Guid.NewGuid():N}.html");
+        File.WriteAllText(file, html, Encoding.UTF8);
+        try { Process.Start(new ProcessStartInfo(file) { UseShellExecute = true }); } catch { }
+    }
+}
