@@ -1,30 +1,79 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Mehra.Desktop.Views.Pages.ReportsPage">
-  <StackPanel Spacing="12">
-    <Border Background="#232B3A" CornerRadius="10" Padding="16,12" Margin="0,0,0,6">
+  <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="24">
+    <DockPanel Grid.Row="0" Margin="0,0,0,12">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+        <Button Content="📊 خروجی اکسل" Classes="ghost" Click="OnExportExcel" />
+        <Button Content="🖨 چاپ گزارش" Classes="primary" Click="OnPrintReport" />
+      </StackPanel>
+      <StackPanel>
+        <TextBlock Text="گزارش‌های جامع و هوشمند" Classes="h1" />
+        <TextBlock Text="مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز — شرکت نگین الماس برتر صیدون" Classes="muted" />
+      </StackPanel>
+    </DockPanel>
+
+    <Border Grid.Row="1" Classes="card" Padding="12" Margin="0,0,0,12">
       <StackPanel Orientation="Horizontal" Spacing="10">
-        <Border Width="10" Height="10" CornerRadius="5" Background="#C8A96A" VerticalAlignment="Center" />
-        <TextBlock Text="گزارش‌ها" FontSize="22" FontWeight="Bold" Foreground="#C8A96A" />
-        <TextBlock Text="مهرآ — مهمان‌پذیر فرهنگیان اهواز" FontSize="12" Foreground="#9AA7C7" VerticalAlignment="Center" />
+        <TextBlock Text="بازه زمانی:" VerticalAlignment="Center" FontWeight="SemiBold" />
+        <ComboBox x:Name="RangeCombo" Width="170" SelectionChanged="OnRangeChanged">
+          <ComboBoxItem Content="کل سوابق" Tag="all" />
+          <ComboBoxItem Content="امروز" Tag="today" />
+          <ComboBoxItem Content="۷ روز اخیر" Tag="week" />
+          <ComboBoxItem Content="۳۰ روز اخیر" Tag="month" />
+        </ComboBox>
+        <TextBlock Text="نوع گزارش:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="10,0,0,0" />
+        <ComboBox x:Name="ReportCombo" Width="210" SelectionChanged="OnRangeChanged">
+          <ComboBoxItem Content="تراکنش‌های مالی و دریافتی" Tag="finance" />
+          <ComboBoxItem Content="مهمانان بدهکار (مانده حساب)" Tag="debt" />
+          <ComboBoxItem Content="اقامت‌ها و پذیرش‌ها" Tag="stays" />
+        </ComboBox>
       </StackPanel>
     </Border>
-    <StackPanel Orientation="Horizontal" Spacing="10">
-      <TextBlock Text="نوع گزارش:" VerticalAlignment="Center" />
-      <ComboBox x:Name="ReportCombo" Width="280" SelectionChanged="OnReportChanged" />
-    </StackPanel>
-    <TextBlock Text="{Binding Title}" FontSize="16" Classes="bold" />
-    <TextBlock Text="{Binding Subtitle}" Foreground="#5A6474" />
-    <TextBlock Text="{Binding Period}" Foreground="#8A93A3" FontSize="11" />
-    <ItemsControl ItemsSource="{Binding Lines}">
-      <ItemsControl.ItemTemplate>
-        <DataTemplate>
-          <Border Classes="card" Margin="6,2" Padding="10,6">
-            <TextBlock Text="{Binding Text}" FontSize="12" />
-          </Border>
-        </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
-    <TextBlock Text="{Binding Status}" Foreground="#8A93A3" FontSize="11" />
-  </StackPanel>
+
+    <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*" Margin="0,0,0,12">
+      <Border Grid.Column="0" Classes="card" Margin="0,0,6,0" Padding="12">
+        <StackPanel>
+          <TextBlock Text="💰 کل دریافتی" Classes="muted" FontSize="12" />
+          <TextBlock x:Name="TotalIncomeText" Text="۰ ریال" FontSize="16" FontWeight="Bold" Foreground="#1E7E34" />
+        </StackPanel>
+      </Border>
+      <Border Grid.Column="1" Classes="card" Margin="3,0" Padding="12">
+        <StackPanel>
+          <TextBlock Text="⚠ مانده / بدهی مهمانان" Classes="muted" FontSize="12" />
+          <TextBlock x:Name="TotalDebtText" Text="۰ ریال" FontSize="16" FontWeight="Bold" Foreground="#B3261E" />
+        </StackPanel>
+      </Border>
+      <Border Grid.Column="2" Classes="card" Margin="3,0" Padding="12">
+        <StackPanel>
+          <TextBlock Text="🔑 تعداد پذیرش‌ها" Classes="muted" FontSize="12" />
+          <TextBlock x:Name="TotalStaysText" Text="۰" FontSize="16" FontWeight="Bold" Foreground="#16233D" />
+        </StackPanel>
+      </Border>
+      <Border Grid.Column="3" Classes="card" Margin="6,0,0,0" Padding="12">
+        <StackPanel>
+          <TextBlock Text="🛏 اتاق‌های اشغال" Classes="muted" FontSize="12" />
+          <TextBlock x:Name="OccupiedRoomsText" Text="۰" FontSize="16" FontWeight="Bold" Foreground="#B08D3E" />
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <Border Grid.Row="3" Classes="card" Padding="0">
+      <ListBox x:Name="ReportList" Background="Transparent" BorderThickness="0">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Border Padding="12,10" BorderBrush="#EFE9DA" BorderThickness="0,0,0,1">
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="2">
+                  <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13" Foreground="#16233D" />
+                  <TextBlock Text="{Binding Subtitle}" Classes="muted" FontSize="12" />
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="{Binding Amount}" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" Foreground="#16233D" />
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Border>
+  </Grid>
 </UserControl>

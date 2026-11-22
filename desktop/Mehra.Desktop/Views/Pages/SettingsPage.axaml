@@ -24,7 +24,7 @@
       <StackPanel Spacing="6">
         <TextBlock Text="دربارهٔ برنامه" Classes="bold" />
         <TextBlock x:Name="VersionText" Text="فراسا — نسخهٔ ویندوز" />
-        <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگیان اهواز — داده‌ها در فایل محلی ذخیره می‌شوند و با سرور شبکهٔ محلی (پورت ۵۰۵۰) به اندروید هم می‌رسند." TextWrapping="Wrap" Foreground="#5A6474" />
+        <TextBlock Text="سامانهٔ مدیریت مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز — داده‌ها در فایل محلی ذخیره می‌شوند و با سرور شبکهٔ محلی (پورت ۵۰۵۰) به اندروید هم می‌رسند." TextWrapping="Wrap" Foreground="#5A6474" />
         <TextBlock Text="طراح و توسعه‌دهنده: میلاد یعقوبی" Classes="bold" />
       </StackPanel>
     </Border>

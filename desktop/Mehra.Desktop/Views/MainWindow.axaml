@@ -20,7 +20,7 @@
           <StackPanel Grid.Row="0" Margin="18,22,18,12" Spacing="3">
             <Image Source="avares://Mehra/Assets/mehra_logo_128.png" Width="56" Height="56" HorizontalAlignment="Right" />
             <TextBlock Text="فراسا" FontSize="28" Classes="bold" Foreground="#E8D6AE" />
-            <TextBlock Text="مهمان‌پذیر فرهنگیان اهواز" FontSize="11.5" Foreground="#A9B4C6" />
+            <TextBlock Text="مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز" FontSize="11.5" Foreground="#A9B4C6" />
           </StackPanel>
           <Border Grid.Row="1" Height="1" Margin="16,0,16,6" Background="#2E4166" />
           <ListBox x:Name="NavList" Grid.Row="2" Classes="nav" SelectionChanged="OnNavChanged">

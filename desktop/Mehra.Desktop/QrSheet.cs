@@ -15,7 +15,7 @@ public static class QrSheet
     private const string GoldSoft = "#E8D6AE";
     private const string Ink = "#2A3346";
 
-    private const string Venue = "مهمان‌پذیر فرهنگیان اهواز";
+    private const string Venue = "مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز";
 
     /// <summary>Full printable sheet (A4 portrait, also prints fine on A5).</summary>
     public static string BuildSheet(string registerUrl, string appVersionFa, string managerName, string managerPhone)

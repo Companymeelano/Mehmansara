@@ -86,6 +86,45 @@ public static class ExportService
     }
 }
 
+public class BankAccountItem
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString("N")[..6];
+    public string BankName { get; set; } = "";
+    public string CardNumber { get; set; } = "";
+    public string OwnerName { get; set; } = "";
+    public bool IsDefault { get; set; }
+    public override string ToString() => $"{BankName} — {CardNumber} ({OwnerName})";
+}
+
+public static class BankAccountsStore
+{
+    private static readonly string PathFile = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Mehra", "bank_accounts.json");
+
+    public static List<BankAccountItem> Load()
+    {
+        try
+        {
+            if (File.Exists(PathFile))
+            {
+                var list = JsonSerializer.Deserialize<List<BankAccountItem>>(File.ReadAllText(PathFile));
+                if (list != null && list.Count > 0) return list;
+            }
+        }
+        catch { }
+        return new List<BankAccountItem>
+        {
+            new() { BankName = "بانک ملی (پیش‌فرض)", CardNumber = "۶۰۳۷-۹۹۷۰-۰۰۰۰-۰۰۰۰", OwnerName = "مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز", IsDefault = true }
+        };
+    }
+
+    public static void Save(List<BankAccountItem> list)
+    {
+        try { Directory.CreateDirectory(Path.GetDirectoryName(PathFile)!); File.WriteAllText(PathFile, JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true })); } catch { }
+    }
+}
+
 public class ParkingRecord
 {
     public string Id { get; set; } = Guid.NewGuid().ToString("N")[..8];
