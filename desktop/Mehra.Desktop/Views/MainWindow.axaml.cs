@@ -64,6 +64,47 @@ public partial class MainWindow : Window
         }
     }
 
+    private async void OnOrgContracts(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var list = OrgContractsService.Load();
+        var dlg = new InputDialog("ثبت قرارداد / معرفی‌نامه سازمانی",
+            ("نام اداره یا سازمان", ""), ("درصد تخفیف مصوب", "۲۰"), ("نام رابط / شماره نامه", ""));
+        if (await dlg.ShowDialog<bool?>(this) == true)
+        {
+            list.Insert(0, new OrgContractRecord
+            {
+                OrgName = dlg.Values["نام اداره یا سازمان"],
+                DiscountPercent = dlg.Values["درصد تخفیف مصوب"],
+                ContactPerson = dlg.Values["نام رابط / شماره نامه"]
+            });
+            OrgContractsService.Save(list);
+            this.FindControl<TextBlock>("StatusText")!.Text = $"✓ قرارداد سازمان «{dlg.Values["نام اداره یا سازمان"]}» ثبت شد (کل قراردادها: {Fa.Num(list.Count)}).";
+        }
+    }
+
+    private async void OnExtendStay(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var dlg = new InputDialog("تمدید سریع اقامت مهمان",
+            ("شماره اتاق یا کد قبض", ""), ("تعداد شب اضافه", "۱"), ("مبلغ مابه‌التفاوت (ریال)", "0"));
+        if (await dlg.ShowDialog<bool?>(this) == true)
+        {
+            long.TryParse(dlg.Values["مبلغ مابه‌التفاوت (ریال)"].Replace(",", ""), out var extra);
+            if (extra > 0)
+                await _session.Api.AddTransactionAsync("Receive", extra, "Pos", $"تمدید اقامت ({dlg.Values["تعداد شب اضافه"]} شب)", "مهمان", dlg.Values["شماره اتاق یا کد قبض"]);
+            this.FindControl<TextBlock>("StatusText")!.Text = $"✓ اقامت اتاق {Fa.Digits(dlg.Values["شماره اتاق یا کد قبض"])} به مدت {Fa.Digits(dlg.Values["تعداد شب اضافه"])} شب تمدید شد.";
+        }
+    }
+
+    private async void OnGuardDesk(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var rooms = (await _session.Api.RoomsAsync()).Value ?? new();
+        var occ = rooms.Where(r => string.Equals(r.Status, "Occupied", StringComparison.OrdinalIgnoreCase)).ToList();
+        var cars = ParkingService.Load();
+        var summary = $"اتاق‌های پر: {Fa.Num(occ.Count)} ({string.Join("، ", occ.Select(r => Fa.Digits(r.Number)))})\n" +
+                      $"خودروهای پارکینگ: {Fa.Num(cars.Count)} ({string.Join("، ", cars.Take(5).Select(c => c.Plate))})";
+        await ConfirmDialog.Show(this, "🛡 کارتابل نگهبانی (بدون دسترسی مالی)", summary, "بستن");
+    }
+
     private async void OnParking(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var list = ParkingService.Load();

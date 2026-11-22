@@ -41,6 +41,9 @@
             <Border Height="1" Background="#2E4166" Margin="0,0,0,4" />
             <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" FontSize="13.5" />
             <TextBlock x:Name="RoleText" Foreground="#9AA6B8" FontSize="11" />
+            <Button Classes="ghost" Content="🏢 قراردادهای سازمانی" Click="OnOrgContracts" HorizontalAlignment="Stretch" />
+            <Button Classes="ghost" Content="⏱ تمدید اقامت" Click="OnExtendStay" HorizontalAlignment="Stretch" />
+            <Button Classes="ghost" Content="🛡 کارتابل نگهبانی" Click="OnGuardDesk" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="🚗 پارکینگ و پلاک" Click="OnParking" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="📋 تحویل شیفت" Click="OnShiftHandover" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="🔒 قفل صفحه" Click="OnLockScreen" HorizontalAlignment="Stretch" />

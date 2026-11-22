@@ -125,6 +125,33 @@ public static class BankAccountsStore
     }
 }
 
+public class OrgContractRecord
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString("N")[..6];
+    public string OrgName { get; set; } = "";
+    public string DiscountPercent { get; set; } = "۲۰";
+    public string ContactPerson { get; set; } = "";
+    public string CreatedAt { get; set; } = Fa.DateLong(DateTime.Today);
+}
+
+public static class OrgContractsService
+{
+    private static readonly string PathFile = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "Mehra", "org_contracts.json");
+
+    public static List<OrgContractRecord> Load()
+    {
+        try { if (File.Exists(PathFile)) return JsonSerializer.Deserialize<List<OrgContractRecord>>(File.ReadAllText(PathFile)) ?? new(); } catch { }
+        return new();
+    }
+
+    public static void Save(List<OrgContractRecord> list)
+    {
+        try { Directory.CreateDirectory(Path.GetDirectoryName(PathFile)!); File.WriteAllText(PathFile, JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true })); } catch { }
+    }
+}
+
 public class ParkingRecord
 {
     public string Id { get; set; } = Guid.NewGuid().ToString("N")[..8];
