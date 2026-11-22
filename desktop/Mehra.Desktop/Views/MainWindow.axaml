@@ -23,32 +23,34 @@
             <TextBlock Text="مهمان‌پذیر فرهنگیان ناحیه ۳ اهواز" FontSize="11.5" Foreground="#A9B4C6" />
           </StackPanel>
           <Border Grid.Row="1" Height="1" Margin="16,0,16,6" Background="#2E4166" />
-          <ListBox x:Name="NavList" Grid.Row="2" Classes="nav" SelectionChanged="OnNavChanged">
-            <ListBoxItem Content="🏠  خانه" Tag="home" />
-            <ListBoxItem Content="🛏  اتاق‌ها" Tag="rooms" />
-            <ListBoxItem Content="📅  رزروها" Tag="reservations" />
-            <ListBoxItem Content="🔑  پذیرش" Tag="reception" />
-            <ListBoxItem Content="👥  مهمانان" Tag="guests" />
-            <ListBoxItem Content="💳  مالی" Tag="finance" />
-            <ListBoxItem Content="🧹  نظافت" Tag="housekeeping" />
-            <ListBoxItem Content="🔧  تعمیرات" Tag="maintenance" />
-            <ListBoxItem Content="📊  گزارش‌ها" Tag="reports" />
-            <ListBoxItem Content="👤  کاربران" Tag="users" />
-            <ListBoxItem Content="🔔  اعلان‌ها" Tag="notifications" />
-            <ListBoxItem Content="⚙  تنظیمات" Tag="settings" />
+          <ListBox x:Name="NavList" Grid.Row="2" Classes="nav" SelectionChanged="OnNavChanged" FontSize="12">
+            <ListBoxItem Content="🏠  خانه" Tag="home" Padding="8,4" />
+            <ListBoxItem Content="🛏  اتاق‌ها" Tag="rooms" Padding="8,4" />
+            <ListBoxItem Content="📅  رزروها" Tag="reservations" Padding="8,4" />
+            <ListBoxItem Content="🔑  پذیرش" Tag="reception" Padding="8,4" />
+            <ListBoxItem Content="👥  مهمانان" Tag="guests" Padding="8,4" />
+            <ListBoxItem Content="💳  مالی" Tag="finance" Padding="8,4" />
+            <ListBoxItem Content="🧹  نظافت" Tag="housekeeping" Padding="8,4" />
+            <ListBoxItem Content="🔧  تعمیرات" Tag="maintenance" Padding="8,4" />
+            <ListBoxItem Content="📊  گزارش‌ها" Tag="reports" Padding="8,4" />
+            <ListBoxItem Content="👤  کاربران" Tag="users" Padding="8,4" />
+            <ListBoxItem Content="🔔  اعلان‌ها" Tag="notifications" Padding="8,4" />
+            <ListBoxItem Content="⚙  تنظیمات" Tag="settings" Padding="8,4" />
           </ListBox>
-          <StackPanel Grid.Row="3" Margin="16,12" Spacing="6">
-            <Border Height="1" Background="#2E4166" Margin="0,0,0,4" />
-            <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" FontSize="13.5" />
-            <TextBlock x:Name="RoleText" Foreground="#9AA6B8" FontSize="11" />
-            <Button Classes="ghost" Content="🏢 قراردادهای سازمانی" Click="OnOrgContracts" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="⏱ تمدید اقامت" Click="OnExtendStay" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="🛡 کارتابل نگهبانی" Click="OnGuardDesk" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="🚗 پارکینگ و پلاک" Click="OnParking" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="📋 تحویل شیفت" Click="OnShiftHandover" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="🌙 تغییر تم (شب / روز)" Click="OnToggleTheme" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="🔒 قفل صفحه" Click="OnLockScreen" HorizontalAlignment="Stretch" />
-            <Button Classes="ghost" Content="خروج از حساب" Click="OnLogout" HorizontalAlignment="Stretch" />
+          <StackPanel Grid.Row="3" Margin="12,6" Spacing="4">
+            <Border Height="1" Background="#2E4166" Margin="0,0,0,2" />
+            <TextBlock x:Name="UserText" Foreground="#E8D6AE" Classes="bold" FontSize="12.5" />
+            <TextBlock x:Name="RoleText" Foreground="#9AA6B8" FontSize="10.5" />
+            <UniformGrid Columns="2" HorizontalAlignment="Stretch">
+              <Button Classes="ghost" Content="🏢 قرارداد" Click="OnOrgContracts" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="⏱ تمدید" Click="OnExtendStay" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="🛡 نگهبانی" Click="OnGuardDesk" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="🚗 پارکینگ" Click="OnParking" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="📋 شیفت" Click="OnShiftHandover" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="🌙 تم شب" Click="OnToggleTheme" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="🔒 قفل" Click="OnLockScreen" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+              <Button Classes="ghost" Content="🚪 خروج" Click="OnLogout" FontSize="10.5" Padding="4,4" Margin="2" HorizontalAlignment="Stretch" />
+            </UniformGrid>
           </StackPanel>
         </Grid>
       </Border>
