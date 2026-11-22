@@ -35,9 +35,9 @@ public partial class ReportsPage : UserControl
         var rangeTag = (RangeCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "all";
         var reportTag = (ReportCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "finance";
 
-        var txRes = await _session.Api.GetTransactionsAsync();
-        var resRes = await _session.Api.GetReservationsAsync();
-        var roomRes = await _session.Api.GetRoomsAsync();
+        var txRes = await _session.Api.TransactionsAsync();
+        var resRes = await _session.Api.ReservationsAsync();
+        var roomRes = await _session.Api.RoomsAsync();
 
         var txs = txRes.Value ?? new();
         var stays = resRes.Value ?? new();
