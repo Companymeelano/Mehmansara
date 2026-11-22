@@ -102,7 +102,7 @@ public partial class MainWindow : Window
         var cars = ParkingService.Load();
         var summary = $"اتاق‌های پر: {Fa.Num(occ.Count)} ({string.Join("، ", occ.Select(r => Fa.Digits(r.RoomNumber)))})\n" +
                       $"خودروهای پارکینگ: {Fa.Num(cars.Count)} ({string.Join("، ", cars.Take(5).Select(c => c.Plate))})";
-        await ConfirmDialog.Show(this, "🛡 کارتابل نگهبانی (بدون دسترسی مالی)", summary, "بستن");
+        await ConfirmDialog.Show(this, "🛡 کارتابل نگهبانی (بدون دسترسی مالی)", summary);
     }
 
     private async void OnParking(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
