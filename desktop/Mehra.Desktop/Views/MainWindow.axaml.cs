@@ -100,7 +100,7 @@ public partial class MainWindow : Window
         var rooms = (await _session.Api.RoomsAsync()).Value ?? new();
         var occ = rooms.Where(r => string.Equals(r.Status, "Occupied", StringComparison.OrdinalIgnoreCase)).ToList();
         var cars = ParkingService.Load();
-        var summary = $"اتاق‌های پر: {Fa.Num(occ.Count)} ({string.Join("، ", occ.Select(r => Fa.Digits(r.Number)))})\n" +
+        var summary = $"اتاق‌های پر: {Fa.Num(occ.Count)} ({string.Join("، ", occ.Select(r => Fa.Digits(r.RoomNumber)))})\n" +
                       $"خودروهای پارکینگ: {Fa.Num(cars.Count)} ({string.Join("، ", cars.Take(5).Select(c => c.Plate))})";
         await ConfirmDialog.Show(this, "🛡 کارتابل نگهبانی (بدون دسترسی مالی)", summary, "بستن");
     }
