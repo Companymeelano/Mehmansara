@@ -56,7 +56,7 @@ public partial class ReportsPage : UserControl
 
         var filteredTxs = txs;
 
-        long income = filteredTxs.Where(t => t.Type == "Receive").Sum(t => t.AmountRial);
+        long income = filteredTxs.Where(t => t.Type == "Receive").Sum(t => t.AmountRial ?? 0);
         long debt = stays.Sum(s => Math.Max(0, (s.TotalRial ?? 0) - (s.PaidRial ?? 0)));
         int occ = rooms.Count(r => string.Equals(r.Status, "Occupied", StringComparison.OrdinalIgnoreCase));
 
