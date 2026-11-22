@@ -135,6 +135,16 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnToggleTheme(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (Avalonia.Application.Current is { } app)
+        {
+            var isDark = app.ActualThemeVariant == Avalonia.Styling.ThemeVariant.Dark;
+            app.RequestedThemeVariant = isDark ? Avalonia.Styling.ThemeVariant.Light : Avalonia.Styling.ThemeVariant.Dark;
+            Background = Avalonia.Media.Brush.Parse(isDark ? "#F7F3E9" : "#0F172A");
+        }
+    }
+
     private async void OnLockScreen(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var lockWin = new LockScreenWindow(_session);

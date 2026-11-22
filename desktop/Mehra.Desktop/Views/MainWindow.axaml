@@ -46,6 +46,7 @@
             <Button Classes="ghost" Content="🛡 کارتابل نگهبانی" Click="OnGuardDesk" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="🚗 پارکینگ و پلاک" Click="OnParking" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="📋 تحویل شیفت" Click="OnShiftHandover" HorizontalAlignment="Stretch" />
+            <Button Classes="ghost" Content="🌙 تغییر تم (شب / روز)" Click="OnToggleTheme" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="🔒 قفل صفحه" Click="OnLockScreen" HorizontalAlignment="Stretch" />
             <Button Classes="ghost" Content="خروج از حساب" Click="OnLogout" HorizontalAlignment="Stretch" />
           </StackPanel>
